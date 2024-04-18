@@ -1,0 +1,86 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://ui/controllers/tools/eraser_controller.gd" type="Script" id=1]
+[ext_resource path="res://ui/components/config_slider.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/components/ai_process_button.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/components/config_checkbox.gd" type="Script" id=4]
+[ext_resource path="res://ui/controllers/tools/img_2_img_controller_module.gd" type="Script" id=5]
+
+[node name="EraserController" type="VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+tool_button = "res://ui/controllers/tools/tool_buttons/eraser_button.tscn"
+
+[node name="QuickImg2Img" parent="." instance=ExtResource( 3 )]
+margin_right = 244.0
+margin_bottom = 28.0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+text = "QUICK_IMG2IMG"
+
+[node name="BrushSize" parent="." instance=ExtResource( 2 )]
+margin_top = 32.0
+margin_right = 244.0
+margin_bottom = 62.0
+size_flags_horizontal = 3
+text = "BRUSH_SIZE"
+min_value = 1.0
+default_value = 20.0
+flag_name_const = "FLAG_BRUSH_SIZE"
+
+[node name="BrushOpacity" parent="." instance=ExtResource( 2 )]
+visible = false
+margin_top = 34.0
+margin_right = 203.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+text = "BRUSH_OPACITY"
+max_value = 255.0
+default_value = 255.0
+requieres_flag = false
+
+[node name="GridContainer" type="GridContainer" parent="."]
+margin_top = 66.0
+margin_right = 244.0
+margin_bottom = 94.0
+columns = 2
+
+[node name="ResetImage" type="Button" parent="GridContainer"]
+margin_right = 99.0
+margin_bottom = 28.0
+text = "RESET_IMAGE"
+
+[node name="UseModifiers" type="CheckBox" parent="GridContainer" groups=["advanced_ui"]]
+margin_left = 103.0
+margin_right = 244.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+pressed = true
+text = "USE_MODIFIERS"
+script = ExtResource( 4 )
+flag_name_const = "FLAG_USE_MODIFIERS"
+flag_prefix_node_name = NodePath("../../QuickImg2Img")
+
+[node name="DenoisingStrenght" parent="." groups=["advanced_ui"] instance=ExtResource( 2 )]
+margin_top = 98.0
+margin_right = 244.0
+margin_bottom = 128.0
+text = "DENOISING_STRENGTH"
+max_value = 1.0
+step = 0.05
+default_value = 0.75
+allow_decimals = true
+flag_name_const = "I_DENOISING_STRENGTH"
+flag_prefix_node_name = NodePath("..")
+
+[node name="QuickImg2ImgModule" type="Node" parent="."]
+script = ExtResource( 5 )
+
+[connection signal="value_changed" from="BrushSize" to="." method="_on_BrushSize_value_changed"]
+[connection signal="value_changed" from="BrushOpacity" to="." method="_on_BrushOpacity_value_changed"]
+[connection signal="pressed" from="GridContainer/ResetImage" to="." method="_on_ResetImage_pressed"]
+[connection signal="visibility_changed" from="GridContainer/UseModifiers" to="." method="_on_UseModifiers_visibility_changed"]
+[connection signal="visibility_changed" from="DenoisingStrenght" to="." method="_on_DenoisingStrenght_visibility_changed"]

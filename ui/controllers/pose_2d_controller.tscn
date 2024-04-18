@@ -1,0 +1,78 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://ui/controllers/pose_2d_controller.gd" type="Script" id=1]
+[ext_resource path="res://ui/controllers/control_net_configs.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/controllers/tools/transform_selection_tool_controller.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/controllers/tools/eraser_tool_controller.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/components/v_gradient.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ui/controllers/tools/flip_tool_controller.tscn" type="PackedScene" id=6]
+
+[node name="Pose2DController" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+controller_role = "Pose 2D Control"
+auto_role = false
+
+[node name="Container" type="ScrollContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Configs" type="HBoxContainer" parent="Container"]
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ControlNetConfigs" parent="Container/Configs" instance=ExtResource( 2 )]
+margin_right = 510.0
+margin_bottom = 600.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Container/Configs/ControlNetConfigs"]
+margin_top = 132.0
+margin_right = 510.0
+margin_bottom = 160.0
+
+[node name="Face" type="CheckBox" parent="Container/Configs/ControlNetConfigs/HBoxContainer"]
+margin_right = 135.0
+margin_bottom = 28.0
+text = "OPENPOSE_FACE"
+
+[node name="Hands" type="CheckBox" parent="Container/Configs/ControlNetConfigs/HBoxContainer"]
+margin_left = 139.0
+margin_right = 286.0
+margin_bottom = 28.0
+text = "OPENPOSE_HANDS"
+
+[node name="ToolControllers" type="VBoxContainer" parent="Container/Configs"]
+margin_left = 514.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EraserToolController" parent="Container/Configs/ToolControllers" instance=ExtResource( 4 )]
+visible = false
+margin_right = 125.0
+margin_bottom = 36.0
+
+[node name="TransformSelectionTool" parent="Container/Configs/ToolControllers" instance=ExtResource( 3 )]
+visible = false
+margin_right = 360.0
+margin_bottom = 112.0
+
+[node name="FlipTool" parent="Container/Configs/ToolControllers" instance=ExtResource( 6 )]
+visible = false
+margin_right = 510.0
+margin_bottom = 26.0
+
+[node name="TopGradient" parent="." instance=ExtResource( 5 )]
+flip_v = true
+
+[node name="BottomGradient" parent="." instance=ExtResource( 5 )]
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+
+[connection signal="toggled" from="Container/Configs/ControlNetConfigs/HBoxContainer/Face" to="." method="_on_Face_toggled"]
+[connection signal="toggled" from="Container/Configs/ControlNetConfigs/HBoxContainer/Hands" to="." method="_on_Hands_toggled"]

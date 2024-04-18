@@ -1,0 +1,141 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://ui/components/config_slider.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/components/prompt_box.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/controllers/style_details_viewer.gd" type="Script" id=3]
+[ext_resource path="res://ui/components/modifier_drop.gd" type="Script" id=4]
+
+[node name="StyleDetailsViewer" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 3 )
+
+[node name="Viewer" type="HBoxContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 570.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Details" type="VBoxContainer" parent="Viewer"]
+margin_right = 510.0
+margin_bottom = 570.0
+size_flags_horizontal = 3
+
+[node name="Negative" type="CheckBox" parent="Viewer/Details"]
+margin_right = 510.0
+margin_bottom = 28.0
+text = "IS_NEGATIVE_PROMPT"
+
+[node name="Strenght" parent="Viewer/Details" instance=ExtResource( 1 )]
+margin_top = 32.0
+margin_right = 510.0
+margin_bottom = 62.0
+text = "STRENGTH"
+max_value = 2.0
+step = 0.05
+allow_decimals = true
+requieres_flag = false
+
+[node name="ExtraStrenght" parent="Viewer/Details" instance=ExtResource( 1 )]
+margin_top = 66.0
+margin_right = 510.0
+margin_bottom = 96.0
+text = "EXTRA_PROMPT_STRENGHT"
+max_value = 2.0
+step = 0.05
+allow_decimals = true
+requieres_flag = false
+
+[node name="ExtraPrompt" type="Label" parent="Viewer/Details"]
+margin_top = 100.0
+margin_right = 510.0
+margin_bottom = 120.0
+text = "EXTRA_PROMPT"
+
+[node name="Margin" type="MarginContainer" parent="Viewer/Details"]
+margin_top = 124.0
+margin_right = 510.0
+margin_bottom = 333.0
+size_flags_vertical = 3
+
+[node name="Extra" type="VBoxContainer" parent="Viewer/Details/Margin"]
+margin_right = 510.0
+margin_bottom = 209.0
+
+[node name="PositivePrompt" parent="Viewer/Details/Margin/Extra" instance=ExtResource( 2 )]
+margin_right = 510.0
+margin_bottom = 102.0
+info_text = "POSITIVE_PROMPT"
+
+[node name="NegativePrompt" parent="Viewer/Details/Margin/Extra" instance=ExtResource( 2 )]
+margin_top = 106.0
+margin_right = 510.0
+margin_bottom = 209.0
+info_text = "NEGATIVE_PROMPT"
+
+[node name="Label" type="Label" parent="Viewer/Details"]
+margin_top = 337.0
+margin_right = 510.0
+margin_bottom = 357.0
+text = "DESCRIPTION"
+
+[node name="Description" parent="Viewer/Details" instance=ExtResource( 2 )]
+margin_top = 361.0
+margin_right = 510.0
+margin_bottom = 570.0
+info_text = "DESCRIPTION"
+
+[node name="Photo" type="MarginContainer" parent="Viewer"]
+margin_left = 514.0
+margin_right = 1024.0
+margin_bottom = 570.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Image" type="TextureRect" parent="Viewer/Photo"]
+margin_right = 510.0
+margin_bottom = 570.0
+expand = true
+stretch_mode = 5
+
+[node name="DropArea" type="Control" parent="Viewer/Photo"]
+margin_right = 510.0
+margin_bottom = 570.0
+script = ExtResource( 4 )
+
+[node name="EditControls" type="HBoxContainer" parent="."]
+margin_top = 574.0
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="Cancel" type="Button" parent="EditControls"]
+margin_right = 60.0
+margin_bottom = 26.0
+text = "CANCEL"
+
+[node name="Control" type="Control" parent="EditControls"]
+margin_left = 64.0
+margin_right = 930.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+
+[node name="Save" type="Button" parent="EditControls"]
+margin_left = 934.0
+margin_right = 977.0
+margin_bottom = 26.0
+theme_type_variation = "ConfirmButton"
+text = "SAVE"
+
+[node name="SaveDefaults" type="Button" parent="EditControls"]
+margin_left = 981.0
+margin_right = 1024.0
+margin_bottom = 26.0
+theme_type_variation = "ConfirmButton"
+text = "SAVE"
+
+[connection signal="modifier_dropped" from="Viewer/Photo/DropArea" to="." method="_on_DropArea_modifier_dropped"]
+[connection signal="pressed" from="EditControls/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="pressed" from="EditControls/Save" to="." method="_on_Save_pressed"]
+[connection signal="pressed" from="EditControls/SaveDefaults" to="." method="_on_Save_pressed"]

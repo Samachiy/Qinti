@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui/components/smart_option_button.gd" type="Script" id=1]
+[ext_resource path="res://assets/icons/buttons_#g1972.png" type="Texture" id=2]
+
+[node name="SmartOptionButton" type="HBoxContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="."]
+margin_top = 10.0
+margin_bottom = 30.0
+valign = 1
+
+[node name="OptionButton" type="OptionButton" parent="."]
+visible = false
+margin_left = 4.0
+margin_right = 40.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+clip_text = true
+
+[node name="Button" type="Button" parent="."]
+margin_left = 4.0
+margin_right = 40.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+icon = ExtResource( 2 )
+clip_text = true
+align = 0
+icon_align = 2
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+margin_left = 30.0
+margin_right = 50.0
+margin_bottom = 40.0
+
+[connection signal="item_selected" from="OptionButton" to="." method="_on_OptionButton_item_selected"]
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
+[connection signal="index_pressed" from="PopupMenu" to="." method="_on_PopupMenu_index_pressed"]

@@ -1,0 +1,171 @@
+[gd_resource type="Theme" load_steps=39 format=2]
+
+[ext_resource path="res://themes/styles/scroll_h_grabber_main_style_highlight.tres" type="StyleBox" id=1]
+[ext_resource path="res://themes/styles/button_main_style_hover.tres" type="StyleBox" id=2]
+[ext_resource path="res://themes/styles/button_main_style_normal.tres" type="StyleBox" id=3]
+[ext_resource path="res://themes/styles/scroll_h_main_style_normal.tres" type="StyleBox" id=4]
+[ext_resource path="res://themes/styles/button_main_style_focus.tres" type="StyleBox" id=5]
+[ext_resource path="res://themes/styles/scroll_h_grabber_main_style_normal.tres" type="StyleBox" id=6]
+[ext_resource path="res://themes/styles/edit_text_panel_normal.tres" type="StyleBox" id=7]
+[ext_resource path="res://themes/styles/container_main_style.tres" type="StyleBox" id=8]
+[ext_resource path="res://themes/styles/tab_main_style_selected.tres" type="StyleBox" id=9]
+[ext_resource path="res://themes/styles/panel_main_style.tres" type="StyleBox" id=10]
+[ext_resource path="res://themes/styles/tab_main_style_unselected.tres" type="StyleBox" id=11]
+[ext_resource path="res://themes/styles/edit_large_text_panel_normal.tres" type="StyleBox" id=12]
+[ext_resource path="res://themes/styles/scroll_grabber_main_style_highlight.tres" type="StyleBox" id=13]
+[ext_resource path="res://themes/styles/scroll_main_style_normal.tres" type="StyleBox" id=14]
+[ext_resource path="res://themes/styles/scroll_grabber_main_style_normal.tres" type="StyleBox" id=15]
+[ext_resource path="res://themes/styles/edit_large_text_panel_focus.tres" type="StyleBox" id=16]
+[ext_resource path="res://themes/styles/checkbox_main_style_normal.tres" type="StyleBox" id=17]
+[ext_resource path="res://themes/styles/checkbox_main_style_focus.tres" type="StyleBox" id=18]
+[ext_resource path="res://themes/styles/checkbox_main_style_hover.tres" type="StyleBox" id=19]
+[ext_resource path="res://assets/icons/ui_controls_#g1736.png" type="Texture" id=20]
+[ext_resource path="res://assets/icons/ui_controls_#g1751_copy_2.png" type="Texture" id=21]
+[ext_resource path="res://themes/styles/button_simple_style_hover.tres" type="StyleBox" id=22]
+[ext_resource path="res://themes/styles/panel_float_style.tres" type="StyleBox" id=23]
+[ext_resource path="res://themes/styles/separator_line.tres" type="StyleBox" id=24]
+[ext_resource path="res://themes/styles/panel_float_no_title_style.tres" type="StyleBox" id=25]
+[ext_resource path="res://themes/styles/button_confirm_style_normal.tres" type="StyleBox" id=26]
+[ext_resource path="res://themes/styles/button_confirm_style_focus.tres" type="StyleBox" id=27]
+[ext_resource path="res://themes/styles/button_confirm_style_hover.tres" type="StyleBox" id=28]
+[ext_resource path="res://themes/styles/button_terminate_style_focus.tres" type="StyleBox" id=29]
+[ext_resource path="res://themes/styles/button_terminate_style_hover.tres" type="StyleBox" id=30]
+[ext_resource path="res://themes/styles/button_terminate_style_normal.tres" type="StyleBox" id=31]
+[ext_resource path="res://assets/icons/cancel_path4.png" type="Texture" id=32]
+[ext_resource path="res://assets/icons/cancel_path5.png" type="Texture" id=33]
+[ext_resource path="res://themes/styles/button_main_style_disabled.tres" type="StyleBox" id=34]
+[ext_resource path="res://themes/styles/tab_simple_style_selected.tres" type="StyleBox" id=35]
+[ext_resource path="res://themes/styles/tab_simple_style_unselected.tres" type="StyleBox" id=36]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+draw_center = false
+border_width_bottom = 2
+border_color = Color( 0, 0.65098, 0.964706, 0.992157 )
+border_blend = true
+expand_margin_left = 2.0
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[resource]
+Button/colors/font_color = Color( 1, 1, 1, 0.960784 )
+Button/colors/font_color_disabled = Color( 0.498039, 0.498039, 0.498039, 0.498039 )
+Button/colors/font_color_focus = Color( 1, 1, 1, 0.960784 )
+Button/colors/font_color_hover = Color( 1, 1, 1, 0.960784 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 0.960784 )
+Button/styles/disabled = ExtResource( 34 )
+Button/styles/focus = ExtResource( 5 )
+Button/styles/hover = ExtResource( 2 )
+Button/styles/normal = ExtResource( 3 )
+Button/styles/pressed = ExtResource( 3 )
+CheckBox/colors/font_color = Color( 1, 1, 1, 0.960784 )
+CheckBox/colors/font_color_focus = Color( 1, 1, 1, 0.960784 )
+CheckBox/colors/font_color_hover = Color( 0.941176, 0.941176, 0.941176, 0.960784 )
+CheckBox/colors/font_color_hover_pressed = Color( 1, 1, 1, 0.960784 )
+CheckBox/colors/font_color_pressed = Color( 1, 1, 1, 0.960784 )
+CheckBox/styles/focus = ExtResource( 18 )
+CheckBox/styles/hover = ExtResource( 19 )
+CheckBox/styles/hover_pressed = ExtResource( 19 )
+CheckBox/styles/normal = ExtResource( 17 )
+CheckBox/styles/pressed = ExtResource( 17 )
+ConfirmButton/base_type = "Button"
+ConfirmButton/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 0.980392 )
+ConfirmButton/colors/font_color_focus = Color( 0.878431, 0.878431, 0.878431, 0.980392 )
+ConfirmButton/colors/font_color_hover = Color( 0.878431, 0.878431, 0.878431, 0.980392 )
+ConfirmButton/colors/font_color_pressed = Color( 0.878431, 0.878431, 0.878431, 0.980392 )
+ConfirmButton/styles/disabled = null
+ConfirmButton/styles/focus = ExtResource( 27 )
+ConfirmButton/styles/hover = ExtResource( 28 )
+ConfirmButton/styles/normal = ExtResource( 26 )
+ConfirmButton/styles/pressed = ExtResource( 26 )
+FileDialog/colors/file_icon_modulate = Color( 0.137255, 0.137255, 0.137255, 0.960784 )
+FileDialog/colors/folder_icon_modulate = Color( 0.137255, 0.137255, 0.137255, 0.960784 )
+HBoxContainer/constants/separation = 12
+HScrollBar/styles/grabber = ExtResource( 6 )
+HScrollBar/styles/grabber_highlight = ExtResource( 1 )
+HScrollBar/styles/grabber_pressed = ExtResource( 1 )
+HScrollBar/styles/scroll = ExtResource( 4 )
+HSlider/icons/grabber = ExtResource( 20 )
+HSlider/icons/grabber_highlight = ExtResource( 21 )
+HSlider/styles/grabber_area = ExtResource( 6 )
+HSlider/styles/grabber_area_highlight = ExtResource( 1 )
+HSlider/styles/slider = ExtResource( 4 )
+InfoRowsPopup/base_type = "PopupMenu"
+InfoRowsPopup/colors/font_color_disabled = Color( 0, 0, 0, 0.960784 )
+Label/colors/font_color = Color( 0.137255, 0.137255, 0.137255, 0.960784 )
+LineEdit/colors/cursor_color = Color( 0.968627, 0.968627, 0.968627, 0.960784 )
+LineEdit/colors/font_color = Color( 0.968627, 0.968627, 0.968627, 0.960784 )
+LineEdit/colors/font_color_selected = Color( 0.968627, 0.968627, 0.968627, 0.960784 )
+LineEdit/styles/focus = SubResource( 1 )
+LineEdit/styles/normal = ExtResource( 7 )
+MarginContainer/constants/margin_bottom = 12
+MarginContainer/constants/margin_left = 12
+MarginContainer/constants/margin_right = 12
+MarginContainer/constants/margin_top = 12
+OptionButton/colors/font_color = Color( 0.968627, 0.968627, 0.968627, 0.960784 )
+OptionButton/colors/font_color_focus = Color( 0.968627, 0.968627, 0.968627, 0.960784 )
+OptionButton/colors/font_color_hover = Color( 0.968627, 0.968627, 0.968627, 0.960784 )
+OptionButton/colors/font_color_pressed = Color( 1, 1, 1, 0.960784 )
+OptionButton/icons/arrow = null
+OptionButton/styles/focus = ExtResource( 5 )
+OptionButton/styles/hover = ExtResource( 2 )
+OptionButton/styles/normal = ExtResource( 3 )
+OptionButton/styles/pressed = ExtResource( 3 )
+Panel/styles/panel = ExtResource( 10 )
+PanelContainer/styles/panel = ExtResource( 8 )
+PopupDialog/styles/panel = ExtResource( 23 )
+PopupMenu/colors/font_color = Color( 0.137255, 0.137255, 0.137255, 0.960784 )
+PopupMenu/colors/font_color_disabled = Color( 0.498039, 0.498039, 0.498039, 0.498039 )
+PopupMenu/colors/font_color_hover = Color( 0.137255, 0.137255, 0.137255, 0.960784 )
+PopupMenu/colors/font_color_separator = Color( 0.137255, 0.137255, 0.137255, 0.960784 )
+PopupMenu/constants/vseparation = 12
+PopupMenu/styles/hover = ExtResource( 22 )
+PopupMenu/styles/labeled_separator_left = ExtResource( 24 )
+PopupMenu/styles/labeled_separator_right = ExtResource( 24 )
+PopupMenu/styles/panel = ExtResource( 25 )
+PopupMenu/styles/separator = ExtResource( 24 )
+PopupPanel/styles/panel = ExtResource( 23 )
+RichTextLabel/colors/default_color = Color( 1, 1, 1, 0.960784 )
+RichTextLabel/styles/focus = ExtResource( 8 )
+RichTextLabel/styles/normal = ExtResource( 8 )
+SimpleTab/base_type = "TabContainer"
+SimpleTab/colors/font_color_bg = Color( 1, 1, 1, 0.960784 )
+SimpleTab/colors/font_color_fg = Color( 1, 1, 1, 0.960784 )
+SimpleTab/styles/panel = SubResource( 2 )
+SimpleTab/styles/tab_bg = ExtResource( 36 )
+SimpleTab/styles/tab_fg = ExtResource( 35 )
+TabContainer/colors/font_color_bg = Color( 1, 1, 1, 0.976471 )
+TabContainer/colors/font_color_fg = Color( 1, 1, 1, 0.976471 )
+TabContainer/constants/side_margin = 0
+TabContainer/styles/panel = ExtResource( 8 )
+TabContainer/styles/tab_bg = ExtResource( 11 )
+TabContainer/styles/tab_fg = ExtResource( 9 )
+TerminateButton/base_type = "Button"
+TerminateButton/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 0.980392 )
+TerminateButton/colors/font_color_focus = Color( 0.878431, 0.878431, 0.878431, 0.980392 )
+TerminateButton/colors/font_color_hover = Color( 0.878431, 0.878431, 0.878431, 0.980392 )
+TerminateButton/colors/font_color_pressed = Color( 0.878431, 0.878431, 0.878431, 0.980392 )
+TerminateButton/styles/focus = ExtResource( 29 )
+TerminateButton/styles/hover = ExtResource( 30 )
+TerminateButton/styles/normal = ExtResource( 31 )
+TerminateButton/styles/pressed = ExtResource( 31 )
+TextEdit/colors/font_color = Color( 0, 0, 0, 0.956863 )
+TextEdit/styles/focus = ExtResource( 16 )
+TextEdit/styles/normal = ExtResource( 12 )
+TextEdit/styles/read_only = ExtResource( 7 )
+Tree/colors/font_color = Color( 0.137255, 0.137255, 0.137255, 0.960784 )
+Tree/colors/font_color_selected = Color( 0, 0.65098, 0.964706, 0.992157 )
+Tree/colors/guide_color = Color( 0.498039, 0.498039, 0.498039, 0.498039 )
+Tree/styles/bg = ExtResource( 10 )
+VBoxContainer/constants/separation = 12
+VScrollBar/styles/grabber = ExtResource( 15 )
+VScrollBar/styles/grabber_highlight = ExtResource( 13 )
+VScrollBar/styles/grabber_pressed = ExtResource( 13 )
+VScrollBar/styles/scroll = ExtResource( 14 )
+VSlider/styles/grabber_area = ExtResource( 15 )
+VSlider/styles/grabber_area_highlight = ExtResource( 13 )
+VSlider/styles/slider = ExtResource( 14 )
+WindowDialog/colors/title_color = Color( 0, 0, 0, 0.960784 )
+WindowDialog/icons/close = ExtResource( 32 )
+WindowDialog/icons/close_highlight = ExtResource( 33 )
+WindowDialog/styles/panel = ExtResource( 23 )

@@ -1,0 +1,178 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://ui/components/prompting_area.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/components/modifiers_area.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/components/toolbox.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/boards/main_canvas_board.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/boards/image_info_board.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ui/generation_interface.gd" type="Script" id=6]
+[ext_resource path="res://themes/main_theme.tres" type="Theme" id=7]
+[ext_resource path="res://ui/boards/composition_board.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/boards/lineart_board.tscn" type="PackedScene" id=9]
+[ext_resource path="res://ui/boards/styling_board.tscn" type="PackedScene" id=10]
+[ext_resource path="res://ui/boards/depth_board.tscn" type="PackedScene" id=11]
+[ext_resource path="res://ui/boards/scribble_board.tscn" type="PackedScene" id=12]
+[ext_resource path="res://ui/boards/pose_2d_board.tscn" type="PackedScene" id=13]
+[ext_resource path="res://ui/boards/normal_map_board.tscn" type="PackedScene" id=14]
+[ext_resource path="res://ui/boards/img_2_img_board.tscn" type="PackedScene" id=15]
+[ext_resource path="res://ui/components/menu_bar.tscn" type="PackedScene" id=16]
+[ext_resource path="res://ui/components/description_bar.tscn" type="PackedScene" id=17]
+
+[node name="GenerationInterface" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 7 )
+script = ExtResource( 6 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 1019.0
+margin_bottom = 595.0
+custom_constants/separation = 7
+
+[node name="TopBarSpacing" type="Control" parent="MarginContainer/VBoxContainer"]
+margin_right = 1014.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 0, 12 )
+
+[node name="PromptingArea" parent="MarginContainer/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 19.0
+margin_right = 1014.0
+margin_bottom = 153.0
+custom_constants/margin_bottom = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 160.0
+margin_right = 1014.0
+margin_bottom = 571.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_top = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer"]
+margin_left = 12.0
+margin_right = 1002.0
+margin_bottom = 399.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="Modifiers" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource( 2 )]
+margin_right = 120.0
+margin_bottom = 399.0
+rect_min_size = Vector2( 120, 0 )
+size_flags_stretch_ratio = 1.2
+
+[node name="Boards" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+margin_left = 120.0
+margin_right = 796.0
+margin_bottom = 399.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 7.0
+
+[node name="CanvasBoard" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Boards" instance=ExtResource( 4 )]
+visible = false
+margin_right = 679.0
+margin_bottom = 454.0
+
+[node name="CompositionBoard" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Boards" instance=ExtResource( 8 )]
+visible = false
+margin_right = 618.0
+margin_bottom = 58.0
+
+[node name="DepthBoard" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Boards" instance=ExtResource( 11 )]
+visible = false
+margin_right = 679.0
+margin_bottom = 58.0
+
+[node name="ImageInfoBoard" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Boards" instance=ExtResource( 5 )]
+visible = false
+margin_right = 697.0
+margin_bottom = 477.0
+
+[node name="Img2ImgBoard" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Boards" instance=ExtResource( 15 )]
+visible = false
+margin_right = 679.0
+margin_bottom = 256.0
+
+[node name="LineartBoard" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Boards" instance=ExtResource( 9 )]
+visible = false
+margin_top = 352.0
+margin_right = 618.0
+margin_bottom = 410.0
+
+[node name="NormalMapBoard" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Boards" instance=ExtResource( 14 )]
+visible = false
+margin_right = 679.0
+margin_bottom = 58.0
+
+[node name="Pose2DBoard" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Boards" instance=ExtResource( 13 )]
+visible = false
+margin_right = 679.0
+margin_bottom = 58.0
+
+[node name="ScribbleBoard" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Boards" instance=ExtResource( 12 )]
+visible = false
+margin_right = 679.0
+margin_bottom = 58.0
+
+[node name="StylingBoard" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Boards" instance=ExtResource( 10 )]
+visible = false
+margin_right = 618.0
+margin_bottom = 44.0
+
+[node name="Toolbox" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource( 3 )]
+margin_left = 796.0
+margin_right = 990.0
+margin_bottom = 399.0
+rect_min_size = Vector2( 190, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="BottomBarSpacing" type="Control" parent="MarginContainer/VBoxContainer"]
+margin_top = 578.0
+margin_right = 1014.0
+margin_bottom = 590.0
+grow_vertical = 0
+rect_min_size = Vector2( 0, 12 )
+
+[node name="Bars" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="MenuBar" parent="Bars" instance=ExtResource( 16 )]
+margin_bottom = 28.0
+
+[node name="Control" type="Control" parent="Bars"]
+margin_top = 40.0
+margin_right = 1024.0
+margin_bottom = 564.0
+mouse_filter = 2
+size_flags_vertical = 3
+
+[node name="DescriptionBar" parent="Bars" instance=ExtResource( 17 )]
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 576.0
+margin_right = 1024.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 0, 24 )
+
+[node name="ForcedCloseTimer" type="Timer" parent="."]
+wait_time = 4.5
+
+[connection signal="resized" from="MarginContainer" to="." method="_on_MarginContainer_resized"]
+[connection signal="hiding_toggled" from="Bars/MenuBar" to="." method="_on_MenuBar_hiding_toggled"]
+[connection signal="visibility_changed" from="Bars/DescriptionBar" to="." method="_on_DescriptionBar_visibility_changed"]
+[connection signal="timeout" from="ForcedCloseTimer" to="." method="_on_ForcedCloseTimer_timeout"]

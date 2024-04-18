@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://themes/sub_theme.tres" type="Theme" id=1]
+[ext_resource path="res://ui/components/prompt_box.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/components/modifier_drop.gd" type="Script" id=3]
+[ext_resource path="res://ui/controllers/model_details_viewer.gd" type="Script" id=4]
+
+[node name="ModelDetailsViewer" type="VBoxContainer"]
+margin_right = 403.0
+margin_bottom = 79.0
+script = ExtResource( 4 )
+
+[node name="Viewer" type="HBoxContainer" parent="."]
+margin_right = 403.0
+margin_bottom = 79.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Details" type="VBoxContainer" parent="Viewer"]
+margin_right = 199.0
+margin_bottom = 79.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Viewer/Details"]
+margin_right = 199.0
+margin_bottom = 20.0
+text = "DESCRIPTION"
+
+[node name="Description" parent="Viewer/Details" instance=ExtResource( 2 )]
+margin_top = 24.0
+margin_right = 199.0
+margin_bottom = 79.0
+info_text = "DESCRIPTION"
+
+[node name="Photo" type="MarginContainer" parent="Viewer"]
+margin_left = 203.0
+margin_right = 403.0
+margin_bottom = 79.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Image" type="TextureRect" parent="Viewer/Photo"]
+margin_right = 200.0
+margin_bottom = 79.0
+expand = true
+stretch_mode = 6
+
+[node name="DropArea" type="Control" parent="Viewer/Photo"]
+margin_right = 200.0
+margin_bottom = 79.0
+script = ExtResource( 3 )
+
+[node name="EditControls" type="HBoxContainer" parent="."]
+margin_top = 83.0
+margin_right = 403.0
+margin_bottom = 109.0
+
+[node name="Cancel" type="Button" parent="EditControls"]
+margin_right = 60.0
+margin_bottom = 26.0
+text = "CANCEL"
+
+[node name="Control" type="Control" parent="EditControls"]
+margin_left = 64.0
+margin_right = 368.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+
+[node name="Save" type="Button" parent="EditControls"]
+margin_left = 372.0
+margin_right = 403.0
+margin_bottom = 26.0
+theme = ExtResource( 1 )
+text = "SAVE"
+
+[connection signal="modifier_dropped" from="Viewer/Photo/DropArea" to="." method="_on_DropArea_modifier_dropped"]
+[connection signal="pressed" from="EditControls/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="pressed" from="EditControls/Save" to="." method="_on_Save_pressed"]

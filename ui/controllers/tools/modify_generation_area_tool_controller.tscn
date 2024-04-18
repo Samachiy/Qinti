@@ -1,0 +1,192 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://ui/controllers/tools/modify_generation_area_tool_controller.gd" type="Script" id=1]
+[ext_resource path="res://ui/components/smart_option_button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/components/config_slider.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/components/config_checkbox.gd" type="Script" id=4]
+[ext_resource path="res://ui/components/ai_process_button.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/icons/lock_g48.png" type="Texture" id=6]
+[ext_resource path="res://assets/icons/lock_g47.png" type="Texture" id=7]
+[ext_resource path="res://assets/icons/lock_g32.png" type="Texture" id=8]
+[ext_resource path="res://ui/components/config_toggle_button.gd" type="Script" id=9]
+[ext_resource path="res://assets/icons/invert_g56.png" type="Texture" id=10]
+[ext_resource path="res://assets/icons/invert_path62.png" type="Texture" id=11]
+[ext_resource path="res://assets/icons/invert_g62.png" type="Texture" id=12]
+[ext_resource path="res://assets/icons/icon_g13.png" type="Texture" id=13]
+[ext_resource path="res://assets/icons/icon_path18.png" type="Texture" id=14]
+[ext_resource path="res://assets/icons/icon_g12.png" type="Texture" id=15]
+[ext_resource path="res://assets/icons/grid_snap_g93.png" type="Texture" id=16]
+[ext_resource path="res://assets/icons/grid_snap_g92.png" type="Texture" id=17]
+[ext_resource path="res://assets/icons/grid_snap_g91.png" type="Texture" id=18]
+
+[node name="ModifyGenerationAreaTool" type="VBoxContainer"]
+margin_right = 231.0
+margin_bottom = 90.0
+script = ExtResource( 1 )
+tool_button = "res://ui/controllers/tools/tool_buttons/modify_generation_area_button.tscn"
+
+[node name="Outpaint" parent="." instance=ExtResource( 5 )]
+margin_right = 244.0
+margin_bottom = 28.0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+text = "OUTPAINT_BUTTON"
+
+[node name="Proportions" parent="." instance=ExtResource( 2 )]
+margin_top = 32.0
+margin_right = 244.0
+margin_bottom = 58.0
+text = "PROPORTIONS"
+flag_name_const = "FLAG_GEN_AREA_PROPORTIONS"
+
+[node name="Spacing" type="Control" parent="Proportions"]
+visible = false
+margin_left = 184.0
+margin_right = 205.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="ImageSizeLabel" type="Label" parent="Proportions"]
+visible = false
+margin_left = 181.0
+margin_top = 6.0
+margin_right = 236.0
+margin_bottom = 20.0
+text = "512x512"
+valign = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Proportions"]
+margin_left = 138.0
+margin_right = 244.0
+margin_bottom = 26.0
+custom_constants/separation = 2
+
+[node name="SnapToGrid" type="TextureButton" parent="Proportions/HBoxContainer"]
+margin_right = 25.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 25, 0 )
+toggle_mode = true
+texture_normal = ExtResource( 18 )
+texture_pressed = ExtResource( 16 )
+texture_hover = ExtResource( 17 )
+texture_focused = ExtResource( 17 )
+expand = true
+stretch_mode = 5
+script = ExtResource( 9 )
+flag_name_const = "FLAG_GRID_SNAP_GEN_AREA"
+
+[node name="FocusGenerationArea" type="TextureButton" parent="Proportions/HBoxContainer"]
+margin_left = 27.0
+margin_right = 52.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 25, 0 )
+texture_normal = ExtResource( 15 )
+texture_pressed = ExtResource( 14 )
+texture_hover = ExtResource( 13 )
+texture_focused = ExtResource( 13 )
+expand = true
+stretch_mode = 5
+
+[node name="InverseProportion" type="TextureButton" parent="Proportions/HBoxContainer"]
+margin_left = 54.0
+margin_right = 79.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 25, 0 )
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 11 )
+texture_hover = ExtResource( 12 )
+texture_focused = ExtResource( 12 )
+expand = true
+stretch_mode = 5
+
+[node name="LockProportion" type="TextureButton" parent="Proportions/HBoxContainer"]
+margin_left = 81.0
+margin_right = 106.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 25, 0 )
+toggle_mode = true
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 6 )
+texture_hover = ExtResource( 8 )
+expand = true
+stretch_mode = 5
+script = ExtResource( 9 )
+flag_name_const = "FLAG_LOCK_PROPORTION_GEN_AREA"
+
+[node name="Spacing2" type="Control" parent="Proportions"]
+visible = false
+margin_left = 233.0
+margin_right = 259.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="Width" parent="." instance=ExtResource( 3 )]
+margin_top = 62.0
+margin_right = 244.0
+margin_bottom = 92.0
+text = "WIDTH"
+max_value = 2048.0
+step = 8.0
+no_upward_limit = true
+flag_name_const = "I_WIDTH"
+
+[node name="Height" parent="." instance=ExtResource( 3 )]
+margin_top = 96.0
+margin_right = 244.0
+margin_bottom = 126.0
+text = "HEIGHT"
+max_value = 2048.0
+step = 8.0
+no_upward_limit = true
+flag_name_const = "I_HEIGHT"
+
+[node name="Label" type="Label" parent="." groups=["advanced_ui"]]
+margin_top = 130.0
+margin_right = 244.0
+margin_bottom = 150.0
+text = "OUTPAINT_SETTINGS"
+
+[node name="DenoisingStrenght" parent="." groups=["advanced_ui"] instance=ExtResource( 3 )]
+margin_top = 154.0
+margin_right = 244.0
+margin_bottom = 184.0
+text = "DENOISING_STRENGTH"
+max_value = 1.0
+step = 0.05
+default_value = 0.75
+allow_decimals = true
+flag_name_const = "I_DENOISING_STRENGTH"
+flag_prefix_node_name = NodePath("../Outpaint")
+
+[node name="Options" type="HBoxContainer" parent="."]
+margin_top = 188.0
+margin_right = 244.0
+margin_bottom = 216.0
+
+[node name="UseModifiers" type="CheckBox" parent="Options" groups=["advanced_ui"]]
+margin_right = 129.0
+margin_bottom = 28.0
+pressed = true
+text = "USE_MODIFIERS"
+script = ExtResource( 4 )
+flag_name_const = "FLAG_USE_MODIFIERS"
+flag_prefix_node_name = NodePath("../../Outpaint")
+
+[node name="GridSize" parent="." instance=ExtResource( 3 )]
+visible = false
+margin_top = 174.0
+margin_right = 259.0
+margin_bottom = 198.0
+text = "SNAP_SIZE"
+flag_name_const = "FLAG_MAIN_CANVAS_GRID_SIZE"
+
+[connection signal="pressed" from="Outpaint" to="." method="_on_AIProcessButton_pressed"]
+[connection signal="option_selected" from="Proportions" to="." method="_on_Proportions_option_selected"]
+[connection signal="toggled" from="Proportions/HBoxContainer/SnapToGrid" to="." method="_on_SnapToGrid_toggled"]
+[connection signal="pressed" from="Proportions/HBoxContainer/FocusGenerationArea" to="." method="_on_FocusGenerationArea_pressed"]
+[connection signal="pressed" from="Proportions/HBoxContainer/InverseProportion" to="." method="_on_InverseProportion_pressed"]
+[connection signal="toggled" from="Proportions/HBoxContainer/LockProportion" to="." method="_on_LockProportion_toggled"]
+[connection signal="value_changed" from="Width" to="." method="_on_Width_value_changed"]
+[connection signal="value_changed" from="Height" to="." method="_on_Height_value_changed"]

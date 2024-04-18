@@ -1,0 +1,8 @@
+[gd_resource type="Theme" load_steps=3 format=2]
+
+[ext_resource path="res://themes/styles/button_simple_style_hover.tres" type="StyleBox" id=1]
+[ext_resource path="res://themes/styles/button_main_style_focus.tres" type="StyleBox" id=2]
+
+[resource]
+Button/styles/focus = ExtResource( 2 )
+Button/styles/hover = ExtResource( 1 )

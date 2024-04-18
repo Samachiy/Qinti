@@ -1,0 +1,131 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/icons/load_icon_mid.png" type="Texture" id=1]
+[ext_resource path="res://assets/icons/load_icon_outer.png" type="Texture" id=2]
+[ext_resource path="res://ui/components/loading_label_icon.gd" type="Script" id=3]
+[ext_resource path="res://assets/icons/load_icon_inner.png" type="Texture" id=4]
+[ext_resource path="res://ui/components/loading_label.gd" type="Script" id=5]
+
+[node name="LoadingLabel" type="MarginContainer"]
+margin_right = 276.0
+margin_bottom = 121.0
+mouse_filter = 2
+custom_constants/margin_right = 4
+custom_constants/margin_top = 4
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 4
+script = ExtResource( 5 )
+
+[node name="LoadIcon" type="AspectRatioContainer" parent="."]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 272.0
+margin_bottom = 117.0
+rect_min_size = Vector2( 25, 0 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Inner" type="TextureRect" parent="LoadIcon"]
+visible = false
+modulate = Color( 1, 1, 1, 0.752941 )
+margin_left = 77.5
+margin_right = 190.5
+margin_bottom = 113.0
+mouse_filter = 2
+size_flags_horizontal = 9
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 5
+script = ExtResource( 3 )
+
+[node name="Mid" type="TextureRect" parent="LoadIcon"]
+visible = false
+modulate = Color( 1, 1, 1, 0.686275 )
+margin_left = 77.5
+margin_right = 190.5
+margin_bottom = 113.0
+mouse_filter = 2
+size_flags_horizontal = 9
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 5
+script = ExtResource( 3 )
+
+[node name="Outer" type="TextureRect" parent="LoadIcon"]
+visible = false
+modulate = Color( 1, 1, 1, 0.498039 )
+margin_left = 77.5
+margin_right = 190.5
+margin_bottom = 113.0
+mouse_filter = 2
+size_flags_horizontal = 9
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 5
+script = ExtResource( 3 )
+
+[node name="Empty" type="TextureRect" parent="LoadIcon"]
+margin_left = 77.5
+margin_right = 190.5
+margin_bottom = 113.0
+mouse_filter = 2
+size_flags_horizontal = 9
+stretch_mode = 6
+
+[node name="Percentage" type="Label" parent="LoadIcon/Empty"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -22.0
+margin_top = -7.0
+margin_right = 22.0
+margin_bottom = 7.0
+rect_pivot_offset = Vector2( 32, 32 )
+text = "100%"
+align = 1
+clip_text = true
+
+[node name="TextClip" type="Control" parent="."]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 272.0
+margin_bottom = 117.0
+rect_min_size = Vector2( 20, 20 )
+rect_clip_content = true
+mouse_filter = 2
+size_flags_horizontal = 3
+
+[node name="ButtonLabel" type="Label" parent="TextClip"]
+modulate = Color( 1, 1, 1, 0.976471 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+align = 1
+valign = 1
+
+[node name="Details" type="HBoxContainer" parent="."]
+visible = false
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 272.0
+margin_bottom = 117.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_clip_content = true
+mouse_filter = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Control" type="Control" parent="Details"]
+visible = false
+margin_right = 24.0
+margin_bottom = 45.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[connection signal="animation_ended" from="LoadIcon/Outer" to="." method="_on_Outer_animation_ended"]
+[connection signal="animation_started" from="LoadIcon/Outer" to="." method="_on_Outer_animation_started"]

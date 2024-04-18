@@ -1,0 +1,113 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://ui/controllers/tools/transform_selection_tool_controller.gd" type="Script" id=1]
+[ext_resource path="res://assets/icons/grid_snap_g93.png" type="Texture" id=2]
+[ext_resource path="res://ui/components/config_slider.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/icons/lock_g48.png" type="Texture" id=4]
+[ext_resource path="res://assets/icons/lock_g47.png" type="Texture" id=5]
+[ext_resource path="res://assets/icons/lock_g32.png" type="Texture" id=6]
+[ext_resource path="res://ui/components/config_toggle_button.gd" type="Script" id=7]
+[ext_resource path="res://assets/icons/grid_snap_g92.png" type="Texture" id=8]
+[ext_resource path="res://assets/icons/grid_snap_g91.png" type="Texture" id=9]
+[ext_resource path="res://ui/materials/layer_texture_material.tres" type="Material" id=10]
+
+[node name="TransformSelectionTool" type="VBoxContainer"]
+material = ExtResource( 10 )
+margin_right = 231.0
+margin_bottom = 90.0
+script = ExtResource( 1 )
+tool_button = "res://ui/controllers/tools/tool_buttons/transform_selection_button.tscn"
+
+[node name="Buttons" type="HBoxContainer" parent="."]
+margin_right = 231.0
+margin_bottom = 26.0
+
+[node name="SnapToGrid" type="TextureButton" parent="Buttons"]
+margin_right = 25.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 25, 0 )
+toggle_mode = true
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 2 )
+texture_hover = ExtResource( 8 )
+texture_focused = ExtResource( 8 )
+expand = true
+stretch_mode = 5
+script = ExtResource( 7 )
+flag_name_const = "FLAG_GRID_SNAP_TRANSFORM"
+
+[node name="LockProportion" type="TextureButton" parent="Buttons"]
+margin_left = 29.0
+margin_right = 49.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 20, 0 )
+toggle_mode = true
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 6 )
+expand = true
+script = ExtResource( 7 )
+flag_name_const = "FLAG_LOCK_PROPORTION_TRANSFORM"
+
+[node name="Spacing" type="Control" parent="Buttons"]
+margin_left = 53.0
+margin_right = 175.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+
+[node name="Reset" type="Button" parent="Buttons"]
+margin_left = 179.0
+margin_right = 231.0
+margin_bottom = 26.0
+text = "RESET"
+
+[node name="Rotation" parent="." instance=ExtResource( 3 )]
+margin_top = 30.0
+margin_right = 231.0
+margin_bottom = 60.0
+text = "ROTATION"
+min_value = -360.0
+max_value = 360.0
+default_value = 0.0
+allow_decimals = true
+requieres_flag = false
+
+[node name="Width" parent="." instance=ExtResource( 3 )]
+margin_top = 64.0
+margin_right = 231.0
+margin_bottom = 94.0
+text = "WIDTH"
+max_value = 2048.0
+step = 8.0
+no_upward_limit = true
+requieres_flag = false
+
+[node name="Height" parent="." instance=ExtResource( 3 )]
+margin_top = 98.0
+margin_right = 231.0
+margin_bottom = 128.0
+text = "HEIGHT"
+max_value = 2048.0
+step = 8.0
+no_upward_limit = true
+requieres_flag = false
+
+[node name="Options" type="HBoxContainer" parent="."]
+visible = false
+margin_top = 108.0
+margin_right = 231.0
+margin_bottom = 108.0
+
+[node name="GridSize" parent="." groups=["advanced_ui"] instance=ExtResource( 3 )]
+margin_top = 132.0
+margin_right = 231.0
+margin_bottom = 162.0
+text = "SNAP_SIZE"
+flag_name_const = "FLAG_GRID_SIZE"
+
+[connection signal="toggled" from="Buttons/SnapToGrid" to="." method="_on_SnapToGrid_toggled"]
+[connection signal="toggled" from="Buttons/LockProportion" to="." method="_on_LockProportion_toggled"]
+[connection signal="pressed" from="Buttons/Reset" to="." method="_on_Reset_pressed"]
+[connection signal="value_changed" from="Rotation" to="." method="_on_Rotation_value_changed"]
+[connection signal="value_changed" from="Width" to="." method="_on_Width_value_changed"]
+[connection signal="value_changed" from="Height" to="." method="_on_Height_value_changed"]

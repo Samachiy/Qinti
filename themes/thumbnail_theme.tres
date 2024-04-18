@@ -1,0 +1,24 @@
+[gd_resource type="Theme" load_steps=3 format=2]
+
+[ext_resource path="res://themes/styles/panel_as_texture_frame_style.tres" type="StyleBox" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.152941, 0.192157, 0.501961, 0.996078 )
+border_width_left = 15
+border_width_top = 15
+border_width_right = 15
+border_width_bottom = 15
+border_color = Color( 0.152941, 0.192157, 0.501961, 0 )
+corner_radius_top_left = 34
+corner_radius_top_right = 16
+corner_radius_bottom_right = 34
+corner_radius_bottom_left = 34
+corner_detail = 16
+expand_margin_left = 10.0
+expand_margin_right = 10.0
+expand_margin_top = 10.0
+expand_margin_bottom = 10.0
+
+[resource]
+Label/styles/normal = SubResource( 1 )
+Panel/styles/panel = ExtResource( 1 )

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://ui/modifiers/base_modifier_type.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+types = {
+"Composition": "COMPOSITION_MODE",
+"Depth": "DEPTH_MODE",
+"Img2Img": "IMG2IMG_MODE",
+"Lineart": "LINEART_MODE",
+"NormalMap": "NORMAL_MAP_MODE",
+"PNGInfo": "PNG_INFO",
+"Pose2D": "POSE2D_MODE"
+}
+order = "1 PNGInfo
+2 Img2Img
+3 Lineart
+5 Pose2D
+6 Composition
+7 Depth
+8 NormalMap"

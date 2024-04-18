@@ -1,0 +1,47 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui/components/description_bar.gd" type="Script" id=1]
+[ext_resource path="res://ui/components/popup_menu.tscn" type="PackedScene" id=2]
+
+[node name="DescriptionBar" type="Panel"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_clip_content = true
+custom_constants/margin_right = 2
+custom_constants/margin_top = 2
+custom_constants/margin_left = 2
+custom_constants/margin_bottom = 2
+
+[node name="Label" type="Label" parent="Margin"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 1022.0
+margin_bottom = 22.0
+text = "> "
+
+[node name="Menu" parent="Margin" instance=ExtResource( 2 )]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 22.0
+margin_bottom = 22.0
+theme_type_variation = "InfoRowsPopup"
+
+[node name="ClickArea" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="HoverIndicator" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 1, 1, 1, 0.196078 )
+
+[connection signal="gui_input" from="ClickArea" to="." method="_on_ClickArea_gui_input"]
+[connection signal="mouse_entered" from="ClickArea" to="." method="_on_ClickArea_mouse_entered"]
+[connection signal="mouse_exited" from="ClickArea" to="." method="_on_ClickArea_mouse_exited"]

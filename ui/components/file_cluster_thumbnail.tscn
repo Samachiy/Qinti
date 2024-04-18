@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://ui/components/file_cluster_thumbnail.gd" type="Script" id=2]
+[ext_resource path="res://ui/components/popup_menu.tscn" type="PackedScene" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color( 0.8, 0.8, 0.8, 0 )
+
+[node name="FileClusterThumbnail" type="TextureRect"]
+margin_right = 166.0
+margin_bottom = 127.0
+rect_clip_content = true
+expand = true
+stretch_mode = 5
+script = ExtResource( 2 )
+
+[node name="ThumbnailName" type="Label" parent="."]
+unique_name_in_owner = true
+modulate = Color( 1, 1, 1, 0.843137 )
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -20.0
+grow_vertical = 0
+rect_min_size = Vector2( 50, 10 )
+custom_styles/normal = SubResource( 1 )
+text = "TEST_LABEL"
+valign = 2
+clip_text = true
+
+[node name="ThumbnailNameBG" type="ColorRect" parent="ThumbnailName"]
+unique_name_in_owner = true
+modulate = Color( 0.498039, 0.498039, 0.498039, 0.498039 )
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Menu" parent="." instance=ExtResource( 3 )]

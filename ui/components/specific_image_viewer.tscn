@@ -1,0 +1,113 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://themes/main_theme.tres" type="Theme" id=1]
+[ext_resource path="res://assets/icons/viewer_icon_#path1836_copy_1.png" type="Texture" id=2]
+[ext_resource path="res://qinti_default.png" type="Texture" id=3]
+[ext_resource path="res://ui/components/specific_image_viewer.gd" type="Script" id=4]
+[ext_resource path="res://ui/components/simple_row_container.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/icons/viewer_icon_#path1543_copy_2.png" type="Texture" id=6]
+[ext_resource path="res://assets/icons/viewer_icon_#path1838_copy_1.png" type="Texture" id=7]
+[ext_resource path="res://assets/icons/viewer_icon_#path1842_copy_1.png" type="Texture" id=8]
+[ext_resource path="res://assets/icons/viewer_icon_#path1594_copy_2.png" type="Texture" id=9]
+[ext_resource path="res://assets/icons/viewer_icon_#path1840_copy_1.png" type="Texture" id=10]
+[ext_resource path="res://ui/components/popup_menu.tscn" type="PackedScene" id=11]
+
+[node name="SpecificImageViewer" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+script = ExtResource( 4 )
+
+[node name="Background" type="Panel" parent="."]
+modulate = Color( 1, 1, 1, 0.745098 )
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+custom_constants/margin_right = 20
+custom_constants/margin_left = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+margin_left = 20.0
+margin_top = 12.0
+margin_right = 1004.0
+margin_bottom = 588.0
+
+[node name="Prev" type="TextureButton" parent="MarginContainer/HBoxContainer"]
+margin_top = 252.0
+margin_right = 26.0
+margin_bottom = 323.0
+size_flags_vertical = 4
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 9 )
+texture_hover = ExtResource( 7 )
+texture_focused = ExtResource( 7 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+margin_left = 38.0
+margin_right = 946.0
+margin_bottom = 576.0
+size_flags_horizontal = 3
+
+[node name="Image" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+margin_right = 908.0
+margin_bottom = 489.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+
+[node name="Thumbnails" parent="MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource( 5 )]
+margin_top = 501.0
+margin_right = 908.0
+margin_bottom = 576.0
+rect_min_size = Vector2( 0, 75 )
+rect_clip_content = false
+
+[node name="Next" type="TextureButton" parent="MarginContainer/HBoxContainer"]
+margin_left = 958.0
+margin_top = 252.0
+margin_right = 984.0
+margin_bottom = 323.0
+size_flags_vertical = 4
+texture_normal = ExtResource( 6 )
+texture_pressed = ExtResource( 6 )
+texture_hover = ExtResource( 2 )
+texture_focused = ExtResource( 2 )
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer"]
+margin_left = 20.0
+margin_top = 12.0
+margin_right = 1004.0
+margin_bottom = 588.0
+mouse_filter = 2
+custom_constants/margin_left = 0
+
+[node name="Close" type="TextureButton" parent="MarginContainer/MarginContainer"]
+margin_left = 946.0
+margin_top = 12.0
+margin_right = 972.0
+margin_bottom = 38.0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+texture_normal = ExtResource( 10 )
+texture_pressed = ExtResource( 10 )
+texture_hover = ExtResource( 8 )
+texture_focused = ExtResource( 8 )
+
+[node name="Menu" parent="." instance=ExtResource( 11 )]
+margin_right = 1024.0
+margin_bottom = 600.0
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Prev" to="." method="_on_Prev_pressed"]
+[connection signal="gui_input" from="MarginContainer/HBoxContainer/VBoxContainer/Image" to="." method="_on_Image_gui_input"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Next" to="." method="_on_Next_pressed"]
+[connection signal="pressed" from="MarginContainer/MarginContainer/Close" to="." method="_on_Close_pressed"]
+[connection signal="option_selected" from="Menu" to="." method="_on_Menu_option_selected"]

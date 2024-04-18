@@ -1,0 +1,283 @@
+[gd_scene load_steps=23 format=2]
+
+[ext_resource path="res://ui/generation_interface.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/components/file_dialog.gd" type="Script" id=2]
+[ext_resource path="res://addons/guion/tutorial_maker/tutorial_display.gd" type="Script" id=3]
+[ext_resource path="res://ui/components/specific_image_viewer.tscn" type="PackedScene" id=4]
+[ext_resource path="res://themes/main_theme.tres" type="Theme" id=5]
+[ext_resource path="res://server/server_management_ui.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/controllers/style_details_viewer.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/components/style_edit_dialog.gd" type="Script" id=8]
+[ext_resource path="res://ui/components/edit_dialogs.gd" type="Script" id=9]
+[ext_resource path="res://ui/controllers/server_state_indicator.tscn" type="PackedScene" id=10]
+[ext_resource path="res://ui/components/model_selector.tscn" type="PackedScene" id=11]
+[ext_resource path="res://ui/components/model_edit_dialog.gd" type="Script" id=12]
+[ext_resource path="res://ui/controllers/model_details_viewer.tscn" type="PackedScene" id=13]
+[ext_resource path="res://ui/components/about.tscn" type="PackedScene" id=14]
+[ext_resource path="res://ui/components/color_picker_service.gd" type="Script" id=15]
+[ext_resource path="res://main.gd" type="Script" id=16]
+[ext_resource path="res://ui/components/loading_label.tscn" type="PackedScene" id=17]
+[ext_resource path="res://ui/dialogs/dialogs.gd" type="Script" id=18]
+[ext_resource path="res://themes/sub_theme.tres" type="Theme" id=19]
+[ext_resource path="res://ui/dialogs/confirmation_dialog.gd" type="Script" id=20]
+[ext_resource path="res://ui/dialogs/info_dialog.gd" type="Script" id=21]
+[ext_resource path="res://ui/dialogs/loading_dialog.gd" type="Script" id=22]
+
+[node name="Main" type="CanvasLayer"]
+script = ExtResource( 16 )
+
+[node name="GenerationInterface" parent="." instance=ExtResource( 1 )]
+
+[node name="ManualDialogs" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 9 )
+
+[node name="StyleEditDialog" type="WindowDialog" parent="ManualDialogs"]
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 20.0
+margin_top = -255.0
+margin_right = 1044.0
+margin_bottom = 345.0
+rect_min_size = Vector2( 420, 420 )
+theme = ExtResource( 5 )
+resizable = true
+script = ExtResource( 8 )
+
+[node name="StyleDetailsViewer" parent="ManualDialogs/StyleEditDialog" instance=ExtResource( 7 )]
+
+[node name="ModelSelector" parent="ManualDialogs" instance=ExtResource( 11 )]
+visible = false
+theme = ExtResource( 5 )
+
+[node name="ModelEditDialog" type="WindowDialog" parent="ManualDialogs"]
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 202.0
+margin_top = -58.0
+margin_right = 1226.0
+margin_bottom = 542.0
+rect_min_size = Vector2( 420, 360 )
+theme = ExtResource( 5 )
+resizable = true
+script = ExtResource( 12 )
+
+[node name="ModelDetailsViewer" parent="ManualDialogs/ModelEditDialog" instance=ExtResource( 13 )]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 0.0
+margin_bottom = 0.0
+
+[node name="InstallerUI" parent="." instance=ExtResource( 6 )]
+visible = false
+
+[node name="ServerState" type="WindowDialog" parent="."]
+margin_right = 415.0
+margin_bottom = 236.0
+theme = ExtResource( 5 )
+resizable = true
+
+[node name="ServerStateIndicator" parent="ServerState" instance=ExtResource( 10 )]
+
+[node name="About" type="WindowDialog" parent="."]
+margin_right = 415.0
+margin_bottom = 236.0
+theme = ExtResource( 5 )
+resizable = true
+
+[node name="About" parent="About" instance=ExtResource( 14 )]
+
+[node name="FileDialog" type="FileDialog" parent="."]
+margin_left = 293.0
+margin_top = 229.0
+margin_right = 657.0
+margin_bottom = 492.0
+theme = ExtResource( 5 )
+resizable = true
+access = 2
+script = ExtResource( 2 )
+
+[node name="SpecificImageViewer" parent="." instance=ExtResource( 4 )]
+visible = false
+
+[node name="Tutorial" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 5 )
+script = ExtResource( 3 )
+dialog_box = "res://ui/components/tutorial_box.tscn"
+frame_color = Color( 0.858824, 0.152941, 0.152941, 1 )
+frame_width = 7
+touch_indicator = "res://ui/components/tutorial_touch_indicator.tscn"
+
+[node name="ColorPickerService" type="TextureButton" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_default_cursor_shape = 3
+script = ExtResource( 15 )
+
+[node name="Dialogs" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource( 5 )
+script = ExtResource( 18 )
+
+[node name="InfoDialog" type="AcceptDialog" parent="Dialogs"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -113.5
+margin_top = -148.0
+margin_right = 113.5
+margin_bottom = 102.0
+script = ExtResource( 21 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Dialogs/InfoDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -44.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Dialogs/InfoDialog/VBoxContainer"]
+margin_right = 211.0
+margin_bottom = 166.0
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Dialogs/InfoDialog/VBoxContainer/MarginContainer"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 199.0
+margin_bottom = 154.0
+
+[node name="Spacing" type="Control" parent="Dialogs/InfoDialog/VBoxContainer/MarginContainer/VBoxContainer"]
+margin_right = 187.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 0, 15 )
+
+[node name="Label" type="Label" parent="Dialogs/InfoDialog/VBoxContainer/MarginContainer/VBoxContainer"]
+margin_top = 27.0
+margin_right = 187.0
+margin_bottom = 70.0
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="Spacing2" type="Control" parent="Dialogs/InfoDialog/VBoxContainer/MarginContainer/VBoxContainer"]
+margin_top = 82.0
+margin_right = 187.0
+margin_bottom = 87.0
+rect_min_size = Vector2( 0, 5 )
+
+[node name="Command" type="HBoxContainer" parent="Dialogs/InfoDialog/VBoxContainer/MarginContainer/VBoxContainer"]
+margin_top = 99.0
+margin_right = 187.0
+margin_bottom = 142.0
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Dialogs/InfoDialog/VBoxContainer/MarginContainer/VBoxContainer/Command"]
+margin_right = 132.0
+margin_bottom = 43.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_following = true
+
+[node name="Copy" type="Button" parent="Dialogs/InfoDialog/VBoxContainer/MarginContainer/VBoxContainer/Command"]
+margin_left = 144.0
+margin_right = 187.0
+margin_bottom = 43.0
+theme = ExtResource( 19 )
+text = "  Copy  "
+
+[node name="Spacing" type="Control" parent="Dialogs/InfoDialog/VBoxContainer"]
+margin_top = 178.0
+margin_right = 211.0
+margin_bottom = 198.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="LoadingDialog" type="WindowDialog" parent="Dialogs"]
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -113.5
+margin_top = -107.5
+margin_right = 113.5
+margin_bottom = 107.5
+script = ExtResource( 22 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Dialogs/LoadingDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Dialogs/LoadingDialog/VBoxContainer"]
+margin_right = 227.0
+margin_bottom = 215.0
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Dialogs/LoadingDialog/VBoxContainer/MarginContainer"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 215.0
+margin_bottom = 203.0
+
+[node name="Spacing" type="Control" parent="Dialogs/LoadingDialog/VBoxContainer/MarginContainer/VBoxContainer"]
+margin_right = 203.0
+margin_bottom = 15.0
+rect_min_size = Vector2( 0, 15 )
+
+[node name="Label" type="Label" parent="Dialogs/LoadingDialog/VBoxContainer/MarginContainer/VBoxContainer"]
+margin_top = 27.0
+margin_right = 203.0
+margin_bottom = 70.0
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="Spacing2" type="Control" parent="Dialogs/LoadingDialog/VBoxContainer/MarginContainer/VBoxContainer"]
+margin_top = 82.0
+margin_right = 203.0
+margin_bottom = 87.0
+rect_min_size = Vector2( 0, 5 )
+
+[node name="LoadingLabel" parent="Dialogs/LoadingDialog/VBoxContainer/MarginContainer/VBoxContainer" instance=ExtResource( 17 )]
+margin_top = 99.0
+margin_right = 203.0
+margin_bottom = 191.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="Dialogs"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -113.0
+margin_top = -94.0
+margin_right = 113.0
+margin_bottom = 94.0
+dialog_autowrap = true
+script = ExtResource( 20 )
+
+[connection signal="ready" from="." to="GenerationInterface" method="_on_Main_ready"]
+[connection signal="resized" from="ManualDialogs" to="ManualDialogs" method="_on_EditDialogs_resized"]
+[connection signal="close_requested" from="ManualDialogs/StyleEditDialog/StyleDetailsViewer" to="ManualDialogs/StyleEditDialog" method="_on_StyleDetailsViewer_close_requested"]
+[connection signal="visibility_changed" from="ManualDialogs/ModelEditDialog" to="ManualDialogs/ModelEditDialog" method="_on_ModelEditDialog_visibility_changed"]
+[connection signal="close_requested" from="ManualDialogs/ModelEditDialog/ModelDetailsViewer" to="ManualDialogs/ModelEditDialog" method="_on_ModelDetailsViewer_close_requested"]
+[connection signal="pressed" from="Dialogs/InfoDialog/VBoxContainer/MarginContainer/VBoxContainer/Command/Copy" to="Dialogs/InfoDialog" method="_on_Copy_pressed"]

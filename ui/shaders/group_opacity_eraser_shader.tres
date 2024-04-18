@@ -1,0 +1,13 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+render_mode blend_sub;
+
+uniform float opacity : hint_range(0.0, 1.0) = 1.0;
+
+void fragment(){
+	vec4 color = textureLod(TEXTURE, UV, 0.0);
+	color.a = min(color.a, opacity);
+	COLOR = color;
+}"

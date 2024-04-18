@@ -1,0 +1,114 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://ui/components/menu_bar.gd" type="Script" id=1]
+
+[node name="MenuBar" type="Panel"]
+margin_right = 1024.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 28 )
+script = ExtResource( 1 )
+
+[node name="Menu" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 2
+custom_constants/margin_top = 2
+custom_constants/margin_left = 2
+custom_constants/margin_bottom = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Menu"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 1022.0
+margin_bottom = 98.0
+
+[node name="Menu" type="MenuButton" parent="Menu/Buttons"]
+margin_right = 49.0
+margin_bottom = 96.0
+text = "MENU"
+switch_on_hover = true
+
+[node name="Server" type="MenuButton" parent="Menu/Buttons"]
+margin_left = 53.0
+margin_right = 112.0
+margin_bottom = 96.0
+focus_mode = 2
+text = "SERVER"
+switch_on_hover = true
+
+[node name="Settings" type="MenuButton" parent="Menu/Buttons"]
+margin_left = 116.0
+margin_right = 190.0
+margin_bottom = 96.0
+focus_mode = 2
+text = "SETTINGS"
+switch_on_hover = true
+
+[node name="Help" type="MenuButton" parent="Menu/Buttons"]
+margin_left = 194.0
+margin_right = 238.0
+margin_bottom = 96.0
+focus_mode = 2
+text = "HELP"
+switch_on_hover = true
+
+[node name="Spacing" type="Control" parent="Menu/Buttons"]
+margin_left = 242.0
+margin_right = 1020.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+
+[node name="DarkLightMode" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+custom_constants/margin_right = 2
+custom_constants/margin_top = 2
+custom_constants/margin_left = 2
+custom_constants/margin_bottom = 2
+
+[node name="Buttons" type="HBoxContainer" parent="DarkLightMode"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 1022.0
+margin_bottom = 98.0
+mouse_filter = 2
+alignment = 2
+
+[node name="SpacingCenter" type="Control" parent="DarkLightMode/Buttons"]
+margin_bottom = 96.0
+mouse_filter = 2
+
+[node name="Themes" type="MarginContainer" parent="DarkLightMode/Buttons"]
+margin_left = 4.0
+margin_right = 981.0
+margin_bottom = 96.0
+mouse_filter = 2
+size_flags_horizontal = 3
+custom_constants/margin_right = 0
+custom_constants/margin_top = 6
+custom_constants/margin_left = 6
+custom_constants/margin_bottom = 0
+
+[node name="Buttons" type="HBoxContainer" parent="DarkLightMode/Buttons/Themes"]
+visible = false
+margin_left = 6.0
+margin_top = 6.0
+margin_right = 977.0
+margin_bottom = 96.0
+alignment = 1
+
+[node name="ShowHideThemes" type="Button" parent="DarkLightMode/Buttons"]
+margin_left = 985.0
+margin_right = 1004.0
+margin_bottom = 96.0
+text = "<"
+
+[node name="LightDarkMode" type="Button" parent="DarkLightMode/Buttons"]
+margin_left = 1008.0
+margin_right = 1020.0
+margin_bottom = 96.0
+
+[connection signal="resized" from="." to="." method="_on_MenuBar_resized"]
+[connection signal="pressed" from="DarkLightMode/Buttons/ShowHideThemes" to="." method="_on_ShowHideThemes_pressed"]
+[connection signal="pressed" from="DarkLightMode/Buttons/LightDarkMode" to="." method="_on_LightDarkMode_pressed"]

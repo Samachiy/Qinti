@@ -1,0 +1,308 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://ui/boards/board.gd" type="Script" id=1]
+[ext_resource path="res://ui/controllers/tools/tool_buttons/overunderlay_visibility_button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/components/config_slider.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/components/popup_fast_settings_panel.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/icons/info_path69.png" type="Texture" id=5]
+[ext_resource path="res://assets/icons/info_path79.png" type="Texture" id=6]
+[ext_resource path="res://assets/icons/magnifying_glass_g97.png" type="Texture" id=7]
+[ext_resource path="res://assets/icons/magnifying_glass_g99.png" type="Texture" id=8]
+[ext_resource path="res://assets/icons/magnifying_glass_g100.png" type="Texture" id=9]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[node name="Board" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 0, 24 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 4
+script = ExtResource( 1 )
+
+[node name="Spacing" type="Control" parent="."]
+margin_right = 1024.0
+
+[node name="Header" type="HBoxContainer" parent="."]
+margin_top = 4.0
+margin_right = 1024.0
+margin_bottom = 32.0
+
+[node name="ShowGenerationArea" type="HBoxContainer" parent="Header"]
+margin_right = 70.0
+margin_bottom = 28.0
+custom_constants/separation = 0
+
+[node name="Label" type="Label" parent="Header/ShowGenerationArea"]
+margin_right = 48.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 0, 28 )
+text = "CANVAS"
+valign = 1
+
+[node name="Spacing" type="Control" parent="Header/ShowGenerationArea"]
+margin_left = 48.0
+margin_right = 58.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 10, 10 )
+
+[node name="Tutorial" type="TextureButton" parent="Header/ShowGenerationArea"]
+margin_left = 58.0
+margin_top = 8.0
+margin_right = 70.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 12, 12 )
+size_flags_vertical = 4
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 5 )
+texture_hover = ExtResource( 6 )
+texture_focused = ExtResource( 6 )
+expand = true
+
+[node name="Spacing" type="Control" parent="Header"]
+margin_left = 74.0
+margin_right = 1008.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 10, 10 )
+size_flags_horizontal = 3
+
+[node name="SwitchCanvasModifier" type="Button" parent="Header"]
+margin_left = 1012.0
+margin_top = 2.0
+margin_right = 1024.0
+margin_bottom = 28.0
+size_flags_vertical = 8
+
+[node name="Spacing2" type="Control" parent="."]
+margin_top = 36.0
+margin_right = 1024.0
+margin_bottom = 36.0
+
+[node name="CanvasArea" type="HBoxContainer" parent="."]
+margin_top = 40.0
+margin_right = 1024.0
+margin_bottom = 586.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="CanvasContainer" type="PanelContainer" parent="CanvasArea"]
+margin_right = 1010.0
+margin_bottom = 546.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
+
+[node name="OverunderlaySettings" type="VBoxContainer" parent="CanvasArea/CanvasContainer"]
+margin_right = 1010.0
+margin_bottom = 546.0
+
+[node name="Container" parent="CanvasArea/CanvasContainer/OverunderlaySettings" instance=ExtResource( 4 )]
+margin_right = 1010.0
+margin_bottom = 166.0
+main_area_control = NodePath("Area")
+aux_area_control_1 = NodePath("../../../ToolsArea/Margin/Tools/OverunderlayButton")
+
+[node name="Margin" type="MarginContainer" parent="CanvasArea/CanvasContainer/OverunderlaySettings/Container"]
+margin_right = 1010.0
+margin_bottom = 166.0
+
+[node name="Controls" type="VBoxContainer" parent="CanvasArea/CanvasContainer/OverunderlaySettings/Container/Margin"]
+margin_right = 1010.0
+margin_bottom = 166.0
+
+[node name="ModifierLayOpacity" parent="CanvasArea/CanvasContainer/OverunderlaySettings/Container/Margin/Controls" instance=ExtResource( 3 )]
+unique_name_in_owner = true
+margin_right = 1010.0
+margin_bottom = 30.0
+text = "LAY_MODIFIERS_OPACITY"
+max_value = 0.85
+step = 0.05
+default_value = 0.4
+allow_decimals = true
+flag_name_const = "FLAG_LAY_MODIFIERS_OPACITY"
+flag_prefix_node_name = NodePath("../../../../../../..")
+
+[node name="ModifierOverLayOpacity" parent="CanvasArea/CanvasContainer/OverunderlaySettings/Container/Margin/Controls" instance=ExtResource( 3 )]
+unique_name_in_owner = true
+margin_top = 34.0
+margin_right = 1010.0
+margin_bottom = 64.0
+text = "LAY_OVER_MODIFIERS_OPACITY"
+max_value = 0.75
+step = 0.05
+default_value = 0.4
+allow_decimals = true
+flag_name_const = "FLAG_OVERLAY_MODIFIERS_OPACITY"
+flag_prefix_node_name = NodePath("../../../../../../..")
+
+[node name="ModifierUnderLayOpacity" parent="CanvasArea/CanvasContainer/OverunderlaySettings/Container/Margin/Controls" instance=ExtResource( 3 )]
+unique_name_in_owner = true
+margin_top = 68.0
+margin_right = 1010.0
+margin_bottom = 98.0
+text = "LAY_UNDER_MODIFIERS_OPACITY"
+max_value = 0.95
+step = 0.05
+default_value = 0.7
+allow_decimals = true
+flag_name_const = "FLAG_UNDERLAY_MODIFIERS_OPACITY"
+flag_prefix_node_name = NodePath("../../../../../../..")
+
+[node name="GenImageLayOpacity" parent="CanvasArea/CanvasContainer/OverunderlaySettings/Container/Margin/Controls" instance=ExtResource( 3 )]
+unique_name_in_owner = true
+margin_top = 102.0
+margin_right = 1010.0
+margin_bottom = 132.0
+text = "LAY_GEN_IMAGE_OPACITY"
+max_value = 0.75
+step = 0.05
+default_value = 0.0
+allow_decimals = true
+flag_name_const = "FLAG_LAY_GEN_IMAGE_OPACITY"
+flag_prefix_node_name = NodePath("../../../../../../..")
+
+[node name="GenMaskLayOpacity" parent="CanvasArea/CanvasContainer/OverunderlaySettings/Container/Margin/Controls" instance=ExtResource( 3 )]
+unique_name_in_owner = true
+margin_top = 136.0
+margin_right = 1010.0
+margin_bottom = 166.0
+text = "LAY_GEN_MASK_OPACITY"
+max_value = 0.75
+step = 0.05
+default_value = 0.4
+allow_decimals = true
+flag_name_const = "FLAG_LAY_GEN_MASK_OPACITY"
+flag_prefix_node_name = NodePath("../../../../../../..")
+
+[node name="Area" type="Control" parent="CanvasArea/CanvasContainer/OverunderlaySettings/Container"]
+margin_right = 1010.0
+margin_bottom = 166.0
+
+[node name="Spacing" type="Control" parent="CanvasArea/CanvasContainer/OverunderlaySettings"]
+margin_top = 170.0
+margin_right = 1010.0
+margin_bottom = 546.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ZoomSettings" type="VBoxContainer" parent="CanvasArea/CanvasContainer"]
+margin_right = 1010.0
+margin_bottom = 546.0
+
+[node name="Container" parent="CanvasArea/CanvasContainer/ZoomSettings" instance=ExtResource( 4 )]
+margin_right = 1010.0
+margin_bottom = 60.0
+main_area_control = NodePath("Area")
+aux_area_control_1 = NodePath("../../../ToolsArea/Margin/Tools/ZoomButton")
+
+[node name="Margin" type="MarginContainer" parent="CanvasArea/CanvasContainer/ZoomSettings/Container"]
+margin_right = 1010.0
+margin_bottom = 60.0
+
+[node name="Controls" type="VBoxContainer" parent="CanvasArea/CanvasContainer/ZoomSettings/Container/Margin"]
+margin_right = 1010.0
+margin_bottom = 60.0
+
+[node name="Zoom" parent="CanvasArea/CanvasContainer/ZoomSettings/Container/Margin/Controls" instance=ExtResource( 3 )]
+margin_right = 1010.0
+margin_bottom = 30.0
+text = "ZOOM"
+min_value = 12.5
+max_value = 500.0
+step = 5.0
+default_value = 100.0
+allow_decimals = true
+no_upward_limit = true
+requieres_flag = false
+
+[node name="ResetZoom" type="Button" parent="CanvasArea/CanvasContainer/ZoomSettings/Container/Margin/Controls"]
+margin_left = 958.0
+margin_top = 34.0
+margin_right = 1010.0
+margin_bottom = 60.0
+size_flags_horizontal = 8
+text = "RESET"
+
+[node name="Area" type="Control" parent="CanvasArea/CanvasContainer/ZoomSettings/Container"]
+margin_right = 1010.0
+margin_bottom = 60.0
+
+[node name="Spacing" type="Control" parent="CanvasArea/CanvasContainer/ZoomSettings"]
+margin_top = 64.0
+margin_right = 1010.0
+margin_bottom = 546.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ToolsArea" type="PanelContainer" parent="CanvasArea"]
+margin_left = 1010.0
+margin_right = 1024.0
+margin_bottom = 546.0
+
+[node name="Margin" type="MarginContainer" parent="CanvasArea/ToolsArea"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 7.0
+margin_bottom = 539.0
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+
+[node name="Tools" type="VBoxContainer" parent="CanvasArea/ToolsArea/Margin"]
+margin_bottom = 532.0
+alignment = 1
+
+[node name="OverunderlayButton" parent="CanvasArea/ToolsArea/Margin/Tools" instance=ExtResource( 2 )]
+margin_right = 0.0
+margin_bottom = 0.0
+pressed = true
+has_right_click = true
+
+[node name="ZoomButton" parent="CanvasArea/ToolsArea/Margin/Tools" instance=ExtResource( 2 )]
+margin_top = 4.0
+margin_right = 0.0
+margin_bottom = 4.0
+toggle_mode = false
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 9 )
+texture_hover = ExtResource( 8 )
+has_right_click = true
+
+[node name="AddedTools" type="VBoxContainer" parent="CanvasArea/ToolsArea/Margin/Tools"]
+margin_top = 8.0
+margin_bottom = 528.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Spacing" type="Control" parent="CanvasArea/ToolsArea/Margin/Tools"]
+margin_top = 532.0
+margin_bottom = 532.0
+
+[node name="Spacing3" type="Control" parent="."]
+margin_top = 590.0
+margin_right = 1024.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 0, 10 )
+
+[connection signal="pressed" from="Header/ShowGenerationArea/Tutorial" to="." method="_on_Tutorial_pressed"]
+[connection signal="pressed" from="Header/SwitchCanvasModifier" to="." method="_on_SwitchCanvasModifier_pressed"]
+[connection signal="mouse_exited_areas" from="CanvasArea/CanvasContainer/OverunderlaySettings/Container" to="." method="_on_OverunderlayContainer_mouse_exited_areas"]
+[connection signal="value_changed" from="CanvasArea/CanvasContainer/OverunderlaySettings/Container/Margin/Controls/ModifierLayOpacity" to="." method="_on_ModifierLayOpacity_value_changed"]
+[connection signal="value_changed" from="CanvasArea/CanvasContainer/OverunderlaySettings/Container/Margin/Controls/ModifierOverLayOpacity" to="." method="_on_ModifierOverLayOpacity_value_changed"]
+[connection signal="value_changed" from="CanvasArea/CanvasContainer/OverunderlaySettings/Container/Margin/Controls/ModifierUnderLayOpacity" to="." method="_on_ModifierUnderLayOpacity_value_changed"]
+[connection signal="value_changed" from="CanvasArea/CanvasContainer/OverunderlaySettings/Container/Margin/Controls/GenImageLayOpacity" to="." method="_on_GenImageLayOpacity_value_changed"]
+[connection signal="value_changed" from="CanvasArea/CanvasContainer/OverunderlaySettings/Container/Margin/Controls/GenMaskLayOpacity" to="." method="_on_GenMaskLayOpacity_value_changed"]
+[connection signal="mouse_exited_areas" from="CanvasArea/CanvasContainer/ZoomSettings/Container" to="." method="_on_ZoomContainer_mouse_exited_areas"]
+[connection signal="value_changed" from="CanvasArea/CanvasContainer/ZoomSettings/Container/Margin/Controls/Zoom" to="." method="_on_Zoom_value_changed"]
+[connection signal="pressed" from="CanvasArea/CanvasContainer/ZoomSettings/Container/Margin/Controls/ResetZoom" to="." method="_on_ResetZoom_pressed"]
+[connection signal="resized" from="CanvasArea/ToolsArea/Margin/Tools" to="." method="_on_Tools_resized"]
+[connection signal="extra_options_selected" from="CanvasArea/ToolsArea/Margin/Tools/OverunderlayButton" to="." method="_on_OverunderlayButton_extra_options_selected"]
+[connection signal="toggled" from="CanvasArea/ToolsArea/Margin/Tools/OverunderlayButton" to="." method="_on_OverunderlayButton_toggled"]
+[connection signal="extra_options_selected" from="CanvasArea/ToolsArea/Margin/Tools/ZoomButton" to="." method="_on_ZoomButton_extra_options_selected"]
+[connection signal="pressed" from="CanvasArea/ToolsArea/Margin/Tools/ZoomButton" to="." method="_on_ZoomButton_pressed"]

@@ -1,0 +1,90 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://themes/main_theme.tres" type="Theme" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://ui/components/about.gd" type="Script" id=3]
+
+[node name="About" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 3 )
+
+[node name="Tabs" type="TabContainer" parent="."]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 1012.0
+margin_bottom = 588.0
+
+[node name="ABOUT" type="RichTextLabel" parent="Tabs"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = 33.0
+margin_right = -3.0
+margin_bottom = -3.0
+focus_mode = 2
+selection_enabled = true
+
+[node name="SOFTWARE_USED" type="VBoxContainer" parent="Tabs"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = 27.0
+margin_right = -3.0
+margin_bottom = -3.0
+
+[node name="GodotIcon" type="TextureRect" parent="Tabs/SOFTWARE_USED"]
+margin_right = 994.0
+margin_bottom = 64.0
+texture = ExtResource( 2 )
+stretch_mode = 4
+
+[node name="GodotThanks" type="Label" parent="Tabs/SOFTWARE_USED"]
+margin_top = 76.0
+margin_right = 994.0
+margin_bottom = 96.0
+text = "MADE_WITH_GODOT"
+align = 1
+
+[node name="Spacing" type="Control" parent="Tabs/SOFTWARE_USED"]
+margin_top = 108.0
+margin_right = 994.0
+margin_bottom = 113.0
+rect_min_size = Vector2( 0, 5 )
+
+[node name="LibrariesPlugins" type="Label" parent="Tabs/SOFTWARE_USED"]
+margin_top = 125.0
+margin_right = 994.0
+margin_bottom = 145.0
+text = "EXTRA_LIBRARIES"
+
+[node name="Guion" type="HBoxContainer" parent="Tabs/SOFTWARE_USED"]
+margin_top = 157.0
+margin_right = 994.0
+margin_bottom = 177.0
+
+[node name="Name" type="Label" parent="Tabs/SOFTWARE_USED/Guion"]
+margin_right = 44.0
+margin_bottom = 20.0
+text = "Guion: "
+
+[node name="Link" type="Label" parent="Tabs/SOFTWARE_USED/Guion"]
+margin_left = 56.0
+margin_right = 280.0
+margin_bottom = 20.0
+text = "https://github.com/Samachiy/Guion"
+
+[node name="LICENSE" type="RichTextLabel" parent="Tabs"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 3.0
+margin_top = 27.0
+margin_right = -3.0
+margin_bottom = -3.0
+focus_mode = 2
+selection_enabled = true
+
+[connection signal="tab_changed" from="Tabs" to="." method="_on_Tabs_tab_changed"]

@@ -1,0 +1,107 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://ui/components/column_flow_thumbnails.gd" type="Script" id=1]
+[ext_resource path="res://ui/components/smart_option_button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/icons/buttons_g44.png" type="Texture" id=3]
+[ext_resource path="res://ui/components/column_flow.gd" type="Script" id=4]
+[ext_resource path="res://assets/icons/buttons_g45.png" type="Texture" id=5]
+[ext_resource path="res://assets/icons/cancel_g35.png" type="Texture" id=6]
+[ext_resource path="res://assets/icons/cancel_g32.png" type="Texture" id=7]
+[ext_resource path="res://assets/icons/external_g86.png" type="Texture" id=8]
+[ext_resource path="res://assets/icons/external_g87.png" type="Texture" id=9]
+
+[node name="ColumnFlow" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 8
+script = ExtResource( 4 )
+
+[node name="Spacing" type="Control" parent="."]
+margin_right = 1024.0
+
+[node name="OptionButton" parent="." instance=ExtResource( 2 )]
+margin_top = 8.0
+margin_right = 1024.0
+margin_bottom = 34.0
+size_flags_horizontal = 3
+requieres_flag = false
+
+[node name="Controls" type="HBoxContainer" parent="."]
+margin_top = 42.0
+margin_right = 1024.0
+margin_bottom = 72.0
+
+[node name="SearchBar" type="LineEdit" parent="Controls"]
+margin_right = 940.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+
+[node name="SearchTimer" type="Timer" parent="Controls/SearchBar"]
+
+[node name="ClearText" type="TextureButton" parent="Controls"]
+margin_left = 944.0
+margin_right = 968.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 24, 0 )
+hint_tooltip = "CLEAR"
+size_flags_vertical = 3
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 7 )
+texture_hover = ExtResource( 6 )
+texture_focused = ExtResource( 6 )
+expand = true
+stretch_mode = 4
+
+[node name="Refresh" type="TextureButton" parent="Controls"]
+margin_left = 972.0
+margin_right = 996.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 24, 0 )
+hint_tooltip = "REFRESH"
+size_flags_vertical = 3
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 3 )
+texture_hover = ExtResource( 5 )
+texture_focused = ExtResource( 5 )
+expand = true
+stretch_mode = 4
+
+[node name="ExternalPath" type="TextureButton" parent="Controls"]
+margin_left = 1000.0
+margin_right = 1024.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 24, 0 )
+hint_tooltip = "OPEN_RESOURCE_FOLDER"
+size_flags_vertical = 3
+texture_normal = ExtResource( 8 )
+texture_pressed = ExtResource( 8 )
+texture_hover = ExtResource( 9 )
+texture_focused = ExtResource( 9 )
+expand = true
+stretch_mode = 4
+
+[node name="Spacing2" type="Control" parent="."]
+margin_top = 80.0
+margin_right = 1024.0
+margin_bottom = 80.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+margin_top = 88.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ColumnFlowContainer" type="Container" parent="ScrollContainer"]
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+
+[connection signal="option_selected" from="OptionButton" to="." method="_on_OptionButton_option_selected"]
+[connection signal="text_changed" from="Controls/SearchBar" to="." method="_on_SearchBar_text_changed"]
+[connection signal="timeout" from="Controls/SearchBar/SearchTimer" to="." method="_on_SearchTimer_timeout"]
+[connection signal="pressed" from="Controls/ClearText" to="." method="_on_ClearText_pressed"]
+[connection signal="pressed" from="Controls/Refresh" to="." method="_on_Refresh_pressed"]
+[connection signal="pressed" from="Controls/ExternalPath" to="." method="_on_ExternalPath_pressed"]
+[connection signal="resized" from="ScrollContainer/ColumnFlowContainer" to="ScrollContainer/ColumnFlowContainer" method="_on_ColumnFlowContainer_resized"]

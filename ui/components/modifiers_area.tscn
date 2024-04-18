@@ -1,0 +1,138 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://ui/components/simple_column_modifiers.gd" type="Script" id=1]
+[ext_resource path="res://ui/components/modifier_drop.gd" type="Script" id=2]
+[ext_resource path="res://assets/icons/buttons_#g1487.png" type="Texture" id=3]
+[ext_resource path="res://assets/icons/buttons_#g2033.png" type="Texture" id=4]
+[ext_resource path="res://ui/components/modifiers_area.gd" type="Script" id=5]
+[ext_resource path="res://assets/icons/buttons_#g2024.png" type="Texture" id=6]
+[ext_resource path="res://assets/icons/buttons_#g2040.png" type="Texture" id=7]
+[ext_resource path="res://assets/icons/buttons_#g1462.png" type="Texture" id=8]
+[ext_resource path="res://assets/icons/buttons_#g1405.png" type="Texture" id=9]
+[ext_resource path="res://assets/icons/buttons_#g1396.png" type="Texture" id=10]
+[ext_resource path="res://assets/icons/icons_#rect1156_copy_3.png" type="Texture" id=11]
+[ext_resource path="res://assets/icons/buttons_#g1389.png" type="Texture" id=12]
+[ext_resource path="res://ui/components/popup_menu.tscn" type="PackedScene" id=13]
+
+[node name="ModiferArea" type="VBoxContainer"]
+margin_right = 119.0
+margin_bottom = 477.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 5 )
+
+[node name="Label" type="Label" parent="."]
+margin_right = 119.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 0, 28 )
+text = "MODIFIERS"
+valign = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+margin_top = 32.0
+margin_right = 119.0
+margin_bottom = 448.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 112.0
+margin_bottom = 409.0
+follow_focus = true
+
+[node name="Container" type="Container" parent="PanelContainer/ScrollContainer"]
+mouse_filter = 1
+size_flags_horizontal = 3
+script = ExtResource( 1 )
+
+[node name="DropArea" type="Control" parent="PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 112.0
+margin_bottom = 409.0
+script = ExtResource( 2 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_top = 452.0
+margin_right = 119.0
+margin_bottom = 477.0
+rect_min_size = Vector2( 0, 25 )
+custom_constants/separation = 2
+
+[node name="LoadImage" type="TextureButton" parent="HBoxContainer"]
+margin_right = 28.0
+margin_bottom = 25.0
+hint_tooltip = "OPEN_IMAGE"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 3 )
+texture_hover = ExtResource( 8 )
+texture_focused = ExtResource( 11 )
+expand = true
+stretch_mode = 4
+
+[node name="Add" type="TextureButton" parent="HBoxContainer"]
+margin_left = 30.0
+margin_right = 58.0
+margin_bottom = 25.0
+hint_tooltip = "ADD_MODIFIER"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource( 6 )
+texture_pressed = ExtResource( 6 )
+texture_hover = ExtResource( 12 )
+texture_focused = ExtResource( 11 )
+expand = true
+stretch_mode = 4
+
+[node name="Menu" parent="HBoxContainer/Add" instance=ExtResource( 13 )]
+unique_name_in_owner = false
+
+[node name="Delete" type="TextureButton" parent="HBoxContainer"]
+margin_left = 60.0
+margin_right = 88.0
+margin_bottom = 25.0
+hint_tooltip = "DELETE_OPTIONS"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 9 )
+texture_focused = ExtResource( 11 )
+expand = true
+stretch_mode = 4
+
+[node name="Menu" parent="HBoxContainer/Delete" instance=ExtResource( 13 )]
+unique_name_in_owner = false
+
+[node name="Other" type="TextureButton" parent="HBoxContainer"]
+margin_left = 90.0
+margin_right = 119.0
+margin_bottom = 25.0
+hint_tooltip = "OTHER"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 7 )
+texture_hover = ExtResource( 10 )
+texture_focused = ExtResource( 11 )
+expand = true
+stretch_mode = 4
+
+[node name="Menu" parent="HBoxContainer/Other" instance=ExtResource( 13 )]
+
+[connection signal="child_entered_tree" from="PanelContainer/ScrollContainer/Container" to="." method="_on_Container_child_entered_tree"]
+[connection signal="resized" from="PanelContainer/ScrollContainer/Container" to="PanelContainer/ScrollContainer/Container" method="_on_Container_resized"]
+[connection signal="tree_exiting" from="PanelContainer/ScrollContainer/Container" to="." method="_on_Container_tree_exiting"]
+[connection signal="modifier_drop_attempted" from="PanelContainer/DropArea" to="." method="_on_DropArea_modifier_drop_attempted"]
+[connection signal="modifier_dropped" from="PanelContainer/DropArea" to="." method="_on_DropArea_modifier_dropped"]
+[connection signal="pressed" from="HBoxContainer/LoadImage" to="." method="_on_LoadImage_pressed"]
+[connection signal="pressed" from="HBoxContainer/Add" to="." method="_on_Add_pressed"]
+[connection signal="option_selected" from="HBoxContainer/Add/Menu" to="." method="_on_Menu_option_selected"]
+[connection signal="pressed" from="HBoxContainer/Delete" to="." method="_on_Delete_pressed"]
+[connection signal="option_selected" from="HBoxContainer/Delete/Menu" to="." method="_on_Menu_option_selected"]
+[connection signal="pressed" from="HBoxContainer/Other" to="." method="_on_Other_pressed"]
+[connection signal="option_selected" from="HBoxContainer/Other/Menu" to="." method="_on_Menu_option_selected"]

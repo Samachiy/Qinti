@@ -1,0 +1,70 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://ui/components/config_slider.gd" type="Script" id=1]
+[ext_resource path="res://assets/icons/ui_control_#g1811.png" type="Texture" id=2]
+[ext_resource path="res://assets/icons/ui_control_#g1821.png" type="Texture" id=3]
+[ext_resource path="res://themes/main_simple_theme.tres" type="Theme" id=4]
+[ext_resource path="res://assets/icons/ui_control_#g1807.png" type="Texture" id=5]
+[ext_resource path="res://assets/icons/ui_control_#g1827.png" type="Texture" id=6]
+[ext_resource path="res://assets/icons/ui_control_#g1815.png" type="Texture" id=7]
+
+[node name="ConfigSlider" type="HBoxContainer"]
+margin_right = 442.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="."]
+margin_top = 13.0
+margin_bottom = 27.0
+
+[node name="Slider" type="HSlider" parent="."]
+margin_left = 4.0
+margin_right = 350.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+value = 1.0
+scrollable = false
+
+[node name="Amount" type="HBoxContainer" parent="."]
+margin_left = 354.0
+margin_right = 442.0
+margin_bottom = 40.0
+custom_constants/separation = 3
+
+[node name="Less" type="TextureButton" parent="Amount"]
+margin_top = 10.0
+margin_right = 12.0
+margin_bottom = 30.0
+size_flags_vertical = 4
+theme = ExtResource( 4 )
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 7 )
+texture_hover = ExtResource( 2 )
+texture_focused = ExtResource( 5 )
+
+[node name="Amount" type="LineEdit" parent="Amount"]
+margin_left = 15.0
+margin_right = 73.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 20, 0 )
+text = "1"
+align = 1
+
+[node name="More" type="TextureButton" parent="Amount"]
+margin_left = 76.0
+margin_top = 10.0
+margin_right = 88.0
+margin_bottom = 30.0
+size_flags_vertical = 4
+theme = ExtResource( 4 )
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 3 )
+texture_hover = ExtResource( 6 )
+texture_focused = ExtResource( 5 )
+
+[connection signal="value_changed" from="Slider" to="." method="_on_Slider_value_changed"]
+[connection signal="pressed" from="Amount/Less" to="." method="_on_Less_pressed"]
+[connection signal="focus_entered" from="Amount/Amount" to="." method="_on_Amount_focus_entered"]
+[connection signal="focus_exited" from="Amount/Amount" to="." method="_on_Amount_focus_exited"]
+[connection signal="text_changed" from="Amount/Amount" to="." method="_on_Amount_text_changed"]
+[connection signal="pressed" from="Amount/More" to="." method="_on_More_pressed"]

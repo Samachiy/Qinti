@@ -1,0 +1,119 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://ui/controllers/image_info_controller.gd" type="Script" id=1]
+[ext_resource path="res://ui/components/smart_option_button.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/components/ai_process_button.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/components/popup_menu.tscn" type="PackedScene" id=4]
+
+[node name="ImageInfoControlller" type="VBoxContainer"]
+margin_right = 335.0
+margin_bottom = 523.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+script = ExtResource( 1 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 335.0
+margin_bottom = 447.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
+margin_right = 165.0
+margin_bottom = 447.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+
+[node name="Details" type="VBoxContainer" parent="HBoxContainer/ScrollContainer"]
+margin_right = 153.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+margin_left = 169.0
+margin_right = 335.0
+margin_bottom = 447.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DetailInfo" type="RichTextLabel" parent="HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+margin_right = 166.0
+margin_bottom = 417.0
+focus_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+selection_enabled = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+margin_top = 421.0
+margin_right = 166.0
+margin_bottom = 447.0
+size_flags_horizontal = 3
+
+[node name="Mode" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
+margin_top = 3.0
+margin_right = 38.0
+margin_bottom = 23.0
+text = "MODE"
+
+[node name="PromptMode" parent="HBoxContainer/VBoxContainer/HBoxContainer" instance=ExtResource( 2 )]
+unique_name_in_owner = true
+margin_left = 42.0
+margin_right = 166.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+flag_name_const = "FLAG_PROMPT_MODE"
+
+[node name="Control" type="Control" parent="."]
+margin_top = 451.0
+margin_right = 335.0
+margin_bottom = 461.0
+rect_min_size = Vector2( 0, 10 )
+size_flags_horizontal = 3
+
+[node name="HFlowContainer" type="HFlowContainer" parent="."]
+margin_top = 465.0
+margin_right = 335.0
+margin_bottom = 523.0
+
+[node name="SelectAll" type="Button" parent="HFlowContainer"]
+margin_right = 335.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+text = "PNG_INFO_SELECT_ALL"
+
+[node name="DeselectAll" type="Button" parent="HFlowContainer"]
+margin_top = 30.0
+margin_right = 177.0
+margin_bottom = 58.0
+size_flags_horizontal = 3
+text = "PNG_INFO_DESELECT_ALL"
+
+[node name="Other" type="Button" parent="HFlowContainer"]
+margin_left = 181.0
+margin_top = 30.0
+margin_right = 296.0
+margin_bottom = 58.0
+size_flags_horizontal = 3
+text = "MORE_OPTIONS"
+
+[node name="Try" parent="HFlowContainer" instance=ExtResource( 3 )]
+margin_left = 300.0
+margin_top = 30.0
+margin_right = 334.0
+margin_bottom = 58.0
+size_flags_stretch_ratio = 0.5
+text = "TRY_PNG_INFO_IMAGE"
+
+[node name="Menu" parent="HFlowContainer" instance=ExtResource( 4 )]
+
+[node name="TryMenu" parent="HFlowContainer" instance=ExtResource( 4 )]
+
+[connection signal="pressed" from="HFlowContainer/SelectAll" to="." method="_on_SelectAll_pressed"]
+[connection signal="pressed" from="HFlowContainer/DeselectAll" to="." method="_on_DeselectAll_pressed"]
+[connection signal="pressed" from="HFlowContainer/Other" to="." method="_on_Other_pressed"]
+[connection signal="pressed" from="HFlowContainer/Try" to="." method="_on_Try_pressed"]
+[connection signal="option_selected" from="HFlowContainer/Menu" to="." method="_on_Menu_option_selected"]
+[connection signal="option_selected" from="HFlowContainer/TryMenu" to="." method="_on_TryMenu_option_selected"]

@@ -1,0 +1,275 @@
+[gd_scene load_steps=22 format=2]
+
+[ext_resource path="res://assets/icons/large_warning_icon.png" type="Texture" id=1]
+[ext_resource path="res://ui/modifiers/modifier.gd" type="Script" id=2]
+[ext_resource path="res://ui/modifiers/image_info_modifier.gd" type="Script" id=3]
+[ext_resource path="res://ui/modifiers/type_image.tres" type="Resource" id=4]
+[ext_resource path="res://ui/components/smart_option_button.tscn" type="PackedScene" id=5]
+[ext_resource path="res://themes/modifier_theme.tres" type="Theme" id=6]
+[ext_resource path="res://ui/modifiers/lineart_modifier.gd" type="Script" id=7]
+[ext_resource path="res://ui/modifiers/styling_modifier.gd" type="Script" id=8]
+[ext_resource path="res://ui/modifiers/type_styling.tres" type="Resource" id=9]
+[ext_resource path="res://ui/modifiers/composition_modifier.gd" type="Script" id=10]
+[ext_resource path="res://ui/modifiers/scribble_modifier.gd" type="Script" id=11]
+[ext_resource path="res://ui/modifiers/type_scribble.tres" type="Resource" id=12]
+[ext_resource path="res://ui/modifiers/normal_map_modifier.gd" type="Script" id=13]
+[ext_resource path="res://ui/modifiers/img_2_img_modifier.gd" type="Script" id=14]
+[ext_resource path="res://ui/modifiers/depth_modifier.gd" type="Script" id=15]
+[ext_resource path="res://ui/modifiers/pose_2d_modifier.gd" type="Script" id=16]
+[ext_resource path="res://assets/icons/large_brush_icon.png" type="Texture" id=17]
+[ext_resource path="res://ui/modifiers/modifier_main_button.gd" type="Script" id=18]
+[ext_resource path="res://ui/components/popup_menu.tscn" type="PackedScene" id=19]
+[ext_resource path="res://assets/fonts/NonoSansJP-Regular_small_dynamicfont.tres" type="DynamicFont" id=20]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color( 0.8, 0.8, 0.8, 0 )
+
+[node name="Modifier" type="MarginContainer"]
+margin_right = 174.0
+margin_bottom = 154.0
+theme = ExtResource( 6 )
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+script = ExtResource( 2 )
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 174.0
+margin_bottom = 154.0
+expand = true
+stretch_mode = 7
+
+[node name="FocusIndicator" type="ColorRect" parent="TextureRect"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 1, 1, 1, 0.196078 )
+
+[node name="EditingIndicator" type="ColorRect" parent="TextureRect"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="EditingIcon" type="VBoxContainer" parent="TextureRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="EditingIcon" type="TextureRect" parent="TextureRect/EditingIcon"]
+margin_right = 174.0
+margin_bottom = 124.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 17 )
+expand = true
+stretch_mode = 6
+
+[node name="Spacing" type="Label" parent="TextureRect/EditingIcon"]
+margin_top = 128.0
+margin_right = 174.0
+margin_bottom = 154.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+text = "   "
+
+[node name="HighlightIndicator" type="ColorRect" parent="TextureRect"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 1, 1, 1, 0.498039 )
+
+[node name="HoverIndicator" type="ColorRect" parent="TextureRect"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 1, 1, 1, 0.196078 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 174.0
+margin_bottom = 154.0
+mouse_filter = 2
+custom_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 174.0
+margin_bottom = 128.0
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="UseIndicator" type="ColorRect" parent="VBoxContainer/HBoxContainer"]
+margin_right = 10.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 10, 0 )
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="NotUseIndicator" type="ColorRect" parent="VBoxContainer/HBoxContainer"]
+margin_left = 10.0
+margin_right = 20.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 10, 0 )
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+color = Color( 0.498039, 0.498039, 0.498039, 1 )
+
+[node name="TextureButton" type="TextureButton" parent="VBoxContainer/HBoxContainer"]
+margin_left = 20.0
+margin_right = 174.0
+margin_bottom = 128.0
+rect_clip_content = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 4.0
+expand = true
+script = ExtResource( 18 )
+
+[node name="ModifierName" type="Label" parent="VBoxContainer/HBoxContainer/TextureButton"]
+unique_name_in_owner = true
+modulate = Color( 1, 1, 1, 0.843137 )
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -20.0
+grow_vertical = 0
+rect_min_size = Vector2( 50, 10 )
+custom_fonts/font = ExtResource( 20 )
+custom_styles/normal = SubResource( 1 )
+text = "TEST_LABEL"
+valign = 2
+clip_text = true
+
+[node name="ModifierNameBG" type="ColorRect" parent="VBoxContainer/HBoxContainer/TextureButton/ModifierName"]
+unique_name_in_owner = true
+modulate = Color( 0.498039, 0.498039, 0.498039, 0.498039 )
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 1, 1, 1, 0.752941 )
+
+[node name="MessageIcons" type="AspectRatioContainer" parent="VBoxContainer/HBoxContainer/TextureButton"]
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+mouse_filter = 2
+alignment_horizontal = 2
+alignment_vertical = 0
+
+[node name="WarningIcon" type="TextureRect" parent="VBoxContainer/HBoxContainer/TextureButton/MessageIcons"]
+unique_name_in_owner = true
+margin_left = 13.0
+margin_right = 77.0
+margin_bottom = 64.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 6
+
+[node name="Controls" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 128.0
+margin_right = 174.0
+margin_bottom = 154.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+custom_constants/separation = 0
+
+[node name="Active" type="CheckBox" parent="VBoxContainer/Controls"]
+margin_right = 22.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 10, 0 )
+size_flags_stretch_ratio = 0.1
+pressed = true
+
+[node name="SmartOptionButton" parent="VBoxContainer/Controls" instance=ExtResource( 5 )]
+margin_left = 22.0
+margin_right = 174.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 6 )
+requieres_flag = false
+
+[node name="Label" type="Label" parent="VBoxContainer/Controls"]
+visible = false
+margin_left = 257.0
+margin_top = 43.0
+margin_right = 492.0
+margin_bottom = 57.0
+size_flags_horizontal = 3
+
+[node name="Modes" type="Node" parent="."]
+
+[node name="PNGInfo" type="Node" parent="Modes"]
+script = ExtResource( 3 )
+type = ExtResource( 4 )
+
+[node name="Lineart" type="Node" parent="Modes"]
+script = ExtResource( 7 )
+type = ExtResource( 4 )
+feature_tags = "controlnet"
+
+[node name="Composition" type="Node" parent="Modes"]
+script = ExtResource( 10 )
+__meta__ = {
+"_editor_description_": ""
+}
+type = ExtResource( 4 )
+feature_tags = "controlnet"
+
+[node name="Scribble" type="Node" parent="Modes"]
+script = ExtResource( 11 )
+type = ExtResource( 12 )
+feature_tags = "controlnet"
+background_color = Color( 1, 1, 1, 1 )
+
+[node name="Depth" type="Node" parent="Modes"]
+script = ExtResource( 15 )
+type = ExtResource( 4 )
+feature_tags = "controlnet"
+
+[node name="NormalMap" type="Node" parent="Modes"]
+script = ExtResource( 13 )
+type = ExtResource( 4 )
+feature_tags = "controlnet"
+
+[node name="Img2Img" type="Node" parent="Modes"]
+script = ExtResource( 14 )
+type = ExtResource( 4 )
+
+[node name="Pose2D" type="Node" parent="Modes"]
+script = ExtResource( 16 )
+type = ExtResource( 4 )
+feature_tags = "controlnet"
+
+[node name="Styling" type="Node" parent="Modes"]
+script = ExtResource( 8 )
+type = ExtResource( 9 )
+
+[node name="Control" type="Control" parent="."]
+margin_right = 174.0
+margin_bottom = 154.0
+mouse_filter = 2
+
+[node name="Menu" parent="Control" instance=ExtResource( 19 )]
+
+[connection signal="focus_entered" from="VBoxContainer/HBoxContainer/TextureButton" to="." method="_on_TextureButton_focus_entered"]
+[connection signal="focus_exited" from="VBoxContainer/HBoxContainer/TextureButton" to="." method="_on_TextureButton_focus_exited"]
+[connection signal="gui_input" from="VBoxContainer/HBoxContainer/TextureButton" to="." method="_on_TextureButton_gui_input"]
+[connection signal="mouse_entered" from="VBoxContainer/HBoxContainer/TextureButton" to="." method="_on_TextureButton_mouse_entered"]
+[connection signal="mouse_exited" from="VBoxContainer/HBoxContainer/TextureButton" to="." method="_on_TextureButton_mouse_exited"]
+[connection signal="toggled" from="VBoxContainer/Controls/Active" to="." method="_on_Active_toggled"]
+[connection signal="option_selected" from="VBoxContainer/Controls/SmartOptionButton" to="." method="_on_SmartOptionButton_option_selected"]
+[connection signal="option_selected" from="Control/Menu" to="." method="_on_Menu_option_selected"]
