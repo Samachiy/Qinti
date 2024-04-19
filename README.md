@@ -6,6 +6,10 @@
 
 ![License](https://img.shields.io/github/license/samachiy/qinti?svg=true)
 
+</div>
+
+### This project will have it's first release around wednesday 24, April 2024, if the last round of testing goes well
+
 Qinti UI is an open source frontend made with Godot for image generation that aims to be both easy to use and for profesional use
 
 It also comes in the form of an executable, so the frontend itself doesn't need to be installed, just click and run, it is currently available for Linux and Windows
@@ -13,7 +17,6 @@ It also comes in the form of an executable, so the frontend itself doesn't need 
 The project uses the AGPL license to ensure that it will always be free and open source
 
 
-</div>
 
 # Features
 
