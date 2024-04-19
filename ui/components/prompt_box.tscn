@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://ui/components/prompt_box.gd" type="Script" id=1]
+
+[node name="PositivePrompt" type="TextEdit"]
+margin_right = 815.0
+margin_bottom = 57.0
+rect_min_size = Vector2( 0, 55 )
+size_flags_vertical = 3
+wrap_enabled = true
+script = ExtResource( 1 )
+
+[node name="Margins" type="MarginContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="Margins"]
+modulate = Color( 1, 1, 1, 0.498039 )
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 30.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+size_flags_vertical = 3

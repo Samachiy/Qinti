@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui/components/simple_row_container.gd" type="Script" id=1]
+[ext_resource path="res://ui/components/simple_row_container_scroll.gd" type="Script" id=2]
+
+[node name="SimpleRowContainer" type="ScrollContainer"]
+margin_right = 406.0
+margin_bottom = 128.0
+follow_focus = true
+scroll_vertical_enabled = false
+script = ExtResource( 2 )
+spacing = 4
+alignment = 1
+
+[node name="Row" type="Container" parent="."]
+margin_bottom = 116.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+
+[connection signal="resized" from="Row" to="Row" method="_on_Row_resized"]

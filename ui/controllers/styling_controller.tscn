@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui/controllers/style_details_viewer.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/controllers/styling_controller.gd" type="Script" id=2]
+
+[node name="StylingController" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="Container" type="ScrollContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Configs" type="HBoxContainer" parent="Container"]
+margin_right = 277.0
+margin_bottom = 327.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="StyleDetailsViewer" parent="Container/Configs" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1024.0
+margin_bottom = 600.0
+readonly_prompt = true
+show_preview = false
+show_description = false

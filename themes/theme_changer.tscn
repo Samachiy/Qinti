@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://themes/theme_changer.gd" type="Script" id=1]
+
+[node name="Theming" type="Node"]
+script = ExtResource( 1 )
+
+[node name="TestTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[connection signal="timeout" from="TestTimer" to="." method="_on_TestTimer_timeout"]

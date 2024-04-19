@@ -1,0 +1,22 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://ui/controllers/tools/tool_buttons/tool_button.gd" type="Script" id=1]
+[ext_resource path="res://assets/icons/icons_#rect1156_copy_3.png" type="Texture" id=2]
+[ext_resource path="res://assets/icons/visible_icon_g52.png" type="Texture" id=3]
+[ext_resource path="res://assets/icons/visible_icon_g51.png" type="Texture" id=4]
+[ext_resource path="res://assets/icons/visible_icon_g50.png" type="Texture" id=5]
+
+[node name="OverunderlayButton" type="TextureButton"]
+modulate = Color( 1, 1, 1, 0.960784 )
+margin_right = 40.0
+margin_bottom = 40.0
+hint_tooltip = "OVERUNDERLAY_VISIBILITY"
+toggle_mode = true
+button_mask = 2
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 5 )
+texture_hover = ExtResource( 3 )
+texture_focused = ExtResource( 2 )
+expand = true
+stretch_mode = 4
+script = ExtResource( 1 )

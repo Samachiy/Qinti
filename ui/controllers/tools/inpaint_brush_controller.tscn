@@ -1,0 +1,121 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://ui/components/config_slider.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/components/config_checkbox.gd" type="Script" id=2]
+[ext_resource path="res://ui/controllers/tools/inpaint_brush_controller.gd" type="Script" id=3]
+[ext_resource path="res://ui/components/ai_process_button.tscn" type="PackedScene" id=4]
+
+[node name="InpaintBrushController" type="VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 3 )
+tool_button = "res://ui/controllers/tools/tool_buttons/inpaint_brush_button.tscn"
+
+[node name="Inpaint" parent="." instance=ExtResource( 4 )]
+margin_right = 279.0
+margin_bottom = 28.0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+text = "INPAINT_BUTTON"
+
+[node name="BrushSize" parent="." instance=ExtResource( 1 )]
+margin_top = 32.0
+margin_right = 279.0
+margin_bottom = 62.0
+size_flags_horizontal = 3
+text = "BRUSH_SIZE"
+min_value = 1.0
+default_value = 20.0
+requieres_flag = false
+flag_prefix_node_name = NodePath("../Inpaint")
+
+[node name="BrushOpacity" parent="." instance=ExtResource( 1 )]
+visible = false
+margin_top = 56.0
+margin_right = 259.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+text = "BRUSH_OPACITY"
+max_value = 255.0
+default_value = 255.0
+flag_name_const = "FLAG_BRUSH_OPACITY"
+flag_prefix_node_name = NodePath("../Inpaint")
+
+[node name="Label" type="Label" parent="."]
+margin_top = 66.0
+margin_right = 279.0
+margin_bottom = 86.0
+text = "INPAINT_SETTINGS"
+
+[node name="DenoisingStrenght" parent="." groups=["advanced_ui"] instance=ExtResource( 1 )]
+margin_top = 90.0
+margin_right = 279.0
+margin_bottom = 120.0
+text = "DENOISING_STRENGTH"
+max_value = 1.0
+step = 0.05
+default_value = 0.75
+allow_decimals = true
+flag_name_const = "I_DENOISING_STRENGTH"
+flag_prefix_node_name = NodePath("../Inpaint")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+margin_top = 124.0
+margin_right = 279.0
+margin_bottom = 184.0
+columns = 2
+
+[node name="UseModifiers" type="CheckBox" parent="GridContainer" groups=["advanced_ui"]]
+margin_right = 129.0
+margin_bottom = 28.0
+pressed = true
+text = "USE_MODIFIERS"
+script = ExtResource( 2 )
+flag_name_const = "FLAG_USE_MODIFIERS"
+flag_prefix_node_name = NodePath("../../Inpaint")
+
+[node name="ClearMask" type="Button" parent="GridContainer"]
+margin_left = 133.0
+margin_right = 279.0
+margin_bottom = 28.0
+text = "CLEAR"
+
+[node name="InvertMask" type="CheckBox" parent="GridContainer"]
+margin_top = 32.0
+margin_right = 129.0
+margin_bottom = 60.0
+text = "INVERT_MASK"
+script = ExtResource( 2 )
+flag_name_const = "I2I_INPAINTING_MASK_INVERT"
+
+[node name="InpaintFullRes" type="CheckBox" parent="GridContainer" groups=["advanced_ui"]]
+margin_left = 133.0
+margin_top = 32.0
+margin_right = 279.0
+margin_bottom = 60.0
+pressed = true
+text = "INPAINT_FULL_RES"
+script = ExtResource( 2 )
+flag_name_const = "I2I_INPAINT_FULL_RES"
+
+[node name="MaskBlur" parent="." groups=["advanced_ui"] instance=ExtResource( 1 )]
+margin_top = 188.0
+margin_right = 279.0
+margin_bottom = 218.0
+text = "MASK_BLUR"
+min_value = 1.0
+max_value = 64.0
+default_value = 3.0
+flag_name_const = "I2I_MASK_BLUR"
+
+[connection signal="pressed" from="Inpaint" to="." method="_on_AIProcessButton_pressed"]
+[connection signal="value_changed" from="BrushSize" to="." method="_on_BrushSize_value_changed"]
+[connection signal="value_changed" from="BrushOpacity" to="." method="_on_BrushOpacity_value_changed"]
+[connection signal="value_changed" from="DenoisingStrenght" to="." method="_on_DenoisingStrenght_value_changed"]
+[connection signal="toggled" from="GridContainer/UseModifiers" to="." method="_on_UseModifiers_toggled"]
+[connection signal="pressed" from="GridContainer/ClearMask" to="." method="_on_ClearMask_pressed"]
+[connection signal="toggled" from="GridContainer/InvertMask" to="." method="_on_InvertMask_toggled"]
+[connection signal="toggled" from="GridContainer/InpaintFullRes" to="." method="_on_InpaintFullRes_toggled"]
+[connection signal="value_changed" from="MaskBlur" to="." method="_on_MaskBlur_value_changed"]

@@ -1,0 +1,21 @@
+[gd_resource type="Theme" load_steps=5 format=2]
+
+[ext_resource path="res://themes/styles/button_main_style_focus.tres" type="StyleBox" id=3]
+[ext_resource path="res://assets/icons/buttons_#g1972.png" type="Texture" id=4]
+[ext_resource path="res://themes/styles/modifier_option_button_style_hover.tres" type="StyleBox" id=5]
+[ext_resource path="res://themes/styles/modifier_option_button_style_normal.tres" type="StyleBox" id=6]
+
+[resource]
+Button/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 0.960784 )
+Button/colors/font_color_focus = Color( 0.878431, 0.878431, 0.878431, 0.960784 )
+Button/colors/font_color_hover = Color( 0.878431, 0.878431, 0.878431, 0.960784 )
+Button/styles/focus = ExtResource( 3 )
+Button/styles/hover = ExtResource( 5 )
+Button/styles/normal = ExtResource( 6 )
+Button/styles/pressed = ExtResource( 6 )
+Label/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 0.960784 )
+OptionButton/icons/arrow = ExtResource( 4 )
+OptionButton/styles/focus = ExtResource( 3 )
+OptionButton/styles/hover = ExtResource( 5 )
+OptionButton/styles/normal = ExtResource( 6 )
+OptionButton/styles/pressed = ExtResource( 6 )

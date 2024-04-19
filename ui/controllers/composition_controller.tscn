@@ -1,0 +1,77 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://ui/components/smart_option_button.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/controllers/composition_controller.gd" type="Script" id=2]
+[ext_resource path="res://ui/controllers/control_net_configs.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/controllers/tools/eraser_tool_controller.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/controllers/tools/brush_tool_controller.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ui/controllers/tools/transform_selection_tool_controller.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/components/v_gradient.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/controllers/tools/flip_tool_controller.tscn" type="PackedScene" id=8]
+
+[node name="CompositionController" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="Container" type="ScrollContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Configs" type="HBoxContainer" parent="Container"]
+margin_right = 232.0
+margin_bottom = 158.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ControlNetConfigs" parent="Container/Configs" instance=ExtResource( 3 )]
+margin_right = 510.0
+margin_bottom = 600.0
+
+[node name="PreprocessorOptions" parent="Container/Configs/ControlNetConfigs" groups=["advanced_ui"] instance=ExtResource( 1 )]
+unique_name_in_owner = true
+margin_top = 132.0
+margin_right = 510.0
+margin_bottom = 158.0
+text = "GENERAL_PREPROCESSOR_TYPE"
+flag_name_const = "FLAG_COMPOSITION_PREPROCESSOR"
+
+[node name="ToolControllers" type="VBoxContainer" parent="Container/Configs"]
+margin_left = 514.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="BrushToolController" parent="Container/Configs/ToolControllers" instance=ExtResource( 5 )]
+visible = false
+margin_right = 125.0
+margin_bottom = 188.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="EraserToolController" parent="Container/Configs/ToolControllers" instance=ExtResource( 4 )]
+visible = false
+margin_right = 125.0
+margin_bottom = 36.0
+
+[node name="TransformSelectionTool" parent="Container/Configs/ToolControllers" instance=ExtResource( 6 )]
+visible = false
+margin_right = 360.0
+margin_bottom = 112.0
+
+[node name="FlipTool" parent="Container/Configs/ToolControllers" instance=ExtResource( 8 )]
+visible = false
+margin_right = 510.0
+margin_bottom = 26.0
+
+[node name="TopGradient" parent="." instance=ExtResource( 7 )]
+flip_v = true
+
+[node name="BottomGradient" parent="." instance=ExtResource( 7 )]
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+
+[connection signal="option_selected" from="Container/Configs/ControlNetConfigs/PreprocessorOptions" to="." method="_on_PreprocessorOptions_option_selected"]

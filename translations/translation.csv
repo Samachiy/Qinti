@@ -1,0 +1,352 @@
+key,en,es
+GENERATE_BUTTON,Generate,Generar
+INPAINT_BUTTON,Inpaint,Regenerar selección
+INPAINT_SETTINGS,Inpaint settings,Regenerar selección – Configuración
+QUICK_IMG2IMG,Quick canvas to image,Canvas a imagen rápido
+OUTPAINT_BUTTON,Outpaint,Generar espacios vacíos
+OUTPAINT_SETTINGS,Outpaint settings,Generar espacios vacíos – Configuración
+CANVAS,Canvas,Canvas
+COMPOSITION_BOARD,Reuse composition,Reusar composición
+DEPTH_BOARD,Depth map,Mapa de profundidad
+IMAGE_INFO_BOARD,Image Information,Información de imagen
+IMG_2_IMG_BOARD,Image to image,Imagen a Imagen
+LINEART_BOARD,Reuse lineart,Reusar delineado
+NORMAL_MAP_BOARD,Normal map,Mapa de normales
+POSE_2D_BOARD,Reuse pose,Reusar pose
+SCRIBBLE_BOARD,Scribble,Garabato
+STYLING_BOARD,Styling,Estilización
+RESOURCES,Resources,Recursos
+MODIFIERS,Modifiers,Modificadores
+MODEL,Model,Modelo
+PROMPT,Prompt,Instrucción
+BASIC_PARAMS,Generation,Generación
+BATCH_PARAMS,Amount,Cantidad
+HI_RES_PARAMS,Hi-Res,Hi-Res
+HI_RES_TYPE,Hi-Res type,Tipo de Hi-Res
+HI_RES_NONE,None,Ninguno
+HI_RES_AUTO,Auto,Automático
+HI_RES_MANUAL,Manual,Manual
+HI_RES_UPSCALE_ONLY_AUTO,"Auto, just upscale","Automático, solo escalar"
+HI_RES_UPSCALE_ONLY_MANUAL,"Manual, just upscale","Manual, solo escalar"
+HI_RES_START_AT,Start at:,A partir de:
+HI_RES_EXTRA_STEPS,Extra steps,Pasos extra
+HI_RES_UPSCALE_BY,Upscale by:,Escalar por:
+HI_RES_UPSCALER,Upscaler,Método de escalado
+SEED,Seed,Semilla
+STEPS,Steps,Pasos
+CFG_SCALE,CFG Scale,Escala CFG
+CFG_SCALE_SIMPLE,Prompt strength,Intensidad de intrucción
+DENOISING_STRENGTH,Denoising strenght,Eliminación de ruido
+ENSD,ENSD,ENSD
+BATCH_SIZE,Batch size,Tamaño de lote
+N_ITER,Batch count,Número de lotes
+SAMPLER,Sampler,Sampler
+TILING,Tiling,Teselar
+CLIP_SKIP,CLIP skip,Omitir CLIP
+RESTORE_FACES,Restore faces,Restaurar caras
+RANDOM_SEED,Random,Aleatoria
+REUSE_SEED,Reuse,Reusar
+SWITCH_TO_CANVAS,Switch to canvas,Ir a canvas
+SWITCH_TO_MODIFIER,Switch to modifier,Ir a modificador
+LAY_MODIFIERS_OPACITY,Modifiers opacity,Opacidad de modificadores
+LAY_OVER_MODIFIERS_OPACITY,Modifiers opacity (above),Opacidad de modificadores (arriba)
+LAY_UNDER_MODIFIERS_OPACITY,Modifiers opacity (below),Opacidad de modificadores (debajo)
+LAY_GEN_IMAGE_OPACITY,Canvas image opacity,Opacidad de canvas
+LAY_GEN_MASK_OPACITY,Inpaint mask opacity,Opacidad de máscara
+MINIMALIST_MODE,Minimalist mode,Modo minimalista
+STYLING,Styling,Estilización
+RECENT,Recent,Recientes
+TOOLS:,Tools:,Herramientas:
+DESCRIPTION,Description,Descripción
+POSITIVE_PROMPT,Positive prompt,Instrucción positiva
+NEGATIVE_PROMPT,Negative prompt,Instrucción negativa
+IS_NEGATIVE_PROMPT,Use as negative prompt,Usar como instrucción negativa
+EXTRA_PROMPT,Extra prompt,Instrucción extra
+EXTRA_PROMPT_STRENGHT,Strenght of the extra prompt,Intensidad de la instrucción extra
+STRENGTH,Strength,Intensidad
+WEIGHT,Weight,Peso
+WIDTH,Width,Ancho
+HEIGHT,Height,Alto
+ROTATION,Rotation,Rotación
+PROPORTIONS,Proportions,Proporciones
+SNAP_TO_GRID,Snap to grid,Encajar en cuadrícula
+RESET,Reset,Restaurar
+RESET_IMAGE,Clear image,Limpiar imagen
+ZOOM,Zoom ,Zoom
+SCALE,Scale,Escalar tamaño
+SNAP_SIZE,Snap size,Tamaño de encaje
+HI_RES_FIX,Hi-Res fix,Arreglo Hi-Res
+LOWVRAM,Low VRAM,Ahorrar VRAM
+PREPROCESOR_RES,Preprocessor resolution,Resolución del preprocesador
+GUIDANCE_START,Guidance start,Empezar guía en
+GUIDANCE_END,Guidance end,Terminar guía en
+PIXEL_PERFECT,Pixel perfect mode,Encaje perfecto de pixeles
+CONTROLNET_MODE,ControlNet mode,Modo de ControlNet
+CONTROLNET_MODE_BALANCED,Balanced,Balanciado
+CONTROLNET_MODE_PROMPT_PRIORITY,The prompt is more important,La instrucción es más importante
+CONTROLNET_MODE_CONTROLNET_PRIORITY,ControlNet is more important,ControlNet es más importante
+REGENERATE_PREPROCESSOR,Regenerate preprocessor,Regenerar preprocesador
+PREPROCESSOR,Preprocessor,Preprocesador
+SCRIBBLE_DETAILS,Scribble details,Detalles del garabato
+SCRIBBLE_DETAILS_HIGH,Normal,Normal
+SCRIBBLE_DETAILS_LOW,Low,Bajo
+OPENPOSE_FACE,Face,Cara
+OPENPOSE_HANDS,Hands,Manos
+BRUSH_SIZE,Brush size,Tamaño del pincel
+BRUSH_OPACITY,Brush opacity,Transparencia del pincel
+BRUSH_GREYSCALE_LIGHTNESS,Brush lightness,Intensidad del pincel
+PNG_INFO,Image Information,Información de imagen
+IMAGE_INFO_MODE,Image information,Información de imagen
+LINEART_MODE,Reuse lineart,Reusar delineado
+COMPOSITION_MODE,Reuse composition,Reusar composición
+SCRIBBLE_MODE,Scribble,Garabato
+DEPTH_MODE,Depth map,Mapa de profundidad
+NORMAL_MAP_MODE,Normal map,Mapa de normales
+POSE2D_MODE,Reuse pose,Reusar pose
+IMG2IMG_MODE,Image to image,Imagen a Imagen
+TRY_PNG_INFO_IMAGE,Replicate,Replicar
+TRY_PNG_INFO_IMAGE_CHECKED,Only checked parameters,Solo parametros marcados
+TRY_PNG_INFO_IMAGE_ALL,All,Todo
+COPY_CONFIG_DATA_RAW_TEXT,Copy raw text,Copiar texto sin formato
+COPY_CONFIG_DATA_JSON,Copy JSON text,Copiar texto formato JSON
+APPLY_SELECTED_PNG_INFO_CONFIG,Apply selected,Aplicar seleccionados
+PNG_INFO_SELECT_ALL,Select all,Seleccionar todo
+PNG_INFO_DESELECT_ALL,Deselect all,Deseleccionar todo
+MORE_OPTIONS,More options,Más opciones
+PNG_INFO_SIZE,Size,Tamaño
+PNG_INFO_MODEL,Model,Modelo
+PNG_INFO_OTHER,Other,Otros
+APPEND_PROMPT,Append to prompt,Añadir a instrucción
+REPLACE_PROMPT,Replace prompt,Reemplazar instrucción
+MODE,Mode,Modo
+SEARCH,Search,Buscar
+REFRESH,Refresh,Refrescar
+CLEAR,Clear,Limpiar
+OPEN_RESOURCE_FOLDER,Open resource folder,Abrir carpeta del recurso
+LYCORIS,LyCORIS,LyCORIS
+LORA,LoRA,LoRA
+TEXTUAL_INVERSION,Textual inversion,Inversión textual
+ALL,All,Todos
+CUSTOM,Custom,Personalizado
+LINEART_TYPE,Lineart type,Tipo de delineado
+GENERAL_PREPROCESSOR_TYPE,Preprocessor,Preprocesador
+INVERT_COLORS,Invert colors,Invertir colores
+COLOR,Color,Color
+INPAINT_FULL_RES,Use full image,Usar imagen completa
+INVERT_MASK,Invert mask,Invertir máscara
+MASK_BLUR,Mask blur,Desenfoque de máscara
+USE_MODIFIERS,Use modifiers,Usar modificadores
+APPLY_GEN_IMAGE,Apply,Aplicar
+APPLY_GEN_COPY,Apply copy,Aplicar copia
+REGENERATE_GEN_IMAGE,Retry,Reintentar
+DISCARD_GEN_IMAGE,Discard,Descartar
+APPLY_GEN_MESSAGE,Apply generated image?,¿Aplicar imagen generada?
+,,
+NEXT,Next,Siguiente
+PREVIOUS,Previous,Atrás
+SKIP,Skip,Omitir
+BACK,Back,Atrás
+INSTALL_OPTION,Install image generation server,Instalar servidor de generación de imagenes
+CHOOSE_INSTALLED_DIR_OPTION,Select folder with an already installed instance,Seleccionar carpeta con una instancia ya instalada
+REMOTE_SERVER_OPTION,Connect to a remote server,Conectarse a un servidor remoto
+OS_TYPE,Operative system,Sistema operativo
+GPU_TYPE,Graphic card type,Tipo de tarjeta gráfica
+LINUX,Linux,Linux
+WINDOWS,Windows,Windows
+AMD,AMD,AMD
+NVIDIA,Nvidia,Nvidia
+SERVER_VERSION,Server version,Versión del servidor
+SERVER_TYPE,Server type,Tipo de servidor
+ADVANCED_INSTALL_OPTIONS,Advanced install options,Opciones de instalación avanzadas
+PLEASE_SELECT_INSTALL_FOLDER,Please select the installation folder,Por favor seleccione la carpeta de instalación
+PLEASE_INSERT_SERVER_ADDRESS,Please insert the server URL address,Por favor inserte la dirección URL del servidor
+PLEASE_SELECT_SERVER_EXECUTABLE,Please select server start file and input the arguments necessary for execution,Por favor seleccione el archivo de inicio del servidor y ingrese los argumentos necesarios para la ejecución
+ARGUMENTS,Arguments:,Argumentos:
+BETA_FEATURE,Beta feature,Función en fase beta.
+MESSAGE_BETA_FEATURE_CONTINUE,"This feature is in beta phase, do you wish to continue?","Esta función está en fase beta, ¿Desea continuar?"
+MSG_NO_NETWORK_CONNECTION,,
+MSG_INVALID_SERVER_URL,,
+MESSAGE_MISSING_DEPENDENCIES,"There are missing dependencies, please run the following console command and press “Resume” after the command is done running.","There are missing dependencies, please run the following console command and press “Resume” after the command is done running."
+MESSAGE_INVALID_PATH_NO_INSTALL_FOUND,"No valid server installation was found in the specified folder, please select another one.","No se encontró ninguna instalación valida del servidor, por favor, seleccione otra carpeta."
+MESSAGE_INSTALL_PYTHON_WINDOWS,It is necessary to install python {0}. Do you wish to execute the python installer?,Es necesario instalar Python version {0}. ¿Desea ejecutar el instalador the Python?
+MESSAGE_INSTALL_GIT_WINDOWS,It is necessary to install git. Do you wish to execute the git installer?,Es necesario instalar Git. ¿Desea ejecutar el instalador the Git?
+MESSAGE_RESTART_QUINTI_NEEDED,"To continue the installation, it is necessary to restart Quinti UI, please start the program again after clicking ‘OK’","Para continuar la instalación, es necesario reiniciar Quinti UI, por favor inicie el programa de vuelta después de hacer click en ‘OK’"
+MESSAGE_NO_CONTROLNET,"Server does not have Control Net enabled, attempting to enable... Please restart the server. If this messages appears again, manually enabling Control Net may be needed.","El servidor no tiene Control Net activado, intentando activación… Por favor reinicie el servidor. Si este mensaje aparece de vuelta, podría ser necesario activar Control Net manualmente."
+MESSAGE_NO_FEATURE_GENERIC,"The current server doesn’t support this feature, this setting will not be used.","El servidor actual no soportad esta funcionalidad, esta funcionalidad no será utilizada."
+MESSAGE_NO_FEATURE_CONTROLNET,"The current server doesn’t support Control Net, this setting will not be applied on image generation.","El servidor actual no soportad Control Net, esta funcionalidad será omitida en la generación de imagenes"
+MESSAGE_INSTALL_FAILED_KEY_INPUT_DRIVERS,"Installation failed, please update the computer drivers and try again. If the installation still fails, please consult the Github page of the project or install the server manually","La instalación falló, por favor actualice los controladores del computador y vuelva a intentarlo. Si la instalación sigue fallando, consulte la página de GitHub del proyecto o instale el servidor manualmente."
+MESSAGE_RUN_FAILED,"Failure to start server, please check the logs and consult the issue in the Github page of the project","La inicailización del servidor falló, porfavor revise los registros del programa y consulte el problema en la página de GitHub del proyecto"
+MESSAGE_SHUTTING_DOWN_SERVER,Closing server. Please wait a moment.,Cerrando servidor. Por favor espere.
+SELECT_FOLDER,Select folder,Seleccionar carpeta
+RESUME,Resume,Continuar
+INSTALL,Install,Instalar
+FINISH,Finish,Finalizar
+CONNECT,Connect,Conectar
+SELECT,Select,Seleccionar
+LATEST_VERSION,Latest,Última
+STABLE_VERSION,Stable,Estable
+INSTALLING_DIFFUSION_SERVER,Installing image generation server...,Instalando servidor de generación de imagenes
+CANCEL,Cancel,Cancelar
+SAVE,Save,Guardar
+SAVE_AS_DEFAULT,Save as default values,Guardar como valores predeterminados
+SAVE_AS,Save as. . .,Guardar como. . .
+SAVE_IMAGE,Save image,Guardar
+SAVE_IMAGE_AS,Save image as. . .,Guardar como. . .
+SAVE_CANVAS,Save canvas,Guardar lienzo
+SAVE_CANVAS_AS,Save canvas as. . .,Guardar lienzo como. . .
+SAVE_PREVIEW,Save preview,Guardar vista previa
+SAVE_PREVIEW_AS,Save preview as. . .,Guardar vista previa como. . .
+SAVE_ACTIVE_IMAGE,Save active image,Guardar imagen activa
+SAVE_ACTIVE_IMAGE_AS,Save active image as. . .,Guardar imagen activa como. . .
+SUPPORTED_SAVE_IMAGE_FORMAT,Supported formats,Formatos soportados
+EDIT,Edit,Editar
+MENU,Menu,Menú
+HELP,Help,Ayuda
+SERVER,Server,Servidor
+SETTINGS,Settings,Ajustes
+EXIT,Exit,Salir
+NEW,New,Nuevo
+RESTART_SERVER,Restart server,Reiniciar servidor
+REINSTALL_OR_CHANGE_SERVER,Install or change server,Instalar or cambiar de servidor
+HIDE_MENU,Hide menu,Ocultar menú
+HIDE_DESCRIPTION_BAR,Hide description bar,Ocultar barra de descripción
+CHANGE_THEME_COLOR,Change theme colors,Cambiar colores del tema
+ADVANCED_GENERATION_OPTIONS,Advanced generation options,Opciones de generación avanzadas
+ENABLE_TUTORIALS,Enable tutorials,Activar tutoriales
+RESET_SEEN_TUTORIALS,Reset seen tutorials,Resetear tutoriales vistos
+SHOW_SERVER_STATE,Show state,Mostrar estado
+SERVER_LOG,Server log,Registro del servidor
+PROGRAM_LOG,Program log,Registro del programa
+SHUTDOWN_SERVER,Shutdown server,Apagar servidor
+SHOW_ABOUT,About,Acerca de…
+LIGHT_MODE,Light mode,Modo claro
+DARK_MODE,Dark mode,Modo oscuro
+OPEN_IMAGE,Open image,Abrir imagen
+ADD_MODIFIER,Add modifier,Añadir modificador
+ADD_SCRIBBLE,Add scribble,Añadir garabato
+DELETE,Delete,Eliminar
+DELETE_OPTIONS,Delete options,Opciones de eliminación
+DELETE_ALL_MODIFIERS,Delete all modifiers,Eliminar todos los modificadores
+DELETE_SELECTED_MODIFIERS,Delete selected modifiers,Eliminar modificadores seleccionados
+DELETE_ACTIVE_MODIFIERS,Delete active modifiers,Eliminar modificadores activos
+DELETE_INACTIVE_MODIFIERS,Delete inactive modifiers,Eliminar modificadores inactivos
+RESTORE_DELETED_MODIFIERS,Restore deleted modifiers,Restaurar modificadores borrados
+OTHER,Other,Otros
+ACTIVATE_ALL_MODIFIERS,Activate all modifiers,Activar todos los modificadores
+INACTIVATE_ALL_MODIFIERS,Inactivate all modifiers,Inactivar todos los modificadores
+UI_CONTROL_RIGHT_CLICK,Right click,Clic derecho
+UI_CONTROL_LEFT_CLICK,Left click,Clic izquierdo
+UI_CONTROL_MIDDLE_CLICK,Middle click,Clic central
+UI_CONTROL_SCROLL_UP,Scroll up,Rueda arriba
+UI_CONTROL_SCROLL_DOWN,Scroll down,Rueda abajo
+HELP_DESC_MOVE_CAMERA,Move canvas,Mover lienzo
+HELP_DESC_ZOOM_IN,Zoom in,Zoom hacia dentro
+HELP_DESC_ZOOM_OUT,Zoom out,Zoom hacia fuera
+HELP_DESC_PAINT,Paint,Pintar
+HELP_DESC_ERASE,Erase,Borrar
+HELP_DESC_PAINT_INPAINT_MASK,Paint inpaint mask,Pintar máscara de regeneración
+HELP_DESC_ERASE_INPAINT_MASK,Erase inpaint mask,Borrar máscara de regeneración
+HELP_DESC_MOVE_AREA,Move area,Mover área
+HELP_DESC_MOVE_IMAGE,Move image,Mover imagen
+HELP_DESC_SAVE_OPTIONS_MENU,Save options menu,Menú de opciones de guardado
+HELP_DESC_IMAGE_GENERATED,Image generated. Right click on recent thumbnail to save.,Imagen generada. Clic derecho en miniatura reciente para guardar.
+HELP_DESC_IMAGE_SAVED,Image saved as: {0},Imagen guardada como: {0}
+HELP_DESC_SERVER_SHUTDOWN,Shutdown signal has been sent to server.,Señal de apagado fue enviada al servidor.
+HELP_DESC_INFO_COPIED_CLIPBOARD,Info copied to clipboard.,Información de copiada en portapapeles
+HELP_DESC_IMAGE_GEN_FAILED,Failed image generation. Please check the program and server logs for more info.,Generación de imagen fallida. Porfavor revise los registros del programa y el servidor para más información.
+HELP_DESC_PREPROCESSOR_IN_PROCESS,Preprocessing image. Some preprocessors may take a long time during the first use if it’s downloading a missing module.,La imagen esta siendo preprocesada. Algunos preprocesadores pueden demorarse en el primer uso en cas de estar descargando algún modulo faltante.
+HELP_DESC_IMAGE_PREPROCESSED,Image preprocessed.,Imagen preprocesada.
+NO_SERVER_LOG_AVAILABLE_1,The server state is currently not being monitored.,El estado del servidor no esta siendo actualmente monitoreado.
+NO_SERVER_LOG_AVAILABLE_2,Servers that weren’t initialized by this program can’t be monitored.,Servidores no inicializados por este programa no puede ser monitoreados.
+GENERATING_IMAGE,Generating image,Generando imagen
+DOWNLOADING_MODEL,Downloading model,Descargando modelo
+PREPROCESSING_IMAGE,Preprocessing image,Preprocesando imagen
+SERVER_READY,Server ready,Servidor listo
+SERVER_STARTING,Starting server,Inicializando servidor
+STATE_PREPARING_DEPENDENCIES,Preparing dependencies,Preparando dependencias
+STATE_PREPARING_PYTHON,Preparing Python,Preparando Python
+STATE_INSTALLING,Installing,Instalando
+STATE_LOADING,Loading,Cargando
+INS_STEP_CHECKING_DEPENDECIES,Checking server dependencies,Revisando dependencias del servidor
+INS_STEP_INSTALLING_DEPENDECIES,Installing server dependencies,Instalando dependencias del servidor
+INS_STEP_CLONING_REPO,Cloning server repository,Clonando repositorio del servidor
+INS_STEP_RESETTING_REPO,Resetting server repository,Resetando repositorio del servidor
+INS_STEP_CHECKING_PYTHON,Checking Python,Revisando Python
+INS_STEP_PREPARING_PYTHON,Preparing Python,Configurando Python
+INS_STEP_INSTALLING_SERVER,Installing server,Instalando servidor
+,,
+TUTORIALS,Tutorials,Tutoriales
+TUT5_LORA_LYCORIS_TI,"Using LoRA, Lyrocirs and Textual inversion","Usando LoRA, Lycoris e Inversión textual"
+TUT6_MODELS,Changing models,Cambiando modelos
+TUT7_LOG_AND_STATUS,Log and server state,Registros del programa y estado del servidor
+TUT8_OPENING_SAVING_IMG,Saving and opening images,Guardar y abrir imágenes
+TUT9_INPAINTING,Inpainting,“Inpainting” or regenerar selección
+TUT10_OUTPAINTING,Outpainting,“Outpainting” o generar espacios vacíos
+,,
+TUT1_WELCOME,Welcome to Quinti UI,Bienvenido a Quinti UI!
+TUT1_PARAMETERS,In the highlighted area you can find the parameters to adjust the image generation.,En el área resaltada se puede encontrarar los parametros para ajustar la generación de imagen.
+TUT1_ADVAN_PARAMETERS,You can enable more advanced parameters in the menu by clicking Settings > Advanced generation options.,Se puede activar parametros más avanzados haciendo click en el menú en Ajustes > Opciones de generación avanzadas.
+TUT1_TOOLS,"At the right side of the canvas you can find tools to perform operations like inpainting, outpainting and change dimensions. Hovering the mouse cursor on the tool icon will explain it's functionality.","Al lado derecho del canvas, se puede encontrar herramientas que permiten realizar operaciones como regenerar una parte pintada o generar imagenes fuera de la original. Al mover el cursor sobre los iconos de las herramientas se puede ver su funcionalidad."
+TUT1_PROMPT,You can write the details of the image you want to generate in the upper box and traits you wish to avoid in the lower box.,"Finalmente, los detalles de la imagen a generar se pueden excribir en la caja superior y los detalles que se desean evitar, en la caja inferior."
+TUT1_GEN_BUTTON,"There are other features that will be explained as you go. In the meantime, please click the generation button to generate your first image!","Hay otros detalles que se han de explicar ha medida que se use el programa. Hasta mientras, por favor haga click en el botón de generación para generar su primera imagen!"
+TUT2_APPLY_GENERATION,"Generated images aren’t directly placed in the canvas, in order to place it, you have to use the highlighted buttons.","Imagenes generadas no son colocadas directamente en el canvas, para colocarla, hay que usar los botones resaltados."
+TUT2_MOVE_EDIT_GENERATION,"The controls to move the image, the canvas or to use any tool will be shown by clicking the bar at the bottom. The contents will change depending of the controls available in the currently selected tool.","Los controles para mover la imagen, el canvas o usar cualquier herramienta serán mostrados al hacer click en la barra al fondo. Los contenidos van a cambiar dependiendo de los controles disponibles en la herramienta selecionada."
+TUT2_SAVE_GENERATION,"To save a generated image, you can right click on the thumbnails in the recent area to open the save menu.","Para guardar un imagen generada, se puede dar click derecho en las imagenes del área de Recientes para abrir un menú de guardado."
+TUT2_SAVE_IMAGE_VIEWER,You can also left click the recent image to open it in a dedicated image viewer. The dedicated image viewer also shows a save menu by right clicking it.,También se puede abrir la imagen en un visualizador dedicado haciendo click izquierdo. El visualizador de imagenes dedicado también permite mostrar un menú de guardado con el click derecho.
+TUT3_LOAD_IMAGE_DRAG,You can load again a previous image by dragging it onto the generation area preview.,Se puede cargar de vuelata una imagen previa arrastrandola a la vista previa del área de generación.
+TUT3_CONTROL_NET_DRAG,You can also drag the image to the modifiers area to use it in control net or see it's data.,También se puede arrastrar la imagen al área de modificadores para usarla en ControlNet o para ver sus datos.
+TUT3_PREVIEW_DRAG,The generation area preview can also be dragged to the modifiers area.,La vista previa del área de generación también puede ser arrastrada al área de modificadores.
+TUT4_CHANGE_MODIFIER,"To change between different ControlNet modes, you can use the button at the bottom of each modifier.","Para cambiar entre distintos modos de ControlNet, se puede utilizar el botón en la parte inferior del modifcador."
+TUT4_MODIFIER_ORDER,"It is important to note that if two or more modifiers have conflicting configurations, the modifiers on top will have priority. You can drag the modifiers to change which is on top.","Es importante destacar que si dos o más modificadores tienen configuraciones conflictivas, los modificadores situados arriba tendrán prioridad. Puedes arrastrar los modificadores para cambiar cuales estaran arriba."
+TUT4_MODIFIER_HELP,"To see specific details of what each mode does, you can click the info button to see a tutorial.","Para ver detalles específicos de que hace cada modo, se puede hacer click en el botón de información vara ver un tutorial."
+TUT4_TUTORIALS,"Finally, to see more details about how to use LoRA, Lycoris, changing models, among others things, you can find tutorials in the menu by clicking Help > Tutorials.","Finalmente, para ver más detalles acerca de como usar LoRA, Lycoris, cambiar modelos, entre otras cosas, se puede encontrar tutoriales haciendo click en el menú en Ayuda > Tutoriales."
+,,
+TUT5_OPENING,"The available LoRA, Lycoris and Textual inversion resources can be found in the ""Styling"" tab of the área de Recursos","Los recursos disponibles como LoRA, Lycoris e Inversión textual se encuentran en la pestaña ""Estilización"" de los Recursos."
+TUT5_NAVIGATION,"You can change whether to display the LoRA, Lycoris or Textual inversion resources by clicking the highlighted button","Se puede cambiar entre desplegar recursos de LoRA, Lycoris o Inversión textual haciendo clic en el botón resaltado."
+TUT5_SEARCH,The text bar bellow allows to search and filter the displayed resources,La barra de texto debajo permite buscar y filtrar los recursos mostrados.
+TUT5_LOAD,"To use them in image generation, you can drag them to the prompt area or the modifiers area","Para usarlos en la generación de imágenes, puedes arrastrarlos al área del área de instrucción o la de modificadores."
+TUT5_PARAMETERS,To edit the parameters of a resource is necessary to load them on the modifiers area,Para editar los parámetros de un recurso es necesario arrastrar en recurso al área de modificadores.
+TUT5_DEFAULTS,"To make permanent changes to the default parameters or to change the preview image of the resource, you can left click on the resource to open an edit window","Para realizar cambios permanentes en los parámetros predeterminados o cambiar la imagen de vista previa del recurso, se puede hacer clic izquierdo sobre el recurso para abrir una ventana de edición."
+TUT5_NEW_MODELS,"To increase the available resources, it is necessary to add them to their respective folders. You can click the highlighted button to copy the folder path.","Para aumentar los recursos disponibles, es necesario agregarlos a sus respectivas carpetas. Puedes hacer clic en el botón resaltado para copiar la dirección de la carpeta."
+TUT6_OPENING,"The available diffusion models can be found by clicking the the highlighted button, which will open the model selector","Los modelos de difusión disponibles se pueden encontrar haciendo clic en el botón resaltado, lo cual abrirá el seleccionador de modelos."
+TUT6_SELECTING,To select a model you just have to click it and the model will be loaded upon closing the model selector,Para seleccionar un modelo solo tienes que hacer clic en él y el modelo será cargado al cerrar el selector.
+TUT6_SEARCH,The text bar allows to search for an specific model,La barra de texto permite buscar un modelo específico.
+TUT6_NEW_MODELS,"To increase the available models, it is necessary to add them to the models folder. You can click the highlighted button to copy the folder path.",Para aumentar los modelos disponibles es necesario agregarlos a la carpeta de modelos. Puedes hacer clic en el botón resaltado para copiar la dirección de la carpeta.
+TUT7_OPENING,"The log, as well as the status of the program and the server can be found in Server > Show state","El registro, así como el estado del programa y el servidor, se encuentra en Servidor > Mostrar estado."
+TUT8_CANVAS,"To save the contents of the canvas, it is necessary to right click the canvas to show the save options","Para guardar el contenido del lienzo, es necesario hacer clic derecho sobre el lienzo para mostrar las opciones de guardado."
+TUT8_ACTIVE_IMAGE,"Saving the ""active image"" means that only that which is currently visible will be saved","Guardar la ""imagen activa"" significa que solo lo que está actualmente visibile será guardado. "
+TUT8_PREVIEW,It is also possible to save the preview of the generation area by right clicking the generation area preview,También es posible guardar la vista previa del área de generación haciendo clic derecho en dicha vista previa.
+TUT8_LOAD,"To load image into the program, you can use the highlighted button or just drop the image into this program.","Para cargar una imagen en el programa, puedes utilizar el botón resaltado o simplemente arrastrar la imagen a este programa."
+TUT9_DEFINITION,Inpainting is useful to regenerate details on an image or eliminate visual artifacts,La operación de “Inpainting” es útil para regenerar detalles en una imagen o eliminar artefactos visuales.
+TUT9_TOOLS,"First, you need to select the Inpaint brush tool","Primero, se debe seleccionar la herramienta resaltada"
+TUT9_MASK,"Then, paint over the part of the image you wish to regenerate and finally press the highlighted button","Luego, dibuja encima de la parte de la imagen que deseas regenerar y, finalmente, presiona el botón resaltado."
+TUT9_ERASER,"To erase the area to inpaint, you can use the highlighted eraser tool or the ""Clear"" button","Para borrar el área pintada, se puede usar la herramienta de borrar resaltada o el botón de “Limpiar”"
+TUT9_DENOISING,"To adjust the denoising strength, which is the intensity of the inpainting process, it is necessary to activate advanced settings in Settings > Advanced generation options","Para ajustar la eliminación de ruido, que es la intensidad del proceso de regeneración, es necesario activar las opciones avanzadas en Ajustes > Opciones de generación avanzadas."
+TUT10_DEFINITION,Outpainting allows to extend an image beyond it's boundaries by generating new parts of the image,La operación de “Outpainting” es útil para regenerar detalles en una imagen o eliminar artefactos visuales.
+TUT10_TOOL,"First, you need to select the Modify generation area tool","Primero, debes seleccionar la herramienta Modificar área de generación."
+TUT10_EXTEND,"Then, extend the area and press the highlighted button","Después, extiende el área y presiona el botón resaltado."
+TUT10_DENOISING,"To adjust the denoising strength, which is the intensity of the outpainting process in case we are using an image to image modifier, it is necessary to activate advanced settings in Settings > Advanced generation options","Para ajustar la eliminación de ruido, que es la intensidad del proceso de “Outpainting” al utilizar un modificador de imagen a imagen, es necesario activar las opciones avanzadas en Ajustes > Opciones de generación avanzadas."
+,,
+TUTM0_CONTROLNET_WEIGHT,The intensity of which the ControlNet is applied can be controlled with the highlighted slider.,La intensidad con el que se aplica el ControlNet puede controlarse mediante el deslizador resaltado.
+TUTM0_MOD_VISIBILITY,"To see how other modifiers of the same type overlap, as well as the inpaint mask, you can left click the eye button","Para ver cómo otros modificadores del mismo tipo superponen, así como también la máscara de inpainting, puedes hacer clic izquierdo en el botón ojo."
+TUTM0_MOD_VISIBILITY_CONFIG,"To edit the transparency of the overlap, as well as enabling the canvas overlap, you can display the settings by right clicking the eye button","Para editar la transparencia de la superposición, así como habilitar la superposición del lienzo, puedes mostrar las configuraciones haciendo clic derecho en el botón ojo."
+TUTM1_DESCRIPTION,The image info modifier allows to read and reuse the parameters of a generated image on the generation of another,El modificador de información de imagen permite leer y reutilizar los parámetros de una imagen generada para la generación de otra.
+TUTM1_DETAILS,"To reuse a specific parameter, it is necessary to check the detail we want to reuse","Para reutilizar un parámetro específico, es necesario marcar la casilla del detalle que queremos reutilizar."
+TUTM1_DESC_BOX,"To see the full content of a parameter, we can click on it's name to see the a full view on the box at the right","Para ver el contenido completo de un parámetro, podemos hacer clic en su nombre para ver la información completa en la caja lateral a la derecha."
+TUTM1_COPY,"You can also copy all the information to clipboard with the options inside the ""More options"" button","Además, se puede copiar toda la información al portapapeles con las opciones dentro del botón ""Más opciones""."
+TUTM2_DESCRIPTION,The lineart modifier will make the generated image follow the provided sketch.,El modificador de delineado hará que la imagen generada siga el esbozo proporcionado.
+TUTM2_USE,It is useful to edit the details of an image and to easily overlap and compose several images together.,Este modo es útil para editar los detalles de una imagen y para superponer y componer fácilmente varias imágenes juntas.
+TUTM2_TYPES,"To use an specific type of lineart like Canny or MLSD, you can select it with the highlighted button. ","Para utilizar un tipo específico de delineado como Canny o MLSD, puedes seleccionarlo mediante el botón resaltado."
+,,
+BRUSH_TOOL,"Brush: Allows to paint on an image or canvas, when used in the main canvas, it also allows to use AI to use what’s drawn to generate an image",Pincel: Permite pintar sobre una imagen o lienzo
+ERASER_TOOL,"Eraser: Allows to erase parts of an image or canvas, when used in the main canvas, it also allows to use AI to use what’s drawn to generate an image",Borrador: Permite borrar partes de una imagen o lienzo
+MODIFY_GEN_AREA_TOOL,Modify generation area: Changes the proportions and position of the image to generate. It can also fill with AI the empty parts within the selected area,Modificar área de generación: Cambia las proporciones y la posición de la imagen a generarar. También puede llenar con IA las partes vacías dentro del área seleccionada.
+INPAINT_ERASER_TOOL,"Inpaint eraser: Allows to inpaint the image, also erases the mask to be used for the inpainting process","Borrador de regenerado (inpaint): Permite regenerar con IA parte de la imagen, además sirve para borrar/deseleccionar el area utilizada en el proceso de regeneración (inpaint)."
+INPAINT_BRUSH_TOOL,"Inpaint brush: Allows to inpaint the image, also creates the mask to be used for the inpainting process","Pincel de regenerado (inpaint): Permite regenerar con IA parte de la imagen, además sirve para seleccionar el area utilizada en el proceso de regenración (inpaint)."
+FLIP_TOOL,Flip tool: Flips the image either horizontally or vertically ,Herramienta de volteo: Voltea la imagen tanto horizontalmente como verticalmente.
+TOOLTIP_TRANSFORM_TOOL,Transform tool: Resize and rotate the image,Herramienta de transformación: Redimensiona y gira la imagen.
+OVERUNDERLAY_VISIBILITY,"Modifiers visibility: Changes the visibility of the generation area and the overlapping modifiers to facilitate proper image placement. Right click to toggle it, left click to configure it.","Visibilidad de los modificadores: cambia la visibilidad del área de generación y los modificadores superpuestos para facilitar la ubicación adecuada de la imagen. Haga clic derecho para activarlo/desactivarlo, o clic izquierdo para configurarlo."
+,,
+LANGUAGE,Language,Idioma
+EN,English,Inglés
+ES,Spanish,Español

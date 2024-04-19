@@ -1,0 +1,38 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+
+const vec2 up = vec2(0, -1);
+const vec2 up_right = vec2(1, -1);
+const vec2 right = vec2(1, 0);
+const vec2 down_right = vec2(1, 1);
+const vec2 down = vec2(0, 1);
+const vec2 down_left = vec2(-1, 1);
+const vec2 left = vec2(-1, 0);
+const vec2 up_left = vec2(-1, -1);
+
+uniform float line_thickness : hint_range(0, 50) = 5.0;
+
+void fragment(){
+	vec2 size = TEXTURE_PIXEL_SIZE * line_thickness;
+	float outline = 0.0;
+	outline += 1.0 - texture(TEXTURE, clamp(UV + size * up, 0, 1)).a;
+	outline += 1.0 - texture(TEXTURE, clamp(UV + size * up_right, 0, 1)).a;
+	outline += 1.0 - texture(TEXTURE, clamp(UV + size * up_left, 0, 1)).a;
+	outline += 1.0 - texture(TEXTURE, clamp(UV + size * down, 0, 1)).a;
+	outline += 1.0 - texture(TEXTURE, clamp(UV + size * down_right, 0, 1)).a;
+	outline += 1.0 - texture(TEXTURE, clamp(UV + size * down_left, 0, 1)).a;
+	outline += 1.0 - texture(TEXTURE, clamp(UV + size * right, 0, 1)).a;
+	outline += 1.0 - texture(TEXTURE, clamp(UV + size * left, 0, 1)).a;
+	outline = min(outline, 1.0);
+	vec4 color = texture(TEXTURE, UV);
+	color = vec4(outline, outline, outline, 1);
+	COLOR = color;
+}
+
+
+
+
+
+"

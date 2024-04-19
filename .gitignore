@@ -1,0 +1,26 @@
+# Godot-specific ignores
+.import/
+.export/
+*.import
+export.cfg
+export_presets.cfg
+project.godot
+default_env.tres
+icon.png
+.godot/
+# Mono-specific ignores
+.mono/
+data_*/
+
+# VSCode-specific ignores
+.vscode/
+
+#User defined ignores
+python/venv/
+dependencies/exe/
+addons/project-statistics
+addons/notes_tab
+addons/godot-git-plugin
+Placeholders
+testing
+

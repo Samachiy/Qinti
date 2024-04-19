@@ -1,0 +1,1134 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://themes/sub_theme.tres" type="Theme" id=1]
+[ext_resource path="res://themes/main_theme.tres" type="Theme" id=2]
+[ext_resource path="res://server/installer_components/local_backend.gd" type="Script" id=3]
+[ext_resource path="res://assets/icons/buttons_#g1487.png" type="Texture" id=4]
+[ext_resource path="res://assets/icons/buttons_#g1462.png" type="Texture" id=5]
+[ext_resource path="res://ui/components/smart_option_button.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/icons/icons_#rect1156_copy_3.png" type="Texture" id=7]
+[ext_resource path="res://server/server_management_ui.gd" type="Script" id=8]
+[ext_resource path="res://server/installer_components/advanced_install_option.gd" type="Script" id=9]
+[ext_resource path="res://ui/components/loading_label.tscn" type="PackedScene" id=10]
+[ext_resource path="res://assets/icons/server_management_g116_copy_2.png" type="Texture" id=13]
+[ext_resource path="res://assets/icons/server_management_g117_copy_1.png" type="Texture" id=14]
+[ext_resource path="res://ui/components/icon_color_font.gd" type="Script" id=15]
+
+[node name="ServerManagementUI" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 2 )
+script = ExtResource( 8 )
+
+[node name="LocalBackend" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="MainOptions" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBox" type="VBoxContainer" parent="MainOptions"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 1012.0
+margin_bottom = 588.0
+
+[node name="Header" type="MarginContainer" parent="MainOptions/VBox"]
+margin_right = 1000.0
+margin_bottom = 110.0
+size_flags_vertical = 3
+
+[node name="Options" type="HBoxContainer" parent="MainOptions/VBox"]
+margin_top = 122.0
+margin_right = 1000.0
+margin_bottom = 453.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+custom_constants/separation = 0
+
+[node name="SelectInstallation" type="MarginContainer" parent="MainOptions/VBox/Options"]
+margin_right = 490.0
+margin_bottom = 331.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 35
+custom_constants/margin_left = 35
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MainOptions/VBox/Options/SelectInstallation"]
+margin_left = 35.0
+margin_top = 12.0
+margin_right = 455.0
+margin_bottom = 319.0
+alignment = 1
+
+[node name="Label" type="Label" parent="MainOptions/VBox/Options/SelectInstallation/VBoxContainer2"]
+margin_right = 420.0
+margin_bottom = 33.0
+size_flags_vertical = 7
+text = "CHOOSE_INSTALLED_DIR_OPTION"
+align = 1
+valign = 2
+autowrap = true
+
+[node name="Spacing" type="Control" parent="MainOptions/VBox/Options/SelectInstallation/VBoxContainer2"]
+margin_top = 45.0
+margin_right = 420.0
+margin_bottom = 78.0
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="MainOptions/VBox/Options/SelectInstallation/VBoxContainer2"]
+margin_top = 90.0
+margin_right = 420.0
+margin_bottom = 165.0
+rect_min_size = Vector2( 0, 75 )
+texture = ExtResource( 14 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 15 )
+
+[node name="Spacing2" type="Control" parent="MainOptions/VBox/Options/SelectInstallation/VBoxContainer2"]
+margin_top = 177.0
+margin_right = 420.0
+margin_bottom = 210.0
+rect_min_size = Vector2( 0, 10 )
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainOptions/VBox/Options/SelectInstallation/VBoxContainer2"]
+margin_top = 222.0
+margin_right = 420.0
+margin_bottom = 262.0
+
+[node name="Spacing" type="Control" parent="MainOptions/VBox/Options/SelectInstallation/VBoxContainer2/HBoxContainer"]
+margin_right = 66.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="MainOpenInstallation" type="Button" parent="MainOptions/VBox/Options/SelectInstallation/VBoxContainer2/HBoxContainer"]
+margin_left = 78.0
+margin_right = 342.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+theme = ExtResource( 1 )
+text = "SELECT_FOLDER"
+
+[node name="Spacing2" type="Control" parent="MainOptions/VBox/Options/SelectInstallation/VBoxContainer2/HBoxContainer"]
+margin_left = 354.0
+margin_right = 420.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="Spacing3" type="Control" parent="MainOptions/VBox/Options/SelectInstallation/VBoxContainer2"]
+margin_top = 274.0
+margin_right = 420.0
+margin_bottom = 307.0
+size_flags_vertical = 3
+
+[node name="SeparationSpacing" type="Control" parent="MainOptions/VBox/Options"]
+margin_left = 490.0
+margin_right = 510.0
+margin_bottom = 331.0
+rect_min_size = Vector2( 20, 0 )
+
+[node name="Separation" type="VScrollBar" parent="MainOptions/VBox/Options/SeparationSpacing"]
+anchor_bottom = 1.0
+margin_right = 12.0
+rect_pivot_offset = Vector2( 0, 170 )
+
+[node name="Install" type="MarginContainer" parent="MainOptions/VBox/Options"]
+margin_left = 510.0
+margin_right = 1000.0
+margin_bottom = 331.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 35
+custom_constants/margin_left = 35
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainOptions/VBox/Options/Install"]
+margin_left = 35.0
+margin_top = 12.0
+margin_right = 455.0
+margin_bottom = 319.0
+alignment = 1
+
+[node name="Label" type="Label" parent="MainOptions/VBox/Options/Install/VBoxContainer"]
+margin_right = 420.0
+margin_bottom = 33.0
+size_flags_vertical = 7
+text = "INSTALL_OPTION"
+align = 1
+valign = 2
+autowrap = true
+
+[node name="Spacing" type="Control" parent="MainOptions/VBox/Options/Install/VBoxContainer"]
+margin_top = 45.0
+margin_right = 420.0
+margin_bottom = 78.0
+rect_clip_content = true
+size_flags_vertical = 3
+
+[node name="BetaLabel" type="Label" parent="MainOptions/VBox/Options/Install/VBoxContainer/Spacing"]
+modulate = Color( 1, 1, 1, 0.588235 )
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -210.0
+margin_right = 210.0
+margin_bottom = 33.0
+size_flags_vertical = 7
+text = "BETA_FEATURE"
+align = 1
+autowrap = true
+
+[node name="TextureRect2" type="TextureRect" parent="MainOptions/VBox/Options/Install/VBoxContainer"]
+margin_top = 90.0
+margin_right = 420.0
+margin_bottom = 165.0
+rect_min_size = Vector2( 0, 75 )
+texture = ExtResource( 13 )
+expand = true
+stretch_mode = 6
+script = ExtResource( 15 )
+
+[node name="Spacing2" type="Control" parent="MainOptions/VBox/Options/Install/VBoxContainer"]
+margin_top = 177.0
+margin_right = 420.0
+margin_bottom = 210.0
+rect_min_size = Vector2( 0, 10 )
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainOptions/VBox/Options/Install/VBoxContainer"]
+margin_top = 222.0
+margin_right = 420.0
+margin_bottom = 262.0
+
+[node name="Spacing" type="Control" parent="MainOptions/VBox/Options/Install/VBoxContainer/HBoxContainer"]
+margin_right = 66.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="MainInstallServer" type="Button" parent="MainOptions/VBox/Options/Install/VBoxContainer/HBoxContainer"]
+margin_left = 78.0
+margin_right = 342.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+theme = ExtResource( 1 )
+text = "SELECT_FOLDER"
+
+[node name="Spacing2" type="Control" parent="MainOptions/VBox/Options/Install/VBoxContainer/HBoxContainer"]
+margin_left = 354.0
+margin_right = 420.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="Spacing3" type="Control" parent="MainOptions/VBox/Options/Install/VBoxContainer"]
+margin_top = 274.0
+margin_right = 420.0
+margin_bottom = 307.0
+size_flags_vertical = 3
+
+[node name="SeparationSpacing2" type="Control" parent="MainOptions/VBox/Options"]
+visible = false
+margin_left = 980.0
+margin_right = 1000.0
+margin_bottom = 331.0
+rect_min_size = Vector2( 20, 0 )
+
+[node name="Separation" type="VScrollBar" parent="MainOptions/VBox/Options/SeparationSpacing2"]
+anchor_bottom = 1.0
+margin_right = 12.0
+rect_pivot_offset = Vector2( 0, 170 )
+
+[node name="RemoteServer" type="MarginContainer" parent="MainOptions/VBox/Options"]
+visible = false
+margin_left = 680.0
+margin_right = 1000.0
+margin_bottom = 331.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 35
+custom_constants/margin_left = 35
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="MainOptions/VBox/Options/RemoteServer"]
+margin_left = 35.0
+margin_top = 12.0
+margin_right = 285.0
+margin_bottom = 319.0
+alignment = 1
+
+[node name="Label" type="Label" parent="MainOptions/VBox/Options/RemoteServer/VBoxContainer3"]
+margin_right = 250.0
+margin_bottom = 94.0
+size_flags_vertical = 7
+text = "REMOTE_SERVER_OPTION"
+align = 1
+valign = 2
+autowrap = true
+
+[node name="Spacing" type="Control" parent="MainOptions/VBox/Options/RemoteServer/VBoxContainer3"]
+margin_top = 106.0
+margin_right = 250.0
+margin_bottom = 200.0
+size_flags_vertical = 3
+
+[node name="MainAddRemoteServer" type="Button" parent="MainOptions/VBox/Options/RemoteServer/VBoxContainer3"]
+visible = false
+margin_top = 178.0
+margin_right = 250.0
+margin_bottom = 217.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+theme = ExtResource( 1 )
+text = "SELECT_FOLDER"
+
+[node name="Spacing2" type="Control" parent="MainOptions/VBox/Options/RemoteServer/VBoxContainer3"]
+margin_top = 212.0
+margin_right = 250.0
+margin_bottom = 307.0
+size_flags_vertical = 3
+
+[node name="Extra" type="Control" parent="MainOptions/VBox"]
+margin_top = 465.0
+margin_right = 1000.0
+margin_bottom = 576.0
+size_flags_vertical = 3
+
+[node name="Buttons" type="HBoxContainer" parent="MainOptions/VBox/Extra"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+alignment = 2
+
+[node name="Spacing3" type="Control" parent="MainOptions/VBox/Extra/Buttons"]
+margin_right = 15.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 15, 0 )
+
+[node name="ExitInstallerButton" type="Button" parent="MainOptions/VBox/Extra/Buttons"]
+unique_name_in_owner = true
+margin_left = 27.0
+margin_right = 80.0
+margin_bottom = 28.0
+text = "BACK"
+
+[node name="Spacing" type="Control" parent="MainOptions/VBox/Extra/Buttons"]
+margin_left = 92.0
+margin_right = 711.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 15, 0 )
+size_flags_horizontal = 3
+
+[node name="Language" parent="MainOptions/VBox/Extra/Buttons" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+margin_left = 723.0
+margin_right = 973.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 250, 0 )
+text = "LANGUAGE"
+requieres_flag = false
+
+[node name="Spacing2" type="Control" parent="MainOptions/VBox/Extra/Buttons"]
+margin_left = 985.0
+margin_right = 1000.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 15, 0 )
+
+[node name="InstallOption" type="MarginContainer" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBox" type="VBoxContainer" parent="InstallOption"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 1012.0
+margin_bottom = 588.0
+
+[node name="Header" type="MarginContainer" parent="InstallOption/VBox"]
+margin_right = 1000.0
+margin_bottom = 122.0
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="InstallOption/VBox/Header"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 988.0
+margin_bottom = 110.0
+size_flags_vertical = 5
+text = "INSTALL_OPTION"
+align = 1
+valign = 1
+
+[node name="Body" type="HBoxContainer" parent="InstallOption/VBox"]
+margin_top = 134.0
+margin_right = 1000.0
+margin_bottom = 441.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.5
+
+[node name="Spacing" type="Control" parent="InstallOption/VBox/Body"]
+margin_right = 69.0
+margin_bottom = 307.0
+size_flags_horizontal = 3
+
+[node name="Options" type="VBoxContainer" parent="InstallOption/VBox/Body"]
+margin_left = 81.0
+margin_right = 918.0
+margin_bottom = 307.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 12.0
+alignment = 1
+
+[node name="Label" type="Label" parent="InstallOption/VBox/Body/Options"]
+margin_top = 18.0
+margin_right = 837.0
+margin_bottom = 38.0
+text = "PLEASE_SELECT_INSTALL_FOLDER"
+
+[node name="SelectFolder" type="HBoxContainer" parent="InstallOption/VBox/Body/Options"]
+margin_top = 50.0
+margin_right = 837.0
+margin_bottom = 80.0
+
+[node name="InstallPath" type="LineEdit" parent="InstallOption/VBox/Body/Options/SelectFolder"]
+unique_name_in_owner = true
+margin_right = 800.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+
+[node name="FileDialogInstall" type="TextureButton" parent="InstallOption/VBox/Body/Options/SelectFolder"]
+margin_left = 812.0
+margin_right = 837.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 25, 30 )
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 5 )
+texture_focused = ExtResource( 7 )
+expand = true
+stretch_mode = 4
+script = ExtResource( 15 )
+
+[node name="Spacing" type="Control" parent="InstallOption/VBox/Body/Options"]
+margin_top = 92.0
+margin_right = 837.0
+margin_bottom = 92.0
+
+[node name="Arguments" type="HBoxContainer" parent="InstallOption/VBox/Body/Options"]
+margin_top = 104.0
+margin_right = 837.0
+margin_bottom = 126.0
+
+[node name="Arguments" type="Label" parent="InstallOption/VBox/Body/Options/Arguments"]
+margin_top = 1.0
+margin_right = 78.0
+margin_bottom = 21.0
+text = "ARGUMENTS"
+
+[node name="CoreInstallArguments" type="Label" parent="InstallOption/VBox/Body/Options/Arguments"]
+unique_name_in_owner = true
+margin_left = 90.0
+margin_top = 1.0
+margin_right = 90.0
+margin_bottom = 21.0
+
+[node name="InstallArguments" type="LineEdit" parent="InstallOption/VBox/Body/Options/Arguments"]
+unique_name_in_owner = true
+margin_left = 102.0
+margin_right = 837.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 0, 22 )
+size_flags_horizontal = 3
+
+[node name="HBox" type="HBoxContainer" parent="InstallOption/VBox/Body/Options"]
+margin_top = 138.0
+margin_right = 837.0
+margin_bottom = 288.0
+
+[node name="VBox" type="VBoxContainer" parent="InstallOption/VBox/Body/Options/HBox"]
+margin_right = 330.0
+margin_bottom = 150.0
+size_flags_horizontal = 3
+
+[node name="SelectOS" type="HBoxContainer" parent="InstallOption/VBox/Body/Options/HBox/VBox"]
+visible = false
+margin_right = 335.0
+margin_bottom = 30.0
+
+[node name="LineEdit" type="Label" parent="InstallOption/VBox/Body/Options/HBox/VBox/SelectOS"]
+margin_top = 8.0
+margin_right = 53.0
+margin_bottom = 22.0
+text = "OS_TYPE"
+
+[node name="AvailableOS" parent="InstallOption/VBox/Body/Options/HBox/VBox/SelectOS" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+margin_left = 61.0
+margin_right = 335.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 3
+requieres_flag = false
+
+[node name="SelectGPU" type="HBoxContainer" parent="InstallOption/VBox/Body/Options/HBox/VBox"]
+margin_right = 330.0
+margin_bottom = 28.0
+
+[node name="LineEdit" type="Label" parent="InstallOption/VBox/Body/Options/HBox/VBox/SelectGPU"]
+margin_top = 4.0
+margin_right = 64.0
+margin_bottom = 24.0
+text = "GPU_TYPE"
+
+[node name="InstallAvailableGPU" parent="InstallOption/VBox/Body/Options/HBox/VBox/SelectGPU" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+margin_left = 76.0
+margin_right = 330.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 3
+requieres_flag = false
+
+[node name="ShowAdvancedInstallOptions" type="CheckBox" parent="InstallOption/VBox/Body/Options/HBox/VBox"]
+margin_top = 40.0
+margin_right = 330.0
+margin_bottom = 70.0
+text = "ADVANCED_INSTALL_OPTIONS"
+
+[node name="SelectServer" type="HBoxContainer" parent="InstallOption/VBox/Body/Options/HBox/VBox"]
+margin_top = 82.0
+margin_right = 330.0
+margin_bottom = 110.0
+script = ExtResource( 9 )
+selector = NodePath("../ShowAdvancedInstallOptions")
+
+[node name="LineEdit" type="Label" parent="InstallOption/VBox/Body/Options/HBox/VBox/SelectServer"]
+margin_top = 4.0
+margin_right = 85.0
+margin_bottom = 24.0
+text = "SERVER_TYPE"
+
+[node name="AvailableServers" parent="InstallOption/VBox/Body/Options/HBox/VBox/SelectServer" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+margin_left = 97.0
+margin_right = 330.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 3
+requieres_flag = false
+
+[node name="SelectVersion" type="HBoxContainer" parent="InstallOption/VBox/Body/Options/HBox/VBox"]
+margin_top = 122.0
+margin_right = 330.0
+margin_bottom = 150.0
+script = ExtResource( 9 )
+selector = NodePath("../ShowAdvancedInstallOptions")
+
+[node name="LineEdit" type="Label" parent="InstallOption/VBox/Body/Options/HBox/VBox/SelectVersion"]
+margin_top = 4.0
+margin_right = 108.0
+margin_bottom = 24.0
+text = "SERVER_VERSION"
+
+[node name="AvailableServerVersions" parent="InstallOption/VBox/Body/Options/HBox/VBox/SelectVersion" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+margin_left = 120.0
+margin_right = 330.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 3
+requieres_flag = false
+
+[node name="Spacing" type="Control" parent="InstallOption/VBox/Body/Options/HBox"]
+margin_left = 342.0
+margin_right = 837.0
+margin_bottom = 150.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.5
+
+[node name="Spacing2" type="Control" parent="InstallOption/VBox/Body"]
+margin_left = 930.0
+margin_right = 1000.0
+margin_bottom = 307.0
+size_flags_horizontal = 3
+
+[node name="NavigationButtons" type="Control" parent="InstallOption/VBox"]
+margin_top = 453.0
+margin_right = 1000.0
+margin_bottom = 576.0
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InstallOption/VBox/NavigationButtons"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -7.0
+margin_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 0, 35 )
+
+[node name="MarginLeft" type="Control" parent="InstallOption/VBox/NavigationButtons/HBoxContainer"]
+margin_right = 68.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="Back" type="Button" parent="InstallOption/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 80.0
+margin_right = 216.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+text = "BACK"
+
+[node name="Spacing" type="Control" parent="InstallOption/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 228.0
+margin_right = 772.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="ProceedInstall" type="Button" parent="InstallOption/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 784.0
+margin_right = 920.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+theme_type_variation = "ConfirmButton"
+text = "INSTALL"
+
+[node name="MarginRight" type="Control" parent="InstallOption/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 932.0
+margin_right = 1000.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="ChooseInstalledDirOption" type="MarginContainer" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBox" type="VBoxContainer" parent="ChooseInstalledDirOption"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 1012.0
+margin_bottom = 588.0
+
+[node name="Header" type="MarginContainer" parent="ChooseInstalledDirOption/VBox"]
+margin_right = 1000.0
+margin_bottom = 122.0
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="ChooseInstalledDirOption/VBox/Header"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 988.0
+margin_bottom = 110.0
+size_flags_vertical = 5
+text = "PLEASE_SELECT_SERVER_EXECUTABLE"
+align = 1
+valign = 1
+
+[node name="Body" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox"]
+margin_top = 134.0
+margin_right = 1000.0
+margin_bottom = 441.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.5
+
+[node name="Spacing" type="Control" parent="ChooseInstalledDirOption/VBox/Body"]
+margin_right = 69.0
+margin_bottom = 307.0
+size_flags_horizontal = 3
+
+[node name="Options" type="VBoxContainer" parent="ChooseInstalledDirOption/VBox/Body"]
+margin_left = 81.0
+margin_right = 918.0
+margin_bottom = 307.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 12.0
+alignment = 1
+
+[node name="Label" type="Label" parent="ChooseInstalledDirOption/VBox/Body/Options"]
+margin_top = 79.0
+margin_right = 837.0
+margin_bottom = 99.0
+text = "PLEASE_SELECT_INSTALL_FOLDER"
+
+[node name="SelectFolder" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options"]
+margin_top = 111.0
+margin_right = 837.0
+margin_bottom = 141.0
+
+[node name="SelectedInstallationPath" type="LineEdit" parent="ChooseInstalledDirOption/VBox/Body/Options/SelectFolder"]
+unique_name_in_owner = true
+margin_right = 800.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+
+[node name="FileDialogOpenInstalled" type="TextureButton" parent="ChooseInstalledDirOption/VBox/Body/Options/SelectFolder"]
+margin_left = 812.0
+margin_right = 837.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 25, 30 )
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 5 )
+texture_focused = ExtResource( 7 )
+expand = true
+stretch_mode = 4
+script = ExtResource( 15 )
+
+[node name="Spacing" type="Control" parent="ChooseInstalledDirOption/VBox/Body/Options"]
+margin_top = 153.0
+margin_right = 837.0
+margin_bottom = 153.0
+
+[node name="Arguments" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options"]
+margin_top = 165.0
+margin_right = 837.0
+margin_bottom = 187.0
+
+[node name="Arguments" type="Label" parent="ChooseInstalledDirOption/VBox/Body/Options/Arguments"]
+margin_top = 1.0
+margin_right = 78.0
+margin_bottom = 21.0
+text = "ARGUMENTS"
+
+[node name="CoreOpenArguments" type="Label" parent="ChooseInstalledDirOption/VBox/Body/Options/Arguments"]
+unique_name_in_owner = true
+margin_left = 90.0
+margin_top = 1.0
+margin_right = 90.0
+margin_bottom = 21.0
+
+[node name="OpenArguments" type="LineEdit" parent="ChooseInstalledDirOption/VBox/Body/Options/Arguments"]
+unique_name_in_owner = true
+margin_left = 102.0
+margin_right = 837.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 0, 22 )
+size_flags_horizontal = 3
+
+[node name="HBox" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options"]
+margin_top = 199.0
+margin_right = 837.0
+margin_bottom = 227.0
+
+[node name="VBox" type="VBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox"]
+margin_right = 330.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+
+[node name="SelectGPU" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox"]
+margin_right = 330.0
+margin_bottom = 28.0
+
+[node name="LineEdit" type="Label" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectGPU"]
+margin_top = 4.0
+margin_right = 64.0
+margin_bottom = 24.0
+text = "GPU_TYPE"
+
+[node name="OpenAvailableGPU" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectGPU" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+margin_left = 76.0
+margin_right = 330.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 3
+requieres_flag = false
+
+[node name="Spacing" type="Control" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox"]
+margin_left = 342.0
+margin_right = 837.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.5
+
+[node name="Spacing2" type="Control" parent="ChooseInstalledDirOption/VBox/Body"]
+margin_left = 930.0
+margin_right = 1000.0
+margin_bottom = 307.0
+size_flags_horizontal = 3
+
+[node name="NavigationButtons" type="Control" parent="ChooseInstalledDirOption/VBox"]
+margin_top = 453.0
+margin_right = 1000.0
+margin_bottom = 576.0
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox/NavigationButtons"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -7.0
+margin_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 0, 35 )
+
+[node name="MarginLeft" type="Control" parent="ChooseInstalledDirOption/VBox/NavigationButtons/HBoxContainer"]
+margin_right = 68.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="Back" type="Button" parent="ChooseInstalledDirOption/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 80.0
+margin_right = 216.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+text = "BACK"
+
+[node name="Spacing" type="Control" parent="ChooseInstalledDirOption/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 228.0
+margin_right = 772.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="ProceedOpenInstalled" type="Button" parent="ChooseInstalledDirOption/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 784.0
+margin_right = 920.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+theme_type_variation = "ConfirmButton"
+text = "SELECT"
+
+[node name="MarginRight" type="Control" parent="ChooseInstalledDirOption/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 932.0
+margin_right = 1000.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="RemoteServerOption" type="MarginContainer" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBox" type="VBoxContainer" parent="RemoteServerOption"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 1012.0
+margin_bottom = 588.0
+
+[node name="Header" type="MarginContainer" parent="RemoteServerOption/VBox"]
+margin_right = 1004.0
+margin_bottom = 125.0
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="RemoteServerOption/VBox/Header"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 992.0
+margin_bottom = 113.0
+size_flags_vertical = 5
+text = "REMOTE_SERVER_OPTION"
+align = 1
+valign = 1
+
+[node name="Body" type="HBoxContainer" parent="RemoteServerOption/VBox"]
+margin_top = 133.0
+margin_right = 1004.0
+margin_bottom = 446.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.5
+
+[node name="Spacing" type="Control" parent="RemoteServerOption/VBox/Body"]
+margin_right = 70.0
+margin_bottom = 313.0
+size_flags_horizontal = 3
+
+[node name="Options" type="VBoxContainer" parent="RemoteServerOption/VBox/Body"]
+margin_left = 78.0
+margin_right = 925.0
+margin_bottom = 313.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 12.0
+alignment = 1
+
+[node name="Label" type="Label" parent="RemoteServerOption/VBox/Body/Options"]
+margin_top = 128.0
+margin_right = 847.0
+margin_bottom = 142.0
+text = "PLEASE_INSERT_SERVER_ADDRESS"
+
+[node name="SelectServer" type="HBoxContainer" parent="RemoteServerOption/VBox/Body/Options"]
+margin_top = 150.0
+margin_right = 847.0
+margin_bottom = 185.0
+rect_min_size = Vector2( 0, 35 )
+
+[node name="ConnectToServerURL" type="LineEdit" parent="RemoteServerOption/VBox/Body/Options/SelectServer"]
+unique_name_in_owner = true
+margin_right = 847.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+
+[node name="Spacing2" type="Control" parent="RemoteServerOption/VBox/Body"]
+margin_left = 933.0
+margin_right = 1004.0
+margin_bottom = 313.0
+size_flags_horizontal = 3
+
+[node name="NavigationButtons" type="Control" parent="RemoteServerOption/VBox"]
+margin_top = 454.0
+margin_right = 1004.0
+margin_bottom = 580.0
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="RemoteServerOption/VBox/NavigationButtons"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -7.0
+margin_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 0, 35 )
+
+[node name="MarginLeft" type="Control" parent="RemoteServerOption/VBox/NavigationButtons/HBoxContainer"]
+margin_right = 69.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="Back" type="Button" parent="RemoteServerOption/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 77.0
+margin_right = 216.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+text = "BACK"
+
+[node name="Spacing" type="Control" parent="RemoteServerOption/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 224.0
+margin_right = 779.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="ProceedRemoteServer" type="Button" parent="RemoteServerOption/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 787.0
+margin_right = 926.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+theme_type_variation = "ConfirmButton"
+text = "CONNECT"
+
+[node name="MarginRight" type="Control" parent="RemoteServerOption/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 934.0
+margin_right = 1004.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="InstallingDialog" type="MarginContainer" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBox" type="VBoxContainer" parent="InstallingDialog"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 1012.0
+margin_bottom = 588.0
+
+[node name="Header" type="MarginContainer" parent="InstallingDialog/VBox"]
+margin_right = 1000.0
+margin_bottom = 210.0
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InstallingDialog/VBox/Header"]
+margin_left = 12.0
+margin_top = 12.0
+margin_right = 988.0
+margin_bottom = 198.0
+
+[node name="Label" type="Label" parent="InstallingDialog/VBox/Header/VBoxContainer"]
+margin_right = 976.0
+margin_bottom = 20.0
+size_flags_vertical = 5
+text = "INSTALLING_DIFFUSION_SERVER"
+align = 1
+valign = 1
+
+[node name="Spacing" type="Control" parent="InstallingDialog/VBox/Header/VBoxContainer"]
+margin_top = 32.0
+margin_right = 976.0
+margin_bottom = 32.0
+
+[node name="InstallationLoadingIconTimer" type="Timer" parent="InstallingDialog/VBox/Header/VBoxContainer"]
+unique_name_in_owner = true
+
+[node name="InstallationLoadingIcon" parent="InstallingDialog/VBox/Header/VBoxContainer" instance=ExtResource( 10 )]
+unique_name_in_owner = true
+margin_top = 44.0
+margin_right = 976.0
+margin_bottom = 114.0
+rect_min_size = Vector2( 0, 70 )
+
+[node name="InstallationLoadingIconSpace" type="Control" parent="InstallingDialog/VBox/Header/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+margin_top = 114.0
+margin_right = 976.0
+margin_bottom = 184.0
+rect_min_size = Vector2( 0, 70 )
+
+[node name="InstallationStep" type="Label" parent="InstallingDialog/VBox/Header/VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 126.0
+margin_right = 976.0
+margin_bottom = 146.0
+text = "INSTALLING_DIFFUSION_SERVER"
+align = 1
+valign = 1
+
+[node name="ResumeInstallation" type="HBoxContainer" parent="InstallingDialog/VBox/Header/VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 158.0
+margin_right = 976.0
+margin_bottom = 186.0
+alignment = 1
+
+[node name="Spacing" type="Control" parent="InstallingDialog/VBox/Header/VBoxContainer/ResumeInstallation"]
+visible = false
+margin_left = 213.0
+margin_right = 243.0
+margin_bottom = 28.0
+
+[node name="ResumeInstallation" type="Button" parent="InstallingDialog/VBox/Header/VBoxContainer/ResumeInstallation"]
+margin_left = 452.0
+margin_right = 524.0
+margin_bottom = 28.0
+theme_type_variation = "ConfirmButton"
+text = "RESUME"
+
+[node name="Spacing2" type="Control" parent="InstallingDialog/VBox/Header/VBoxContainer/ResumeInstallation"]
+visible = false
+margin_left = 213.0
+margin_right = 892.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+
+[node name="Body" type="HBoxContainer" parent="InstallingDialog/VBox"]
+margin_top = 222.0
+margin_right = 1000.0
+margin_bottom = 450.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="Spacing" type="Control" parent="InstallingDialog/VBox/Body"]
+margin_right = 69.0
+margin_bottom = 228.0
+size_flags_horizontal = 3
+
+[node name="Progress" type="VBoxContainer" parent="InstallingDialog/VBox/Body"]
+margin_left = 81.0
+margin_right = 918.0
+margin_bottom = 228.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 12.0
+
+[node name="InstallationOutput" type="RichTextLabel" parent="InstallingDialog/VBox/Body/Progress"]
+unique_name_in_owner = true
+margin_right = 837.0
+margin_bottom = 228.0
+focus_mode = 2
+size_flags_vertical = 3
+scroll_following = true
+selection_enabled = true
+
+[node name="Spacing2" type="Control" parent="InstallingDialog/VBox/Body"]
+margin_left = 930.0
+margin_right = 1000.0
+margin_bottom = 228.0
+size_flags_horizontal = 3
+
+[node name="NavigationButtons" type="Control" parent="InstallingDialog/VBox"]
+margin_top = 462.0
+margin_right = 1000.0
+margin_bottom = 576.0
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InstallingDialog/VBox/NavigationButtons"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -7.0
+margin_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 0, 35 )
+
+[node name="MarginLeft" type="Control" parent="InstallingDialog/VBox/NavigationButtons/HBoxContainer"]
+margin_right = 97.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="Back" type="Button" parent="InstallingDialog/VBox/NavigationButtons/HBoxContainer"]
+visible = false
+margin_left = 77.0
+margin_right = 216.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+text = "BACK"
+
+[node name="Spacing" type="Control" parent="InstallingDialog/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 109.0
+margin_right = 890.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="InstallationFinish" type="Button" parent="InstallingDialog/VBox/NavigationButtons/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+margin_left = 747.0
+margin_right = 907.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+theme_type_variation = "ConfirmButton"
+text = "FINISH"
+
+[node name="MarginRight" type="Control" parent="InstallingDialog/VBox/NavigationButtons/HBoxContainer"]
+margin_left = 902.0
+margin_right = 1000.0
+margin_bottom = 35.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[connection signal="pressed" from="MainOptions/VBox/Options/SelectInstallation/VBoxContainer2/HBoxContainer/MainOpenInstallation" to="." method="_on_MainOpenInstallation_pressed"]
+[connection signal="pressed" from="MainOptions/VBox/Options/Install/VBoxContainer/HBoxContainer/MainInstallServer" to="." method="_on_MainInstallServer_pressed"]
+[connection signal="pressed" from="MainOptions/VBox/Options/RemoteServer/VBoxContainer3/MainAddRemoteServer" to="." method="_on_MainAddRemoteServer_pressed"]
+[connection signal="pressed" from="MainOptions/VBox/Extra/Buttons/ExitInstallerButton" to="." method="_on_ExitInstallerButton_pressed"]
+[connection signal="option_selected" from="MainOptions/VBox/Extra/Buttons/Language" to="." method="_on_Language_option_selected"]
+[connection signal="text_changed" from="InstallOption/VBox/Body/Options/SelectFolder/InstallPath" to="." method="_on_InstallPath_text_changed"]
+[connection signal="pressed" from="InstallOption/VBox/Body/Options/SelectFolder/FileDialogInstall" to="." method="_on_FileDialogInstall_pressed"]
+[connection signal="option_selected" from="InstallOption/VBox/Body/Options/HBox/VBox/SelectGPU/InstallAvailableGPU" to="." method="_on_InstallAvailableGPU_option_selected"]
+[connection signal="option_selected" from="InstallOption/VBox/Body/Options/HBox/VBox/SelectServer/AvailableServers" to="." method="_on_AvailableServers_option_selected"]
+[connection signal="pressed" from="InstallOption/VBox/NavigationButtons/HBoxContainer/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="InstallOption/VBox/NavigationButtons/HBoxContainer/ProceedInstall" to="." method="_on_ProceedInstall_pressed"]
+[connection signal="text_changed" from="ChooseInstalledDirOption/VBox/Body/Options/SelectFolder/SelectedInstallationPath" to="." method="_on_SelectedInstallationPath_text_changed"]
+[connection signal="pressed" from="ChooseInstalledDirOption/VBox/Body/Options/SelectFolder/FileDialogOpenInstalled" to="." method="_on_FileDialogOpenInstalled_pressed"]
+[connection signal="option_selected" from="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectGPU/OpenAvailableGPU" to="." method="_on_OpenAvailableGPU_option_selected"]
+[connection signal="pressed" from="ChooseInstalledDirOption/VBox/NavigationButtons/HBoxContainer/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="ChooseInstalledDirOption/VBox/NavigationButtons/HBoxContainer/ProceedOpenInstalled" to="." method="_on_ProceedOpenInstalled_pressed"]
+[connection signal="pressed" from="RemoteServerOption/VBox/NavigationButtons/HBoxContainer/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="RemoteServerOption/VBox/NavigationButtons/HBoxContainer/ProceedRemoteServer" to="." method="_on_ProceedRemoteServer_pressed"]
+[connection signal="timeout" from="InstallingDialog/VBox/Header/VBoxContainer/InstallationLoadingIconTimer" to="." method="_on_InstallationLoadingIconTimer_timeout"]
+[connection signal="pressed" from="InstallingDialog/VBox/Header/VBoxContainer/ResumeInstallation/ResumeInstallation" to="." method="_on_ResumeInstallation_pressed"]
+[connection signal="pressed" from="InstallingDialog/VBox/NavigationButtons/HBoxContainer/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="InstallingDialog/VBox/NavigationButtons/HBoxContainer/InstallationFinish" to="." method="_on_FinishInstallation_pressed"]

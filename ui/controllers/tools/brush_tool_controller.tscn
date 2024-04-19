@@ -1,0 +1,135 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://ui/controllers/tools/brush_controller.gd" type="Script" id=1]
+[ext_resource path="res://ui/components/config_slider.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/components/color_picker_button.gd" type="Script" id=3]
+[ext_resource path="res://ui/components/ai_process_button.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/controllers/tools/img_2_img_controller_module.gd" type="Script" id=5]
+[ext_resource path="res://ui/components/config_checkbox.gd" type="Script" id=6]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=5]
+
+[node name="BrushController" type="VBoxContainer"]
+margin_right = 380.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+tool_button = "res://ui/controllers/tools/tool_buttons/brush_button.tscn"
+
+[node name="QuickImg2Img" parent="." instance=ExtResource( 4 )]
+margin_right = 380.0
+margin_bottom = 28.0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+text = "QUICK_IMG2IMG"
+
+[node name="BrushSize" parent="." instance=ExtResource( 2 )]
+margin_top = 32.0
+margin_right = 380.0
+margin_bottom = 62.0
+size_flags_horizontal = 3
+text = "BRUSH_SIZE"
+min_value = 1.0
+default_value = 20.0
+flag_name_const = "FLAG_BRUSH_SIZE"
+
+[node name="BrushOpacity" parent="." instance=ExtResource( 2 )]
+visible = false
+margin_top = 34.0
+margin_right = 380.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+text = "BRUSH_OPACITY"
+max_value = 255.0
+default_value = 255.0
+requieres_flag = false
+
+[node name="GreyscaleLightness" parent="." instance=ExtResource( 2 )]
+margin_top = 66.0
+margin_right = 380.0
+margin_bottom = 96.0
+size_flags_horizontal = 3
+text = "BRUSH_GREYSCALE_LIGHTNESS"
+max_value = 255.0
+default_value = 255.0
+flag_name_const = "FLAG_BRUSH_GREYSCALE_LIGHTNESS"
+
+[node name="GridContainer" type="GridContainer" parent="."]
+margin_top = 100.0
+margin_right = 380.0
+margin_bottom = 134.0
+columns = 2
+
+[node name="ColorPicker" type="HBoxContainer" parent="GridContainer"]
+margin_right = 188.0
+margin_bottom = 34.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="GridContainer/ColorPicker"]
+margin_top = 7.0
+margin_right = 43.0
+margin_bottom = 27.0
+text = "COLOR"
+
+[node name="PanelContainer" type="PanelContainer" parent="GridContainer/ColorPicker"]
+margin_left = 47.0
+margin_right = 136.0
+margin_bottom = 34.0
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="GridContainer/ColorPicker/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 82.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 75, 0 )
+custom_styles/hover = SubResource( 1 )
+custom_styles/pressed = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+script = ExtResource( 3 )
+
+[node name="UseModifiers" type="CheckBox" parent="GridContainer" groups=["advanced_ui"]]
+margin_left = 192.0
+margin_right = 380.0
+margin_bottom = 34.0
+size_flags_horizontal = 3
+pressed = true
+text = "USE_MODIFIERS"
+script = ExtResource( 6 )
+flag_name_const = "FLAG_USE_MODIFIERS"
+flag_prefix_node_name = NodePath("../../QuickImg2Img")
+
+[node name="DenoisingStrenght" parent="." groups=["advanced_ui"] instance=ExtResource( 2 )]
+margin_top = 138.0
+margin_right = 380.0
+margin_bottom = 168.0
+text = "DENOISING_STRENGTH"
+max_value = 1.0
+step = 0.05
+default_value = 0.75
+allow_decimals = true
+flag_name_const = "I_DENOISING_STRENGTH"
+flag_prefix_node_name = NodePath("..")
+
+[node name="QuickImg2ImgModule" type="Node" parent="."]
+script = ExtResource( 5 )
+
+[connection signal="pressed" from="QuickImg2Img" to="." method="_on_QuickImg2Img_pressed"]
+[connection signal="value_changed" from="BrushSize" to="." method="_on_BrushSize_value_changed"]
+[connection signal="value_changed" from="BrushOpacity" to="." method="_on_BrushOpacity_value_changed"]
+[connection signal="value_changed" from="GreyscaleLightness" to="." method="_on_GreyscaleLightness_value_changed"]
+[connection signal="color_changed" from="GridContainer/ColorPicker/PanelContainer/ColorPickerButton" to="." method="_on_ColorPickerButton_color_changed"]
+[connection signal="toggled" from="GridContainer/UseModifiers" to="." method="_on_UseModifiers_toggled"]
+[connection signal="visibility_changed" from="GridContainer/UseModifiers" to="." method="_on_UseModifiers_visibility_changed"]
+[connection signal="value_changed" from="DenoisingStrenght" to="." method="_on_DenoisingStrenght_value_changed"]
+[connection signal="visibility_changed" from="DenoisingStrenght" to="." method="_on_DenoisingStrenght_visibility_changed"]

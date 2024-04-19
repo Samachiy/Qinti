@@ -1,0 +1,292 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://ui/controllers/tools/brush_tool_controller.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/controllers/main_canvas_controller.gd" type="Script" id=2]
+[ext_resource path="res://ui/controllers/tools/eraser_tool_controller.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/components/config_slider.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/components/config_checkbox.gd" type="Script" id=5]
+[ext_resource path="res://ui/controllers/tools/modify_generation_area_tool_controller.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/controllers/tools/transform_selection_tool_controller.tscn" type="PackedScene" id=7]
+[ext_resource path="res://ui/controllers/tools/inpaint_eraser_controller.tscn" type="PackedScene" id=8]
+[ext_resource path="res://ui/controllers/tools/inpaint_brush_controller.tscn" type="PackedScene" id=9]
+[ext_resource path="res://ui/components/smart_option_button.tscn" type="PackedScene" id=10]
+[ext_resource path="res://ui/components/v_gradient.tscn" type="PackedScene" id=11]
+[ext_resource path="res://ui/controllers/tools/flip_tool_controller.tscn" type="PackedScene" id=12]
+
+[node name="CanvasController" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 0, 87 )
+rect_clip_content = true
+size_flags_stretch_ratio = 0.35
+script = ExtResource( 2 )
+
+[node name="Configs" type="ScrollContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+follow_focus = true
+
+[node name="Settings" type="HBoxContainer" parent="Configs"]
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 12
+
+[node name="Tab" type="TabContainer" parent="Configs/Settings"]
+margin_right = 506.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = "SimpleTab"
+tab_align = 0
+drag_to_rearrange_enabled = true
+
+[node name="BASIC_PARAMS" type="VBoxContainer" parent="Configs/Settings/Tab"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 38.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Spacing" type="Control" parent="Configs/Settings/Tab/BASIC_PARAMS"]
+margin_right = 498.0
+
+[node name="Sampler" parent="Configs/Settings/Tab/BASIC_PARAMS" groups=["advanced_ui"] instance=ExtResource( 10 )]
+margin_top = 4.0
+margin_right = 498.0
+margin_bottom = 30.0
+flag_name_const = "I_SAMPLER_NAME"
+
+[node name="Steps" parent="Configs/Settings/Tab/BASIC_PARAMS" instance=ExtResource( 4 )]
+margin_top = 34.0
+margin_right = 498.0
+margin_bottom = 64.0
+text = "STEPS"
+default_value = 20.0
+flag_name_const = "I_STEPS"
+
+[node name="CFGScale" parent="Configs/Settings/Tab/BASIC_PARAMS" groups=["advanced_ui"] instance=ExtResource( 4 )]
+margin_top = 68.0
+margin_right = 498.0
+margin_bottom = 98.0
+text = "CFG_SCALE"
+max_value = 15.0
+step = 0.5
+default_value = 7.5
+allow_decimals = true
+flag_name_const = "I_CFG_SCALE"
+
+[node name="CheckBoxes" type="HBoxContainer" parent="Configs/Settings/Tab/BASIC_PARAMS"]
+margin_top = 102.0
+margin_right = 498.0
+margin_bottom = 130.0
+
+[node name="Tiling" type="CheckBox" parent="Configs/Settings/Tab/BASIC_PARAMS/CheckBoxes"]
+margin_right = 247.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+text = "TILING"
+script = ExtResource( 5 )
+flag_name_const = "I_TILING"
+
+[node name="RestoreFaces" type="CheckBox" parent="Configs/Settings/Tab/BASIC_PARAMS/CheckBoxes" groups=["advanced_ui"]]
+margin_left = 251.0
+margin_right = 498.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+text = "RESTORE_FACES"
+script = ExtResource( 5 )
+flag_name_const = "I_RESTORE_FACES"
+
+[node name="ClipSkip" parent="Configs/Settings/Tab/BASIC_PARAMS" groups=["advanced_ui"] instance=ExtResource( 4 )]
+margin_top = 134.0
+margin_right = 498.0
+margin_bottom = 164.0
+text = "CLIP_SKIP"
+max_value = 4.0
+flag_name_const = "SDO_CLIP_SKIP"
+
+[node name="ESDN" type="HBoxContainer" parent="Configs/Settings/Tab/BASIC_PARAMS" groups=["advanced_ui"]]
+margin_top = 168.0
+margin_right = 498.0
+margin_bottom = 198.0
+
+[node name="ESDNLabel" type="Label" parent="Configs/Settings/Tab/BASIC_PARAMS/ESDN"]
+margin_top = 5.0
+margin_right = 34.0
+margin_bottom = 25.0
+text = "ESDN"
+
+[node name="ESDN" type="LineEdit" parent="Configs/Settings/Tab/BASIC_PARAMS/ESDN"]
+margin_left = 38.0
+margin_right = 498.0
+margin_bottom = 30.0
+size_flags_horizontal = 3
+caret_blink = true
+caret_blink_speed = 0.5
+
+[node name="BATCH_PARAMS" type="VBoxContainer" parent="Configs/Settings/Tab"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 24.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Spacing" type="Control" parent="Configs/Settings/Tab/BATCH_PARAMS"]
+margin_right = 498.0
+
+[node name="BatchSize" parent="Configs/Settings/Tab/BATCH_PARAMS" instance=ExtResource( 4 )]
+margin_top = 4.0
+margin_right = 498.0
+margin_bottom = 28.0
+text = "BATCH_SIZE"
+min_value = 1.0
+max_value = 8.0
+flag_name_const = "I_BATCH_SIZE"
+
+[node name="BatchCount" parent="Configs/Settings/Tab/BATCH_PARAMS" groups=["advanced_ui"] instance=ExtResource( 4 )]
+margin_top = 32.0
+margin_right = 498.0
+margin_bottom = 56.0
+text = "N_ITER"
+min_value = 1.0
+max_value = 8.0
+flag_name_const = "I_N_ITER"
+
+[node name="HI_RES_PARAMS" type="VBoxContainer" parent="Configs/Settings/Tab"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 24.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Spacing" type="Control" parent="Configs/Settings/Tab/HI_RES_PARAMS"]
+margin_right = 498.0
+
+[node name="HiResType" parent="Configs/Settings/Tab/HI_RES_PARAMS" instance=ExtResource( 10 )]
+margin_top = 4.0
+margin_right = 498.0
+margin_bottom = 30.0
+text = "HI_RES_TYPE"
+flag_name_const = "FLAG_HI_RES_TYPE"
+
+[node name="StartAt" parent="Configs/Settings/Tab/HI_RES_PARAMS" instance=ExtResource( 10 )]
+margin_top = 34.0
+margin_right = 498.0
+margin_bottom = 60.0
+text = "HI_RES_START_AT"
+flag_name_const = "FLAG_HI_RES_START_AT"
+
+[node name="UpscaleBy" parent="Configs/Settings/Tab/HI_RES_PARAMS" instance=ExtResource( 4 )]
+margin_top = 64.0
+margin_right = 498.0
+margin_bottom = 88.0
+text = "HI_RES_UPSCALE_BY"
+min_value = 1.0
+max_value = 4.0
+step = 0.1
+default_value = 2.0
+allow_decimals = true
+flag_name_const = "T2I_HR_SCALE"
+
+[node name="FromTo" type="Label" parent="Configs/Settings/Tab/HI_RES_PARAMS"]
+margin_top = 92.0
+margin_right = 498.0
+margin_bottom = 106.0
+
+[node name="Steps" parent="Configs/Settings/Tab/HI_RES_PARAMS" instance=ExtResource( 4 )]
+margin_top = 110.0
+margin_right = 498.0
+margin_bottom = 134.0
+text = "HI_RES_EXTRA_STEPS"
+max_value = 50.0
+default_value = 15.0
+flag_name_const = "T2I_HR_SECOND_PASS_STEPS"
+
+[node name="DenoisingStrenght" parent="Configs/Settings/Tab/HI_RES_PARAMS" groups=["advanced_ui"] instance=ExtResource( 4 )]
+margin_top = 138.0
+margin_right = 498.0
+margin_bottom = 162.0
+text = "DENOISING_STRENGTH"
+max_value = 1.0
+step = 0.05
+default_value = 0.75
+allow_decimals = true
+flag_name_const = "I_DENOISING_STRENGTH"
+flag_prefix_node_name = NodePath("..")
+
+[node name="Upscaler" parent="Configs/Settings/Tab/HI_RES_PARAMS" groups=["advanced_ui"] instance=ExtResource( 10 )]
+margin_top = 166.0
+margin_right = 498.0
+margin_bottom = 192.0
+text = "HI_RES_UPSCALER"
+flag_name_const = "T2I_HR_UPSCALER"
+
+[node name="ToolControllers" type="VBoxContainer" parent="Configs/Settings"]
+margin_left = 518.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ModifyGenerationAreaTool" parent="Configs/Settings/ToolControllers" instance=ExtResource( 6 )]
+visible = false
+margin_right = 244.0
+margin_bottom = 192.0
+
+[node name="BrushToolController" parent="Configs/Settings/ToolControllers" instance=ExtResource( 1 )]
+visible = false
+margin_right = 125.0
+margin_bottom = 188.0
+
+[node name="EraserToolController" parent="Configs/Settings/ToolControllers" instance=ExtResource( 3 )]
+visible = false
+margin_right = 125.0
+margin_bottom = 36.0
+
+[node name="TransformSelectionTool" parent="Configs/Settings/ToolControllers" instance=ExtResource( 7 )]
+visible = false
+margin_right = 506.0
+margin_bottom = 112.0
+
+[node name="FlipTool" parent="Configs/Settings/ToolControllers" instance=ExtResource( 12 )]
+visible = false
+margin_right = 506.0
+margin_bottom = 26.0
+
+[node name="InpaintBrushController" parent="Configs/Settings/ToolControllers" instance=ExtResource( 9 )]
+visible = false
+margin_right = 506.0
+margin_bottom = 600.0
+inpaint_eraser = NodePath("../InpaintEraserController")
+
+[node name="InpaintEraserController" parent="Configs/Settings/ToolControllers" instance=ExtResource( 8 )]
+visible = false
+margin_right = 506.0
+margin_bottom = 600.0
+inpaint_brush = NodePath("../InpaintBrushController")
+
+[node name="TopGradient" parent="." instance=ExtResource( 11 )]
+flip_v = true
+
+[node name="BottomGradient" parent="." instance=ExtResource( 11 )]
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+
+[connection signal="canvas_connected" from="." to="." method="_on_CanvasController_canvas_connected"]
+[connection signal="option_selected" from="Configs/Settings/Tab/BASIC_PARAMS/Sampler" to="." method="_on_Sampler_option_selected"]
+[connection signal="option_selected" from="Configs/Settings/Tab/HI_RES_PARAMS/HiResType" to="." method="_on_HiResType_option_selected"]
+[connection signal="value_changed" from="Configs/Settings/Tab/HI_RES_PARAMS/UpscaleBy" to="." method="_on_UpscaleBy_value_changed"]

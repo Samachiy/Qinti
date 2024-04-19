@@ -1,0 +1,22 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://ui/controllers/tools/tool_buttons/tool_button.gd" type="Script" id=1]
+[ext_resource path="res://assets/icons/icons_#rect1156_copy_3.png" type="Texture" id=2]
+[ext_resource path="res://assets/icons/select_tool_#rect1825.png" type="Texture" id=3]
+[ext_resource path="res://assets/icons/select_tool_#g2137.png" type="Texture" id=4]
+[ext_resource path="res://assets/icons/select_tool_#g2151.png" type="Texture" id=5]
+[ext_resource path="res://ui/controllers/button_groups/canvas_tools.tres" type="ButtonGroup" id=6]
+
+[node name="TransformSelectionButton" type="TextureButton"]
+margin_right = 40.0
+margin_bottom = 40.0
+hint_tooltip = "TOOLTIP_TRANSFORM_TOOL"
+toggle_mode = true
+group = ExtResource( 6 )
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 3 )
+texture_hover = ExtResource( 5 )
+texture_focused = ExtResource( 2 )
+expand = true
+stretch_mode = 4
+script = ExtResource( 1 )

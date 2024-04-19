@@ -1,0 +1,257 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://ui/canvas/canvas_2d/canvas2d.gd" type="Script" id=1]
+[ext_resource path="res://ui/canvas/canvas_2d/canvas2d_grid.gd" type="Script" id=2]
+[ext_resource path="res://ui/canvas/canvas_2d/canvas2d_camera.gd" type="Script" id=3]
+[ext_resource path="res://ui/components/preview_thumbnail.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/canvas/canvas_2d/canvas2d_active_area.gd" type="Script" id=5]
+[ext_resource path="res://ui/components/popup_menu.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/canvas/canvas_2d/message_area_canvas_2d.gd" type="Script" id=7]
+[ext_resource path="res://ui/canvas/canvas_2d/lay_module_canvas_2d.gd" type="Script" id=8]
+[ext_resource path="res://ui/canvas/canvas_2d/canvas2d_pointer.gd" type="Script" id=9]
+[ext_resource path="res://ui/shaders/pointer_invert_screen_colors_mask_material.tres" type="Material" id=10]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.156863, 0.156863, 0.156863, 1 )
+
+[node name="Canvas2D" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 1 )
+
+[node name="ViewportContainer" type="ViewportContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="Viewport" type="Viewport" parent="ViewportContainer"]
+size = Vector2( 1024, 600 )
+transparent_bg = true
+handle_input_locally = false
+hdr = false
+disable_3d = true
+usage = 0
+render_target_update_mode = 3
+
+[node name="Camera2D" type="Camera2D" parent="ViewportContainer/Viewport"]
+current = true
+script = ExtResource( 3 )
+
+[node name="Grid" type="Node2D" parent="ViewportContainer/Viewport/Camera2D"]
+script = ExtResource( 2 )
+
+[node name="Underlay" type="Sprite" parent="ViewportContainer/Viewport/Camera2D"]
+modulate = Color( 1, 1, 1, 0.498039 )
+
+[node name="Layers" type="Node" parent="ViewportContainer/Viewport"]
+
+[node name="Pointer" type="Node2D" parent="ViewportContainer/Viewport"]
+material = ExtResource( 10 )
+script = ExtResource( 9 )
+
+[node name="Shadows" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="LeftShadow" type="ColorRect" parent="Shadows"]
+margin_bottom = 600.0
+mouse_filter = 2
+color = Color( 0.498039, 0.498039, 0.498039, 0.498039 )
+
+[node name="VBox" type="VBoxContainer" parent="Shadows"]
+margin_right = 1024.0
+margin_bottom = 600.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 0
+
+[node name="TopShadow" type="ColorRect" parent="Shadows/VBox"]
+margin_right = 1024.0
+mouse_filter = 2
+color = Color( 0.498039, 0.498039, 0.498039, 0.498039 )
+
+[node name="ActiveArea" type="Control" parent="Shadows/VBox"]
+margin_right = 1024.0
+margin_bottom = 600.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ModifiersOverlay" type="TextureRect" parent="Shadows/VBox/ActiveArea"]
+modulate = Color( 1, 1, 1, 0.498039 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand = true
+script = ExtResource( 5 )
+
+[node name="GenAreaImageOverlay" type="TextureRect" parent="Shadows/VBox/ActiveArea"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand = true
+
+[node name="GenAreaMaskOverlay" type="TextureRect" parent="Shadows/VBox/ActiveArea"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand = true
+
+[node name="BottomShadow" type="ColorRect" parent="Shadows/VBox"]
+margin_top = 600.0
+margin_right = 1024.0
+margin_bottom = 600.0
+mouse_filter = 2
+color = Color( 0.498039, 0.498039, 0.498039, 0.498039 )
+
+[node name="RightShadow" type="ColorRect" parent="Shadows"]
+margin_left = 1024.0
+margin_right = 1024.0
+margin_bottom = 600.0
+mouse_filter = 2
+color = Color( 0.498039, 0.498039, 0.498039, 0.498039 )
+
+[node name="PreviewThumbnail" parent="." instance=ExtResource( 4 )]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -40.0
+margin_top = -40.0
+margin_right = 0.0
+margin_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="MessageArea" type="MarginContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -40.0
+rect_clip_content = true
+custom_constants/margin_right = 5
+custom_constants/margin_top = 5
+custom_constants/margin_left = 5
+custom_constants/margin_bottom = 5
+script = ExtResource( 7 )
+
+[node name="MessageBackground" type="ColorRect" parent="MessageArea"]
+show_behind_parent = true
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 1019.0
+margin_bottom = 41.0
+color = Color( 1, 1, 1, 0.666667 )
+
+[node name="MarginContainer" type="MarginContainer" parent="MessageArea"]
+show_behind_parent = true
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 1019.0
+margin_bottom = 41.0
+grow_vertical = 0
+custom_constants/margin_right = 4
+custom_constants/margin_top = 5
+custom_constants/margin_left = 4
+custom_constants/margin_bottom = 5
+
+[node name="Message" type="HBoxContainer" parent="MessageArea/MarginContainer"]
+margin_left = 4.0
+margin_top = 5.0
+margin_right = 1010.0
+margin_bottom = 31.0
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="MessageArea/MarginContainer/Message"]
+margin_top = 3.0
+margin_right = 371.0
+margin_bottom = 23.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "APPLY_GEN_MESSAGE"
+clip_text = true
+
+[node name="Prev" type="Button" parent="MessageArea/MarginContainer/Message"]
+margin_left = 375.0
+margin_right = 394.0
+margin_bottom = 26.0
+custom_colors/font_color_focus = Color( 1, 1, 1, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
+custom_colors/font_color_pressed = Color( 1, 1, 1, 1 )
+text = "<"
+
+[node name="Next" type="Button" parent="MessageArea/MarginContainer/Message"]
+margin_left = 398.0
+margin_right = 417.0
+margin_bottom = 26.0
+custom_colors/font_color_focus = Color( 1, 1, 1, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
+custom_colors/font_color_pressed = Color( 1, 1, 1, 1 )
+text = ">"
+
+[node name="Apply" type="Button" parent="MessageArea/MarginContainer/Message"]
+margin_left = 421.0
+margin_right = 551.0
+margin_bottom = 26.0
+custom_colors/font_color_focus = Color( 1, 1, 1, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
+custom_colors/font_color_pressed = Color( 1, 1, 1, 1 )
+text = "APPLY_GEN_IMAGE"
+
+[node name="ApplyCopy" type="Button" parent="MessageArea/MarginContainer/Message"]
+margin_left = 555.0
+margin_right = 678.0
+margin_bottom = 26.0
+custom_colors/font_color_focus = Color( 1, 1, 1, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
+custom_colors/font_color_pressed = Color( 1, 1, 1, 1 )
+text = "APPLY_GEN_COPY"
+
+[node name="Regenerate" type="Button" parent="MessageArea/MarginContainer/Message"]
+margin_left = 682.0
+margin_right = 856.0
+margin_bottom = 26.0
+custom_colors/font_color_focus = Color( 1, 1, 1, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
+custom_colors/font_color_pressed = Color( 1, 1, 1, 1 )
+text = "REGENERATE_GEN_IMAGE"
+
+[node name="Discard" type="Button" parent="MessageArea/MarginContainer/Message"]
+margin_left = 860.0
+margin_right = 1006.0
+margin_bottom = 26.0
+custom_colors/font_color_focus = Color( 1, 1, 1, 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 1, 1, 1, 1 )
+custom_colors/font_color_pressed = Color( 1, 1, 1, 1 )
+text = "DISCARD_GEN_IMAGE"
+
+[node name="Menu" parent="." instance=ExtResource( 6 )]
+
+[node name="OverunderlayModule" type="Node" parent="."]
+script = ExtResource( 8 )
+
+[connection signal="gui_input" from="ViewportContainer" to="." method="_on_gui_input"]
+[connection signal="mouse_exited" from="ViewportContainer" to="." method="_on_ViewportContainer_mouse_exited"]
+[connection signal="resized" from="ViewportContainer" to="." method="_on_resized"]
+[connection signal="texture_changed" from="ViewportContainer/Viewport/Camera2D/Underlay" to="ViewportContainer/Viewport/Camera2D" method="_on_Underlay_texture_changed"]
+[connection signal="active_area_resized" from="Shadows/VBox/ActiveArea/ModifiersOverlay" to="ViewportContainer/Viewport/Camera2D" method="_on_ActiveArea_active_area_resized"]
+[connection signal="message_area_displayed" from="MessageArea" to="." method="_on_MessageArea_message_area_displayed"]
+[connection signal="message_area_hiding" from="MessageArea" to="." method="_on_MessageArea_message_area_hiding"]

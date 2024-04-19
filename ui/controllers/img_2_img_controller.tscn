@@ -1,0 +1,89 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://ui/controllers/img_2_img_controller.gd" type="Script" id=1]
+[ext_resource path="res://ui/controllers/tools/transform_selection_tool_controller.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ui/controllers/tools/brush_tool_controller.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/controllers/tools/eraser_tool_controller.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ui/components/config_slider.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ui/components/v_gradient.tscn" type="PackedScene" id=6]
+[ext_resource path="res://ui/controllers/tools/flip_tool_controller.tscn" type="PackedScene" id=7]
+
+[node name="Img2ImgController" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+controller_role = "Img2Img Control"
+auto_role = false
+
+[node name="Container" type="ScrollContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Configs" type="HBoxContainer" parent="Container"]
+margin_right = 248.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Img2ImgConfigs" type="VBoxContainer" parent="Container/Configs"]
+margin_right = 510.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DenoisingStrenght" parent="Container/Configs/Img2ImgConfigs" instance=ExtResource( 5 )]
+margin_right = 510.0
+margin_bottom = 30.0
+text = "DENOISING_STRENGTH"
+max_value = 1.0
+step = 0.05
+default_value = 0.5
+allow_decimals = true
+flag_name_const = "I_DENOISING_STRENGTH"
+
+[node name="CFGScale" parent="Container/Configs/Img2ImgConfigs" groups=["advanced_ui"] instance=ExtResource( 5 )]
+margin_top = 34.0
+margin_right = 510.0
+margin_bottom = 64.0
+text = "CFG_SCALE"
+max_value = 3.0
+step = 0.05
+default_value = 1.5
+allow_decimals = true
+flag_name_const = "I2I_IMAGE_CFG_SCALE"
+
+[node name="ToolControllers" type="VBoxContainer" parent="Container/Configs"]
+margin_left = 514.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="BrushToolController" parent="Container/Configs/ToolControllers" instance=ExtResource( 3 )]
+visible = false
+margin_right = 510.0
+margin_bottom = 600.0
+default_color = Color( 1, 1, 1, 1 )
+
+[node name="EraserToolController" parent="Container/Configs/ToolControllers" instance=ExtResource( 4 )]
+visible = false
+margin_right = 125.0
+margin_bottom = 36.0
+
+[node name="TransformSelectionTool" parent="Container/Configs/ToolControllers" instance=ExtResource( 2 )]
+visible = false
+margin_right = 360.0
+margin_bottom = 112.0
+
+[node name="FlipTool" parent="Container/Configs/ToolControllers" instance=ExtResource( 7 )]
+visible = false
+margin_right = 510.0
+margin_bottom = 26.0
+
+[node name="TopGradient" parent="." instance=ExtResource( 6 )]
+flip_v = true
+
+[node name="BottomGradient" parent="." instance=ExtResource( 6 )]
+anchor_top = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0

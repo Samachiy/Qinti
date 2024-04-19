@@ -1,0 +1,13 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+render_mode blend_premul_alpha;
+
+void fragment(){
+	vec4 color = texture(TEXTURE, UV);
+	float alpha;
+	alpha = (color.r + color.g + color.b) * 0.33;
+	color = vec4(0, 0, 0, alpha);
+	COLOR = color;
+}"
