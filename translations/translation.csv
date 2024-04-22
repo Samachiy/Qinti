@@ -170,7 +170,7 @@ MESSAGE_MISSING_DEPENDENCIES,"There are missing dependencies, please run the fol
 MESSAGE_INVALID_PATH_NO_INSTALL_FOUND,"No valid server installation was found in the specified folder, please select another one.","No se encontró ninguna instalación valida del servidor, por favor, seleccione otra carpeta."
 MESSAGE_INSTALL_PYTHON_WINDOWS,It is necessary to install python {0}. Do you wish to execute the python installer?,Es necesario instalar Python version {0}. ¿Desea ejecutar el instalador the Python?
 MESSAGE_INSTALL_GIT_WINDOWS,It is necessary to install git. Do you wish to execute the git installer?,Es necesario instalar Git. ¿Desea ejecutar el instalador the Git?
-MESSAGE_RESTART_QUINTI_NEEDED,"To continue the installation, it is necessary to restart Quinti UI, please start the program again after clicking ‘OK’","Para continuar la instalación, es necesario reiniciar Quinti UI, por favor inicie el programa de vuelta después de hacer click en ‘OK’"
+MESSAGE_RESTART_QINTI_NEEDED,"To continue the installation, it is necessary to restart Qinti UI, please start the program again after clicking ‘OK’","Para continuar la instalación, es necesario reiniciar Qinti UI, por favor inicie el programa de vuelta después de hacer click en ‘OK’"
 MESSAGE_NO_CONTROLNET,"Server does not have Control Net enabled, attempting to enable... Please restart the server. If this messages appears again, manually enabling Control Net may be needed.","El servidor no tiene Control Net activado, intentando activación… Por favor reinicie el servidor. Si este mensaje aparece de vuelta, podría ser necesario activar Control Net manualmente."
 MESSAGE_NO_FEATURE_GENERIC,"The current server doesn’t support this feature, this setting will not be used.","El servidor actual no soportad esta funcionalidad, esta funcionalidad no será utilizada."
 MESSAGE_NO_FEATURE_CONTROLNET,"The current server doesn’t support Control Net, this setting will not be applied on image generation.","El servidor actual no soportad Control Net, esta funcionalidad será omitida en la generación de imagenes"
@@ -283,7 +283,7 @@ TUT8_OPENING_SAVING_IMG,Saving and opening images,Guardar y abrir imágenes
 TUT9_INPAINTING,Inpainting,“Inpainting” or regenerar selección
 TUT10_OUTPAINTING,Outpainting,“Outpainting” o generar espacios vacíos
 ,,
-TUT1_WELCOME,Welcome to Quinti UI,Bienvenido a Quinti UI!
+TUT1_WELCOME,Welcome to Qinti UI,Bienvenido a Qinti UI!
 TUT1_PARAMETERS,In the highlighted area you can find the parameters to adjust the image generation.,En el área resaltada se puede encontrarar los parametros para ajustar la generación de imagen.
 TUT1_ADVAN_PARAMETERS,You can enable more advanced parameters in the menu by clicking Settings > Advanced generation options.,Se puede activar parametros más avanzados haciendo click en el menú en Ajustes > Opciones de generación avanzadas.
 TUT1_TOOLS,"At the right side of the canvas you can find tools to perform operations like inpainting, outpainting and change dimensions. Hovering the mouse cursor on the tool icon will explain it's functionality.","Al lado derecho del canvas, se puede encontrar herramientas que permiten realizar operaciones como regenerar una parte pintada o generar imagenes fuera de la original. Al mover el cursor sobre los iconos de las herramientas se puede ver su funcionalidad."
