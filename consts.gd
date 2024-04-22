@@ -394,7 +394,7 @@ var THEME_DARK_TYPE = {
 	LABEL_FONT_COLOR_INVERSE_A: make_color("232323", LABEL_FONT_COLOR_INVERSE_A),
 }
 
-const DEFAULT_IMAGE_PATH = "res://quinti_default.png"
+const DEFAULT_IMAGE_PATH = "res://qinti_default.png"
 var default_image_data: ImageData = null
 var default_image_obj: Texture 
 var pc_data: PCData = PCData.new()

@@ -178,7 +178,7 @@ func _on_ProceedOpenInstalled_pressed():
 		set_gpu_in_pcdata(local_backend.repo.data.pc, available_gpu_open.get_selected())
 		local_backend.repo.override_args(selected_installation_args.text, true)
 		hide_installation_window()
-		local_backend.repo.prepare_files()
+		yield(local_backend.repo.prepare_files(), "completed")
 		if DiffusionServer.get_state() != Consts.SERVER_STATE_READY:
 			DiffusionServer.initialize_server_connection()
 	else:
@@ -311,7 +311,7 @@ func _on_FileDialogOpenInstalled_pressed():
 	Cue.new(Consts.ROLE_FILE_PICKER,  "request_dialog").args([
 			self,
 			"_on_open_installed_path_selected",
-			FileDialog.MODE_OPEN_FILE
+			FileDialog.MODE_OPEN_DIR
 			]).execute()
 
 

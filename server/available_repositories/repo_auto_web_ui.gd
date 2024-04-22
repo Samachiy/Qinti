@@ -20,7 +20,7 @@ const PCKM_PACMAN_DEPENDENCIES = 'sudo pacman -S git python3'
 const MSG_MISSING_DEPENDENCIES = "MESSAGE_MISSING_DEPENDENCIES"
 const MSG_INSTALL_PYTHON_WINDOWS = "MESSAGE_INSTALL_PYTHON_WINDOWS"
 const MSG_INSTALL_GIT_WINDOWS = "MESSAGE_INSTALL_GIT_WINDOWS"
-const MSG_RESTART_QUINTI_NEEDED = "MESSAGE_RESTART_QUINTI_NEEDED"
+const MSG_RESTART_QINTI_NEEDED = "MESSAGE_RESTART_QINTI_NEEDED"
 const MSG_INSTALL_FAILED_KEY_INPUT_DRIVERS = "MESSAGE_INSTALL_FAILED_KEY_INPUT_DRIVERS"
 const PYTHON_VER_LINUX = '3.11'
 
@@ -109,7 +109,7 @@ func _install(re_install: bool = false):
 		if restart_needed:
 			DiffusionServer.set_state(Consts.SERVER_STATE_PREPARING_DEPENDENCIES)
 			pause_install_request_confirmation(
-					MSG_RESTART_QUINTI_NEEDED,
+					MSG_RESTART_QINTI_NEEDED,
 					self,
 					"_close_setting_pending_install"
 			)
@@ -275,7 +275,7 @@ func _set_config_file(config_dict: Dictionary):
 	var file = File.new()
 	var config_json = full_path.plus_file("config.json")
 	file.open(config_json, File.WRITE)
-	file.store_string(config_dict)
+	file.store_string(to_json(config_dict))
 	file.close()
 
 
@@ -291,7 +291,7 @@ func _enable_controlnet_extension():
 	disabled_extensions = config_dict.get(disabled_extensions_key, null)
 	if not disabled_extensions is Array:
 		l.g("In AutoWebUI Class config file, disabled_extensions resulted in: " + 
-				str(disabled_extensions))
+				str(disabled_extensions), l.WARNING)
 		return
 		
 	if SD_WEBUI_CONTROLNET_NAME in disabled_extensions:

@@ -50,6 +50,7 @@ func _on_server_state_changed(_prev_state: String, new_state: String):
 	if new_state == Consts.SERVER_STATE_READY:
 		if pending_generation:
 			DiffusionServer.generate(self, "_on_image_generated")
+			pending_generation = false
 
 
 func _on_Generate_pressed():
