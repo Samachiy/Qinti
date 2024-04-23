@@ -69,7 +69,6 @@ func _on_Generate_pressed():
 	
 #	if not OS.has_feature("standalone"):
 #		Cue.new(Consts.ROLE_API, "apply_safe_mode").execute()
-	
 	DiffusionServer.generate(self, "_on_image_generated")
 
 

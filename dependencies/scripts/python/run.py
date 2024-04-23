@@ -59,6 +59,7 @@ def main():
 
 
 def send_packet(packet):
+    print(packet)
     byte_message = bytes(json.dumps(packet), "utf-8")
     opened_socket.sendto(byte_message, (UDP_IP, UDP_PORT))
 

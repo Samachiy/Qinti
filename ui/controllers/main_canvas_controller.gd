@@ -247,15 +247,15 @@ func apply_parameters_to_api(_cue: Cue = null):
 					hi_res_start_at.get_selected())
 			dict[Consts.I_WIDTH] = hi_res.x
 			dict[Consts.I_HEIGHT] = hi_res.y
-			dict[Consts.T2I_HR_RESIZE_X] = 0
-			dict[Consts.T2I_HR_RESIZE_Y] = 0
+			#dict[Consts.T2I_HR_RESIZE_X] = 0
+			#dict[Consts.T2I_HR_RESIZE_Y] = 0
 			dict[Consts.T2I_HR_SCALE] = hi_res.upscale_by
 		HI_RES_MANUAL:
 			var upscale_by = clamp(hi_res_upscale_by.get_value(), 1, 4)
 			dict[Consts.T2I_HR_RESIZE_X] = int(width / upscale_by)
 			dict[Consts.T2I_HR_RESIZE_Y] = int(height / upscale_by)
-			dict[Consts.T2I_HR_RESIZE_X] = 0
-			dict[Consts.T2I_HR_RESIZE_Y] = 0
+			#dict[Consts.T2I_HR_RESIZE_X] = 0
+			#dict[Consts.T2I_HR_RESIZE_Y] = 0
 			dict[Consts.T2I_HR_SCALE] = upscale_by
 		HI_RES_UPSCALE_ONLY_AUTO:
 			pass # not in use yet

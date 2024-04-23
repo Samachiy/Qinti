@@ -9,7 +9,7 @@ var spacing: int = 10
 var alignment: int = 0
 var last_size
 var last_h_scroll_height: int = 0
-var last_x_size = 1
+var last_x_size = 1 # used to prevent infinite loop of resizing when showing scrollbar
 
 func place_children(x_pos_offset: int = 0):
 	var x_pos = 0

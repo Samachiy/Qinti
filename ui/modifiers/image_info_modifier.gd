@@ -71,8 +71,8 @@ func apply_to_api(_api):
 	
 	var prompt_mode = data_cue.get_at(2)
 	var prompt = [
-			config.get(Consts.I_PROMPT, ''), 
-			config.get(Consts.I_NEGATIVE_PROMPT, '')]
+			config.get(Consts.I_PROMPT, null), 
+			config.get(Consts.I_NEGATIVE_PROMPT, null)]
 # warning-ignore:return_value_discarded
 	config.erase(Consts.I_PROMPT)
 # warning-ignore:return_value_discarded
