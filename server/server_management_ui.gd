@@ -86,7 +86,7 @@ func _ready():
 	
 	var e = Python.connect("output_received", self, "_on_PythonInterface_output_received")
 	l.error(e, l.CONNECTION_FAILED)
-	e = Python.connect("output_last_line_replaced", self, "_on_PythonInterface_last_line_received")
+	e = Python.connect("output_last_line_replaced", self, "_on_PythonInterface_last_line_replaced")
 	l.error(e, l.CONNECTION_FAILED)
 	refresh_versions()
 	refresh_locale()
@@ -406,7 +406,7 @@ func _on_PythonInterface_output_received(text_line):
 		instal_proc_load_icon_timer.start()
 
 
-func _on_PythonInterface_last_line_received(text_line):
+func _on_PythonInterface_last_line_replaced(text_line):
 	if text_output_to_console:
 		instal_proc_output.remove_line(instal_proc_output.get_line_count() - 1) 
 		instal_proc_output.text += text_line
@@ -482,6 +482,17 @@ func connect_server_output(cue: Cue):
 		return
 	
 	var error = Python.connect("output_received", object, method)
+	l.error(error, l.CONNECTION_FAILED)
+
+
+func connect_last_line_replaced(cue: Cue):
+	# [ object, method]
+	var object = cue.get_at(0, null)
+	var method = cue.str_at(1, '')
+	if object == null or method.empty():
+		return
+	
+	var error = Python.connect("output_last_line_replaced", object, method)
 	l.error(error, l.CONNECTION_FAILED)
 
 

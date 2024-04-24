@@ -33,6 +33,8 @@ func _ready():
 	l.error(e, l.CONNECTION_FAILED)
 	Cue.new(Consts.ROLE_SERVER_MANAGER, "connect_server_output").args([
 			self, "_on_server_output_received"]).execute()
+	Cue.new(Consts.ROLE_SERVER_MANAGER, "connect_last_line_replaced").args([
+			self, "_on_server_last_line_replaced"]).execute()
 	
 	loading_frame.modulate.a8 = Consts.ACCENT_COLOR_A
 	UIOrganizer.add_to_theme_by_modulate_group(loading_frame, Consts.THEME_MODULATE_GROUP_STYLE)
@@ -134,6 +136,11 @@ func _on_server_output_received(text):
 		has_server_console_output = true
 	
 	server_console.text += text + "\n"
+
+
+func _on_server_last_line_replaced(text):
+	server_console.remove_line(server_console.get_line_count() - 1) 
+	server_console.text += text
 
 
 

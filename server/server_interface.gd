@@ -74,6 +74,7 @@ func set_api(server_api: DiffusionAPI):
 
 func _on_server_probed(success: bool):
 	if success:
+		Python.start_listening()
 		api.adjust_server()
 		return
 	

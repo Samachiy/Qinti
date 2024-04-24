@@ -211,10 +211,12 @@ func add_to_prompt(cue: Cue):
 
 func replace_prompt(cue: Cue):
 	# [positive_prompt, negative_prompt]
-	var positive_prompt: String = cue.get_at(0, '', false)
-	var negative_prompt: String = cue.get_at(1, '', false)
-	request_data[Consts.I_PROMPT] = positive_prompt.strip_edges()
-	request_data[Consts.I_NEGATIVE_PROMPT] = negative_prompt.strip_edges()
+	var positive_prompt = cue.get_at(0, '')
+	var negative_prompt = cue.get_at(1, '')
+	if positive_prompt is String:
+		request_data[Consts.I_PROMPT] = positive_prompt.strip_edges()
+	if negative_prompt is String:
+		request_data[Consts.I_NEGATIVE_PROMPT] = negative_prompt.strip_edges()
 	
 
 

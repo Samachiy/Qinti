@@ -54,6 +54,11 @@ func open_images(cue: Cue):
 	counter = -1
 	images = cue._arguments
 	thumbnails_ref.clear()
+	var is_multiple_images = images.size() > 1
+	next_button.visible = is_multiple_images
+	prev_button.visible = is_multiple_images
+	thumbnails.visible = is_multiple_images
+	
 	var i = 0
 	for image_data in images:
 		add_thumnail(image_data, i)
@@ -133,6 +138,7 @@ func prev(_cue: Cue = null):
 
 func close(_cue: Cue = null):	
 	emit_safe_image_signal("viewer_closed")
+	thumbnails.remove_children()
 	image_viewer_relay = null
 	counter = -1
 	visible = false
