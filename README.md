@@ -8,8 +8,6 @@
 
 </div>
 
-### This project will have it's first release around wednesday 24, April 2024, if the last round of testing goes well.
-
 Qinti UI is an open source frontend made with Godot for image generation that aims to be both easy to use and for professional use.
 
 It also comes in the form of an executable, so the frontend itself doesn't need to be installed, just click and run, it is currently available for Linux and Windows.
@@ -39,9 +37,9 @@ https://github.com/Samachiy/Qinti/assets/155751973/84399745-4e89-4de7-b369-4d7b3
     - Use of Textural inversion, LoRAs, Lycoris, etc
     - Model resources management
     - Supports both Automatic1111 Web UI and SD.Next as backends
-    - Modular use of generated images metadata to generata other iamges
+    - Modular use of generated images metadata to generate other images
     - Inbuilt tutorials
-    - Automatic1111 installation (beta feature)
+    - Automatic1111 Web UI installation (beta feature)
 
 
 https://github.com/Samachiy/Qinti/assets/155751973/fe350ae5-c6e2-4f8e-a0f4-d471179a1a51
