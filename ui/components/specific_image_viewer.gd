@@ -8,7 +8,7 @@ onready var image_node = $MarginContainer/HBoxContainer/VBoxContainer/Image
 onready var thumbnails = $MarginContainer/HBoxContainer/VBoxContainer/Thumbnails
 onready var prev_button = $MarginContainer/HBoxContainer/Prev
 onready var next_button = $MarginContainer/HBoxContainer/Next
-onready var close_button = $MarginContainer/MarginContainer/Close
+onready var close_button = $MarginContainer/MarginContainer/ExtraButtons/Close
 onready var menu = $"%Menu"
 
 export(bool) var select_on_change = true

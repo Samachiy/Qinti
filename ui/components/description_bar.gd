@@ -1,10 +1,14 @@
 extends Panel
 
 const TEXT_PREFIX = "  > "
+const LASTEST_VERSION_API = "https://api.github.com/repos/Samachiy/Qinti/releases/latest"
+const LASTEST_VERSION_URL = "https://www.github.com/Samachiy/Qinti/releases/latest"
+const LATEST_VER_KEY = "tag_name"
 
-onready var label = $Margin/Label
-onready var menu = $Margin/Menu
-onready var hover_indicator = $HoverIndicator
+onready var label = $HBox/NotificationArea/Margin/Label
+onready var menu = $HBox/NotificationArea/Margin/Menu
+onready var hover_indicator = $HBox/NotificationArea/HoverIndicator
+onready var update_button = $HBox/UpdateQinti
 
 var minimal_indexes = [
 	Consts.UI_CONTROL_RIGHT_CLICK,
@@ -27,6 +31,8 @@ func _ready():
 	update_text()
 	Tutorials.subscribe(self, Tutorials.TUT2)
 	hover_indicator.visible = false
+	if OS.has_feature("standalone"):
+		check_qinti_update()
 
 
 func _tutorial(tutorial_seq: TutorialSequence):
@@ -112,3 +118,76 @@ func _on_ClickArea_mouse_entered():
 
 func _on_ClickArea_mouse_exited():
 	hover_indicator.visible = false
+
+
+func check_qinti_update():
+	var api_request = APIRequest.new(self, "_on_latest_version_checked", self)
+	api_request.api_get(LASTEST_VERSION_API)
+
+
+func _on_latest_version_checked(result):
+	var version_name
+	if result is Dictionary:
+		version_name = result.get(LATEST_VER_KEY)
+	
+	if not version_name is String:
+		l.g("Latest version name on Github is not a string")
+		return
+	
+	var ver_array: Array = version_name.split(".", false)
+	# Example: 0.1.0-rc.1 will result in [0, 1, 0, 1]
+	for i in range(ver_array.size()):
+		ver_array[i] = int(ver_array[i])
+	
+	if ver_array.size() < 3:
+		l.g("Latest version name on Github has an incorrect format: " + version_name)
+		return
+	elif ver_array.size() == 3:
+		ver_array.append(0) # 0 means not a release candidate
+	
+	var current_is_rc = Director.release_candidate != 0
+	var online_is_rc = ver_array[3] != 0
+	var ver_cue = Cue.new('', '')
+	var comparison = ver_cue._compare_version_to_array(ver_array)
+	var has_update: bool
+	if comparison == -1:
+		has_update = true
+	elif comparison == 0:
+		if current_is_rc:
+			has_update = not online_is_rc or ver_array[3] > Director.release_candidate
+		else:
+			has_update = false
+	else:
+		has_update = false
+	
+	update_button.visible = has_update
+	if has_update:
+		rect_min_size.x = 28
+	return [comparison, has_update]
+
+
+func _on_UpdateQinti_pressed():
+	var error = OS.shell_open(LASTEST_VERSION_URL)
+	l.error(error, "Failure to open lateste version webpage")
+
+
+
+
+
+
+# Versioning check testing
+# Place on _ready() if test is needed
+
+#	var test = {}
+#	test[LATEST_VER_KEY] = "0.1.0-rc.1"
+#	print(test, _on_latest_version_checked(test))
+#	test[LATEST_VER_KEY] = "0.1.1-rc.1"
+#	print(test, _on_latest_version_checked(test))
+#	test[LATEST_VER_KEY] = "0.1.0-rc.2"
+#	print(test, _on_latest_version_checked(test))
+#	test[LATEST_VER_KEY] = "0.1.0"
+#	print(test, _on_latest_version_checked(test))
+#	test[LATEST_VER_KEY] = "0.1.1"
+#	print(test, _on_latest_version_checked(test))
+#	test[LATEST_VER_KEY] = "0.0.0"
+#	print(test, _on_latest_version_checked(test))
