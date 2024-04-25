@@ -141,6 +141,7 @@ APPLY_GEN_COPY,Apply copy,Aplicar copia
 REGENERATE_GEN_IMAGE,Retry,Reintentar
 DISCARD_GEN_IMAGE,Discard,Descartar
 APPLY_GEN_MESSAGE,Apply generated image?,¿Aplicar imagen generada?
+UPDATE_AVAILABLE,Update available,Actualización disponible
 ,,
 NEXT,Next,Siguiente
 PREVIOUS,Previous,Atrás

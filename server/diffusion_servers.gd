@@ -213,6 +213,7 @@ func generate(response_object: Object, response_method: String, custom_gen_data:
 		api_request.api_post(url, custom_gen_data)
 	
 	generation_request = api_request
+	Python.add_next_line()
 	last_gen_data = api.request_data.duplicate(true)
 
 

@@ -156,7 +156,7 @@ margin_bottom = 28.0
 [node name="Control" type="Control" parent="Bars"]
 margin_top = 40.0
 margin_right = 1024.0
-margin_bottom = 564.0
+margin_bottom = 560.0
 mouse_filter = 2
 size_flags_vertical = 3
 
@@ -164,10 +164,10 @@ size_flags_vertical = 3
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 576.0
+margin_top = 572.0
 margin_right = 1024.0
 margin_bottom = 600.0
-rect_min_size = Vector2( 0, 24 )
+rect_min_size = Vector2( 0, 28 )
 
 [node name="ForcedCloseTimer" type="Timer" parent="."]
 wait_time = 4.5

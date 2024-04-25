@@ -392,8 +392,6 @@ func reload_description(_cue: Cue = null):
 func _fill_menu():
 	canvas.menu.add_tr_labeled_item(Consts.MENU_SAVE_CANVAS)
 	canvas.menu.add_tr_labeled_item(Consts.MENU_SAVE_CANVAS_AS)
-	canvas.menu.add_tr_labeled_item(Consts.MENU_SAVE_ACTIVE_IMAGE)
-	canvas.menu.add_tr_labeled_item(Consts.MENU_SAVE_ACTIVE_IMAGE_AS)
 
 
 func _on_Menu_option_pressed(label_id, _index_id):
