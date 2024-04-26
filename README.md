@@ -70,3 +70,23 @@ To use Qinti, it is necessary to specify a Automatic1111 Web UI installation or 
 - On the second option it is only necessary to specify an installation folder and press “install”.
 
 After a valid installation is set, Qinti will display a few short tutorials to explain the user interface
+
+# Modyfing code and compiling 
+
+In case anyone wants to modify or compile the code by themselves, the instructions are as follows:
+
+### Runnig the project
+
+1. Clone this repo (don't run it yet):
+   > git clone https://github.com/Samachiy/Qinti.git
+   
+2. Clone Guion addon:
+   > git clone https://github.com/Samachiy/Guion.git
+   
+3. Copy Guion/addons into Qinti/
+4. Download Godot from: https://godotengine.org/download/3.x/
+5. Run the project
+
+### Compiling
+
+Follow the instructions in the official Godot Documentation: https://docs.godotengine.org/en/3.5/development/compiling/index.html
