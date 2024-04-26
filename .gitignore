@@ -4,7 +4,7 @@
 *.import
 export.cfg
 export_presets.cfg
-project.godot
+#project.godot
 default_env.tres
 icon.png
 .godot/
@@ -21,6 +21,7 @@ dependencies/exe/
 addons/project-statistics
 addons/notes_tab
 addons/godot-git-plugin
+addons/guion
 Placeholders
 testing
 
