@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://ui/shaders/empty_area_mask_material.tres" type="Material" id=1]
+[ext_resource path="res://data_classes/image_processor.gd" type="Script" id=2]
+
+[sub_resource type="ImageTexture" id=1]
+
+[node name="Node" type="CanvasLayer"]
+script = ExtResource( 2 )
+
+[node name="ViewportContainer" type="ViewportContainer" parent="."]
+margin_right = 740.0
+margin_bottom = 512.0
+mouse_filter = 2
+
+[node name="Viewport" type="Viewport" parent="ViewportContainer"]
+size = Vector2( 740, 512 )
+transparent_bg = true
+handle_input_locally = false
+disable_3d = true
+usage = 0
+render_target_v_flip = true
+render_target_update_mode = 3
+
+[node name="Sprite" type="Sprite" parent="ViewportContainer/Viewport"]
+material = ExtResource( 1 )
+texture = SubResource( 1 )
+centered = false
