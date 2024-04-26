@@ -121,7 +121,7 @@ margin_bottom = 198.0
 margin_top = 5.0
 margin_right = 34.0
 margin_bottom = 25.0
-text = "ESDN"
+text = "ENSD"
 
 [node name="ESDN" type="LineEdit" parent="Configs/Settings/Tab/BASIC_PARAMS/ESDN"]
 margin_left = 38.0
