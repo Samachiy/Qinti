@@ -4,7 +4,7 @@ class_name APISequence
 
 var node
 var steps: Array = []
-var counter = 0
+var counter = -1
 var id: String = ''
 var mode: int 
 var history: Array = [] # [ 1, 1, 0, 1 ] Example: 1st, 2nd and 4th step success, 3rd failed
@@ -75,7 +75,7 @@ func _try_next_step():
 		run_filters.SUCCESS_ONLY:
 			counter = _get_next_history_success()
 		run_filters.FAILURE_ONLY:
-			counter = _get_next_history_success()
+			counter = _get_next_history_failure()
 		run_filters.UNTRIED_ONLY:
 			counter = _get_next_untried()
 	
@@ -93,8 +93,9 @@ func _try_next_step():
 func _get_next_history_success():
 	var i = counter
 	if i < 0:
-		i = 0
+		i = -1
 	
+	i += 1
 	while i < history.size() and history[i] == 0:
 		i += 1
 	
@@ -104,8 +105,9 @@ func _get_next_history_success():
 func _get_next_history_failure():
 	var i = counter
 	if i < 0:
-		i = 0
+		i = -1
 	
+	i += 1
 	while i < history.size() and history[i] == 1:
 		i += 1
 	
@@ -115,7 +117,7 @@ func _get_next_history_failure():
 func _get_next_untried():
 	var i = counter
 	if i < 0:
-		i = 0
+		i = -1
 	
 	var step: APIStep
 	while i < steps.size():
@@ -178,6 +180,7 @@ func run_success(try_all_if_failure: bool):
 	history = DiffusionServer.sequences_data.get(id, [])
 	if history.empty():
 		if try_all_if_failure:
+			recheck_untried = true
 			run()
 	else:
 		if try_all_if_failure:
@@ -212,9 +215,9 @@ class APIStep extends Reference:
 		return self
 	
 	
-	func try(retry: bool = false):
+	func try(retry: bool = false) -> bool:
 		if tried and not retry:
-			return
+			return false
 		
 		tried = true
 		match http_method:
@@ -222,3 +225,5 @@ class APIStep extends Reference:
 				api_request.api_post(url, data)
 			HTTPClient.METHOD_GET:
 				api_request.api_get(url)
+		
+		return true

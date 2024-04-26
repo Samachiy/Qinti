@@ -1,0 +1,444 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Object",
+"class": "APIRequest",
+"language": "GDScript",
+"path": "res://server/api_request.gd"
+}, {
+"base": "Object",
+"class": "APISequence",
+"language": "GDScript",
+"path": "res://server/api_sequence.gd"
+}, {
+"base": "DiffusionAPI",
+"class": "AutoWebUI_API",
+"language": "GDScript",
+"path": "res://server/api_auto_web_ui.gd"
+}, {
+"base": "LocalRepo",
+"class": "AutoWebUI_Repo",
+"language": "GDScript",
+"path": "res://server/available_repositories/repo_auto_web_ui.gd"
+}, {
+"base": "Reference",
+"class": "BaseFile",
+"language": "GDScript",
+"path": "res://addons/guion/reader/BaseFile.gd"
+}, {
+"base": "Node2D",
+"class": "BrushLine2D",
+"language": "GDScript",
+"path": "res://ui/canvas/canvas_2d/brush_line_2d.gd"
+}, {
+"base": "Panel",
+"class": "Canvas2D",
+"language": "GDScript",
+"path": "res://ui/canvas/canvas_2d/canvas2d.gd"
+}, {
+"base": "Reference",
+"class": "Canvas2DUndoAction",
+"language": "GDScript",
+"path": "res://ui/canvas/canvas_2d/canvas_2d_undo_redo_action.gd"
+}, {
+"base": "Reference",
+"class": "Canvas2DUndoQueue",
+"language": "GDScript",
+"path": "res://ui/canvas/canvas_2d/canvas_2d_undo_redo_queue.gd"
+}, {
+"base": "CheckBox",
+"class": "ConfigCheckBox",
+"language": "GDScript",
+"path": "res://ui/components/config_checkbox.gd"
+}, {
+"base": "TextureButton",
+"class": "ConfigToggleButton",
+"language": "GDScript",
+"path": "res://ui/components/config_toggle_button.gd"
+}, {
+"base": "Control",
+"class": "Controller",
+"language": "GDScript",
+"path": "res://ui/controllers/base_controller.gd"
+}, {
+"base": "Controller",
+"class": "ControlnetController",
+"language": "GDScript",
+"path": "res://ui/controllers/control_net_controller.gd"
+}, {
+"base": "ModifierMode",
+"class": "ControlnetModifierMode",
+"language": "GDScript",
+"path": "res://ui/modifiers/control_net_modifier.gd"
+}, {
+"base": "Reference",
+"class": "Cue",
+"language": "GDScript",
+"path": "res://addons/guion/director/Cue.gd"
+}, {
+"base": "FileClusterThumbnail",
+"class": "CurrentModelThumbnail",
+"language": "GDScript",
+"path": "res://ui/components/current_model_thumbnail.gd"
+}, {
+"base": "HTTPRequest",
+"class": "DiffusionAPI",
+"language": "GDScript",
+"path": "res://server/api.gd"
+}, {
+"base": "Reference",
+"class": "DragData",
+"language": "GDScript",
+"path": "res://data_classes/drag_data_wrapper.gd"
+}, {
+"base": "Control",
+"class": "DropArea",
+"language": "GDScript",
+"path": "res://ui/components/modifier_drop.gd"
+}, {
+"base": "Reference",
+"class": "FeatureList",
+"language": "GDScript",
+"path": "res://data_classes/feature_list.gd"
+}, {
+"base": "Reference",
+"class": "FileCluster",
+"language": "GDScript",
+"path": "res://data_classes/file_cluster.gd"
+}, {
+"base": "Thumbnail",
+"class": "FileClusterThumbnail",
+"language": "GDScript",
+"path": "res://ui/components/file_cluster_thumbnail.gd"
+}, {
+"base": "Reference",
+"class": "Flag",
+"language": "GDScript",
+"path": "res://addons/guion/director/FlagWrapper.gd"
+}, {
+"base": "Node",
+"class": "FlagModule",
+"language": "GDScript",
+"path": "res://addons/guion/director/Flags.gd"
+}, {
+"base": "AutoWebUI_Repo",
+"class": "Forge_Repo",
+"language": "GDScript",
+"path": "res://server/available_repositories/repo_forge.gd"
+}, {
+"base": "Layer2D",
+"class": "GenerationArea2D",
+"language": "GDScript",
+"path": "res://ui/canvas/canvas_2d/generation_area2d.gd"
+}, {
+"base": "EditorVCSInterface",
+"class": "GitAPI",
+"language": "NativeScript",
+"path": "res://addons/godot-git-plugin/git_api.gdns"
+}, {
+"base": "Reference",
+"class": "ImageData",
+"language": "GDScript",
+"path": "res://data_classes/image_data.gd"
+}, {
+"base": "Controller",
+"class": "ImageInfoController",
+"language": "GDScript",
+"path": "res://ui/controllers/image_info_controller.gd"
+}, {
+"base": "Reference",
+"class": "ImageViewerRelay",
+"language": "GDScript",
+"path": "res://data_classes/image_viewer_relay.gd"
+}, {
+"base": "OptionButton",
+"class": "LabeledOptionButton",
+"language": "GDScript",
+"path": "res://ui/components/labeled_option_button.gd"
+}, {
+"base": "Control",
+"class": "Layer2D",
+"language": "GDScript",
+"path": "res://ui/canvas/canvas_2d/layer2d.gd"
+}, {
+"base": "Reference",
+"class": "LocalRepo",
+"language": "GDScript",
+"path": "res://data_classes/local_repo.gd"
+}, {
+"base": "Node",
+"class": "Manager",
+"language": "GDScript",
+"path": "res://addons/guion/manager/ManagerCore.gd"
+}, {
+"base": "Reference",
+"class": "Matcher",
+"language": "GDScript",
+"path": "res://addons/guion/reader/Matcher.gd"
+}, {
+"base": "FileClusterThumbnail",
+"class": "ModelThumbnail",
+"language": "GDScript",
+"path": "res://ui/components/model_thumbnail.gd"
+}, {
+"base": "MarginContainer",
+"class": "Modifier",
+"language": "GDScript",
+"path": "res://ui/modifiers/modifier.gd"
+}, {
+"base": "Node",
+"class": "ModifierMode",
+"language": "GDScript",
+"path": "res://ui/modifiers/base_modifier_mode.gd"
+}, {
+"base": "Resource",
+"class": "ModifierType",
+"language": "GDScript",
+"path": "res://ui/modifiers/base_modifier_type.gd"
+}, {
+"base": "Reference",
+"class": "PCData",
+"language": "GDScript",
+"path": "res://data_classes/pc_data.gd"
+}, {
+"base": "Reference",
+"class": "Parser",
+"language": "GDScript",
+"path": "res://addons/guion/reader/Parser.gd"
+}, {
+"base": "Thumbnail",
+"class": "PreviewThumbnail",
+"language": "GDScript",
+"path": "res://ui/components/preview_thumbnail.gd"
+}, {
+"base": "Node",
+"class": "PythonInterface",
+"language": "GDScript",
+"path": "res://data_classes/python_interface.gd"
+}, {
+"base": "Thumbnail",
+"class": "RecentThumbnail",
+"language": "GDScript",
+"path": "res://ui/components/recent_thumbnail.gd"
+}, {
+"base": "Reference",
+"class": "RepoData",
+"language": "GDScript",
+"path": "res://data_classes/repo_data.gd"
+}, {
+"base": "Reference",
+"class": "Role",
+"language": "GDScript",
+"path": "res://addons/guion/director/Role.gd"
+}, {
+"base": "Reference",
+"class": "ServerAddress",
+"language": "GDScript",
+"path": "res://data_classes/server_address.gd"
+}, {
+"base": "Reference",
+"class": "StylingData",
+"language": "GDScript",
+"path": "res://data_classes/styling_data.gd"
+}, {
+"base": "FileClusterThumbnail",
+"class": "StylingThumbnail",
+"language": "GDScript",
+"path": "res://ui/components/styling_thumbnail.gd"
+}, {
+"base": "Reference",
+"class": "ThemeData",
+"language": "GDScript",
+"path": "res://data_classes/theme_data.gd"
+}, {
+"base": "TextureRect",
+"class": "Thumbnail",
+"language": "GDScript",
+"path": "res://ui/components/thumbnail.gd"
+}, {
+"base": "Resource",
+"class": "ThumbnailCategories",
+"language": "GDScript",
+"path": "res://ui/components/thumbnail_categories.gd"
+}, {
+"base": "VBoxContainer",
+"class": "ToolController",
+"language": "GDScript",
+"path": "res://ui/controllers/tools/base_tool_controller.gd"
+}, {
+"base": "Control",
+"class": "TutorialDisplay",
+"language": "GDScript",
+"path": "res://addons/guion/tutorial_maker/tutorial_display.gd"
+}, {
+"base": "Node",
+"class": "TutorialOrganizer",
+"language": "GDScript",
+"path": "res://addons/guion/tutorial_maker/tutorial_organizer.gd"
+}, {
+"base": "Object",
+"class": "TutorialSequence",
+"language": "GDScript",
+"path": "res://addons/guion/tutorial_maker/tutorial_sequence.gd"
+}, {
+"base": "Reference",
+"class": "TutorialStep",
+"language": "GDScript",
+"path": "res://addons/guion/tutorial_maker/tutorial_step.gd"
+}, {
+"base": "VBoxContainer",
+"class": "VFlowClusters",
+"language": "GDScript",
+"path": "res://ui/components/column_flow.gd"
+} ]
+_global_script_class_icons={
+"APIRequest": "",
+"APISequence": "",
+"AutoWebUI_API": "",
+"AutoWebUI_Repo": "",
+"BaseFile": "",
+"BrushLine2D": "",
+"Canvas2D": "",
+"Canvas2DUndoAction": "",
+"Canvas2DUndoQueue": "",
+"ConfigCheckBox": "",
+"ConfigToggleButton": "",
+"Controller": "",
+"ControlnetController": "",
+"ControlnetModifierMode": "",
+"Cue": "",
+"CurrentModelThumbnail": "",
+"DiffusionAPI": "",
+"DragData": "",
+"DropArea": "",
+"FeatureList": "",
+"FileCluster": "",
+"FileClusterThumbnail": "",
+"Flag": "",
+"FlagModule": "",
+"Forge_Repo": "",
+"GenerationArea2D": "",
+"GitAPI": "",
+"ImageData": "",
+"ImageInfoController": "",
+"ImageViewerRelay": "",
+"LabeledOptionButton": "",
+"Layer2D": "",
+"LocalRepo": "",
+"Manager": "",
+"Matcher": "",
+"ModelThumbnail": "",
+"Modifier": "",
+"ModifierMode": "",
+"ModifierType": "",
+"PCData": "",
+"Parser": "",
+"PreviewThumbnail": "",
+"PythonInterface": "",
+"RecentThumbnail": "",
+"RepoData": "",
+"Role": "",
+"ServerAddress": "",
+"StylingData": "",
+"StylingThumbnail": "",
+"ThemeData": "",
+"Thumbnail": "",
+"ThumbnailCategories": "",
+"ToolController": "",
+"TutorialDisplay": "",
+"TutorialOrganizer": "",
+"TutorialSequence": "",
+"TutorialStep": "",
+"VFlowClusters": ""
+}
+
+[application]
+
+config/name="Qinti"
+run/main_scene="res://Main.tscn"
+run/low_processor_mode=true
+boot_splash/image="res://qinti_icon.png"
+boot_splash/fullsize=false
+config/icon="res://qinti_icon.png"
+config/windows_native_icon="res://qinti_icon.ico"
+config/auto_accept_quit=false
+
+[autoload]
+
+l="*res://addons/guion/log/Log.tscn"
+Flags="*res://addons/guion/director/flags.tscn"
+Roles="*res://addons/guion/director/roles.tscn"
+Director="*res://addons/guion/director/Director.tscn"
+Consts="*res://consts.gd"
+DiffusionServer="*res://server/diffusion_servers.tscn"
+UIOrganizer="*res://addons/guion/director/ui_organizer.tscn"
+ThemeChanger="*res://themes/theme_changer.tscn"
+ImageProcessor="*res://data_classes/image_processor.tscn"
+Tutorials="*res://ui/components/tutorials.tscn"
+Locale="*res://ui/components/locale.gd"
+Python="*res://data_classes/python_interface.gd"
+
+[display]
+
+window/stretch/aspect="keep"
+
+[editor]
+
+version_control_autoload_on_startup=true
+version_control_plugin_name="GitAPI"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/guion/plugin.cfg", "res://addons/notes_tab/plugin.cfg", "res://addons/project-statistics/plugin.cfg" )
+
+[global]
+
+"auto ac"=false
+
+[gui]
+
+common/drop_mouse_on_gui_input_disabled=true
+theme/custom_font="res://assets/fonts/NonoSansJP-Regular_dynamicfont.tres"
+
+[input]
+
+ui_undo={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":90,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+ui_redo={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":true,"control":true,"meta":false,"command":true,"pressed":false,"scancode":90,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":false,"command":true,"pressed":false,"scancode":89,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+ui_ctrl={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777238,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+
+[locale]
+
+translations=PoolStringArray( "res://translations/translation.en.translation", "res://translations/translation.es.translation" )
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"
+
+[statistics]
+
+force_include=PoolStringArray(  )
