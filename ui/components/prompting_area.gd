@@ -34,8 +34,12 @@ func _ready():
 func _tutorial(tutorial_seq: TutorialSequence):
 	match tutorial_seq.name:
 		Tutorials.TUT1:
+			var step: TutorialStep
 			tutorial_seq.add_tr_named_step(Tutorials.TUT1_PROMPT, [prompt_area])
-			tutorial_seq.add_tr_named_step(Tutorials.TUT1_GEN_BUTTON, [generate_button])
+			step = tutorial_seq.add_tr_named_step(Tutorials.TUT1_GEN_BUTTON, [generate_button])
+			step.cue_in_run(Cue.new(Consts.ROLE_PROMPTING_AREA, "write_prompt").args([
+					"lanscape", "bad quality"
+			]))
 		Tutorials.TUT5:
 			var mod_area = Roles.get_node_by_role(Consts.ROLE_MODIFIERS_AREA)
 			tutorial_seq.add_tr_named_step(Tutorials.TUT5_LOAD, [prompt_area, mod_area])
@@ -121,6 +125,18 @@ func add_prompt_and_seed_to_api(_cue: Cue = null):
 	
 	Cue.new(Consts.ROLE_API, "apply_parameters").opts(dict).execute()
 	Cue.new(Consts.ROLE_API, "add_to_prompt").opts(config).execute()
+
+
+func write_prompt(cue: Cue):
+	# [positive_prompt, negative_prompt]
+	var pos_prompt = cue.get_at(0, '')
+	var neg_prompt = cue.get_at(1, '', false)
+	if pos_prompt is String and positive_prompt.text.strip_edges().empty():
+		positive_prompt.text = pos_prompt
+		positive_prompt.label.visible = false
+	if neg_prompt is String and negative_prompt.text.strip_edges().empty():
+		negative_prompt.text = neg_prompt
+		negative_prompt.label.visible = false
 
 
 
