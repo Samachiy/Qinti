@@ -52,7 +52,8 @@ func refresh_models():
 	
 	var dir: Directory = Directory.new()
 	if not dir.dir_exists(path):
-		l.g("Can't read installation folder info, folder doesn't exist")
+		l.g("Can't read models from installation folder info, folder doesn't exist: " 
+				+ str(path))
 		return
 	
 	clusters = get_file_clusters_at(path)

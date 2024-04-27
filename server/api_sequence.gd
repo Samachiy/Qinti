@@ -81,6 +81,7 @@ func _try_next_step():
 	
 	if counter < steps.size():
 		var step: APIStep = steps[counter]
+# warning-ignore:return_value_discarded
 		step.try()
 	elif recheck_untried:
 		recheck_untried = false # stopping condition

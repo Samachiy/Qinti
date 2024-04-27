@@ -182,6 +182,7 @@ func _on_ProceedOpenInstalled_pressed():
 	elif available_servers_open.visible and \
 	load_installation_folder_info_manual_server(available_servers_open.get_selected(), path):
 		if local_backend.repo.is_installed:
+			l.g("Manual backend was applied: " + local_backend.repo.data.id, l.INFO)
 			success = true
 	else:
 		available_servers_open.visible = true
@@ -217,6 +218,7 @@ func set_installation_info(cue: Cue):
 	var backend = cue.str_option("backend", '')
 	success = load_installation_folder_info_manual_server(backend, path)
 	if success:
+		l.g("Manual backend was applied: " + local_backend.repo.data.id, l.INFO)
 		local_backend.repo.data.pc.gpu_type = gpu_type
 		local_backend.repo.override_args(extra_args, true)
 		DiffusionServer.initialize_server_connection()

@@ -181,6 +181,25 @@ func clear(_cue : Cue = null):
 			array.resize(0)
 
 
+func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
+preprocessor_name: String):
+	if not is_instance_valid(response_object):
+		l.g("Can't preprocess image, invalid response object. Type: " + preprocessor_name, 
+				l.WARNING)
+	
+	var api_request = APIRequest.new(response_object, response_method, self)
+	var url = server_address.url + ADDRESS_CONTROLNET_PREPROCESS
+	var data = {
+		Consts.PREP_ONLY_MODULE: preprocessor_name,
+		Consts.PREP_ONLY_INPUT_IMAGES: [image_data.base64],
+		Consts.PREP_ONLY_RESOLUTION: image_data.texture.get_width(),
+	}
+	
+	# The next code notifies the server_state_indicator for a state change 
+	DiffusionServer.set_state(Consts.SERVER_STATE_PREPROCESSING)
+	api_request.api_post(url, data)
+
+
 func add_to_prompt(cue: Cue): 
 	# [positive_prompt, negative_prompt]
 	# also accepts a config dictionary, will use this if the arguments are emtpy
@@ -733,11 +752,20 @@ func refresh_data(what: String):
 	var resul = {}
 	var success
 	if is_all or what == REFRESH_CONTROLNET_MODELS:
-		var api_request = APIRequest.new(self, "_on_contronet_models_refreshed", self)
-		api_request.connect_on_request_failed(self, "_on_contronet_models_failed_refresh")
-		var url = server_address.url + ADDRESS_GET_CONTROLNET_MODEL_LIST
-		success = yield(api_request.api_get(url), "api_request_finished")
-		resul[REFRESH_CONTROLNET_MODELS] = success
+		var models = Cue.new(Consts.ROLE_FILE_PICKER, "get_file_paths").args([
+				get_controlnet_dir(), ".pth"]).execute()
+		for i in range(models.size()):
+			models[i] = models[i].get_basename().get_file()
+
+		DiffusionServer.controlnet_models = models
+		resul[REFRESH_CONTROLNET_MODELS_LOCAL] = success
+	
+#	if is_all or what == REFRESH_CONTROLNET_MODELS:
+#		var api_request = APIRequest.new(self, "_on_contronet_models_refreshed", self)
+#		api_request.connect_on_request_failed(self, "_on_contronet_models_failed_refresh")
+#		var url = server_address.url + ADDRESS_GET_CONTROLNET_MODEL_LIST
+#		success = yield(api_request.api_get(url), "api_request_finished")
+#		resul[REFRESH_CONTROLNET_MODELS] = success
 	
 	if is_all or what == REFRESH_SAMPLERS:
 		var api_request = APIRequest.new(self, "_on_samplers_refreshed", self)

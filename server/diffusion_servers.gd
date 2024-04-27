@@ -42,6 +42,7 @@ var running_repo: LocalRepo = null
 var sequences_data = {}
 
 signal controlnet_models_refreshed
+signal local_controlnet_models_refreshed
 signal diffusion_models_refreshed(success)
 signal samplers_refreshed
 signal upscalers_refreshed
@@ -127,6 +128,9 @@ func _on_data_refreshed(what_dict: Dictionary):
 	
 	if what_dict.get(DiffusionAPI.REFRESH_CONTROLNET_MODELS, false):
 		emit_signal("controlnet_models_refreshed")
+	
+	if what_dict.get(DiffusionAPI.REFRESH_CONTROLNET_MODELS_LOCAL, false):
+		emit_signal("local_controlnet_models_refreshed")
 	
 	if DiffusionAPI.REFRESH_MODELS in what_dict:
 		emit_signal("diffusion_models_refreshed", what_dict.get(DiffusionAPI.REFRESH_MODELS))
@@ -222,22 +226,7 @@ preprocessor_name: String):
 	if not is_api_initialized():
 		return
 	
-	if not is_instance_valid(response_object):
-		l.g("Can't preprocess image, invalid response object. Type: " + preprocessor_name, 
-				l.WARNING)
-	
-	var api_request = APIRequest.new(response_object, response_method, api)
-	var url = server_address.url + api.ADDRESS_CONTROLNET_PREPROCESS
-	var data = {
-		Consts.PREP_ONLY_MODULE: preprocessor_name,
-		Consts.PREP_ONLY_INPUT_IMAGES: [image_data.base64],
-		Consts.PREP_ONLY_RESOLUTION: image_data.texture.get_width(),
-	}
-	
-	# The next code notifies the server_state_indicator for a state change 
-	set_state(Consts.SERVER_STATE_PREPROCESSING)
-	
-	api_request.api_post(url, data)
+	api.preprocess(response_object, response_method, image_data, preprocessor_name)
 
 
 func request_image_info(response_object: Object, response_method: String, image_base64: String):
