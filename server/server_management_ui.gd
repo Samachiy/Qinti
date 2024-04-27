@@ -67,6 +67,7 @@ func _ready():
 	
 	# Setting individual elements visibility
 	available_servers_open.visible = false
+	available_servers_open.get_parent().visible = false
 	
 	Roles.request_role(self, Consts.ROLE_SERVER_MANAGER)
 	Director.use_up_locker(Consts.ROLE_SERVER_MANAGER)
@@ -88,7 +89,6 @@ func _ready():
 		available_servers_open.add_labeled_item(server_type, server_type)
 		
 	available_servers.select_first()
-	available_servers_open.select_first()
 	
 	var e = Python.connect("output_received", self, "_on_PythonInterface_output_received")
 	l.error(e, l.CONNECTION_FAILED)
@@ -185,6 +185,8 @@ func _on_ProceedOpenInstalled_pressed():
 			success = true
 	else:
 		available_servers_open.visible = true
+		available_servers_open.get_parent().visible = true
+		available_servers_open.select_first()
 	
 	if success:
 		set_gpu_in_pcdata(local_backend.repo.data.pc, available_gpu_open.get_selected())

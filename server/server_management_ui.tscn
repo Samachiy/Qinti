@@ -747,18 +747,18 @@ rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 3
 requieres_flag = false
 
-[node name="SelectBackend" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox"]
+[node name="SelectServer" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox"]
 margin_top = 40.0
 margin_right = 330.0
 margin_bottom = 68.0
 
-[node name="LineEdit" type="Label" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectBackend"]
+[node name="LineEdit" type="Label" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectServer"]
 margin_top = 4.0
 margin_right = 85.0
 margin_bottom = 24.0
 text = "SERVER_TYPE"
 
-[node name="OpenAvailableServers" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectBackend" instance=ExtResource( 6 )]
+[node name="OpenAvailableServers" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectServer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
 margin_left = 97.0
 margin_right = 330.0
@@ -1144,7 +1144,7 @@ size_flags_stretch_ratio = 0.5
 [connection signal="text_changed" from="ChooseInstalledDirOption/VBox/Body/Options/SelectFolder/SelectedInstallationPath" to="." method="_on_SelectedInstallationPath_text_changed"]
 [connection signal="pressed" from="ChooseInstalledDirOption/VBox/Body/Options/SelectFolder/FileDialogOpenInstalled" to="." method="_on_FileDialogOpenInstalled_pressed"]
 [connection signal="option_selected" from="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectGPU/OpenAvailableGPU" to="." method="_on_OpenAvailableGPU_option_selected"]
-[connection signal="option_selected" from="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectBackend/OpenAvailableServers" to="." method="_on_OpenAvailableServers_option_selected"]
+[connection signal="option_selected" from="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectServer/OpenAvailableServers" to="." method="_on_OpenAvailableServers_option_selected"]
 [connection signal="pressed" from="ChooseInstalledDirOption/VBox/NavigationButtons/HBoxContainer/Back" to="." method="_on_Back_pressed"]
 [connection signal="pressed" from="ChooseInstalledDirOption/VBox/NavigationButtons/HBoxContainer/ProceedOpenInstalled" to="." method="_on_ProceedOpenInstalled_pressed"]
 [connection signal="pressed" from="RemoteServerOption/VBox/NavigationButtons/HBoxContainer/Back" to="." method="_on_Back_pressed"]
