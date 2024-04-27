@@ -24,6 +24,7 @@ script = ExtResource( 8 )
 script = ExtResource( 3 )
 
 [node name="MainOptions" type="MarginContainer" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -515,7 +516,7 @@ margin_right = 85.0
 margin_bottom = 24.0
 text = "SERVER_TYPE"
 
-[node name="AvailableServers" parent="InstallOption/VBox/Body/Options/HBox/VBox/SelectServer" instance=ExtResource( 6 )]
+[node name="InstallAvailableServers" parent="InstallOption/VBox/Body/Options/HBox/VBox/SelectServer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
 margin_left = 97.0
 margin_right = 330.0
@@ -537,7 +538,7 @@ margin_right = 108.0
 margin_bottom = 24.0
 text = "SERVER_VERSION"
 
-[node name="AvailableServerVersions" parent="InstallOption/VBox/Body/Options/HBox/VBox/SelectVersion" instance=ExtResource( 6 )]
+[node name="InstallAvailableServerVersions" parent="InstallOption/VBox/Body/Options/HBox/VBox/SelectVersion" instance=ExtResource( 6 )]
 unique_name_in_owner = true
 margin_left = 120.0
 margin_right = 330.0
@@ -611,7 +612,6 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.5
 
 [node name="ChooseInstalledDirOption" type="MarginContainer" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -658,15 +658,15 @@ size_flags_stretch_ratio = 12.0
 alignment = 1
 
 [node name="Label" type="Label" parent="ChooseInstalledDirOption/VBox/Body/Options"]
-margin_top = 79.0
+margin_top = 59.0
 margin_right = 837.0
-margin_bottom = 99.0
+margin_bottom = 79.0
 text = "PLEASE_SELECT_INSTALL_FOLDER"
 
 [node name="SelectFolder" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options"]
-margin_top = 111.0
+margin_top = 91.0
 margin_right = 837.0
-margin_bottom = 141.0
+margin_bottom = 121.0
 
 [node name="SelectedInstallationPath" type="LineEdit" parent="ChooseInstalledDirOption/VBox/Body/Options/SelectFolder"]
 unique_name_in_owner = true
@@ -688,14 +688,14 @@ stretch_mode = 4
 script = ExtResource( 15 )
 
 [node name="Spacing" type="Control" parent="ChooseInstalledDirOption/VBox/Body/Options"]
-margin_top = 153.0
+margin_top = 133.0
 margin_right = 837.0
-margin_bottom = 153.0
+margin_bottom = 133.0
 
 [node name="Arguments" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options"]
-margin_top = 165.0
+margin_top = 145.0
 margin_right = 837.0
-margin_bottom = 187.0
+margin_bottom = 167.0
 
 [node name="Arguments" type="Label" parent="ChooseInstalledDirOption/VBox/Body/Options/Arguments"]
 margin_top = 1.0
@@ -719,13 +719,13 @@ rect_min_size = Vector2( 0, 22 )
 size_flags_horizontal = 3
 
 [node name="HBox" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options"]
-margin_top = 199.0
+margin_top = 179.0
 margin_right = 837.0
-margin_bottom = 227.0
+margin_bottom = 247.0
 
 [node name="VBox" type="VBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox"]
 margin_right = 330.0
-margin_bottom = 28.0
+margin_bottom = 68.0
 size_flags_horizontal = 3
 
 [node name="SelectGPU" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox"]
@@ -747,10 +747,30 @@ rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 3
 requieres_flag = false
 
+[node name="SelectBackend" type="HBoxContainer" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox"]
+margin_top = 40.0
+margin_right = 330.0
+margin_bottom = 68.0
+
+[node name="LineEdit" type="Label" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectBackend"]
+margin_top = 4.0
+margin_right = 85.0
+margin_bottom = 24.0
+text = "SERVER_TYPE"
+
+[node name="OpenAvailableServers" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectBackend" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+margin_left = 97.0
+margin_right = 330.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 200, 0 )
+size_flags_horizontal = 3
+requieres_flag = false
+
 [node name="Spacing" type="Control" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox"]
 margin_left = 342.0
 margin_right = 837.0
-margin_bottom = 28.0
+margin_bottom = 68.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.5
 
@@ -1118,12 +1138,13 @@ size_flags_stretch_ratio = 0.5
 [connection signal="text_changed" from="InstallOption/VBox/Body/Options/SelectFolder/InstallPath" to="." method="_on_InstallPath_text_changed"]
 [connection signal="pressed" from="InstallOption/VBox/Body/Options/SelectFolder/FileDialogInstall" to="." method="_on_FileDialogInstall_pressed"]
 [connection signal="option_selected" from="InstallOption/VBox/Body/Options/HBox/VBox/SelectGPU/InstallAvailableGPU" to="." method="_on_InstallAvailableGPU_option_selected"]
-[connection signal="option_selected" from="InstallOption/VBox/Body/Options/HBox/VBox/SelectServer/AvailableServers" to="." method="_on_AvailableServers_option_selected"]
+[connection signal="option_selected" from="InstallOption/VBox/Body/Options/HBox/VBox/SelectServer/InstallAvailableServers" to="." method="_on_AvailableServers_option_selected"]
 [connection signal="pressed" from="InstallOption/VBox/NavigationButtons/HBoxContainer/Back" to="." method="_on_Back_pressed"]
 [connection signal="pressed" from="InstallOption/VBox/NavigationButtons/HBoxContainer/ProceedInstall" to="." method="_on_ProceedInstall_pressed"]
 [connection signal="text_changed" from="ChooseInstalledDirOption/VBox/Body/Options/SelectFolder/SelectedInstallationPath" to="." method="_on_SelectedInstallationPath_text_changed"]
 [connection signal="pressed" from="ChooseInstalledDirOption/VBox/Body/Options/SelectFolder/FileDialogOpenInstalled" to="." method="_on_FileDialogOpenInstalled_pressed"]
 [connection signal="option_selected" from="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectGPU/OpenAvailableGPU" to="." method="_on_OpenAvailableGPU_option_selected"]
+[connection signal="option_selected" from="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectBackend/OpenAvailableServers" to="." method="_on_OpenAvailableServers_option_selected"]
 [connection signal="pressed" from="ChooseInstalledDirOption/VBox/NavigationButtons/HBoxContainer/Back" to="." method="_on_Back_pressed"]
 [connection signal="pressed" from="ChooseInstalledDirOption/VBox/NavigationButtons/HBoxContainer/ProceedOpenInstalled" to="." method="_on_ProceedOpenInstalled_pressed"]
 [connection signal="pressed" from="RemoteServerOption/VBox/NavigationButtons/HBoxContainer/Back" to="." method="_on_Back_pressed"]
