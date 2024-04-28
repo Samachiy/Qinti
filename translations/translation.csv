@@ -168,7 +168,7 @@ MESSAGE_BETA_FEATURE_CONTINUE,"This feature is in beta phase, do you wish to con
 MSG_NO_NETWORK_CONNECTION,,
 MSG_INVALID_SERVER_URL,,
 MESSAGE_MISSING_DEPENDENCIES,"There are missing dependencies, please run the following console command and press “Resume” after the command is done running.","There are missing dependencies, please run the following console command and press “Resume” after the command is done running."
-MESSAGE_INVALID_PATH_NO_INSTALL_FOUND,"No valid server installation was found in the specified folder, please select another one.","No se encontró ninguna instalación valida del servidor, por favor, seleccione otra carpeta."
+MESSAGE_INVALID_PATH_NO_INSTALL_FOUND,"No valid server installation was found in the specified folder, please select another one or manually specify the “Server type”","No se encontró ninguna instalación valida del servidor, por favor, seleccione otra carpeta or especifique manualmente el “Tipo de servidor”"
 MESSAGE_INSTALL_PYTHON_WINDOWS,It is necessary to install python {0}. Do you wish to execute the python installer?,Es necesario instalar Python version {0}. ¿Desea ejecutar el instalador the Python?
 MESSAGE_INSTALL_GIT_WINDOWS,It is necessary to install git. Do you wish to execute the git installer?,Es necesario instalar Git. ¿Desea ejecutar el instalador the Git?
 MESSAGE_RESTART_QINTI_NEEDED,"To continue the installation, it is necessary to restart Qinti UI, please start the program again after clicking ‘OK’","Para continuar la instalación, es necesario reiniciar Qinti UI, por favor inicie el programa de vuelta después de hacer click en ‘OK’"

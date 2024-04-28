@@ -751,21 +751,13 @@ func refresh_data(what: String):
 	var is_all = what == REFRESH_ALL
 	var resul = {}
 	var success
-	if is_all or what == REFRESH_CONTROLNET_MODELS:
-		var models = Cue.new(Consts.ROLE_FILE_PICKER, "get_file_paths").args([
-				get_controlnet_dir(), ".pth"]).execute()
-		for i in range(models.size()):
-			models[i] = models[i].get_basename().get_file()
-
-		DiffusionServer.controlnet_models = models
-		resul[REFRESH_CONTROLNET_MODELS_LOCAL] = success
 	
-#	if is_all or what == REFRESH_CONTROLNET_MODELS:
-#		var api_request = APIRequest.new(self, "_on_contronet_models_refreshed", self)
-#		api_request.connect_on_request_failed(self, "_on_contronet_models_failed_refresh")
-#		var url = server_address.url + ADDRESS_GET_CONTROLNET_MODEL_LIST
-#		success = yield(api_request.api_get(url), "api_request_finished")
-#		resul[REFRESH_CONTROLNET_MODELS] = success
+	if is_all or what == REFRESH_CONTROLNET_MODELS:
+		var api_request = APIRequest.new(self, "_on_contronet_models_refreshed", self)
+		api_request.connect_on_request_failed(self, "_on_contronet_models_failed_refresh")
+		var url = server_address.url + ADDRESS_GET_CONTROLNET_MODEL_LIST
+		success = yield(api_request.api_get(url), "api_request_finished")
+		resul[REFRESH_CONTROLNET_MODELS] = success
 	
 	if is_all or what == REFRESH_SAMPLERS:
 		var api_request = APIRequest.new(self, "_on_samplers_refreshed", self)

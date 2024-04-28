@@ -266,9 +266,12 @@ func get_server_config(response_object: Object, response_method: String):
 
 
 func get_server_diffusion_model_from_config(server_config_result: Dictionary):
-	var full_name: String = server_config_result.get("sd_model_checkpoint", '')
-	full_name = full_name.substr(0, full_name.rfind(' '))
-	return full_name.get_basename()
+	var full_name = server_config_result.get("sd_model_checkpoint", '')
+	if full_name is String:
+		full_name = full_name.substr(0, full_name.rfind(' '))
+		return full_name.get_basename()
+	else:
+		return ''
 
 
 func set_server_diffusion_model(model_file_name: String, object: Object, 

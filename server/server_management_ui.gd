@@ -214,6 +214,7 @@ func set_installation_info(cue: Cue):
 		local_backend.repo.override_args(extra_args, true)
 		DiffusionServer.initialize_server_connection()
 		hide_installation_window()
+		return
 	
 	var backend = cue.str_option("backend", '')
 	success = load_installation_folder_info_manual_server(backend, path)
@@ -223,6 +224,7 @@ func set_installation_info(cue: Cue):
 		local_backend.repo.override_args(extra_args, true)
 		DiffusionServer.initialize_server_connection()
 		hide_installation_window()
+		return
 
 
 func set_install_cue(cue: Cue):

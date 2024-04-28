@@ -84,18 +84,19 @@ static func extract_git_origin(full_repo_path: String) -> String:
 static func extract_readme_title(full_repo_path: String) -> String:
 	var readme = "README.md"
 	var readme_path = full_repo_path.plus_file(readme)
+	var title = ''
 	var file: File = File.new()
 	var error = file.open(readme_path, File.READ)
 	l.error(error, "Failed to open file: " + readme_path)
-	var line 
-	var title = ''
-	var title_indicator = "#"
-	while not file.eof_reached():
-		line = file.get_line()
-		line = line.strip_edges()
-		if not line.empty() and line[0] == title_indicator:
-			title = line
-			break
+	if error == OK:
+		var line 
+		var title_indicator = "#"
+		while not file.eof_reached():
+			line = file.get_line()
+			line = line.strip_edges()
+			if not line.empty() and line[0] == title_indicator:
+				title = line
+				break
 	
 	return title
 
