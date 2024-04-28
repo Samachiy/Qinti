@@ -22,8 +22,9 @@ onready var remote_server_url = $"%ConnectToServerURL"
 onready var available_os = $"%AvailableOS"
 onready var available_gpu_install = $"%InstallAvailableGPU"
 onready var available_gpu_open = $"%OpenAvailableGPU"
-onready var available_servers = $"%AvailableServers"
-onready var available_server_ver = $"%AvailableServerVersions"
+onready var available_servers_open = $"%OpenAvailableServers"
+onready var available_servers = $"%InstallAvailableServers"
+onready var available_server_ver = $"%InstallAvailableServerVersions"
 #onready var info_dialog = $InfoDialog
 #onready var confirm_dialog = $ConfirmationDialog
 onready var install_option_ui = $InstallOption
@@ -64,6 +65,10 @@ func _ready():
 	install_option_ui.visible = false
 	instal_proc_ui.visible = false
 	
+	# Setting individual elements visibility
+	available_servers_open.visible = false
+	available_servers_open.get_parent().visible = false
+	
 	Roles.request_role(self, Consts.ROLE_SERVER_MANAGER)
 	Director.use_up_locker(Consts.ROLE_SERVER_MANAGER)
 	Director.connect_global_save_cues_requested(self, "_on_global_save_cues_requested")
@@ -81,6 +86,7 @@ func _ready():
 		server_info = local_backend.servers[server_type]
 		if server_info.can_install:
 			available_servers.add_labeled_item(server_type, server_type)
+		available_servers_open.add_labeled_item(server_type, server_type)
 		
 	available_servers.select_first()
 	
@@ -168,11 +174,20 @@ func _on_connection_failed(response_code):
 
 func _on_ProceedOpenInstalled_pressed():
 	var success = false
-	
+	var path = selected_installation_path.text
 	# load_installation_folder_info already checks if folder exists
-	if load_installation_folder_info(selected_installation_path.text):
+	if load_installation_folder_info(path):
 		if local_backend.repo.is_installed:
 			success = true
+	elif available_servers_open.visible and \
+	load_installation_folder_info_manual_server(available_servers_open.get_selected(), path):
+		if local_backend.repo.is_installed:
+			l.g("Manual backend was applied: " + local_backend.repo.data.id, l.INFO)
+			success = true
+	else:
+		available_servers_open.visible = true
+		available_servers_open.get_parent().visible = true
+		available_servers_open.select_first()
 	
 	if success:
 		set_gpu_in_pcdata(local_backend.repo.data.pc, available_gpu_open.get_selected())
@@ -199,6 +214,17 @@ func set_installation_info(cue: Cue):
 		local_backend.repo.override_args(extra_args, true)
 		DiffusionServer.initialize_server_connection()
 		hide_installation_window()
+		return
+	
+	var backend = cue.str_option("backend", '')
+	success = load_installation_folder_info_manual_server(backend, path)
+	if success:
+		l.g("Manual backend was applied: " + local_backend.repo.data.id, l.INFO)
+		local_backend.repo.data.pc.gpu_type = gpu_type
+		local_backend.repo.override_args(extra_args, true)
+		DiffusionServer.initialize_server_connection()
+		hide_installation_window()
+		return
 
 
 func set_install_cue(cue: Cue):
@@ -227,22 +253,35 @@ func get_install_cue(_cue: Cue = null):
 func load_installation_folder_info(path: String):
 	l.g("Loading server installed at: " + path, l.INFO)
 	var repo = get_repo_from_path(path)
+	return load_repo(repo, path)
+
+
+func load_installation_folder_info_manual_server(server_id: String, path: String):
+	if not server_id.empty():
+		var repo_data: RepoData = local_backend.servers.get(server_id, null)
+		return load_repo(LocalRepo.new_from_data(path, repo_data), "[Manual selected repo]")
+	else:
+		return false
+
+
+func load_repo(repo: LocalRepo, debug_path: String):
 	if repo == null:
-		l.g("The path '" + path + "' doesn't contain a valid repository")
+		l.g("The path '" + debug_path + "' doesn't contain a valid repository")
 		return false
 	else:
 		_prepare_repo(repo)
 		return true
+	
 
 
 func get_repo_from_path(path: String, error_level: int = l.ERROR) -> LocalRepo:
 	if path.empty():
-		l.g("Can't read installation folder info, path is empty", error_level)
+		l.g("Can't read installation folder info, path is empty: " + path, error_level)
 		return null
 	
 	var dir: Directory = Directory.new()
 	if not dir.dir_exists(path):
-		l.g("Can't read installation folder info, folder doesn't exist", error_level)
+		l.g("Can't read installation folder info, folder doesn't exist: " + path, error_level)
 		return null
 	
 	return LocalRepo.new_from_repo_array(path, local_backend.servers.values())
@@ -508,7 +547,8 @@ func _on_global_save_cues_requested():
 					get_full_installation_path(), 
 					local_backend.repo.data.pc.gpu_type,
 					local_backend.repo.extra_args
-				]
+				],
+				{ "backend": local_backend.repo.data.id}
 		)
 
 
@@ -640,3 +680,15 @@ func _on_InstallAvailableGPU_option_selected(_label_id, _index_id):
 
 func _on_OpenAvailableGPU_option_selected(_label_id, _index_id):
 	refresh_open_installed_arguments(selected_installation_path.text)
+
+
+func _on_OpenAvailableServers_option_selected(_label_id, _index_id):
+	var server_id = available_servers_open.get_selected()
+	var repo_data: RepoData = local_backend.servers.get(server_id, null)
+	var args = ''
+	if repo_data != null:
+		var pc_data = PCData.new()
+		set_gpu_in_pcdata(pc_data, available_gpu_open.get_selected())
+		args = repo_data.get_start_args_custom(pc_data)
+	
+	selected_installation_core_args.text = args

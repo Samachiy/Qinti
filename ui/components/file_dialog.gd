@@ -159,6 +159,7 @@ func _get_file_clusters_at(path: String, image_data: ImageData, clusters: Dictio
 		
 		file_name = dir.get_next()
 	
+	l.p("clusters: " + str(clusters))
 	return clusters
 
 

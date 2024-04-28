@@ -126,7 +126,8 @@ func generate(cue: Cue = null):
 
 func _on_Main_ready():
 	Director.scene_load_ready(false)
-	PCData.make_file_executable_recursive(PCData.globalize_path(LINUX_SCRIPTS_PATH))
+	if Consts.pc_data.is_linux():
+		PCData.make_file_executable_recursive(PCData.globalize_path(LINUX_SCRIPTS_PATH))
 
 
 func exit(_cue: Cue = null):

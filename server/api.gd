@@ -5,6 +5,7 @@ class_name DiffusionAPI
 const REFRESH_ALL = "all"
 const REFRESH_MODELS = "diffusion models"
 const REFRESH_CONTROLNET_MODELS = "controlnet models"
+const REFRESH_CONTROLNET_MODELS_LOCAL = "controlnet models local"
 const REFRESH_SAMPLERS = "samplers"
 const REFRESH_UPSCALERS = "upscalers"
 
@@ -242,6 +243,14 @@ func clear(_cue : Cue = null):
 	# Clears the request_data back to it's original state
 	l.g("The function 'clear' has not been overriden yet on Api: " + 
 	name)
+
+
+func preprocess(_response_object: Object, _response_method: String, _image_data: ImageData, 
+_preprocessor_name: String):
+	# Request to preprocess image_data using preprocessor_name to server
+	l.g("The function 'preprocess' has not been overriden yet on Api: " + 
+	name)
+	
 
 
 func add_to_prompt(_cue: Cue): 

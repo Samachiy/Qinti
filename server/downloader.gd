@@ -76,35 +76,44 @@ func search_controlnet_model(search_string: String):
 		if search_string in model_link:
 			return model_link.get_file()
 	
-	return ''
+	return controlnet_links_t2i.get(search_string, '').get_file()
 
 
 func download_control_net(type_name):
 	var link: String = controlnet_links_t2i.get(type_name, '')
+	
 	if link.empty():
 		l.g("Couldn't download item of name '" + type_name + "', definition wasn't found")
 		return
 	
+	var file_name = link.get_file()
+	if not type_name in file_name:
+		file_name = link.get_file() + type_name # This is done because we use the type name to find out
+		# if it's the correct file
+	
 	var path = DiffusionServer.api.get_controlnet_dir()
-	_queue_download(link + CONTROLNET_MODEL_EXT, path)
+	_queue_download(link + CONTROLNET_MODEL_EXT, path, file_name + CONTROLNET_MODEL_EXT)
 	
 	# Controlnets from lllyasviel/ControlNet-v1-1 also need a configuration file
 	if "lllyasviel" in link:
-		_queue_download(link + CONTROLNET_MODEL_CONFIG_EXT, path)
+		_queue_download(link + CONTROLNET_MODEL_CONFIG_EXT, path, file_name + CONTROLNET_MODEL_CONFIG_EXT)
 	
 	_http_request_completed('') # This function resets data and starts downloading the queue
 
 
-func _queue_download(full_link: String, path: String):
+func _queue_download(full_link: String, path: String, file_name: String):
 	if full_link in links_in_progress:
 		l.g("Link '" + full_link + "' is already queued, sipping link", l.INFO)
 		return
+	
+	if file_name.empty():
+		file_name = full_link.get_file()
 	
 	links_in_progress[full_link] = true
 	queue.append(Cue.new("", "").args([
 			full_link, 
 			path, 
-			full_link.get_file()
+			file_name
 	]))
 	
 

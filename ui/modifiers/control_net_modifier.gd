@@ -98,11 +98,33 @@ func _on_control_net_models_refreshed(cn_model_string):
 	
 	if get_control_net_model_name(false).empty():
 		l.g("Failure to download control net model at modifier: " + name)
+#		var error = DiffusionServer.connect(
+#				"local_controlnet_models_refreshed", 
+#				self, 
+#				"_on_control_net_models_refreshed", 
+#				[cn_model_search_string])
+#		l.error(error, l.CONNECTION_FAILED)
+#		DiffusionServer.refresh_data(DiffusionAPI.REFRESH_CONTROLNET_MODELS_LOCAL)
 	else:
 		prepare_mode()
 	
 	DiffusionServer.disconnect(
-			"controlnet_models_refreshed", self, "_on_control_net_models_refreshed")
+			"controlnet_models_refreshed", self, "_on_local_control_net_models_refreshed")
+
+
+#func _on_local_control_net_models_refreshed(cn_model_string):
+#	if cn_model_string != cn_model_search_string:
+#		# We confirm that we are talking to the right modifier
+#		return
+#
+#	if get_control_net_model_name(false).empty():
+#		l.g("Failure to download control net model at modifier: " + name)
+#	else:
+#		prepare_mode()
+#
+#	DiffusionServer.disconnect(
+#			"controlnet_models_refreshed", self, "_on_control_net_models_refreshed")
+		
 
 
 func clear_board():

@@ -15,6 +15,8 @@ var pc: PCData = null
 var class_gdscript: GDScript = null
 var api_gdscript: GDScript = null
 var can_install: bool = false
+var readme_title: String = ''
+var id: String
 #var local: LocalRepo = null
 
 # start script stuff
@@ -95,6 +97,16 @@ func set_api(gdscript: GDScript):
 	if api_gdscript == null:
 		l.g("Couldn't set api in repository data: " + url)
 	
+	return self
+
+
+func set_readme_title(title: String):
+	readme_title = title
+	return self
+
+
+func set_id(new_id: String):
+	id = new_id
 	return self
 
 

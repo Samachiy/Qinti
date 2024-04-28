@@ -129,6 +129,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/guion/director/Flags.gd"
 }, {
+"base": "AutoWebUI_API",
+"class": "Forge_API",
+"language": "GDScript",
+"path": "res://server/api_forge.gd"
+}, {
 "base": "AutoWebUI_Repo",
 "class": "Forge_Repo",
 "language": "GDScript",
@@ -324,6 +329,7 @@ _global_script_class_icons={
 "FileClusterThumbnail": "",
 "Flag": "",
 "FlagModule": "",
+"Forge_API": "",
 "Forge_Repo": "",
 "GenerationArea2D": "",
 "GitAPI": "",

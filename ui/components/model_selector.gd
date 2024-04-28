@@ -52,7 +52,8 @@ func refresh_models():
 	
 	var dir: Directory = Directory.new()
 	if not dir.dir_exists(path):
-		l.g("Can't read installation folder info, folder doesn't exist")
+		l.g("Can't read models from installation folder info, folder doesn't exist: " 
+				+ str(path))
 		return
 	
 	clusters = get_file_clusters_at(path)
@@ -89,6 +90,8 @@ func _on_first_server_config_received(server_config):
 		refresh_models()
 	server_is_ready = true
 	var server_model = DiffusionServer.get_server_diffusion_model_from_config(server_config)
+	if server_model.empty():
+		return
 	server_model = DiffusionServer.api.get_checkpoints_dir().plus_file(server_model)
 	var server_model_cluster =  clusters.get(server_model, null)
 	Cue.new(Consts.UI_CURRENT_MODEL_THUMBNAIL_GROUP, "cue_cluster").args([

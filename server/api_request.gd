@@ -37,7 +37,8 @@ func _request(data, method):
 	
 	if error != OK:
 		l.g("Error: " + str(error) + ". Killing http request, no signal will be sent. " + 
-				"Failed to send request to url: " + request_url)
+				"Failed to send request to url: " + request_url + ". Method: " + 
+				str(method))
 		safe_free()
 
 

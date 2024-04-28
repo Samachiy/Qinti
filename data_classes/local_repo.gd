@@ -70,7 +70,7 @@ func has_start_script(dir_path):
 	return dir.file_exists(dir_path.plus_file(data.get_start_script()))
 
 
-static func extract_git_origin(full_repo_path: String):
+static func extract_git_origin(full_repo_path: String) -> String:
 	var output = []
 	var error = OS.execute(GIT, 
 			["-C", full_repo_path, "ls-remote", "--get-url", "origin"], true, output)
@@ -79,6 +79,26 @@ static func extract_git_origin(full_repo_path: String):
 		return ''
 	else:
 		return str(output[0]).strip_edges()
+
+
+static func extract_readme_title(full_repo_path: String) -> String:
+	var readme = "README.md"
+	var readme_path = full_repo_path.plus_file(readme)
+	var title = ''
+	var file: File = File.new()
+	var error = file.open(readme_path, File.READ)
+	l.error(error, "Failed to open file: " + readme_path)
+	if error == OK:
+		var line 
+		var title_indicator = "#"
+		while not file.eof_reached():
+			line = file.get_line()
+			line = line.strip_edges()
+			if not line.empty() and line[0] == title_indicator:
+				title = line
+				break
+	
+	return title
 
 
 static func get_repo_data_from_array(full_repo_path: String, repo_data_array: Array) -> RepoData:
@@ -92,11 +112,28 @@ static func get_repo_data_from_array(full_repo_path: String, repo_data_array: Ar
 		if repo_data_url.to_lower() == git_repo_url:
 			return repo_data
 	
+	# If this doesn't return, that means looking at git origin failed
+	var title = extract_readme_title(full_repo_path).to_lower()
+	var repo_title: String
+	for repo_data in repo_data_array:
+		if not repo_data is RepoData:
+			continue
+		
+		repo_title = repo_data.readme_title.strip_edges()
+		if repo_title.empty():
+			l.g("Repository: " + repo_data.url + " doesn't have a readme title")
+		elif repo_title.to_lower() == title:
+			return repo_data
+	
 	return null
 
 
 static func new_from_repo_array(full_repo_path: String, repo_data_array: Array) -> LocalRepo:
 	var repo_data: RepoData = get_repo_data_from_array(full_repo_path, repo_data_array)
+	return new_from_data(full_repo_path, repo_data)
+
+
+static func new_from_data(full_repo_path: String, repo_data) -> LocalRepo:
 	if repo_data == null:
 		return null
 	
@@ -104,6 +141,7 @@ static func new_from_repo_array(full_repo_path: String, repo_data_array: Array) 
 		return repo_data.class_gdscript.new(full_repo_path, repo_data)
 	else:
 		return null
+	
 
 
 func override_args(new_args: String, append_to_base_args: bool):
