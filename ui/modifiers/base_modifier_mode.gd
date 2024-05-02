@@ -41,7 +41,7 @@ func apply_to_api(_api):
 
 func clear_board():
 	# This function will be called more times on it's lifespan, program it accordingly
-	l.g("The function 'clear' has not been overriden yet on modifier mode: " + 
+	l.g("The function 'clear_board' has not been overriden yet on modifier mode: " + 
 	name)
 
 

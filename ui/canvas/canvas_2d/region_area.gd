@@ -66,3 +66,13 @@ func _on_left_limit_changed_by(new_value: float):
 	refresh_region()
 
 
+
+func snap(amount: int):
+	# Returns how much the image was moved when snapping
+	var extra_x = fmod(limits.position.x, amount)
+	var extra_y = fmod(limits.position.y, amount)
+	var extra_amount = Vector2(-extra_x, -extra_y)
+	limits.position.x = limits.position.x - extra_x
+	limits.position.y = limits.position.y - extra_y
+	refresh_region()
+	return extra_amount

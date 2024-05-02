@@ -18,18 +18,19 @@ func select_mode():
 func deselect_mode():
 	selected = false
 
+
 func prepare_mode():
 	pass
+
 
 func apply_to_api(_api):
 	# This function will be called more times on it's lifespan, program it accordingly
 	l.g("The function 'apply_to_api' has not been overriden yet on modifier mode: " + 
 	name)
 
+
 func clear_board():
-	# This function will be called more times on it's lifespan, program it accordingly
-	l.g("The function 'clear' has not been overriden yet on modifier mode: " + 
-	name)
+	Cue.new(controller_role, "clear").execute()
 
 
 func _on_same_type_modifier_toggled():

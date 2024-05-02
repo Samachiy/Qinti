@@ -40,13 +40,13 @@ func get_regions_data() -> Dictionary:
 	return data
 
 
-func hide_interactables():
+func hide_regions():
 	for child in get_children():
 		if child is Control:
 			child.visible = false
 
 
-func show_interactables():
+func show_regions():
 	for child in get_children():
 		if child is Control:
 			child.visible = true

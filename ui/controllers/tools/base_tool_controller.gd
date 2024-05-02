@@ -7,6 +7,7 @@ export(String, FILE, "*.tscn") var tool_button: String
 var canvas
 var has_canvas: bool = false
 var button: BaseButton = null
+var controller_owner: Controller = null
 
 func select_tool():
 	# This function will be called more times on it's lifespan, program it accordingly
@@ -90,7 +91,9 @@ func _on_canvas_connected(canvas_node: Node):
 		l.g("tool controller is null for the button: " + name)
 	
 	button = icon_button
-	owner.add_tool_icon(icon_button)
+	if owner is Controller:
+		controller_owner = owner
+		owner.add_tool_icon(icon_button)
 	set_canvas(canvas_node)
 
 

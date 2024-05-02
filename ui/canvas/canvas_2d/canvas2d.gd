@@ -134,6 +134,12 @@ func convert_position(pos: Vector2):
 	return pos + camera.position
 
 
+func convert_back_position(pos: Vector2):
+	pos = pos - camera.position
+	pos = pos / camera.zoom
+	return pos + Vector2(display_viewport.size) / 2
+
+
 func convert_movement(relative_pos_from_prev):
 	return relative_pos_from_prev * MOUSE_SPEED * camera.zoom.x
 

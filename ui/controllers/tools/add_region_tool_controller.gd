@@ -5,30 +5,24 @@ const SNAP_SIZE = 8
 var layer: Control = null
 var active_button = null
 var snap: bool = true
-
-
+var latest_region = null
 
 
 func select_tool():
+	visible = true
+	active_button = null
+	
 	layer = canvas.get_selected_layer()
 	if not layer is RegionLayer2D:
 		l.g("Selected layer is not region layer on add region tool.")
 		return
 	
-	visible = true
-	active_button = null
-	layer.show_interactables()
 
 
 func deselect_tool():
 	if not layer is RegionLayer2D:
 		l.g("Selected layer is not region layer on add region tool.")
 		return
-	
-	if layer.is_connected("proportions_changed", self, "_on_layer_proportions_changed"):
-		layer.disconnect("proportions_changed", self, "_on_layer_proportions_changed")
-	if layer.is_connected("rotation_changed", self, "_on_layer_rotation_changed"):
-		layer.disconnect("rotation_changed", self, "_on_layer_rotation_changed")
 	
 	visible = false
 	active_button = null
@@ -54,8 +48,12 @@ func _on_layer_region_resize_button_pressed(button):
 func button_released(_event: InputEventMouseButton):
 	if active_button != null:
 		active_button.deactivate()
+		active_button.snap(SNAP_SIZE) 
 		active_button = null
-		#active_button.snap(SNAP_SIZE) 
+		controller_owner.add_missing_regions()
+		if latest_region is RegionArea2D:
+			controller_owner.select_region(latest_region)
+			latest_region = null
 		#add_redo_action()
 
 
@@ -67,18 +65,29 @@ func left_click(event: InputEventMouseButton):
 	var pos = event.position
 	pos = canvas.convert_position(pos)
 	var region = layer.create_region(pos)
+	region.hide_interactables()
 	if region is RegionArea2D:
 		region.bottom_right._on_button_down()
-	
+		region.snap(SNAP_SIZE)
+		latest_region = region
 	return true
 
 
 func left_click_drag(event: InputEventMouseMotion):
-	if layer == null:
-		return
-	
 	if active_button != null:
 		active_button.move_by(
 				canvas.convert_position_change(event.relative),
 				snap,
 				SNAP_SIZE)
+
+
+func focus_region(region_node):
+	if region_node is RegionArea2D:
+		region_node.modulate.a = 1
+		region_node.hide_interactables()
+
+
+func unfocus_region(region_node):
+	if region_node is RegionArea2D:
+		region_node.modulate.a = 0.5
+		region_node.hide_interactables()
