@@ -90,6 +90,13 @@ func add_scribble_modifier():
 	modifier_container.place_modifiers()
 
 
+func add_regional_prompting_modifier():
+	var new_modifier = MODIFIER_NODE.instance()
+	modifier_container.add_child(new_modifier)
+	new_modifier.set_as_regional_prompting_type(scribble_defaul_image_data)
+	modifier_container.place_modifiers()
+
+
 func update_canvas_overlay_underlay(cue: Cue):
 	# [canvas: Control, target_mode: String, limiter: Modifier, 
 	# overlay_underlay_material: Material]
@@ -180,6 +187,7 @@ func _on_DropArea_modifier_drop_attempt_finished():
 func _on_Add_pressed():
 	add_menu.clear()
 	add_menu.add_tr_labeled_item(Consts.MENU_ADD_SCRIBBLE)
+	add_menu.add_tr_labeled_item(Consts.MENU_ADD_REGIONAL_PROMPTING)
 	add_menu.popup_at_cursor()
 
 
@@ -215,6 +223,8 @@ func _on_Menu_option_selected(label_id, _index_id):
 	match label_id:
 		Consts.MENU_ADD_SCRIBBLE:
 			add_scribble_modifier()
+		Consts.MENU_ADD_REGIONAL_PROMPTING:
+			add_regional_prompting_modifier()
 		Consts.MENU_DELETE_ALL_MODIFIERS:
 			delete_all_modifiers()
 		Consts.MENU_DELETE_SELECTED_MODIFIERS:

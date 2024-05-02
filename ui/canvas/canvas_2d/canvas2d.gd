@@ -42,7 +42,7 @@ var layer_packed_scene = preload("res://ui/canvas/canvas_2d/layer2d.tscn")
 var gen_area_packed_scene = preload("res://ui/canvas/canvas_2d/generation_area2d.tscn")
 
 var mouse_status = NO_PRESS
-var current_layer: Layer2D = null setget set_current_layer
+var current_layer: Control = null setget set_current_layer
 var layers_registry: Dictionary = {}
 var undoredo_queue: Canvas2DUndoQueue = Canvas2DUndoQueue.new(UNDO_REDO_LIMIT)
 var temp_tool_undoredo: Canvas2DUndoQueue = null
@@ -332,6 +332,8 @@ func set_current_layer(value):
 		return
 	
 	if value is Layer2D:
+		current_layer = value
+	elif value is RegionLayer2D:
 		current_layer = value
 	else:
 		l.g("Can't set layer2d, value is: " + str(value))

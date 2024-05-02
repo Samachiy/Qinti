@@ -6,6 +6,7 @@ onready var core_mode_of_image_type = $Modes/PNGInfo
 onready var alt_mode_of_image_type = $Modes/Img2Img
 onready var styling_type = $Modes/Styling
 onready var scribble_type = $Modes/Scribble
+onready var regional_prompting_type = $Modes/RegionalPrompting
 onready var texture_rect = $TextureRect
 onready var main_button = $VBoxContainer/HBoxContainer/TextureButton
 onready var option_button = $VBoxContainer/Controls/SmartOptionButton
@@ -100,6 +101,13 @@ func set_as_scribble_type(image: ImageData):
 	# in the option_button. This will also load the image_data into the mode
 	_refresh_image_data_with(image) # This must go first since we are loading the image
 	scribble_type.set_in_combobox(option_button, true)
+
+
+func set_as_regional_prompting_type(image: ImageData):
+	# set_in_combobox also loads the mode, since a mode is always loaded when selected
+	# in the option_button. This will also load the image_data into the mode
+	_refresh_image_data_with(image) # This must go first since we are loading the image
+	regional_prompting_type.set_in_combobox(option_button, true)
 
 
 func _refresh_image_data_with(new_image_data: ImageData):

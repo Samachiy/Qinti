@@ -20,6 +20,7 @@ var push_server_down_error: bool = true
 var cue_on_finish: Array = []
 var print_network_error: bool = true
 var finish_signal_sent: bool = false
+var downloading_full_file: String = ''
 
 
 func _init(response_object: Object, response_method: String, parent: Node, binds: Array = []):
@@ -69,6 +70,8 @@ func download(url: String, path: String, file_name: String):
 		api_node.download_file = path.plus_file(file_name)
 		var e = api_node.request(url)
 		l.error(e, "Failed download request at URL: " + url)
+		if e == OK:
+			downloading_full_file = path.plus_file(file_name)
 
 
 func cancel():

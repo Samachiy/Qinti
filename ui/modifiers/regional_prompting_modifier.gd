@@ -3,7 +3,7 @@ extends ModifierMode
 class_name RegionPromptModifierMode
 
 var layer_id: String = ''
-var controller_role: String = Consts.ROLE_CONTROL_IMG2IMG
+var controller_role: String = Consts.ROLE_CONTROL_REGION_PROMPT
 var undoredo_data: Canvas2DUndoQueue = null
 
 func select_mode():
@@ -12,13 +12,11 @@ func select_mode():
 	
 	selected = true
 	Cue.new(controller_role, "open_board").args([self]).execute()
-	layer_id = Cue.new(controller_role, 'prepare_layer').args([layer_id]).execute()
+	layer_id = Cue.new(controller_role, 'prepare_regions').args([layer_id]).execute()
 
 
 func deselect_mode():
-	# This function will be called more times on it's lifespan, program it accordingly
-	l.g("The function 'deselect_mode' has not been overriden yet on modifier mode: " + 
-	name)
+	selected = false
 
 func prepare_mode():
 	pass

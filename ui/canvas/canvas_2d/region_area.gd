@@ -4,10 +4,17 @@ class_name RegionArea2D
 
 const DESCRIPTION = "desc"
 
+onready var bottom_right = $TextureButton3
 var limits: Rect2 = Rect2(rect_position, rect_size)
 var data: Dictionary = {}
+var canvas = null
+var layer = null
 
 signal proportions_changed(limits)
+
+
+func _ready():
+	limits = Rect2(rect_position, rect_size) # refresh the rect position, otherwise it will be ZERO
 
 
 func hide_interactables():
@@ -57,4 +64,5 @@ func _on_left_limit_changed_by(new_value: float):
 	emit_signal("proportions_changed", limits)
 	# This function will update the limits indicator according to limits
 	refresh_region()
+
 

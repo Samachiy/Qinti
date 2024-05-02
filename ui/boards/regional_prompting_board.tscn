@@ -5,11 +5,14 @@
 [node name="RegionPromptBoard" type="MarginContainer"]
 margin_right = 40.0
 margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Board" parent="." instance=ExtResource( 1 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 322.0
 margin_bottom = 224.0
+controller = "res://ui/controllers/regional_prompting_controller.tscn"
 canvas = "res://ui/canvas/canvas_2d/canvas2d.tscn"
 has_overunderlay = false

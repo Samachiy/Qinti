@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://ui/components/prompting_area.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ui/components/modifiers_area.tscn" type="PackedScene" id=2]
@@ -17,6 +17,7 @@
 [ext_resource path="res://ui/boards/img_2_img_board.tscn" type="PackedScene" id=15]
 [ext_resource path="res://ui/components/menu_bar.tscn" type="PackedScene" id=16]
 [ext_resource path="res://ui/components/description_bar.tscn" type="PackedScene" id=17]
+[ext_resource path="res://ui/boards/regional_prompting_board.tscn" type="PackedScene" id=18]
 
 [node name="GenerationInterface" type="Panel"]
 anchor_right = 1.0
@@ -128,6 +129,11 @@ margin_bottom = 58.0
 visible = false
 margin_right = 618.0
 margin_bottom = 44.0
+
+[node name="RegionPromptBoard" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Boards" instance=ExtResource( 18 )]
+visible = false
+margin_right = 676.0
+margin_bottom = 282.0
 
 [node name="Toolbox" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" instance=ExtResource( 3 )]
 margin_left = 796.0

@@ -27,40 +27,37 @@ var type = ''
 var viewport_container: ViewportContainer = null
 
 func _ready():
-	if owner != null and owner is Layer2D:
-		layer = owner
+	if owner != null and owner is RegionArea2D:
+		layer = owner.layer
 		canvas = owner.get("canvas")
 	else:
 		layer = null
-		l.g('Invalid owner on transform area button at: ' + get_path())
+		l.g('Invalid owner on region area button at: ' + get_path())
 		valid_button = false
 	
 	parent = get_parent()
-	if parent != null and parent.get("SCALE_NAME") != null:
-		type = parent.get("SCALE_NAME")
-	else:
-		parent = null
-		l.g('Invalid parent on transform area button at: ' + get_path())
+	if parent == null:
+		l.g('Invalid parent on region area button at: ' + get_path())
 		valid_button = false
 	
 	if canvas == null:
-		l.g('Invalid canvas on transform area button at: ' + get_path())
+		l.g('Invalid canvas on region area button at: ' + get_path())
 	
 	# validating proper button configuration
 	if top and bottom:
-		l.g('Invalid vertical direction on transform area button at: ' + get_path())
+		l.g('Invalid vertical direction on region area button at: ' + get_path())
 		valid_button = false
 	elif top or bottom:
 		vertical = true
 	
 	if right and left:
-		l.g('Invalid horizontal direction on transform area button at: ' + get_path())
+		l.g('Invalid horizontal direction on region area button at: ' + get_path())
 		valid_button = false
 	elif right or left:
 		horizontal = true
 	
 	if not horizontal and not vertical:
-		l.g('Nonexisting direction on transform area button at: ' + get_path())
+		l.g('Nonexisting direction on region area button at: ' + get_path())
 		valid_button = false
 	
 	if valid_button:
