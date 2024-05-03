@@ -22,7 +22,7 @@ _global_script_classes=[ {
 "base": "DiffusionAPI",
 "class": "AutoWebUI_API",
 "language": "GDScript",
-"path": "res://server/api_auto_web_ui.gd"
+"path": "res://server/available_apis/api_auto_web_ui.gd"
 }, {
 "base": "LocalRepo",
 "class": "AutoWebUI_Repo",
@@ -132,7 +132,7 @@ _global_script_classes=[ {
 "base": "AutoWebUI_API",
 "class": "Forge_API",
 "language": "GDScript",
-"path": "res://server/api_forge.gd"
+"path": "res://server/available_apis/api_forge.gd"
 }, {
 "base": "AutoWebUI_Repo",
 "class": "Forge_Repo",
