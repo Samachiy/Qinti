@@ -191,6 +191,11 @@ func get_progress() -> float:
 
 func cancel_download():
 	if current_download_request is APIRequest:
+		var file_path = current_download_request.downloading_full_file
+		if not file_path.empty():
+			var e = Directory.new().remove(file_path)
+			l.error(e, "Failure to delete canceled download file: " + file_path )
+		
 		current_download_request.cancel()
 		_http_request_completed('') # To clear data and proceed with next download, if any
 		DiffusionServer.set_state(Consts.SERVER_STATE_READY)

@@ -42,7 +42,7 @@ var layer_packed_scene = preload("res://ui/canvas/canvas_2d/layer2d.tscn")
 var gen_area_packed_scene = preload("res://ui/canvas/canvas_2d/generation_area2d.tscn")
 
 var mouse_status = NO_PRESS
-var current_layer: Layer2D = null setget set_current_layer
+var current_layer: Control = null setget set_current_layer
 var layers_registry: Dictionary = {}
 var undoredo_queue: Canvas2DUndoQueue = Canvas2DUndoQueue.new(UNDO_REDO_LIMIT)
 var temp_tool_undoredo: Canvas2DUndoQueue = null
@@ -68,14 +68,17 @@ signal mouse_button_released(event)
 signal mouse_moved(event, is_inside)
 signal mouse_exited_canvas()
 signal layer_created(layer)
+signal region_layer_created(layer)
 
 signal zoom_changed(value)
 
-# This signal is indeed used, but by the layers when a transfrom_button is pressed
+# This signals are indeed used, but by the layers when a transfrom_button is pressed
 # in other words, this signal is emitted by one of the layers but not the canvas 
 # itself
 # warning-ignore:unused_signal
 signal layer_transform_button_pressed(button) 
+# warning-ignore:unused_signal
+signal layer_region_resize_button_pressed(button) 
 
 func _ready():
 	lay.set_lay(underlay, self, "active_area_proportions", MODIFIERS_UNDERLAY)
@@ -129,6 +132,12 @@ func convert_position(pos: Vector2):
 	pos = pos - Vector2(display_viewport.size) / 2
 	pos = pos * camera.zoom
 	return pos + camera.position
+
+
+func convert_back_position(pos: Vector2):
+	pos = pos - camera.position
+	pos = pos / camera.zoom
+	return pos + Vector2(display_viewport.size) / 2
 
 
 func convert_movement(relative_pos_from_prev):
@@ -282,12 +291,24 @@ func add_layer(id: String = ''):
 	return id
 
 
+func add_region_layer(id: String = ''):
+	var new_layer = RegionLayer2D.new()
+	new_layer.canvas = self
+	layers.add_child(new_layer)
+	if id.empty():
+		id = new_layer.name
+	
+	layers_registry[id] = new_layer
+	emit_signal("region_layer_created", new_layer)
+	return id
+
+
 func remove_layer(id: String):
 	var layer = layers_registry.get(id, null)
 	return remove_layer_object(layer)
 
 
-func remove_layer_object(layer: Layer2D) -> bool:
+func remove_layer_object(layer: Node) -> bool:
 	if layer != null:
 		layers.remove_child(layer)
 		layer.queue_free()
@@ -317,6 +338,8 @@ func set_current_layer(value):
 		return
 	
 	if value is Layer2D:
+		current_layer = value
+	elif value is RegionLayer2D:
 		current_layer = value
 	else:
 		l.g("Can't set layer2d, value is: " + str(value))
