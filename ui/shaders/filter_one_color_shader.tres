@@ -1,0 +1,15 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+render_mode blend_premul_alpha;
+
+uniform vec3 target_color = vec3(0.502, 0.251, 0.251);
+
+void fragment(){
+	vec4 color = texture(TEXTURE, UV);
+	vec3 color3 = vec3(color.r, color.g, color.b);
+	float alpha = step(distance(color3, target_color), 0.001);
+	vec4 new_color = vec4(alpha, alpha, alpha, alpha);
+	COLOR = new_color;
+}"
