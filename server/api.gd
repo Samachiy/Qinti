@@ -35,9 +35,9 @@ var server_address: ServerAddress = null
 
 var request_data: Dictionary = {} 
 
-var img2img_to_bake: Array = []
+var img2img_to_bake: Array = [] # [ data_dict1, data_dict2, ... ]
 var controlnet_to_bake: Dictionary = {
-	Consts.CN_TYPE_SHUFFLE: [],
+	Consts.CN_TYPE_SHUFFLE: [], # [ data_dict1, data_dict2, ... ] 
 	Consts.CN_TYPE_DEPTH: [],
 	Consts.CN_TYPE_CANNY: [],
 	Consts.CN_TYPE_LINEART: [],
@@ -50,6 +50,7 @@ var controlnet_to_bake: Dictionary = {
 }
 var mask_to_bake: Array = [] # [ mask, base_image ] base_image is what will appear 
 #								in the unmasked area
+var regions_to_bake: Array = [] # [ [rect2_1, data_dict1], [rect2_2, data_dict2], ... ]
 
 
 # warning-ignore:unused_signal
@@ -62,6 +63,12 @@ signal server_stopped
 signal data_refreshed(what_dict) # { what_1: success_bool_1, what_2: success_bool_2, ... }
 # warning-ignore:unused_signal
 signal paths_refreshed 
+
+
+func _ready():
+	for node in get_children():
+		if node is DiffusionAPIModule and node.enabled:
+			DiffusionServer.features.check(node.feature_name)
 
 
 # GENERIC FUNCTIONS
@@ -212,6 +219,36 @@ default_value, replace_null_with_default: bool = false): # parent
 		return default_value
 	else:
 		return aux / amount
+
+
+static func debug_scrub_dict_key_string(dictionary: Dictionary, key: String, allow_empty: bool):
+	if not dictionary.has(key):
+		dictionary[key] = "[no key]"
+		
+	var aux = dictionary.get(key, '')
+	var sufix: String = ''
+	if aux is Array and aux.size() >= 1:
+		aux = aux[0]
+		sufix = "array, "
+	
+	if aux is String:
+		if aux.strip_edges().empty() and not allow_empty:
+			dictionary[key] = sufix + "[empty]"
+		elif sufix.empty():
+# warning-ignore:return_value_discarded
+			dictionary.erase(key)
+		else:
+			dictionary[key] = sufix + "[valid value]"
+	else:
+		dictionary[key] = sufix + "[not a string: " + str(typeof(aux)) + " -> " + str(aux) + "]"
+
+
+func clear_bake_queues():
+	img2img_to_bake = []
+	mask_to_bake = []
+	for array in controlnet_to_bake.values():
+		if array is Array:
+			array.resize(0)
 
 
 # OVERRIDABLES IMAGE GENERATION

@@ -13,15 +13,11 @@ const PNG_INFO_SERVICE = "png-info"
 const ADDRESS_REFRESH_DIFFUSION_MODELS = "/sdapi/v1/refresh-checkpoints"
 const ADDRESS_GET_DIFFUSION_MODEL_LIST = "/sdapi/v1/sd-models"
 const ADDRESS_GET_CONTROLNET_MODEL_LIST = "/controlnet/model_list"
-const ADDRESS_CONTROLNET_PREPROCESS = "/controlnet/detect"
 const ADDRESS_GET_SAMPLERS = "/sdapi/v1/samplers"
 const ADDRESS_GET_UPSCALERS = "/sdapi/v1/upscalers"
 const ADDRESS_GET_PROGRESS = "/sdapi/v1/progress?skip_current_image=true"
 const ADDRESS_CANCEL = "/sdapi/v1/interrupt"
 const ADDRESS_IMAGE_INFO = "/sdapi/v1/png-info"
-
-const CONTROLNET_DICT_KEY = "controlnet"
-const CONTROLNET_ARGS_KEY = "args"
 
 # CONFIGS
 const CONTROLNET_CONFIG = "Control Net"
@@ -38,6 +34,9 @@ const PATH_KEY_EMBEDDINGS_DIR = "embeddings_dir"
 const PATH_KEY_CHECKPOINTS_DIR = "ckpt_dir"
 const PATH_KEY_CONTROL_DIR = "control_dir"
 
+
+onready var controlnet = $ControlNet
+
 # DEFAULT_PATHS
 var models_dir: String = "models"
 var lora_dir: String = "models/Lora"
@@ -50,18 +49,6 @@ var donwload_control_dir: String = "models/ControlNet/"
 # API ROUTE SHORTCUTS
 var context = MAIN_API_CONTEXT
 var service = TEXT2IMG_SERVICE
-
-
-var type_bgs: Dictionary = {
-	Consts.CN_TYPE_CANNY: Color.black,
-	Consts.CN_TYPE_LINEART: Color.black,
-	Consts.CN_TYPE_MLSD: Color.black,
-	Consts.CN_TYPE_SOFTEDGE: Color.black,
-	Consts.CN_TYPE_OPENPOSE: Color.black,
-	Consts.CN_TYPE_DEPTH: Color.black,
-	Consts.CN_TYPE_NORMAL: Color.mediumpurple,
-	
-}
 
 # Removed keys: 
 # styles, subseed, subseed_strength, seed_resize_from_h, seed_resize_from_w, 
@@ -129,24 +116,6 @@ var img2img_dict: Dictionary = {
 	"inpainting_mask_invert": 0,
 }
 
-# The controlnet_dict goes inside and array as value of the controlnet_dict_key
-# like this:	 CONTROLNET_DICT_KEY: [controlnet_dict]
-# This applies to both txt2img and im2img dictionaries
-# Removed keys: guidance, mask, guessmode, threshold_a, threshold_b
-var controlnet_dict: Dictionary = {
-	"input_image": "",
-	"module": "None",
-	"model": "",
-	"weight": 1,
-	#"resize_mode": "Just Resize", # this is not configurable, this program will resize it
-	#"lowvram": false, # advanced mode only, if needed
-	#"processor_res": 512, # this is only in if applying the preprocessor to the input_image
-	"guidance_start": 0, # advanced mode only
-	"guidance_end": 1, # advanced mode only
-	#"pixel_perfect": false, # advance mode only, if needed
-	"control_mode": 2, # 0 = balanced, 1 = prompt more important, 2 = controlnet more important
-}
-
 var png_info_dict: Dictionary = {
 	"image": "string"
 }
@@ -174,30 +143,7 @@ func clear(_cue : Cue = null):
 	context = MAIN_API_CONTEXT
 	service = TEXT2IMG_SERVICE
 	request_data = txt2img_dict.duplicate(true)
-	img2img_to_bake = []
-	mask_to_bake = []
-	for array in controlnet_to_bake.values():
-		if array is Array:
-			array.resize(0)
-
-
-func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
-preprocessor_name: String):
-	if not is_instance_valid(response_object):
-		l.g("Can't preprocess image, invalid response object. Type: " + preprocessor_name, 
-				l.WARNING)
-	
-	var api_request = APIRequest.new(response_object, response_method, self)
-	var url = server_address.url + ADDRESS_CONTROLNET_PREPROCESS
-	var data = {
-		Consts.PREP_ONLY_MODULE: preprocessor_name,
-		Consts.PREP_ONLY_INPUT_IMAGES: [image_data.base64],
-		Consts.PREP_ONLY_RESOLUTION: image_data.texture.get_width(),
-	}
-	
-	# The next code notifies the server_state_indicator for a state change 
-	DiffusionServer.set_state(Consts.SERVER_STATE_PREPROCESSING)
-	api_request.api_post(url, data)
+	clear_bake_queues()
 
 
 func add_to_prompt(cue: Cue): 
@@ -259,27 +205,16 @@ func replace_parameters(cue: Cue):
 
 func apply_controlnet_parameters(cue: Cue): 
 	# the config lies in the cue's dictionary (aka options)
-	var request_data_controlnet = _add_new_controlnet_to_data()
-	request_data_controlnet.erase(Consts.CN_MODULE)
-	_merge_dict(request_data_controlnet, cue._options)
-
-
-func _add_new_controlnet_to_data() -> Dictionary:
-	var new_control_net = controlnet_dict.duplicate()
-	_add_controlnet_to_data(new_control_net)
-	return new_control_net
-
-
-func _add_controlnet_to_data(dictionary: Dictionary):
-	var always_on_scripts_dict: Dictionary = request_data[Consts.I_ALWAYS_ON_SCRIPTS]
-	if not always_on_scripts_dict.has(CONTROLNET_DICT_KEY):
-		always_on_scripts_dict[CONTROLNET_DICT_KEY] = {CONTROLNET_ARGS_KEY: []}
-	
-	always_on_scripts_dict[CONTROLNET_DICT_KEY][CONTROLNET_ARGS_KEY].append(dictionary)
+	controlnet.apply_parameters(cue)
 
 
 func _merge_dict(base_dict: Dictionary, overwrite_dict: Dictionary):
 	base_dict.merge(overwrite_dict, true)
+
+
+func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
+preprocessor_name: String):
+	controlnet.preprocess(response_object, response_method, image_data, preprocessor_name)
 
 
 func bake_pending_img2img(cue: Cue):
@@ -382,39 +317,7 @@ func convert_to_img2img(_cue: Cue = null):
 
 
 func bake_pending_controlnets(_cue: Cue = null):
-	if controlnet_to_bake.empty():
-		return
-	
-	var height = request_data.get("height", 512)
-	var width = request_data.get("width", 512)
-	var control_net_array
-	for controlnet_type in controlnet_to_bake.keys():
-		control_net_array = controlnet_to_bake.get(controlnet_type)
-		if control_net_array is Array and not control_net_array.empty():
-			_bake_one_controlnet_type(control_net_array, width, height, controlnet_type)
-			control_net_array.resize(0) # We empty the array since this was already added
-
-
-func _bake_one_controlnet_type(dictionaries: Array, width: int, height: int, type: String):
-	var resul: Dictionary = controlnet_dict.duplicate()
-	for key in resul.keys():
-		match key:
-			"input_image":
-				resul[key] = _blend_images_at_dictionaries_key(
-						key, dictionaries, width, height, false, type_bgs.get(type, null)
-						)
-			"weight", "guidance_start", "guidance_end":
-				resul[key] = _average_nums_at_dictionaries_key(
-						key, dictionaries, resul[key]
-						)
-			_:
-				resul[key] = _overlap_values_at_dictionaries_key(
-						key, dictionaries, resul[key]
-						)
-	
-# warning-ignore:return_value_discarded
-	resul.erase("module") # keeping module will cause it to fail
-	_add_controlnet_to_data(resul)
+	controlnet.bake_pending_controlnets()
 
 
 func get_request_data_no_images(custom_data: Dictionary = {}) -> Dictionary:
@@ -424,23 +327,16 @@ func get_request_data_no_images(custom_data: Dictionary = {}) -> Dictionary:
 	else:
 		data_copy = custom_data.duplicate(true)
 	
-	_debug_scrub_dict_key_string(data_copy, "init_images", false)
-	_debug_scrub_dict_key_string(data_copy, "mask", false)
-	var always_on_scripts_dict: Dictionary = data_copy[Consts.I_ALWAYS_ON_SCRIPTS]
-	var control_nets_array = always_on_scripts_dict.get(CONTROLNET_DICT_KEY, {})
-	control_nets_array = control_nets_array.get(CONTROLNET_ARGS_KEY, [])
-	for dictionary in control_nets_array:
-		if dictionary is Dictionary:
-			_debug_scrub_dict_key_string(dictionary, "input_image", false)
-	
-	return data_copy
+	debug_scrub_dict_key_string(data_copy, "init_images", false)
+	debug_scrub_dict_key_string(data_copy, "mask", false)
+	return controlnet.remove_images_from_request_data(data_copy)
 
 
 func get_request_data_no_images_no_prompts(custom_data: Dictionary = {}) -> Dictionary: 
 	var data_copy = get_request_data_no_images(custom_data)
 	
-	_debug_scrub_dict_key_string(data_copy, "prompt", true)
-	_debug_scrub_dict_key_string(data_copy, "negative_prompt", true)
+	debug_scrub_dict_key_string(data_copy, "prompt", true)
+	debug_scrub_dict_key_string(data_copy, "negative_prompt", true)
 	return data_copy
 
 
@@ -448,56 +344,20 @@ func get_images_from_result(result, debug: bool, img_name: String) -> Array:
 	# This function should return an array of ImageData
 	# Debug will include the controlnet images sent
 	
-	var images_base64 = result.get('images')
+	var images_key_base64 = result.get('images')
 	var resul_base64 = []
-	if images_base64 is String:
-		resul_base64.append(images_base64)
-	elif images_base64 is Array:
-		for image in images_base64:
+	if images_key_base64 is String:
+		resul_base64.append(images_key_base64)
+	elif images_key_base64 is Array:
+		for image in images_key_base64:
 			resul_base64.append(image)
 	
 	if debug:
+		# Controlnet images haven't been removed
 		return _base64_to_image_data(resul_base64, img_name)
 	
-	# We extrance the controlnet array
-	var controlnet_array = result.get('parameters', null)
-	controlnet_array = controlnet_array.get(Consts.I_ALWAYS_ON_SCRIPTS, null)
-	var extra_images_num: int = 0
-	var is_cn_array: bool = false
-	if controlnet_array is Dictionary:
-		controlnet_array = controlnet_array.get(CONTROLNET_DICT_KEY, null)
-	if controlnet_array is Dictionary:
-		controlnet_array = controlnet_array.get(CONTROLNET_ARGS_KEY, null)
-		is_cn_array = true
-	if is_cn_array and controlnet_array is Array:
-		# We remove the controlnet images
-		extra_images_num = controlnet_array.size()
-		for _i in range(extra_images_num):
-			resul_base64.pop_back()
-	
+	resul_base64 = controlnet.remove_images_from_result(result, resul_base64)
 	return _base64_to_image_data(resul_base64, img_name)
-
-
-func _debug_scrub_dict_key_string(dictionary: Dictionary, key: String, allow_empty: bool):
-	if not dictionary.has(key):
-		dictionary[key] = "[no key]"
-		
-	var aux = dictionary.get(key, '')
-	var sufix: String = ''
-	if aux is Array and aux.size() >= 1:
-		aux = aux[0]
-		sufix = "array, "
-	
-	if aux is String:
-		if aux.strip_edges().empty() and not allow_empty:
-			dictionary[key] = sufix + "[empty]"
-		elif sufix.empty():
-# warning-ignore:return_value_discarded
-			dictionary.erase(key)
-		else:
-			dictionary[key] = sufix + "[valid value]"
-	else:
-		dictionary[key] = sufix + "[not a string: " + str(typeof(aux)) + " -> " + str(aux) + "]"
 
 
 func probe_server(current_server_address: ServerAddress):
@@ -848,7 +708,7 @@ func _on_upscalers_refreshed(result):
 
 
 func _on_diffusion_models_refreshed(_result):
-	pass # nothing to do here at the moment
+	pass # nothing to do here at the current way the api works
 
 
 
