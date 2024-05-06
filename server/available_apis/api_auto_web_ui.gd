@@ -34,8 +34,9 @@ const PATH_KEY_EMBEDDINGS_DIR = "embeddings_dir"
 const PATH_KEY_CHECKPOINTS_DIR = "ckpt_dir"
 const PATH_KEY_CONTROL_DIR = "control_dir"
 
-
-onready var controlnet = $ControlNet
+# Modules
+var controlnet: DiffusionAPIModule = null
+var region_prompt: DiffusionAPIModule = null
 
 # DEFAULT_PATHS
 var models_dir: String = "models"
@@ -122,6 +123,14 @@ var png_info_dict: Dictionary = {
 
 
 func _ready():
+	controlnet = add_module(
+			DiffusionServer.FEATURE_CONTROLNET, 
+			"res://server/available_apis/auto_web_ui_control_net.gd"
+	)
+	region_prompt = add_module(
+			DiffusionServer.FEATURE_REGIONAL_PROMPTING, 
+			"res://server/available_apis/auto_web_ui_regional_prompting.gd"
+	)
 	extra_samplers = []
 	extra_upscalers = ["Latent"]
 	default_sampler = "Euler"
@@ -318,6 +327,10 @@ func convert_to_img2img(_cue: Cue = null):
 
 func bake_pending_controlnets(_cue: Cue = null):
 	controlnet.bake_pending_controlnets()
+
+
+func bake_pending_regional_prompts(_cue: Cue = null):
+	return region_prompt.bake_regions()
 
 
 func get_request_data_no_images(custom_data: Dictionary = {}) -> Dictionary:

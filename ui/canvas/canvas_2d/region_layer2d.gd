@@ -31,10 +31,15 @@ func activate_transfrom_button(button: Control):
 	canvas.emit_signal("layer_region_resize_button_pressed", button)
 
 
-func get_regions_data() -> Dictionary:
+func get_regions_data(only_visible: bool) -> Dictionary:
 	var data = {} # { child1: [rect2_1, data_dict1], child2: [rect2_2, data_dict2], ... ]
 	for child in get_children():
-		if child is RegionArea2D:
+		if not child is RegionArea2D:
+			continue
+		
+		if only_visible and child.visible:
+			data[child] = [child.limits, child.data]
+		else:
 			data[child] = [child.limits, child.data]
 	
 	return data

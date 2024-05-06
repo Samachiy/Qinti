@@ -56,26 +56,40 @@ func clear(_cue: Cue = null):
 
 
 func get_data_cue(_cue: Cue = null):
+	var cue = Cue.new(Consts.ROLE_CONTROL_REGION_PROMPT, 'set_data_cue')
+	
+	cue.args([
+		canvas.display_area,
+		layer_name,
+		])
+	
+	return cue
+
+
+func get_active_regions(_cue: Cue = null):
 	var active_regions = [] # [ [rect1, data_dict1], [rect2, data_dict2], ... ]
-	var inactive_regions = [] # [ [rect1, data_dict1], [rect2, data_dict2], ... ]
-	return Cue.new(controller_role, "set_data_cue").args([active_regions, inactive_regions])
+	if current_layer is RegionLayer2D:
+		active_regions = current_layer.get_regions_data(true).values()
+		active_regions.invert() # so that the lowest priority are first, higher last
+	
+	return active_regions
 
 
-func set_data_cue(_cue: Cue):
-	# This function will be called more times on it's lifespan, program it accordingly
-	l.g("The function 'set_data_cue' has not been overriden yet on Controller: " + 
-	name)
+func set_data_cue(cue: Cue):
+	clear()
+	var display_area = cue.get_at(0, Rect2(Vector2.ZERO, Vector2(512, 512)))
+	var layer_name_ = cue.get_at(1, '')
+	prepare_regions(Cue.new('', '').args([layer_name_]))
+	canvas.display_area = display_area
+	canvas.fit_to_rect2(display_area)
 
 
 func _fill_menu():
-	l.g("The function '_fill_menu' has not been overriden yet on Controller: " + 
-	filename)
+	pass # No menu needed here
 
 
 func _on_Menu_option_pressed(_label_id, _index_id):
-	# This function will be called more times on it's lifespan, program it accordingly
-	l.g("The function '_on_Menu_option_pressed' has not been overriden yet on Controller: " + 
-	filename)
+	pass # No menu needed here
 
 
 func reload_description(_cue: Cue = null):
@@ -96,7 +110,7 @@ func prepare_regions(cue: Cue):
 	current_layer.visible = true
 	layer_name = layer_id
 	if current_layer is RegionLayer2D:
-		regions_data = current_layer.get_regions_data()
+		regions_data = current_layer.get_regions_data(false)
 		load_entries()
 		current_layer.show_regions()
 	return layer_id
@@ -123,7 +137,7 @@ func add_entry(node: Node):
 
 func add_missing_regions():
 	if current_layer is RegionLayer2D:
-		regions_data = current_layer.get_regions_data()
+		regions_data = current_layer.get_regions_data(false)
 	
 	for node in regions_data.keys():
 		if not node in regions_to_entry:
@@ -170,6 +184,12 @@ func get_current_region():
 		return current_entry.region
 	else:
 		return null
+
+
+func get_active_image(_cue: Cue = null) -> Image:
+	canvas.update_display_area()
+	var image: Image = canvas.get_active_image()
+	return image
 
 
 func _on_scroll_changed():

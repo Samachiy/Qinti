@@ -73,6 +73,15 @@ func _ready():
 
 # GENERIC FUNCTIONS
 
+
+func add_module(module_name: String, script_path: String):
+	var script = load(script_path)
+	var node = script.new()
+	add_child(node)
+	node.name = module_name
+	node.api = self
+	return node
+
 func get_lora_dir() -> String:
 	return SUBDIR_LORA
 
@@ -133,6 +142,10 @@ func queue_controlnet_to_bake(dict: Dictionary, type: String):
 		type_array.append(dict.duplicate(true))
 	else:
 		l.g("Can't bake controlnet of type '" + type + "', type not registered")
+
+
+func queue_regions_to_bake(regions: Array):
+	regions_to_bake.append_array(regions)
 
 
 # COMMON UTILITIES TO MAKE OVERRIDABLES
@@ -246,6 +259,7 @@ static func debug_scrub_dict_key_string(dictionary: Dictionary, key: String, all
 func clear_bake_queues():
 	img2img_to_bake = []
 	mask_to_bake = []
+	regions_to_bake = []
 	for array in controlnet_to_bake.values():
 		if array is Array:
 			array.resize(0)
@@ -337,7 +351,15 @@ func bake_pending_controlnets(_cue: Cue = null):
 	# this must apply pending controlnet to request data
 	# controlnet_to_bake: a dictionary with the name of the controlnet as keys and an 
 	# array of dictionaries as value. the dictionaries inside the array uses names specified in 
-	# Consts.gd
+	l.g("The function 'bake_pending_controlnets' has not been overriden yet on Api: " + 
+	name)
+
+
+func bake_pending_regional_prompts(_cue: Cue = null):
+	# this must apply pending regions to request data
+	# regions_to_bake: follows the next format:
+	# [ [rect2_1, data_dict1], [rect2_2, data_dict2], ... ]
+	# At the beginning are the lower priority regions, at the end, the hightest
 	l.g("The function 'bake_pending_controlnets' has not been overriden yet on Api: " + 
 	name)
 
