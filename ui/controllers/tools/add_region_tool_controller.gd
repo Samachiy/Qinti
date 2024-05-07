@@ -13,15 +13,19 @@ func select_tool():
 	active_button = null
 	
 	layer = canvas.get_selected_layer()
-	if not layer is RegionLayer2D:
+	if layer == null:
+		l.g("Selected layer is null on add region tool.")
+	elif not layer is RegionLayer2D:
 		l.g("Selected layer is not region layer on add region tool.")
 		return
 	
 
 
 func deselect_tool():
-	if not layer is RegionLayer2D:
-		l.g("Selected layer is not region layer on add region tool.")
+	if layer == null:
+		pass # Just so that the error below don't trigger if null
+	elif not layer is RegionLayer2D:
+		l.g("Deselected layer is not region layer on add region tool.")
 		return
 	
 	visible = false

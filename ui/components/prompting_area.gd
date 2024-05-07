@@ -70,6 +70,7 @@ func _on_Generate_pressed():
 	
 	Cue.new(Consts.ROLE_API, "bake_pending_img2img").execute()
 	Cue.new(Consts.ROLE_API, "bake_pending_controlnets").execute()
+	yield(Cue.new(Consts.ROLE_API, "bake_pending_regional_prompts").execute(), "completed")
 	
 #	if not OS.has_feature("standalone"):
 #		Cue.new(Consts.ROLE_API, "apply_safe_mode").execute()

@@ -45,15 +45,16 @@ func process_image(image: Image, material: Material, target: Object, method: Str
 	sprite.material = material
 	processed_image = viewport.get_texture().get_data()
 	var error = connect("image_processed", target, method, binds, CONNECT_ONESHOT)
-	if error == OK:
-		yield(VisualServer, "frame_post_draw")
-		processed_image = viewport.get_texture().get_data()
-		emit_signal("image_processed", processed_image)
+	
+	yield(VisualServer, "frame_post_draw")
+	processed_image = viewport.get_texture().get_data()
+	l.error(error, l.CONNECTION_FAILED + "on process_image")
 	
 	available = true
 	sprite.texture = null
 	sprite.material = null
 	viewport_container.visible = false
+	emit_signal("image_processed", processed_image)
 
 
 func image_to_base64(image: Image):

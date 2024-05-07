@@ -4,7 +4,7 @@ class_name RegionPromptModifierMode
 
 var layer_id: String = ''
 var controller_role: String = Consts.ROLE_CONTROL_REGION_PROMPT
-var undoredo_data: Canvas2DUndoQueue = null
+var active_regions: Array = []
 
 func select_mode():
 	if selected:
@@ -13,20 +13,34 @@ func select_mode():
 	selected = true
 	Cue.new(controller_role, "open_board").args([self]).execute()
 	layer_id = Cue.new(controller_role, 'prepare_regions').args([layer_id]).execute()
+	
+	if data_cue != null:
+		data_cue.clone().execute()
 
 
 func deselect_mode():
+	data_cue = Cue.new(controller_role, "get_data_cue").execute()
+	active_image = Cue.new(controller_role, "get_active_image").execute()
+	active_regions = Cue.new(controller_role, "get_active_regions").execute()
+	Cue.new(controller_role, "deselect_tools").execute()
 	selected = false
+	if owner is Modifier:
+		var image_data = ImageData.new("regional_prompting" + "_screenshot")
+		image_data.load_image_object(active_image)
+		owner._refresh_image_data_with(image_data)
 
 
 func prepare_mode():
 	pass
 
 
-func apply_to_api(_api):
-	# This function will be called more times on it's lifespan, program it accordingly
-	l.g("The function 'apply_to_api' has not been overriden yet on modifier mode: " + 
-	name)
+func apply_to_api(api):
+	if selected:
+		active_regions = Cue.new(controller_role, "get_active_regions").execute()
+	
+	
+	if api.has_method("queue_regions_to_bake"):
+		api.queue_regions_to_bake(active_regions)
 
 
 func clear_board():
@@ -34,13 +48,12 @@ func clear_board():
 
 
 func _on_same_type_modifier_toggled():
-	# This function will be called more times on it's lifespan, program it accordingly
-	l.g("The function '_on_same_type_modifier_toggled' has not been overriden yet " + 
-			"on modifier mode: " + name)
+	# If we decide to add the overlay and under lay, the code to update will be here
+	pass
 
 
 func get_active_image():
-	# This function will be called more times on it's lifespan, program it accordingly
-	# This function has to return an ImageData object
-	l.g("The function 'get_active_image' has not been overriden yet on modifier mode: " + 
-	name)
+	if active_image != null:
+		return active_image
+	else:
+		return null

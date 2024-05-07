@@ -3,6 +3,7 @@ extends ReferenceRect
 class_name RegionArea2D
 
 const DESCRIPTION = "desc"
+const SELECTED = "selected"
 
 onready var bottom_right = $TextureButton3
 var limits: Rect2 = Rect2(rect_position, rect_size)

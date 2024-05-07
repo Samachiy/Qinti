@@ -36,6 +36,7 @@ func quick_image_to_image(apply_modifiers: bool, canvas: Canvas2D, denoising_str
 		Consts.I_DENOISING_STRENGTH: denoising_strenght,
 	}
 	Cue.new(Consts.ROLE_API, "apply_parameters").opts(config).execute()
+	Cue.new(Consts.ROLE_API, "bake_pending_regional_prompts").execute()
 	var prompting_area = Roles.get_node_by_role(Consts.ROLE_PROMPTING_AREA)
 	if prompting_area is Object:
 		DiffusionServer.generate(prompting_area, "_on_image_generated")

@@ -5,6 +5,7 @@ const SNAP_SIZE = 8
 var region: RegionArea2D = null
 var active_button = null
 var snap: bool = true
+var movement_cache: Vector2 = Vector2.ZERO # intended for snapping
 
 
 
@@ -29,6 +30,13 @@ func deselect_tool():
 	active_button = null
 
 
+func button_released(_event: InputEventMouseButton):
+	if active_button != null:
+		var aux = active_button
+		active_button.active = false
+		active_button = null
+		aux.snap(SNAP_SIZE) 
+
 
 func left_click(_event: InputEventMouseButton):
 	if region == null:
@@ -46,6 +54,27 @@ func left_click_drag(event: InputEventMouseMotion):
 				canvas.convert_position_change(event.relative),
 				snap,
 				SNAP_SIZE)
+	else:
+		movement_cache += canvas.convert_movement(event.relative) 
+		var move_amount
+		var aux: Vector2 = Vector2.ZERO
+		if snap:
+			aux.x = fmod(movement_cache.x, SNAP_SIZE)
+			aux.y = fmod(movement_cache.y, SNAP_SIZE)
+			move_amount = movement_cache - aux
+			movement_cache = aux
+			move_region(move_amount)
+		else:
+			move_amount = movement_cache
+			movement_cache = Vector2.ZERO
+			move_region(move_amount)
+
+
+func move_region(move_amount: Vector2):
+	if region is RegionArea2D:
+		region.limits.position += move_amount
+		region.refresh_region()
+
 
 
 func _on_canvas_connected(canvas_node: Node):

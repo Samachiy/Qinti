@@ -14,6 +14,7 @@ const STATE_INSTALLING = Consts.SERVER_STATE_INSTALLING
 const STATE_SHUTDOWN = Consts.SERVER_STATE_SHUTDOWN
 
 const FEATURE_CONTROLNET = "controlnet"
+const FEATURE_REGIONAL_PROMPTING = "regional_prompting"
 
 const MSG_NO_FEATURE_GENERIC = "MESSAGE_NO_FEATURE_GENERIC"
 const MSG_NO_FEATURE_CONTROLNET = "MESSAGE_NO_FEATURE_CONTROLNET"
@@ -26,6 +27,7 @@ var server_urls = [
 	"http://127.0.0.1:7861",
 	"http://127.0.0.1:7862",
 ]
+
 var server_address: ServerAddress = null
 var controlnet_models = null
 var diffusion_models = null
@@ -193,6 +195,14 @@ func _on_generation_failed(_result):
 			str(api.get_request_data_no_images_no_prompts(last_gen_data)))
 
 
+func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
+preprocessor_name: String):
+	if not is_api_initialized():
+		return
+	
+	api.preprocess(response_object, response_method, image_data, preprocessor_name)
+
+
 # ----- Block pending to move to api [BEGIN]
 # api_auto_web_ui is too big, it may be needed to find a way to divide the logic in multiple parts
 # without affecting inheritance from DiffusionAPI class (since this works as guide and 
@@ -219,14 +229,6 @@ func generate(response_object: Object, response_method: String, custom_gen_data:
 	generation_request = api_request
 	Python.add_next_line()
 	last_gen_data = api.request_data.duplicate(true)
-
-
-func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
-preprocessor_name: String):
-	if not is_api_initialized():
-		return
-	
-	api.preprocess(response_object, response_method, image_data, preprocessor_name)
 
 
 func request_image_info(response_object: Object, response_method: String, image_base64: String):

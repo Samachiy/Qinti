@@ -21,6 +21,7 @@ func set_text(text: String):
 func _on_Enabled_toggled(button_pressed):
 	if region is RegionArea2D:
 		region.visible = button_pressed
+		region.data[RegionArea2D.SELECTED] = button_pressed
 
 
 func _on_Label_pressed():
