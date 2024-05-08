@@ -66,8 +66,6 @@ func apply_to_api(_api):
 	if selected or data_cue == null:
 		data_cue = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "get_data_cue").execute()
 		config = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "get_config").execute()
-#		if data_cue == null:"res://Placeholders/images.png"
-#			_on_png_info_received()
 	
 	var prompt_mode = data_cue.get_at(2)
 	var prompt = [
@@ -90,6 +88,7 @@ func apply_to_api(_api):
 
 
 func _on_png_info_received(result):
+	DiffusionServer.api.get_image_info_from_result(result)
 	# Results format
 	# {
 	# "info": "string",

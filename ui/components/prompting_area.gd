@@ -78,7 +78,6 @@ func _on_Generate_pressed():
 
 
 func _on_image_generated(result):
-	var resul_info = result.get('info')
 	var images_data = []
 	
 	# Images extraction
@@ -89,12 +88,7 @@ func _on_image_generated(result):
 		images_data = DiffusionServer.api.get_images_from_result(result, true, positive_prompt.text)
 	
 	# Seed extraction
-	if resul_info is String:
-		resul_info = JSON.parse(resul_info).result
-	if resul_info is Dictionary:
-		last_seed = int(resul_info.get('seed', -1))
-	if last_seed == -1:
-		l.g("Couldn't recover seed of last generated image")
+	last_seed = DiffusionServer.api.get_seed_from_result(result)
 	
 	# Setting up the result images in the UI
 	var cue = Cue.new(Consts.ROLE_TOOLBOX, "add_recent_data_images").args(images_data)

@@ -84,12 +84,6 @@ func connect_feature(feature_name: String, target_object: Object, target_method:
 
 
 func instance_api(api_script: GDScript) -> DiffusionAPI:
-#	var api_path = apis.get(api_name.to_lower())
-#	if api_path == null:
-#		return
-#
-#	var api_script = load(api_path)
-#	var new_api = HTTPRequest.new()
 	var new_api = api_script.new()
 	if not new_api is DiffusionAPI:
 		return null
@@ -203,30 +197,16 @@ preprocessor_name: String):
 	api.preprocess(response_object, response_method, image_data, preprocessor_name)
 
 
-# ----- Block pending to move to api [BEGIN]
-# api_auto_web_ui is too big, it may be needed to find a way to divide the logic in multiple parts
-# without affecting inheritance from DiffusionAPI class (since this works as guide and 
-# documentation)
-
-
 func generate(response_object: Object, response_method: String, custom_gen_data: Dictionary = {}):
 	if not is_api_initialized():
 		return
 	
-	var api_request = APIRequest.new(response_object, response_method, api)
-	var url = server_address.url + api.context + api.service
 	last_gen_response_object = response_object
 	last_gen_response_method = response_method
 	# The next code notifies the server_state_indicator for a state change
 	set_state(Consts.SERVER_STATE_GENERATING)
 	
-	api_request.connect_on_request_failed(self, "_on_generation_failed")
-	if custom_gen_data.empty():
-		api_request.api_post(url, api.request_data)
-	else:
-		api_request.api_post(url, custom_gen_data)
-	
-	generation_request = api_request
+	generation_request = api.generate(response_object, response_method, custom_gen_data)
 	Python.add_next_line()
 	last_gen_data = api.request_data.duplicate(true)
 
@@ -235,38 +215,48 @@ func request_image_info(response_object: Object, response_method: String, image_
 	if not is_api_initialized():
 		return
 	
-	var api_request = APIRequest.new(response_object, response_method, api)
-	var url = server_address.url + api.ADDRESS_IMAGE_INFO
-	api_request.api_post(url, {Consts.OI_PNG_INFO_IMAGE: image_base64})
-
-
-func test_server(_object: Object, _success_method: String, _failure_method: String):
-	if not is_api_initialized():
-		return
-	
-	# Intended for use in future remote server, this function will probably be replaced
-	# by probe_server()
-	pass
+	api.request_image_info(response_object, response_method, image_base64)
 
 
 func request_progress(response_object: Object, response_method: String):
 	if not is_api_initialized():
 		return
 	
-	var api_request = APIRequest.new(response_object, response_method, api)
-	var url = server_address.url + api.ADDRESS_GET_PROGRESS
-	api_request.api_get(url)
+	api.request_progress(response_object, response_method)
 
 
 func get_server_config(response_object: Object, response_method: String):
 	if not is_api_initialized():
 		return
 	
-	var api_request = APIRequest.new(response_object, response_method, api)
-	var url = server_address.url + api.ADDRESS_GET_SERVER_CONFIG
-	api_request.api_get(url)
+	api.get_server_config(response_object, response_method)
 
 
+func set_server_diffusion_model(model_file_name: String, response_object: Object, 
+success_method: String, failure_method: String):
+	if not is_api_initialized():
+		return
+	
+	api.set_server_diffusion_model(
+			model_file_name, response_object, 
+			success_method, failure_method
+	)
+
+
+func cancel_diffusion():
+	if not is_api_initialized():
+		return
+	
+	api.cancel_diffusion()
+
+
+# ----- Block pending to move to api [BEGIN]
+# api_auto_web_ui is too big, it may be needed to find a way to divide the logic in multiple parts
+# without affecting inheritance from DiffusionAPI class (since this works as guide and 
+# documentation)
+
+# RESUME move to api_auto_web_ui and return the model ready to the response object and method
+# and rename from get server config, to get model
 func get_server_diffusion_model_from_config(server_config_result: Dictionary):
 	var full_name = server_config_result.get("sd_model_checkpoint", '')
 	if full_name is String:
@@ -274,26 +264,6 @@ func get_server_diffusion_model_from_config(server_config_result: Dictionary):
 		return full_name.get_basename()
 	else:
 		return ''
-
-
-func set_server_diffusion_model(model_file_name: String, object: Object, 
-success_method: String, failure_method: String):
-	if not is_api_initialized():
-		return
-	
-	var api_request = APIRequest.new(object, success_method, api)
-	api_request.connect_on_request_failed(object, failure_method)
-	var url = server_address.url + api.ADDRESS_SET_SERVER_CONFIG
-	api_request.api_post(url, {"sd_model_checkpoint": model_file_name.get_file()})
-
-
-func cancel_diffusion():
-	if not is_api_initialized():
-		return
-	
-	var api_request = APIRequest.new(self, "_on_diffusion_canceled", api)
-	var url = server_address.url + api.ADDRESS_CANCEL
-	api_request.api_post(url, {})
 
 
 # ----- Block pending to move to api [END]

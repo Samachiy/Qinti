@@ -187,7 +187,6 @@ func _on_DropArea_modifier_drop_attempt_finished():
 func _on_Add_pressed():
 	add_menu.clear()
 	add_menu.add_tr_labeled_item(Consts.MENU_ADD_SCRIBBLE)
-	add_menu.add_tr_labeled_item(Consts.MENU_ADD_REGIONAL_PROMPTING)
 	add_menu.popup_at_cursor()
 
 
@@ -223,8 +222,6 @@ func _on_Menu_option_selected(label_id, _index_id):
 	match label_id:
 		Consts.MENU_ADD_SCRIBBLE:
 			add_scribble_modifier()
-		Consts.MENU_ADD_REGIONAL_PROMPTING:
-			add_regional_prompting_modifier()
 		Consts.MENU_DELETE_ALL_MODIFIERS:
 			delete_all_modifiers()
 		Consts.MENU_DELETE_SELECTED_MODIFIERS:

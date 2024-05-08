@@ -65,11 +65,6 @@ signal data_refreshed(what_dict) # { what_1: success_bool_1, what_2: success_boo
 signal paths_refreshed 
 
 
-func _ready():
-	for node in get_children():
-		if node is DiffusionAPIModule and node.enabled:
-			DiffusionServer.features.check(node.feature_name)
-
 
 # GENERIC FUNCTIONS
 
@@ -82,73 +77,8 @@ func add_module(module_name: String, script_path: String):
 	node.api = self
 	return node
 
-func get_lora_dir() -> String:
-	return SUBDIR_LORA
 
-
-func get_lycoris_dir() -> String:
-	return SUBDIR_LYCORIS
-
-
-func get_textual_inversion_dir() -> String:
-	return SUBDIR_TI
-
-
-func get_checkpoints_dir() -> String:
-	return SUBDIR_DIFFUSION_MODELS
-
-
-func get_controlnet_dir() -> String:
-	return SUBDIR_CONTROLNET_MODELS
-
-
-func get_installation_dir() -> String:
-	return Cue.new(Consts.ROLE_SERVER_MANAGER, "get_full_installation_path").execute()
-
-
-func get_request_data() -> Dictionary:
-	return request_data.duplicate(true)
-
-
-func queue_mask_to_bake(mask: Image, base_image: Image): 
-	# Since we are going to blend the image manually rather than on ImageProcessor
-	# We fix the formating right now (Image processor is supposed to fix formating)
-	if mask == null:
-		l.g("Can't queue mask, mask is not an Image.")
-		return
-	
-	if base_image == null:
-		l.g("Can't queue mask, unmasked background is not an Image.")
-		return
-	
-	mask.convert(Image.FORMAT_RGBA8)
-	base_image.convert(Image.FORMAT_RGBA8)
-	mask_to_bake = [mask, base_image]
-
-
-func queue_img2img_to_bake(dict: Dictionary): 
-	if dict == null:
-		return
-	
-	img2img_to_bake.append(dict.duplicate(true))
-
-
-func queue_controlnet_to_bake(dict: Dictionary, type: String):
-	if dict == null:
-		return
-	
-	var type_array = controlnet_to_bake.get(type)
-	if type_array is Array:
-		type_array.append(dict.duplicate(true))
-	else:
-		l.g("Can't bake controlnet of type '" + type + "', type not registered")
-
-
-func queue_regions_to_bake(regions: Array):
-	regions_to_bake.append_array(regions)
-
-
-# COMMON UTILITIES TO MAKE OVERRIDABLES
+# COMMON UTILITIES
 
 
 func _base64_to_image_data(images: Array, image_name: String) -> Array:
@@ -234,29 +164,10 @@ default_value, replace_null_with_default: bool = false): # parent
 		return aux / amount
 
 
-static func debug_scrub_dict_key_string(dictionary: Dictionary, key: String, allow_empty: bool):
-	if not dictionary.has(key):
-		dictionary[key] = "[no key]"
-		
-	var aux = dictionary.get(key, '')
-	var sufix: String = ''
-	if aux is Array and aux.size() >= 1:
-		aux = aux[0]
-		sufix = "array, "
-	
-	if aux is String:
-		if aux.strip_edges().empty() and not allow_empty:
-			dictionary[key] = sufix + "[empty]"
-		elif sufix.empty():
-# warning-ignore:return_value_discarded
-			dictionary.erase(key)
-		else:
-			dictionary[key] = sufix + "[valid value]"
-	else:
-		dictionary[key] = sufix + "[not a string: " + str(typeof(aux)) + " -> " + str(aux) + "]"
+# RESET API INFO FOR NEW REQUEST
 
 
-func clear_bake_queues():
+func clear_queues():
 	img2img_to_bake = []
 	mask_to_bake = []
 	regions_to_bake = []
@@ -265,7 +176,21 @@ func clear_bake_queues():
 			array.resize(0)
 
 
-# OVERRIDABLES IMAGE GENERATION
+func clear(_cue : Cue = null): 
+	# Clears the request_data back to it's original state
+	l.g("The function 'clear' has not been overriden yet on Api: " + 
+	name)
+
+
+# GENERATE
+
+
+func generate(_response_object: Object, _response_method: String, 
+_custom_gen_data: Dictionary = {}) -> APIRequest:
+	# custom_gen_data is meant for the retry button, so it is essentially the previous request_data
+	l.g("The function 'generate' has not been overriden yet on Api: " + 
+	name)
+	return null
 
 
 func get_images_from_result(_result, _debug: bool, _img_name: String) -> Array:
@@ -276,32 +201,29 @@ func get_images_from_result(_result, _debug: bool, _img_name: String) -> Array:
 	return []
 
 
-func get_request_data_no_images(_custom_data: Dictionary = {}) -> Dictionary:
-	# This function should return an dictionary with the parameters but no images in it
-	l.g("The function 'get_request_data_no_images' has not been overriden yet on Api: " + 
+func get_seed_from_result(_result) -> int:
+	# This function should return the seed as an int
+	l.g("The function 'get_seed_from_result' has not been overriden yet on Api: " + 
 	name)
-	return {}
+	return -1
 
 
-func get_request_data_no_images_no_prompts(_custom_data: Dictionary = {}) -> Dictionary:
-	# This function should return an dictionary with the parameters but no images nor prompts in it
-	l.g("The function 'get_request_data_no_images_no_prompts' has not been overriden yet on Api: " + 
+func request_progress(_response_object: Object, _response_method: String):
+	l.g("The function 'request_progress' has not been overriden yet on Api: " + 
 	name)
-	return {}
+	return null
 
 
-func clear(_cue : Cue = null): 
-	# Clears the request_data back to it's original state
-	l.g("The function 'clear' has not been overriden yet on Api: " + 
+func get_progress_from_result(_result) -> float:
+	# Returns progress as a float between 0.0 and 1.0, representing the percentage of progress
+	# Returns 0.0 if there's no way to see the progress
+	# Returns -1.0 if there's no job
+	l.g("The function 'get_progress_from_result' has not been overriden yet on Api: " + 
 	name)
+	return 0.0
 
 
-func preprocess(_response_object: Object, _response_method: String, _image_data: ImageData, 
-_preprocessor_name: String):
-	# Request to preprocess image_data using preprocessor_name to server
-	l.g("The function 'preprocess' has not been overriden yet on Api: " + 
-	name)
-	
+# TXT2IMG
 
 
 func add_to_prompt(_cue: Cue): 
@@ -331,12 +253,30 @@ func replace_parameters(_cue: Cue):
 	name)
 
 
-func apply_controlnet_parameters(_cue: Cue): 
-	# the parameters lies in the cue's dictionary (aka options), those must be applied/merged to
-	# request_data, they will come using the names specified in Consts.gd, so running it with
-	# translate_dictionary() may be needed
-	l.g("The function 'apply_controlnet_parameters' has not been overriden yet on Api: " + 
-	name)
+# IMG2IMG, INPAINT, OUTPAINT
+
+
+func queue_mask_to_bake(mask: Image, base_image: Image): 
+	# Since we are going to blend the image manually rather than on ImageProcessor
+	# We fix the formating right now (Image processor is supposed to fix formating)
+	if mask == null:
+		l.g("Can't queue mask, mask is not an Image.")
+		return
+	
+	if base_image == null:
+		l.g("Can't queue mask, unmasked background is not an Image.")
+		return
+	
+	mask.convert(Image.FORMAT_RGBA8)
+	base_image.convert(Image.FORMAT_RGBA8)
+	mask_to_bake = [mask, base_image]
+
+
+func queue_img2img_to_bake(dict: Dictionary): 
+	if dict == null:
+		return
+	
+	img2img_to_bake.append(dict.duplicate(true))
 
 
 func bake_pending_img2img(_cue: Cue):
@@ -347,12 +287,65 @@ func bake_pending_img2img(_cue: Cue):
 	name)
 
 
+# IMAGE INFORMATION
+
+
+func request_image_info(response_object: Object, response_method: String, image_base64: String):
+	l.g("The function 'request_image_info' has not been overriden yet on Api: " + 
+	name)
+
+
+func get_image_info_from_result(result):
+	# Returns formated_info
+	# Also, ignore raw_info, we have no use for it
+	l.g("The function 'get_image_info_from_result' has not been overriden yet on Api: " + 
+	name)
+	return {}
+	
+
+
+# CONTROLNET
+
+
+func queue_controlnet_to_bake(dict: Dictionary, type: String):
+	if dict == null:
+		return
+	
+	var type_array = controlnet_to_bake.get(type)
+	if type_array is Array:
+		type_array.append(dict.duplicate(true))
+	else:
+		l.g("Can't bake controlnet of type '" + type + "', type not registered")
+
+
 func bake_pending_controlnets(_cue: Cue = null):
 	# this must apply pending controlnet to request data
 	# controlnet_to_bake: a dictionary with the name of the controlnet as keys and an 
 	# array of dictionaries as value. the dictionaries inside the array uses names specified in 
 	l.g("The function 'bake_pending_controlnets' has not been overriden yet on Api: " + 
 	name)
+
+
+func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
+preprocessor_name: String):
+	# Request to preprocess image_data using preprocessor_name to server
+	l.g("The function 'preprocess' has not been overriden yet on Api: " + 
+	name)
+
+
+func apply_controlnet_parameters(_cue: Cue): 
+	# the parameters lies in the cue's dictionary (aka options), those must be applied/merged to
+	# request_data, they will come using the names specified in Consts.gd, so running it with
+	# translate_dictionary() may be needed
+	l.g("The function 'apply_controlnet_parameters' has not been overriden yet on Api: " + 
+	name)
+
+
+# REGIONAL PROMPTING
+
+
+func queue_regions_to_bake(regions: Array):
+	regions_to_bake.append_array(regions)
 
 
 func bake_pending_regional_prompts(_cue: Cue = null):
@@ -364,12 +357,7 @@ func bake_pending_regional_prompts(_cue: Cue = null):
 	name)
 
 
-func apply_safe_mode(_cue: Cue = null):
-	# Currently not in use
-	# Just here in case a formal or an all-ages-friendly presentation occurs
-	# This eliminates things from the prompt and add stuff to the negative prompt to make it SFW
-	# It's not needed to override this
-	pass
+# SERVER MANAGEMENT
 
 
 func probe_server(_current_server_address: ServerAddress):
@@ -378,10 +366,39 @@ func probe_server(_current_server_address: ServerAddress):
 	name)
 
 
+func refresh_data(_what: String):
+	# refresh and sends any needed data, must signal data_refreshed(what_signaled) where 
+	# what_signaled: Dictionary =  { what_1: success_bool_1, what_2: success_bool_2, ... }
+	# What: String = api.REFRESH_*
+	l.g("The function 'refresh_data' has not been overriden yet on Api: " + 
+	name)
+
+
+# LOCAL SERVER MANAGEMENT
+
+
+func get_server_config(response_object: Object, response_method: String):
+	# Currently, just used to get the model in use
+	l.g("The function 'get_server_config' has not been overriden yet on Api: " + 
+	name)
+
+
+func set_server_diffusion_model(model_file_name: String, response_object: Object, 
+success_method: String, failure_method: String):
+	l.g("The function 'set_server_diffusion_model' has not been overriden yet on Api: " + 
+	name)
+
+
+func cancel_diffusion():
+	# Currently, just used to get the model in use
+	l.g("The function 'cancel_diffusion' has not been overriden yet on Api: " + 
+	name)
+
+
 func adjust_server():
 	# checks configuration and configures server if needed, must signal
 	# adjust_server(success: bool)
-	l.g("The function 'verify_server' has not been overriden yet on Api: " + 
+	l.g("The function 'adjust_server' has not been overriden yet on Api: " + 
 	name)
 
 
@@ -393,19 +410,94 @@ func stop_server():
 	return self
 
 
-func refresh_data(_what: String):
-	# refresh and sends any needed data, must signal data_refreshed(what_signaled) where 
-	# what_signaled: Dictionary =  { what_1: success_bool_1, what_2: success_bool_2, ... }
-	# What: String = Api const REFRESH_*
-	l.g("The function 'refresh_data' has not been overriden yet on Api: " + 
-	name)
-
-
 func refresh_paths(_data = null):
 	# refresh and sends any needed path, must signal paths_refreshed() 
 	# data is whatever is needed to set the appropiate paths, must have a default
 	l.g("The function 'refresh_paths' has not been overriden yet on Api: " + 
 	name)
+
+
+func get_lora_dir() -> String:
+	return SUBDIR_LORA
+
+
+func get_lycoris_dir() -> String:
+	return SUBDIR_LYCORIS
+
+
+func get_textual_inversion_dir() -> String:
+	return SUBDIR_TI
+
+
+func get_checkpoints_dir() -> String:
+	return SUBDIR_DIFFUSION_MODELS
+
+
+func get_controlnet_dir() -> String:
+	return SUBDIR_CONTROLNET_MODELS
+
+
+func get_installation_dir() -> String:
+	return Cue.new(Consts.ROLE_SERVER_MANAGER, "get_full_installation_path").execute()
+
+
+
+
+
+
+# DEBUG
+
+
+func get_request_data() -> Dictionary:
+	return request_data.duplicate(true)
+
+
+func get_request_data_no_images(_custom_data: Dictionary = {}) -> Dictionary:
+	# This function should return an dictionary with the parameters but no images in it
+	l.g("The function 'get_request_data_no_images' has not been overriden yet on Api: " + 
+	name)
+	return {}
+
+
+func get_request_data_no_images_no_prompts(_custom_data: Dictionary = {}) -> Dictionary:
+	# This function should return an dictionary with the parameters but no images nor prompts in it
+	l.g("The function 'get_request_data_no_images_no_prompts' has not been overriden yet on Api: " + 
+	name)
+	return {}
+
+
+static func debug_scrub_dict_key_string(dictionary: Dictionary, key: String, allow_empty: bool):
+	if not dictionary.has(key):
+		dictionary[key] = "[no key]"
+		
+	var aux = dictionary.get(key, '')
+	var sufix: String = ''
+	if aux is Array and aux.size() >= 1:
+		aux = aux[0]
+		sufix = "array, "
+	
+	if aux is String:
+		if aux.strip_edges().empty() and not allow_empty:
+			dictionary[key] = sufix + "[empty]"
+		elif sufix.empty():
+# warning-ignore:return_value_discarded
+			dictionary.erase(key)
+		else:
+			dictionary[key] = sufix + "[valid value]"
+	else:
+		dictionary[key] = sufix + "[not a string: " + str(typeof(aux)) + " -> " + str(aux) + "]"
+
+
+
+# OTHER
+
+
+func apply_safe_mode(_cue: Cue = null):
+	# Currently not in use
+	# Just here in case a formal or an all-ages-friendly presentation occurs
+	# This eliminates things from the prompt and add stuff to the negative prompt to make it SFW
+	# It's not needed to override this
+	pass
 
 
 

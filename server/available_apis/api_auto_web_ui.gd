@@ -34,6 +34,11 @@ const PATH_KEY_EMBEDDINGS_DIR = "embeddings_dir"
 const PATH_KEY_CHECKPOINTS_DIR = "ckpt_dir"
 const PATH_KEY_CONTROL_DIR = "control_dir"
 
+# PROGRESS KEYS
+const PROGRESS_KEY = "progress"
+const PROGRESS_STATE_KEY = "state"
+const PROGRESS_STATE_JOB_COUNT = "job_count"
+
 # Modules
 var controlnet: DiffusionAPIModule = null
 var region_prompt: DiffusionAPIModule = null
@@ -148,11 +153,97 @@ func _ready():
 	clear()
 
 
+func generate(response_object: Object, response_method: String, custom_gen_data: Dictionary = {}):
+	var api_request = APIRequest.new(response_object, response_method, self)
+	var url = server_address.url + context + service
+	# ADD TO TEMPLATE
+	api_request.connect_on_request_failed(self, "_on_generation_failed")
+	if custom_gen_data.empty():
+		api_request.api_post(url, request_data)
+	else:
+		api_request.api_post(url, custom_gen_data)
+	
+	return api_request
+
+
+func get_images_from_result(result, debug: bool, img_name: String) -> Array: 
+	# This function should return an array of ImageData
+	# Debug will include the controlnet images sent
+	
+	var images_key_base64 = result.get('images')
+	var resul_base64 = []
+	if images_key_base64 is String:
+		resul_base64.append(images_key_base64)
+	elif images_key_base64 is Array:
+		for image in images_key_base64:
+			resul_base64.append(image)
+	
+	if debug:
+		# Controlnet images haven't been removed
+		return _base64_to_image_data(resul_base64, img_name)
+	
+	resul_base64 = controlnet.remove_images_from_result(result, resul_base64)
+	return _base64_to_image_data(resul_base64, img_name)
+
+
+func get_seed_from_result(result) -> int:
+	var resul_info = result.get('info')
+	var last_seed = -1
+	if resul_info is String:
+		resul_info = JSON.parse(resul_info).result
+	if resul_info is Dictionary:
+		last_seed = int(resul_info.get('seed', -1))
+	if last_seed == -1:
+		l.g("Couldn't recover seed of last generated image")
+	
+	return last_seed
+
+
+func request_image_info(response_object: Object, response_method: String, image_base64: String):
+	var api_request = APIRequest.new(response_object, response_method, self)
+	var url = server_address.url + ADDRESS_IMAGE_INFO
+	api_request.api_post(url, {Consts.OI_PNG_INFO_IMAGE: image_base64})
+
+
+func request_progress(response_object: Object, response_method: String):
+	var api_request = APIRequest.new(response_object, response_method, self)
+	var url = server_address.url + ADDRESS_GET_PROGRESS
+	api_request.api_get(url)
+
+
+func get_progress_from_result(result):
+	if not result is Dictionary:
+		return 0.0
+	
+	var progress = result.get(PROGRESS_KEY, 0.0)
+	if _progress_has_job_count(result):
+		return -1.0
+	else:
+		return progress
+
+
+func _progress_has_job_count(results: Dictionary, only_zero_is_false: bool = true):
+	var state = results.get(PROGRESS_STATE_KEY, {})
+	var job_count = null
+	if state is Dictionary:
+		job_count = state.get(PROGRESS_STATE_JOB_COUNT, null)
+	
+	if job_count == null:
+		l.g("Failure to retrieve job count on pi_auto_web_ui.gd. Data: " + 
+				str(results))
+		job_count = 0
+	
+	if only_zero_is_false:
+		return int(job_count) != 0
+	else:
+		return job_count > 0
+
+
 func clear(_cue : Cue = null):
 	context = MAIN_API_CONTEXT
 	service = TEXT2IMG_SERVICE
 	request_data = txt2img_dict.duplicate(true)
-	clear_bake_queues()
+	clear_queues()
 
 
 func add_to_prompt(cue: Cue): 
@@ -353,24 +444,24 @@ func get_request_data_no_images_no_prompts(custom_data: Dictionary = {}) -> Dict
 	return data_copy
 
 
-func get_images_from_result(result, debug: bool, img_name: String) -> Array: 
-	# This function should return an array of ImageData
-	# Debug will include the controlnet images sent
-	
-	var images_key_base64 = result.get('images')
-	var resul_base64 = []
-	if images_key_base64 is String:
-		resul_base64.append(images_key_base64)
-	elif images_key_base64 is Array:
-		for image in images_key_base64:
-			resul_base64.append(image)
-	
-	if debug:
-		# Controlnet images haven't been removed
-		return _base64_to_image_data(resul_base64, img_name)
-	
-	resul_base64 = controlnet.remove_images_from_result(result, resul_base64)
-	return _base64_to_image_data(resul_base64, img_name)
+func get_server_config(response_object: Object, response_method: String):
+	var api_request = APIRequest.new(response_object, response_method, self)
+	var url = server_address.url + ADDRESS_GET_SERVER_CONFIG
+	api_request.api_get(url)
+
+
+func set_server_diffusion_model(model_file_name: String, response_object: Object, 
+success_method: String, failure_method: String):
+	var api_request = APIRequest.new(response_object, success_method, self)
+	api_request.connect_on_request_failed(response_object, failure_method)
+	var url = server_address.url + self.ADDRESS_SET_SERVER_CONFIG
+	api_request.api_post(url, {"sd_model_checkpoint": model_file_name.get_file()})
+
+
+func cancel_diffusion():
+	var api_request = APIRequest.new(self, "_on_diffusion_canceled", self)
+	var url = server_address.url + self.ADDRESS_CANCEL
+	api_request.api_post(url, {})
 
 
 func probe_server(current_server_address: ServerAddress):
