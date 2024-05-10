@@ -82,14 +82,14 @@ func get_file_clusters_at(path: String) -> Dictionary:
 
 
 func _on_server_ready():
-	DiffusionServer.get_server_config(self, "_on_first_server_config_received")
+	DiffusionServer.get_current_diffusion_model(self, "_on_server_diffusion_model_received")
 
 
-func _on_first_server_config_received(server_config):
+func _on_server_diffusion_model_received(server_config):
 	if clusters.empty():
 		refresh_models()
 	server_is_ready = true
-	var server_model = DiffusionServer.get_server_diffusion_model_from_config(server_config)
+	var server_model = DiffusionServer.api.get_diffusion_model_from_result(server_config)
 	if server_model.empty():
 		return
 	server_model = DiffusionServer.api.get_checkpoints_dir().plus_file(server_model)
@@ -135,7 +135,7 @@ func set_diffusion_model(model_file_cluster: FileCluster):
 func _on_set_diffusion_model_success(_result):
 	load_model_on_close = null
 	queued_model_load = null
-	DiffusionServer.get_server_config(self, "_on_first_server_config_received")
+	DiffusionServer.get_current_diffusion_model(self, "_on_server_diffusion_model_received")
 	Cue.new(Consts.UI_CURRENT_MODEL_THUMBNAIL_GROUP, "cue_cluster").args([
 			current_model]).execute()
 
@@ -144,7 +144,7 @@ func _on_set_diffusion_model_failure(response_code):
 	current_model = previous_model
 	load_model_on_close = null
 	queued_model_load = null
-	DiffusionServer.get_server_config(self, "_on_first_server_config_received")
+	DiffusionServer.get_current_diffusion_model(self, "_on_server_diffusion_model_received")
 	Cue.new(Consts.UI_CURRENT_MODEL_THUMBNAIL_GROUP, "stop_animation").execute()
 	if not server_is_ready:
 		queued_model_load = current_model
@@ -175,7 +175,7 @@ func _on_DiffusionModels_refresh_requested():
 
 func _on_models_refreshed(_success: bool):
 	refresh_models()
-	DiffusionServer.get_server_config(self, "_on_first_server_config_received")
+	DiffusionServer.get_current_diffusion_model(self, "_on_server_diffusion_model_received")
 
 
 func _on_model_selected(model_thumbnail: ModelThumbnail):

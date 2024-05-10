@@ -296,14 +296,15 @@ func _on_mask_generated(mask: Image, bind_input_image: Image):
 		Consts.I2I_INPAINT_FULL_RES: true,
 	}
 	Cue.new(Consts.ROLE_API, "clear").execute()
-	DiffusionServer.api.queue_mask_to_bake(mask, bind_input_image)
+	DiffusionServer.api.queue_mask_to_bake(mask, bind_input_image, DiffusionAPI.MASK_MODE_OUTPAINT)
 	
 	Cue.new(Consts.ROLE_PROMPTING_AREA, "add_prompt_and_seed_to_api").execute()
 	Cue.new(Consts.ROLE_CANVAS, "apply_parameters_to_api").execute()
 	
 	if use_modifiers.pressed:
 		Cue.new(Consts.ROLE_GENERATION_INTERFACE, "apply_modifiers_to_api").execute()
-	Cue.new(Consts.ROLE_API, "bake_pending_img2img").args([true]).execute()
+	Cue.new(Consts.ROLE_API, "bake_pending_img2img").execute()
+	Cue.new(Consts.ROLE_API, "bake_pending_mask").execute()
 	Cue.new(Consts.ROLE_API, "bake_pending_controlnets").execute()
 	Cue.new(Consts.ROLE_API, "apply_parameters").opts(config).execute()
 	Cue.new(Consts.ROLE_API, "bake_pending_regional_prompts").execute()

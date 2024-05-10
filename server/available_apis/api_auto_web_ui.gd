@@ -7,7 +7,6 @@ class_name AutoWebUI_API
 
 const MAIN_API_CONTEXT = "/sdapi/v1/"
 const TEXT2IMG_SERVICE = "txt2img"
-const IMG2IMG_SERVICE = "img2img"
 const PNG_INFO_SERVICE = "png-info"
 
 const ADDRESS_REFRESH_DIFFUSION_MODELS = "/sdapi/v1/refresh-checkpoints"
@@ -39,9 +38,6 @@ const PROGRESS_KEY = "progress"
 const PROGRESS_STATE_KEY = "state"
 const PROGRESS_STATE_JOB_COUNT = "job_count"
 
-# Modules
-var controlnet: DiffusionAPIModule = null
-var region_prompt: DiffusionAPIModule = null
 
 # DEFAULT_PATHS
 var models_dir: String = "models"
@@ -87,43 +83,6 @@ var txt2img_dict: Dictionary = {
 	"send_images": true, # this one is not configurable
 	"save_images": false, # this one is not configurable
 	"alwayson_scripts": {},
-}
-
-# Removed keys: 
-# styles, subseed, subseed_strength, seed_resize_from_h, seed_resize_from_w, 
-# do_not_save_samples, do_not_save_grid, sampler_index, alwayson_scripts, script_name, 
-# script_args, include_init_images, initial_noise_multiplier, inpaint_full_res_padding
-# inpainting_fill
-# (removing these gives me consistent results with web ui)
-# eta: 0, s_churn: 0, s_tmax: 0, s_tmin: 0, s_noise: 1 
-# (According to the source code, this is not that effective so it will not be used)
-# inpainting_fill
-# (too redundant with txt2img_dict)
-# steps, cfg_scale, width, height, restore_faces, tiling, negative_prompt, prompt
-# override_settings, override_settings_restore_afterwards, send_images, save_images,
-# alwayson_scripts, batch_size, n_iter, sampler_name, seed
-var img2img_dict: Dictionary = {
-	"init_images": [
-		# After reading the conde of the Automativ1111's web ui, it seems that 
-		# this array is meant to hold 1 image in general or 1 image per image requested
-		# in the batch, if there are less than the batch, the batch is resized to fit 
-		# the images sent, if it's more, then error. In summary, send just one image
-		# it's not worth bothering with mingling with some very custom functionality
-		# unless it's an extremely specific use case like processing a video WITHOUT 
-		# using controlnet or some other shennanigan like that
-		"" 
-	],
-	"resize_mode": 0, # this is not configurable, the image will be resized in this program
-	"denoising_strength": 0.7,
-	"image_cfg_scale": 0,
-#	"mask": "",
-	"mask_blur": 3,
-	"inpaint_full_res": true,
-	"inpainting_mask_invert": 0,
-}
-
-var png_info_dict: Dictionary = {
-	"image": "string"
 }
 
 
@@ -182,7 +141,7 @@ func get_images_from_result(result, debug: bool, img_name: String) -> Array:
 		# Controlnet images haven't been removed
 		return _base64_to_image_data(resul_base64, img_name)
 	
-	resul_base64 = controlnet.remove_images_from_result(result, resul_base64)
+	resul_base64 = controlnet.remove_controlnet_images_from_result(result, resul_base64)
 	return _base64_to_image_data(resul_base64, img_name)
 
 
@@ -199,112 +158,6 @@ func get_seed_from_result(result) -> int:
 	return last_seed
 
 
-const POSITIVE_PROMPT = "Positive prompt:"
-const NEGATIVE_PROMPT = "Negative prompt:"
-const CONFIG_DETAILS = "Steps:"
-
-# The purpose of this dictionary is to replace the result given by the 
-# png info api with item names that can be recognized by the constants in Const.gd,
-# that way when loading the configuation in the image in order to generate,
-# we just need to merge the configuration into the api call
-var info_translations: Dictionary = {
-	"cfg scale": Consts.I_CFG_SCALE,
-	"denoising strength": Consts.I_DENOISING_STRENGTH,
-	"ensd": Consts.SDO_ENSD,
-	"hires steps": Consts.T2I_HR_SECOND_PASS_STEPS,
-	"hires upscale": Consts.T2I_HR_SCALE,
-	"hires upscaler": Consts.T2I_HR_UPSCALER,
-	Consts.T2I_ENABLE_HR: Consts.T2I_ENABLE_HR,
-	"clip skip": Consts.SDO_CLIP_SKIP,
-	"model": Consts.SDO_MODEL,
-	"model hash": Consts.SDO_MODEL_HASH,
-	"negative prompt": Consts.I_NEGATIVE_PROMPT,
-	"positive prompt": Consts.I_PROMPT,
-	"sampler": Consts.I_SAMPLER_NAME,
-	"seed": Consts.I_SEED,
-	"size": ImageInfoController.SIZE_CONFIG_DISPLAY_NAME,
-	"steps": Consts.I_STEPS
-}
-
-
-func request_image_info(response_object: Object, response_method: String, image_base64: String):
-	var api_request = APIRequest.new(response_object, response_method, self)
-	var url = server_address.url + ADDRESS_IMAGE_INFO
-	api_request.api_post(url, {Consts.OI_PNG_INFO_IMAGE: image_base64})
-
-
-func get_image_info_from_result(result) -> Dictionary:
-	var info = result.get('info')
-	if info is String and info_translations is Dictionary:
-		return format_info(info, info_translations)
-	elif info_translations is Dictionary:
-		l.g("Can't process raw info in image controller, info: " + str(info))
-		return {}
-	else: 
-		l.g("Can't process raw info in image controller, info_translations not a dictionary")
-		return {}
-
-
-func format_info(string: String, info_translations: Dictionary) -> Dictionary:
-	var resul: Dictionary = {}
-	var negative_prompt_pos = string.find(NEGATIVE_PROMPT)
-	var other_config_pos = string.find(CONFIG_DETAILS)
-	var positive_prompt = ''
-	var negative_prompt = ''
-	var config_details = ''
-	if other_config_pos != -1:
-		config_details = string.substr(other_config_pos)
-		string = string.substr(0, other_config_pos)
-	if negative_prompt_pos != -1:
-		positive_prompt = string.substr(0, negative_prompt_pos)
-		negative_prompt = string.substr(negative_prompt_pos)
-	else:
-		positive_prompt = string.strip_edges()
-	
-	var not_formated_entries: Array = config_details.split(',')
-	if not negative_prompt.empty():
-		not_formated_entries.push_front(negative_prompt)
-	if not positive_prompt.empty():
-		not_formated_entries.push_front(POSITIVE_PROMPT + positive_prompt)
-	
-	_add_info_entries_to_dict(not_formated_entries, resul)
-	return _translate_dict(resul, info_translations)
-
-
-func _add_info_entries_to_dict(entries: Array, resul_dict: Dictionary):
-	var key: String
-	var value: String
-	var aux: Array
-	for entry in entries:
-		aux = entry.split(':', false, 1)
-		if aux.size() != 2:
-			continue
-		
-		key = aux[0].strip_edges()
-		value = aux[1].strip_edges()
-		resul_dict[key] = value
-		if "hires" in key.to_lower():
-			resul_dict[Consts.T2I_ENABLE_HR] = true
-	
-	return resul_dict
-
-
-func _translate_dict(dict: Dictionary, info_translations: Dictionary) -> Dictionary:
-	var new_dict = {}
-	var translated_key
-	var other_info = ''
-	for key in dict.keys():
-		translated_key = info_translations.get(key.to_lower())
-		if translated_key == null:
-			l.g("Unrecognized value '" + key + "' on image info", l.INFO)
-			other_info += key + ": " + dict[key] + "\n"
-		else:
-			new_dict[translated_key] = dict[key]
-	
-	if not other_info.empty():
-		new_dict[ImageInfoController.OTHER_DETAILS_KEY] = other_info
-	
-	return new_dict
 
 
 func request_progress(response_object: Object, response_method: String):
@@ -318,7 +171,7 @@ func get_progress_from_result(result):
 		return 0.0
 	
 	var progress = result.get(PROGRESS_KEY, 0.0)
-	if _progress_has_job_count(result):
+	if not _progress_has_job_count(result):
 		return -1.0
 	else:
 		return progress
@@ -405,125 +258,8 @@ func replace_parameters(cue: Cue):
 	request_data = cue._options.duplicate()
 
 
-func apply_controlnet_parameters(cue: Cue): 
-	# the config lies in the cue's dictionary (aka options)
-	controlnet.apply_parameters(cue)
-
-
 func _merge_dict(base_dict: Dictionary, overwrite_dict: Dictionary):
 	base_dict.merge(overwrite_dict, true)
-
-
-func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
-preprocessor_name: String):
-	controlnet.preprocess(response_object, response_method, image_data, preprocessor_name)
-
-
-func bake_pending_img2img(cue: Cue):
-	# [ has_empty_space: bool = false ]
-	var has_empty_space = cue.bool_at(0, false, false)
-	if img2img_to_bake.empty():
-		# if there's no img2img to use as background, that means that there MAY
-		# be empty space after baking, hence why we inform it to the funcion
-		# whether or not there is empty space
-		# Important: As for right now, we can only be certain that there is empty
-		# space when using outpainting, hence this bool is set only there
-		# POSTRELEASE use Image.is_invisible() to tell if there are any empty spaces
-		# (this requires applying a shader to invert alpha channel) rather than this
-		# one-case-only workaround, also add a checkbox on outpainting and inpainting
-		# to use this feature optionally
-		_bake_pending_mask(null, has_empty_space)
-		return
-	
-	convert_to_img2img()
-	var resul: Dictionary = img2img_dict.duplicate()
-	var height = request_data.get("height", 512)
-	var width = request_data.get("width", 512)
-	var base_image
-	for key in resul.keys():
-		match key:
-			"init_images":
-				base_image = _blend_images_at_dictionaries_key(
-						key, img2img_to_bake, width, height, true, null, false
-						)
-				base_image.save_png("user://img2img_base")
-				# warning-ignore:return_value_discarded
-				resul.erase("init_images")
-				_bake_pending_mask(base_image)
-			"mask":
-				# At the moment, there is no use for the mask in img2img thanks to the
-				# dedicated tool, hence this is not used
-				# Adding the comment here since these function will need an ImageData
-				# as image format for the input
-				resul[key] = _blend_images_at_dictionaries_key(
-						key, img2img_to_bake, width, height, false
-						)
-			"image_cfg_scale", "cfg_scale", "denoising_strength":
-				resul[key] = _average_nums_at_dictionaries_key(
-						key, img2img_to_bake, resul[key]
-						)
-			_:
-				resul[key] = _overlap_values_at_dictionaries_key(
-						key, img2img_to_bake, resul[key]
-						)
-	
-	img2img_to_bake = []
-	_merge_dict(request_data, resul)
-
-
-func _bake_pending_mask(img2img_mask: Image, has_empty_space: bool = false):
-	# This function is meant to be called inside bake_pending_img2img()
-	if mask_to_bake.empty():
-		# no need to apply any mask if this is the case
-		if img2img_mask != null:
-			# We just add the original img2img if it exists
-			request_data["init_images"] = [ImageProcessor.image_to_base64(img2img_mask)]
-			convert_to_img2img()
-		return
-	
-	convert_to_img2img()
-	# If we have to apply the mask
-	# we check if there's any need to blend or if we just apply the mask directly
-	var mask: Image = mask_to_bake[0]
-	var base_image: Image = mask_to_bake[1]
-	if img2img_mask != null:
-		# There's an image to blend (the result of the combined img2img images)
-		base_image.blend_rect_mask(
-				img2img_mask, 
-				mask, 
-				Rect2(Vector2.ZERO, img2img_mask.get_size()), 
-				Vector2.ZERO
-				)
-	else:
-		# if there's no background for the empty areas and has_empty_space
-		# we need denoising strength of 1, oterwise, we will be trying to
-		# replace noise with an empty image
-		if has_empty_space:
-			request_data["denoising_strength"] = 1
-	
-	request_data["init_images"] = [ImageProcessor.image_to_base64(base_image)]
-	request_data["mask"] = ImageProcessor.image_to_base64(mask)
-	mask_to_bake = []
-
-
-func convert_to_img2img(_cue: Cue = null):
-	# This function will copy all the changes made over the original request_data,
-	# but only the changes that are compatible with the img2img request data
-	if service == IMG2IMG_SERVICE:
-		return # it is already img2img
-	
-	for key in img2img_dict.keys():
-		request_data[key] = img2img_dict[key]
-	# Also the necessary api path changes will be applied
-	service = IMG2IMG_SERVICE
-
-
-func bake_pending_controlnets(_cue: Cue = null):
-	controlnet.bake_pending_controlnets()
-
-
-func bake_pending_regional_prompts(_cue: Cue = null):
-	return region_prompt.bake_regions()
 
 
 func get_request_data_no_images(custom_data: Dictionary = {}) -> Dictionary:
@@ -546,10 +282,19 @@ func get_request_data_no_images_no_prompts(custom_data: Dictionary = {}) -> Dict
 	return data_copy
 
 
-func get_server_config(response_object: Object, response_method: String):
+func get_current_diffusion_model(response_object: Object, response_method: String):
 	var api_request = APIRequest.new(response_object, response_method, self)
 	var url = server_address.url + ADDRESS_GET_SERVER_CONFIG
 	api_request.api_get(url)
+
+
+func get_diffusion_model_from_result(server_config_result: Dictionary):
+	var full_name = server_config_result.get("sd_model_checkpoint", '')
+	if full_name is String:
+		full_name = full_name.substr(0, full_name.rfind(' '))
+		return full_name.get_basename()
+	else:
+		return ''
 
 
 func set_server_diffusion_model(model_file_name: String, response_object: Object, 

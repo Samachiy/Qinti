@@ -9,6 +9,9 @@ const REFRESH_CONTROLNET_MODELS_LOCAL = "controlnet models local"
 const REFRESH_SAMPLERS = "samplers"
 const REFRESH_UPSCALERS = "upscalers"
 
+const MASK_MODE_INPAINT = "inpaint"
+const MASK_MODE_OUTPAINT = "outpaint"
+
 # Technically this should be consts, but since they need to be overriden, we set them as vars
 var SUBDIR_LORA = ""
 var SUBDIR_LYCORIS = ""
@@ -48,9 +51,16 @@ var controlnet_to_bake: Dictionary = {
 	Consts.CN_TYPE_SEG: [],
 	Consts.CN_TYPE_SOFTEDGE: [],
 }
-var mask_to_bake: Array = [] # [ mask, base_image ] base_image is what will appear 
-#								in the unmasked area
+var mask_to_bake: Array = [] # [ mask, base_image, mode ] base_image is what will appear
+#							in the unmasked area, mode is MASK_MODE_INPAINT or MASK_MODE_OUTPAINT
 var regions_to_bake: Array = [] # [ [rect2_1, data_dict1], [rect2_2, data_dict2], ... ]
+
+# Modules
+var controlnet: DiffusionAPIModule = null
+var region_prompt: DiffusionAPIModule = null
+var image_info: DiffusionAPIModule = null
+var img_to_img: DiffusionAPIModule = null
+var inpaint_outpaint: DiffusionAPIModule = null
 
 
 # warning-ignore:unused_signal
@@ -90,7 +100,7 @@ func _base64_to_image_data(images: Array, image_name: String) -> Array:
 	return resul
 
 
-func _blend_images(images: Array, width: int, height: int, bg_color = null, default = null):
+func blend_images(images: Array, width: int, height: int, bg_color = null, default = null):
 	var new_image = Image.new()
 	var is_null = true
 	new_image.create(width, height, false, Image.FORMAT_RGBA8)
@@ -111,7 +121,7 @@ func _blend_images(images: Array, width: int, height: int, bg_color = null, defa
 		return new_image
 
 
-func _blend_images_at_dictionaries_key(key: String, dictionaries: Array, width: int, 
+func blend_images_at_dictionaries_key(key: String, dictionaries: Array, width: int, 
 height: int, dict_value_is_array: bool, bg_color = null, encode_base64: bool = true):
 	var aux = []
 	if dict_value_is_array:
@@ -122,12 +132,12 @@ height: int, dict_value_is_array: bool, bg_color = null, encode_base64: bool = t
 			aux.append(dict.get(key, null))
 	
 	if encode_base64:
-		return ImageProcessor.image_to_base64(_blend_images(aux, width, height, bg_color))
+		return ImageProcessor.image_to_base64(blend_images(aux, width, height, bg_color))
 	else:
-		return _blend_images(aux, width, height, bg_color)
+		return blend_images(aux, width, height, bg_color)
 
 
-func _overlap_values_at_dictionaries_key(key: String, dictionaries: Array, default_value):
+func overlap_values_at_dictionaries_key(key: String, dictionaries: Array, default_value):
 	var resul = default_value
 	var new_value
 	for dict in dictionaries:
@@ -138,7 +148,7 @@ func _overlap_values_at_dictionaries_key(key: String, dictionaries: Array, defau
 	return resul
 
 
-func _average_nums_at_dictionaries_key(key: String, dictionaries: Array, 
+func average_nums_at_dictionaries_key(key: String, dictionaries: Array, 
 default_value, replace_null_with_default: bool = false): # parent
 	var values = []
 	var amount: int = 0
@@ -236,6 +246,16 @@ func add_to_prompt(_cue: Cue):
 	name)
 
 
+func replace_prompt(cue: Cue):
+	# [positive_prompt, negative_prompt]
+	# also accepts a config dictionary, will use this if the arguments are emtpy
+	# the config dictionary will can be read with:
+	#	var p_prompt = cue.get_option(Consts.I_PROMPT, '') 
+	#	var n_prompt = cue.get_option(Consts.I_NEGATIVE_PROMPT, '')
+	l.g("The function 'replace_prompt' has not been overriden yet on Api: " + 
+	name)
+
+
 func apply_parameters(_cue: Cue): 
 	# the parameters lies in the cue's dictionary (aka options), those must be applied/merged to
 	# request_data, they will come using the names specified in Consts.gd, so running it with
@@ -253,10 +273,27 @@ func replace_parameters(_cue: Cue):
 	name)
 
 
-# IMG2IMG, INPAINT, OUTPAINT
+# IMG2IMG
 
 
-func queue_mask_to_bake(mask: Image, base_image: Image): 
+func queue_img2img_to_bake(dict: Dictionary): 
+	if dict == null:
+		return
+	
+	img2img_to_bake.append(dict.duplicate(true))
+
+
+func bake_pending_img2img(_cue: Cue):
+	if img_to_img is DiffusionAPIModule:
+		img_to_img.bake_pending_img2img()
+	else:
+		l.g("Tried to use 'bake_pending_img2img' but api has no img2img module")
+
+
+# INPAINT, OUTPAINT
+
+
+func queue_mask_to_bake(mask: Image, base_image: Image, mode: String): 
 	# Since we are going to blend the image manually rather than on ImageProcessor
 	# We fix the formating right now (Image processor is supposed to fix formating)
 	if mask == null:
@@ -272,41 +309,29 @@ func queue_mask_to_bake(mask: Image, base_image: Image):
 	mask_to_bake = [mask, base_image]
 
 
-func queue_img2img_to_bake(dict: Dictionary): 
-	if dict == null:
-		return
-	
-	img2img_to_bake.append(dict.duplicate(true))
-
-
-func bake_pending_img2img(_cue: Cue):
-	# this must apply pending img2img and mask to request data
-	# img2img_to_bake: an array of dictionaries with keys using the names specified in Consts.gd
-	# mask_to_bake: an array of arrays with the structure: [ mask, background_for_the_masked_image ]
-	l.g("The function 'bake_pending_img2img' has not been overriden yet on Api: " + 
-	name)
+func bake_pending_mask():
+	if inpaint_outpaint is DiffusionAPIModule:
+		inpaint_outpaint.bake_pending_mask()
+	else:
+		l.g("Tried to use 'bake_pending_img2img' but api has no img2img module")
 
 
 # IMAGE INFORMATION
 
 
-func request_image_info(_response_object: Object, _response_method: String, _image_base64: String):
-	l.g("The function 'request_image_info' has not been overriden yet on Api: " + 
-	name)
+func request_image_info(response_object: Object, response_method: String, image_base64: String):
+	if image_info is DiffusionAPIModule:
+		image_info.request_image_info(response_object, response_method, image_base64)
+	else:
+		l.g("Tried to use 'request_image_info' but api has no image info module")
 
 
-func get_image_info_from_result(_result):
-	# Returns info formatted like a dictionary, were the keys correspond to the ones found
-	# in Const.gd
-	# An exception to this is:
-	# 	- size (width and height) which comes in the following format:
-	#		- ImageInfoController.SIZE_CONFIG_DISPLAY_NAME: {width} x {height}
-	#	- others (any parameter not found in the Consts.gd) in the following format
-	#		- ImageInfoController.OTHER_DETAILS_KEY: {text/string of the info}
-	l.g("The function 'get_image_info_from_result' has not been overriden yet on Api: " + 
-	name)
-	return {}
-	
+func get_image_info_from_result(result) -> Dictionary:
+	if image_info is DiffusionAPIModule:
+		return image_info.get_image_info_from_result(result)
+	else:
+		l.g("Tried to use 'get_image_info_from_result' but api has no image info module")
+		return {}
 
 
 # CONTROLNET
@@ -324,26 +349,35 @@ func queue_controlnet_to_bake(dict: Dictionary, type: String):
 
 
 func bake_pending_controlnets(_cue: Cue = null):
-	# this must apply pending controlnet to request data
-	# controlnet_to_bake: a dictionary with the name of the controlnet as keys and an 
-	# array of dictionaries as value. the dictionaries inside the array uses names specified in 
-	l.g("The function 'bake_pending_controlnets' has not been overriden yet on Api: " + 
-	name)
+	if controlnet is DiffusionAPIModule:
+		controlnet.bake_pending_controlnets()
+	else:
+		l.g("Tried to use 'bake_pending_controlnets' but api has no controlnet module")
 
 
 func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
 preprocessor_name: String):
-	# Request to preprocess image_data using preprocessor_name to server
-	l.g("The function 'preprocess' has not been overriden yet on Api: " + 
-	name)
+	if controlnet is DiffusionAPIModule:
+		controlnet.preprocess(response_object, response_method, image_data, preprocessor_name)
+	else:
+		l.g("Tried to use 'preprocess' but api has no controlnet module")
 
 
-func apply_controlnet_parameters(_cue: Cue): 
-	# the parameters lies in the cue's dictionary (aka options), those must be applied/merged to
-	# request_data, they will come using the names specified in Consts.gd, so running it with
-	# translate_dictionary() may be needed
-	l.g("The function 'apply_controlnet_parameters' has not been overriden yet on Api: " + 
-	name)
+func get_preprocessed_image(result, preprocessor_name: String = '') -> ImageData:
+	if controlnet is DiffusionAPIModule:
+		return controlnet.get_preprocessed_image(result, preprocessor_name)
+	else:
+		l.g("Tried to use 'get_preprocessed_image' but api has no controlnet module")
+		return null
+
+
+func apply_controlnet_parameters(cue: Cue): 
+	if controlnet is DiffusionAPIModule:
+		# the config lies in the cue's dictionary (aka options)
+		controlnet.apply_controlnet_parameters(cue._options)
+	else:
+		l.g("Tried to use 'apply_controlnet_parameters' but api has no controlnet module")
+		return null
 
 
 # REGIONAL PROMPTING
@@ -382,14 +416,20 @@ func refresh_data(_what: String):
 # LOCAL SERVER MANAGEMENT
 
 
-func get_server_config(response_object: Object, response_method: String):
-	# Currently, just used to get the model in use
+func get_current_diffusion_model(_response_object: Object, _response_method: String):
+	# Gets the model in use
 	l.g("The function 'get_server_config' has not been overriden yet on Api: " + 
+	name)
+	
+	
+func get_diffusion_model_from_result(_server_config_result: Dictionary):
+	# Extracts the model from the result of the function above
+	l.g("The function 'get_diffusion_model_from_result' has not been overriden yet on Api: " + 
 	name)
 
 
-func set_server_diffusion_model(model_file_name: String, response_object: Object, 
-success_method: String, failure_method: String):
+func set_server_diffusion_model(_model_file_name: String, _response_object: Object, 
+_success_method: String, _failure_method: String):
 	l.g("The function 'set_server_diffusion_model' has not been overriden yet on Api: " + 
 	name)
 

@@ -225,11 +225,11 @@ func request_progress(response_object: Object, response_method: String):
 	api.request_progress(response_object, response_method)
 
 
-func get_server_config(response_object: Object, response_method: String):
+func get_current_diffusion_model(response_object: Object, response_method: String):
 	if not is_api_initialized():
 		return
 	
-	api.get_server_config(response_object, response_method)
+	api.get_current_diffusion_model(response_object, response_method)
 
 
 func set_server_diffusion_model(model_file_name: String, response_object: Object, 
@@ -257,13 +257,6 @@ func cancel_diffusion():
 
 # RESUME move to api_auto_web_ui and return the model ready to the response object and method
 # and rename from get server config, to get model
-func get_server_diffusion_model_from_config(server_config_result: Dictionary):
-	var full_name = server_config_result.get("sd_model_checkpoint", '')
-	if full_name is String:
-		full_name = full_name.substr(0, full_name.rfind(' '))
-		return full_name.get_basename()
-	else:
-		return ''
 
 
 # ----- Block pending to move to api [END]

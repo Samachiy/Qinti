@@ -33,17 +33,6 @@ var controlnet_dict: Dictionary = {
 }
 
 
-func apply_parameters(cue: Cue): 
-	# the config lies in the cue's dictionary (aka options)
-	var request_data_controlnet = _add_new_controlnet_to_data()
-	request_data_controlnet.erase(Consts.CN_MODULE)
-	_merge_dict(request_data_controlnet, cue._options)
-
-
-func _merge_dict(base_dict: Dictionary, overwrite_dict: Dictionary):
-	base_dict.merge(overwrite_dict, true)
-
-
 func bake_pending_controlnets():
 	if api.controlnet_to_bake.empty():
 		return
@@ -64,15 +53,15 @@ func _bake_one_controlnet_type(dictionaries: Array, width: int, height: int, typ
 	for key in resul.keys():
 		match key:
 			"input_image":
-				resul[key] = api._blend_images_at_dictionaries_key(
+				resul[key] = api.blend_images_at_dictionaries_key(
 						key, dictionaries, width, height, false, type_bgs.get(type, null)
 						)
 			"weight", "guidance_start", "guidance_end":
-				resul[key] = api._average_nums_at_dictionaries_key(
+				resul[key] = api.average_nums_at_dictionaries_key(
 						key, dictionaries, resul[key]
 						)
 			_:
-				resul[key] = api._overlap_values_at_dictionaries_key(
+				resul[key] = api.overlap_values_at_dictionaries_key(
 						key, dictionaries, resul[key]
 						)
 	
@@ -106,7 +95,7 @@ func remove_images_from_request_data(data_copy: Dictionary) -> Dictionary:
 	return data_copy
 
 
-func remove_images_from_result(result, images_base64: Array) -> Array:
+func remove_controlnet_images_from_result(result, images_base64: Array) -> Array:
 	# We extact the controlnet array
 	var controlnet_array = result.get('parameters', null)
 	controlnet_array = controlnet_array.get(Consts.I_ALWAYS_ON_SCRIPTS, null)
@@ -143,3 +132,25 @@ preprocessor_name: String):
 	# The next code notifies the server_state_indicator for a state change 
 	DiffusionServer.set_state(Consts.SERVER_STATE_PREPROCESSING)
 	api_request.api_post(url, data)
+
+
+func get_preprocessed_image(result, preprocessor_name: String = '') -> ImageData:
+	var images = result.get('images')
+	var image_data: ImageData = null
+	if images is Array and not images.empty():
+		image_data = ImageData.new("preprocessed_image_" + preprocessor_name).load_base64(
+			images[0], 
+			ImageData.PNG)
+	
+	return image_data
+
+
+func apply_controlnet_parameters(parameters: Dictionary): 
+	# the config lies in the cue's dictionary (aka options)
+	var request_data_controlnet = _add_new_controlnet_to_data()
+	request_data_controlnet.erase(Consts.CN_MODULE)
+	_merge_dict(request_data_controlnet, parameters)
+
+
+func _merge_dict(base_dict: Dictionary, overwrite_dict: Dictionary):
+	base_dict.merge(overwrite_dict, true)

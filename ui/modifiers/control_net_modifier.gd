@@ -197,15 +197,11 @@ func _on_image_preprocessed(result):
 	# We extract the image ansd set it accordingly
 	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "set_text").args([
 			Consts.HELP_DESC_IMAGE_PREPROCESSED]).execute()
-	var images = result.get('images')
-	var image_data: ImageData
-	if not images is Array or images.empty():
+	
+	var image_data: ImageData = DiffusionServer.api.get_preprocessed_image(result, name)
+	if image_data == null:
 		DiffusionServer.mark_generation_available()
 		return
-	
-	image_data = ImageData.new("preprocessed_image_" + name).load_base64(
-			images[0], 
-			ImageData.PNG)
 	
 	if preprocessor_material != null:
 		ImageProcessor.process_image(
