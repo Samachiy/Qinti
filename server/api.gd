@@ -55,12 +55,22 @@ var mask_to_bake: Array = [] # [ mask, base_image, mode ] base_image is what wil
 #							in the unmasked area, mode is MASK_MODE_INPAINT or MASK_MODE_OUTPAINT
 var regions_to_bake: Array = [] # [ [rect2_1, data_dict1], [rect2_2, data_dict2], ... ]
 
+var controlnet_bgs: Dictionary = {
+	Consts.CN_TYPE_CANNY: Color.black,
+	Consts.CN_TYPE_LINEART: Color.black,
+	Consts.CN_TYPE_MLSD: Color.black,
+	Consts.CN_TYPE_SOFTEDGE: Color.black,
+	Consts.CN_TYPE_OPENPOSE: Color.black,
+	Consts.CN_TYPE_DEPTH: Color.black,
+	Consts.CN_TYPE_NORMAL: Color.mediumpurple,
+}
+
 # Modules
 var controlnet: DiffusionAPIModule = null
-var region_prompt: DiffusionAPIModule = null
 var image_info: DiffusionAPIModule = null
 var img_to_img: DiffusionAPIModule = null
 var inpaint_outpaint: DiffusionAPIModule = null
+var region_prompt: DiffusionAPIModule = null
 
 
 # warning-ignore:unused_signal
@@ -172,6 +182,49 @@ default_value, replace_null_with_default: bool = false): # parent
 		return default_value
 	else:
 		return aux / amount
+
+
+func get_controlnet_data(width: int, height: int) -> Dictionary:
+	var data: Dictionary = {}
+	var control_net_array
+	for controlnet_type in controlnet_to_bake.keys():
+		control_net_array = controlnet_to_bake.get(controlnet_type)
+		if control_net_array is Array and not control_net_array.empty():
+			data[controlnet_type] = _consolidate_one_controlnet(
+					control_net_array, 
+					width, 
+					height, 
+					controlnet_type
+			)
+	
+	return data
+
+
+func _consolidate_one_controlnet(dictionaries: Array, width: int, height: int, type: String):
+	var result: Dictionary = {
+		"input_image": "", # base64 image
+		"model": "", # Controlnet model to use
+		"weight": 1,
+		"guidance_start": 0, # advanced mode only
+		"guidance_end": 1, # advanced mode only
+		"control_mode": 2, # 0 = balanced, 1 = prompt more important, 2 = controlnet more important
+	}
+	for key in result.keys():
+		match key:
+			"input_image":
+				result[key] = blend_images_at_dictionaries_key(
+						key, dictionaries, width, height, false, controlnet_bgs.get(type, null)
+						)
+			"weight", "guidance_start", "guidance_end":
+				result[key] = average_nums_at_dictionaries_key(
+						key, dictionaries, result[key]
+						)
+			_:
+				result[key] = overlap_values_at_dictionaries_key(
+						key, dictionaries, result[key]
+						)
+	
+	return result
 
 
 # RESET API INFO FOR NEW REQUEST

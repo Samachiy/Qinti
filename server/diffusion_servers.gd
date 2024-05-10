@@ -130,7 +130,7 @@ func _on_data_refreshed(what_dict: Dictionary):
 	
 	if DiffusionAPI.REFRESH_MODELS in what_dict:
 		emit_signal("diffusion_models_refreshed", what_dict.get(DiffusionAPI.REFRESH_MODELS))
-		# RESUME cathc signal
+	
 	if retrieving_start_info:
 		emit_signal("server_ready")
 		set_state(STATE_READY)
@@ -248,18 +248,6 @@ func cancel_diffusion():
 		return
 	
 	api.cancel_diffusion()
-
-
-# ----- Block pending to move to api [BEGIN]
-# api_auto_web_ui is too big, it may be needed to find a way to divide the logic in multiple parts
-# without affecting inheritance from DiffusionAPI class (since this works as guide and 
-# documentation)
-
-# RESUME move to api_auto_web_ui and return the model ready to the response object and method
-# and rename from get server config, to get model
-
-
-# ----- Block pending to move to api [END]
 
 
 func _on_diffusion_canceled(_result):

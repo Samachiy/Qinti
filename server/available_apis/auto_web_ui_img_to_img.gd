@@ -72,6 +72,7 @@ func bake_pending_img2img(_cue: Cue):
 	var height = api.request_data.get("height", 512)
 	var width = api.request_data.get("width", 512)
 	var base_image: Image
+	# RESUME this whole block from here and var resul: Dictionary = img2img_dict.duplicate()
 	for key in resul.keys():
 		match key:
 			"init_images":
@@ -99,7 +100,7 @@ func bake_pending_img2img(_cue: Cue):
 				resul[key] = api.overlap_values_at_dictionaries_key(
 						key, api.img2img_to_bake, resul[key]
 						)
-	
+	# RESUME return resul rather than merging it
 	api.request_data.merge(resul, true)
 
 

@@ -4,16 +4,6 @@ const CONTROLNET_DICT_KEY = "controlnet"
 const CONTROLNET_ARGS_KEY = "args"
 const ADDRESS_CONTROLNET_PREPROCESS = "/controlnet/detect"
 
-var type_bgs: Dictionary = {
-	Consts.CN_TYPE_CANNY: Color.black,
-	Consts.CN_TYPE_LINEART: Color.black,
-	Consts.CN_TYPE_MLSD: Color.black,
-	Consts.CN_TYPE_SOFTEDGE: Color.black,
-	Consts.CN_TYPE_OPENPOSE: Color.black,
-	Consts.CN_TYPE_DEPTH: Color.black,
-	Consts.CN_TYPE_NORMAL: Color.mediumpurple,
-}
-
 # The controlnet_dict goes inside and array as value of the controlnet_dict_key
 # like this:	 CONTROLNET_DICT_KEY: [controlnet_dict]
 # This applies to both txt2img and im2img dictionaries
@@ -41,36 +31,42 @@ func bake_pending_controlnets():
 	var width = api.request_data.get("width", 512)
 	var control_net_array
 	var controlnet_to_bake = api.controlnet_to_bake
-	for controlnet_type in controlnet_to_bake.keys():
-		control_net_array = controlnet_to_bake.get(controlnet_type)
-		if control_net_array is Array and not control_net_array.empty():
-			_bake_one_controlnet_type(control_net_array, width, height, controlnet_type)
-			control_net_array.resize(0) # We empty the array since this was already added
-
-
-func _bake_one_controlnet_type(dictionaries: Array, width: int, height: int, type: String):
-	var resul: Dictionary = controlnet_dict.duplicate()
-	for key in resul.keys():
-		match key:
-			"input_image":
-				resul[key] = api.blend_images_at_dictionaries_key(
-						key, dictionaries, width, height, false, type_bgs.get(type, null)
-						)
-			"weight", "guidance_start", "guidance_end":
-				resul[key] = api.average_nums_at_dictionaries_key(
-						key, dictionaries, resul[key]
-						)
-			_:
-				resul[key] = api.overlap_values_at_dictionaries_key(
-						key, dictionaries, resul[key]
-						)
-	
-# warning-ignore:return_value_discarded
-	resul.erase("module") # keeping module will cause it to fail
-	_add_controlnet_to_data(resul)
+	var controlnet_data = api.get_controlnet_data(width, height)
+	for value in controlnet_data.values():
+		_add_controlnet_to_data(value)
+#	for controlnet_type in controlnet_to_bake.keys():
+#		control_net_array = controlnet_to_bake.get(controlnet_type)
+#		if control_net_array is Array and not control_net_array.empty():
+#			_bake_one_controlnet_type(control_net_array, width, height, controlnet_type) # RESUME place the resul in a dictionary
+#			control_net_array.resize(0) # We empty the array since this was already added
+#
+#
+#func _bake_one_controlnet_type(dictionaries: Array, width: int, height: int, type: String):
+#	var resul: Dictionary = controlnet_dict.duplicate()
+#	for key in resul.keys():
+#		match key:
+#			"input_image":
+#				resul[key] = api.blend_images_at_dictionaries_key(
+#						key, dictionaries, width, height, false, type_bgs.get(type, null)
+#						)
+#			"weight", "guidance_start", "guidance_end":
+#				resul[key] = api.average_nums_at_dictionaries_key(
+#						key, dictionaries, resul[key]
+#						)
+#			_:
+#				resul[key] = api.overlap_values_at_dictionaries_key(
+#						key, dictionaries, resul[key]
+#						)
+#
+## warning-ignore:return_value_discarded
+#	resul.erase("module") # keeping module will cause it to fail
+#	# RESUME return the resul rather than directly adding it
+#	# RESUME rename it as consolidate
+#	_add_controlnet_to_data(resul) # RESUME this will stay but we will iterate on the consolidated_controlnets. values()
 
 
 func _add_new_controlnet_to_data() -> Dictionary:
+	# REMOVE after removing apply_controlnet_parameters
 	var new_control_net = controlnet_dict.duplicate()
 	_add_controlnet_to_data(new_control_net)
 	return new_control_net
@@ -146,6 +142,7 @@ func get_preprocessed_image(result, preprocessor_name: String = '') -> ImageData
 
 
 func apply_controlnet_parameters(parameters: Dictionary): 
+	# REMOVE but take care of the instances it is used first, also in template
 	# the config lies in the cue's dictionary (aka options)
 	var request_data_controlnet = _add_new_controlnet_to_data()
 	request_data_controlnet.erase(Consts.CN_MODULE)

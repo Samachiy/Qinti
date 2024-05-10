@@ -11,6 +11,7 @@ func _ready():
 
 
 func clear(_cue : Cue = null): 
+	clear_queues()
 	# Clears the request_data back to it's original state
 	l.g("The function 'clear' has not been overriden yet on Api: " + 
 	name)
