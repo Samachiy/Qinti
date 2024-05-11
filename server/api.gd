@@ -424,15 +424,6 @@ func get_preprocessed_image(result, preprocessor_name: String = '') -> ImageData
 		return null
 
 
-func apply_controlnet_parameters(cue: Cue): 
-	if controlnet is DiffusionAPIModule:
-		# the config lies in the cue's dictionary (aka options)
-		controlnet.apply_controlnet_parameters(cue._options)
-	else:
-		l.g("Tried to use 'apply_controlnet_parameters' but api has no controlnet module")
-		return null
-
-
 # REGIONAL PROMPTING
 
 

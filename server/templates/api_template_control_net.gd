@@ -25,11 +25,3 @@ func get_preprocessed_image(result, preprocessor_name: String = '') -> ImageData
 	l.g("The function 'get_preprocessed_image' has not been overriden yet on Api: " + 
 	name)
 	return null
-
-
-func apply_controlnet_parameters(parameters: Dictionary): 
-	# the parameters must be applied/merged to
-	# request_data, they will come using the names specified in Consts.gd, so running it with
-	# translate_dictionary() may be needed
-	l.g("The function 'apply_controlnet_parameters' has not been overriden yet on Api: " + 
-	name)

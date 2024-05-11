@@ -65,13 +65,6 @@ func bake_pending_controlnets():
 #	_add_controlnet_to_data(resul) 
 
 
-func _add_new_controlnet_to_data() -> Dictionary:
-	# REMOVE after removing apply_controlnet_parameters
-	var new_control_net = controlnet_dict.duplicate()
-	_add_controlnet_to_data(new_control_net)
-	return new_control_net
-
-
 func _add_controlnet_to_data(dictionary: Dictionary):
 	var always_on_scripts_dict: Dictionary = api.request_data[Consts.I_ALWAYS_ON_SCRIPTS]
 	if not always_on_scripts_dict.has(CONTROLNET_DICT_KEY):
@@ -139,14 +132,6 @@ func get_preprocessed_image(result, preprocessor_name: String = '') -> ImageData
 			ImageData.PNG)
 	
 	return image_data
-
-
-func apply_controlnet_parameters(parameters: Dictionary): 
-	# REMOVE but take care of the instances it is used first, also in template
-	# the config lies in the cue's dictionary (aka options)
-	var request_data_controlnet = _add_new_controlnet_to_data()
-	request_data_controlnet.erase(Consts.CN_MODULE)
-	_merge_dict(request_data_controlnet, parameters)
 
 
 func _merge_dict(base_dict: Dictionary, overwrite_dict: Dictionary):
