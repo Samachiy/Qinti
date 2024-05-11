@@ -12,7 +12,7 @@ func _ready():
 	controlnet_mode.select_flag_value()
 
 
-func get_config_cue(input_image: Image, default_values: bool = true) -> Cue:
+func get_controlnet_config(input_image: Image, default_values: bool = true) -> Cue:
 	var contronlet_dic = {
 		Consts.CN_INPUT_IMAGE: input_image,
 	}
@@ -24,10 +24,4 @@ func get_config_cue(input_image: Image, default_values: bool = true) -> Cue:
 		contronlet_dic[Consts.CN_GUIDANCE_END] = guidance_end.get_value()
 		contronlet_dic[Consts.CN_CONTROL_MODE] = controlnet_mode.get_selected()
 	
-	# role and method are not used since we are just need to send the dictionary
-	# we sen the cue rather than just the dictionary in order to not changing the code
-	# that expects a cue
-	# DREAM replace this cue for a dict, very low priority
-	var cue: Cue = Cue.new(Consts.ROLE_API, "apply_controlnet_parameters").opts(contronlet_dic)
-	
-	return cue
+	return contronlet_dic

@@ -38,6 +38,14 @@ func button_released(_event: InputEventMouseButton):
 		aux.snap(SNAP_SIZE) 
 
 
+#func right_click(event: InputEventMouseButton):
+#	var pos = canvas.convert_position(event.position)
+#	if region is RegionArea2D:
+#		region.limits.position = pos
+#		region.refresh_region()
+#	return true
+
+
 func left_click(_event: InputEventMouseButton):
 	if region == null:
 		return
@@ -93,6 +101,7 @@ func _on_layer_region_resize_button_pressed(button):
 
 
 func focus_region(region_node):
+	region = region_node
 	if region_node is RegionArea2D:
 		region_node.modulate.a = 1
 		region_node.show_interactables()

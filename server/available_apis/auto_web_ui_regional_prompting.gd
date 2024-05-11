@@ -8,11 +8,11 @@ var reg_prompt_array = [
 	true, # active
 	false, # debug
 	'Mask', # mode
-	'Colums', # matrix mode type
+	'Vertical', # matrix mode type
 	'Mask', # mask mode type
 	'Prompt', # prompt mode type
 	'1,1,1', # ratios
-	'0', # base ratio
+	'', # base ratio
 	false, # use base, allows to specify weight
 	true, # use common
 	true, # use negative common
@@ -66,13 +66,13 @@ func bake_regions():
 	image.create(size_x, size_y, false, Image.FORMAT_RGBA8)
 	for i in range(api.regions_to_bake.size()):
 		var rect = api.regions_to_bake[i][0] # from less priority to more
-		var color = colors[-i] # colors are from more priority to less
+		var color = colors[-i-1] # colors are from more priority to less
 		image.fill_rect(rect, color)
 	
 	# We remove the regions whose color is not present
 	var valid_regions = [] # regions that are present in the current mask
 	for i in range(api.regions_to_bake.size()):
-		var color = colors[-i] # colors are from more priority to less
+		var color = colors[-i-1] # colors are from more priority to less
 		yield(check_mask_color(image, color, valid_regions, i), "mask_color_checked")
 	
 	# We make the final mask
@@ -83,7 +83,7 @@ func bake_regions():
 	colors.resize(valid_regions.size()) # We remove excess colors, less priority are last
 	for i in range(valid_regions.size()):
 		var rect = valid_regions[i][0] # from less priority to more
-		var color = colors[-i] # colors are from more priority to less
+		var color = colors[-i-1] # colors are from more priority to less
 		final_mask.fill_rect(rect, color)
 	
 	# We save the image and add it's path to the request data
@@ -108,7 +108,7 @@ func bake_regions():
 
 func check_mask_color(mask:Image, color: Color, valid_regions: Array, region_index):
 	color_filter.set_shader_param("target_color", Vector3(color.r, color.g, color.b))
-	ImageProcessor.process_image(
+	ImageProcessor.call_deferred("process_image",
 			mask, color_filter, 
 			self, "_on_mask_color_checked", 
 			[valid_regions, region_index]
@@ -120,6 +120,7 @@ func _on_mask_color_checked(filtered_image: Image, valid_regions: Array, region_
 	if not filtered_image.is_invisible():
 		valid_regions.append(api.regions_to_bake[region_index])
 	
+	ImageProcessor.disconnect("image_processed", self, "_on_mask_color_checked")
 	emit_signal("mask_color_checked")
 
 

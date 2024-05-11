@@ -66,15 +66,6 @@ func get_data_cue(_cue: Cue = null):
 	return cue
 
 
-func get_active_regions(_cue: Cue = null):
-	var active_regions = [] # [ [rect1, data_dict1], [rect2, data_dict2], ... ]
-	if current_layer is RegionLayer2D:
-		active_regions = current_layer.get_regions_data(true).values()
-		active_regions.invert() # so that the lowest priority are first, higher last
-	
-	return active_regions
-
-
 func set_data_cue(cue: Cue):
 	clear()
 	var display_area = cue.get_at(0, Rect2(Vector2.ZERO, Vector2(512, 512)))
@@ -166,6 +157,7 @@ func select_region(region_node):
 
 
 func _on_RegionEntry_pressed(region_node):
+	l.p(calculate_region_node_rect(region_node))
 	select_region(region_node)
 
 
@@ -192,18 +184,41 @@ func get_active_image(_cue: Cue = null) -> Image:
 	return image
 
 
+func get_active_regions(_cue: Cue = null):
+	var active_regions = [] # [ [rect1, data_dict1], [rect2, data_dict2], ... ]
+	if current_layer is RegionLayer2D:
+		active_regions = current_layer.get_regions_data(true).values()
+	
+	var formatted_regions = []
+	for i in range(active_regions.size() - 1, -1, -1):
+		# we iterrate backwards so that the lowest priority are first and higher last
+		active_regions[i][0] = calculate_region_rect(active_regions[i][0])
+		formatted_regions.append(active_regions[i])
+		active_regions.invert() 
+	
+	return formatted_regions
+
+
 func _on_scroll_changed():
 	var scrollbar = scroll.get_v_scrollbar()
 	UIOrganizer.show_v_scroll_indicator(scrollbar, top_gradient, bottom_gradient)
 
 
 func calculate_region_node_rect(region_node: RegionArea2D):
-	var display_rect = canvas.display_area
 	var region_rect = region_node.get_rect()
+	return calculate_region_rect(region_rect)
+
+
+func calculate_region_rect(region_rect: Rect2):
+	# position
 	var resul_pos = canvas.convert_back_position(region_rect.position)
 	var shadows = Vector2(canvas.left_shadow.rect_min_size.x, canvas.top_shadow.rect_min_size.y)
 	resul_pos = resul_pos - shadows
-	var active_area_prop = canvas.active_area_proportions
-	var size_prop = active_area_prop / display_rect.size
-	var resul_size =  region_rect.size * size_prop
+	var active_area_size = canvas.rect_size - shadows * 2 
+	var active_area_ratio = canvas.active_area_proportions / active_area_size
+	resul_pos = resul_pos * active_area_ratio
+	# size
+	var size_ratio = canvas.active_area_proportions / canvas.display_area.size
+	var resul_size =  region_rect.size * size_ratio
 	return Rect2(resul_pos, resul_size)
+	

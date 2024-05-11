@@ -2,6 +2,8 @@ extends AutoWebUI_API
 
 class_name Forge_API
 
+const ADDRESS_CONTROLNET_PREPROCESS = "/controlnet/detect"
+
 var preprocessors_translation_dict = {
 	Consts.CNPREP_LINEART_REALISTIC: "lineart_realistic",
 	Consts.CNPREP_SOFTEDGE_PIDINET_SAFE: "softedge_pidisafe",

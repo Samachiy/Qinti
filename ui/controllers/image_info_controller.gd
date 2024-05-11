@@ -2,9 +2,9 @@ extends Controller
 
 class_name ImageInfoController
 
-const POSITIVE_PROMPT = "Positive prompt:"
-const NEGATIVE_PROMPT = "Negative prompt:"
-const CONFIG_DETAILS = "Steps:"
+#const POSITIVE_PROMPT = "Positive prompt:"
+#const NEGATIVE_PROMPT = "Negative prompt:"
+#const CONFIG_DETAILS = "Steps:"
 const SIZE_CONFIG_DISPLAY_NAME = "PNG_INFO_SIZE"
 const MODEL_CONFIG_DISPLAY_NAME = "PNG_INFO_MODEL"
 const OTHER_DETAILS_KEY = "PNG_INFO_OTHER"
@@ -19,7 +19,7 @@ onready var menu_try = $"%TryMenu"
 var detail_button = preload("res://ui/controllers/image_info_detail.tscn")
 var image_data: ImageData = null
 var formatted_info = null
-var raw_info = null
+#var raw_info = null
 ## This enum must be the same as the one in the modifier
 #enum {
 #	REPLACE,
@@ -60,91 +60,91 @@ func set_image(cue: Cue):
 	canvas.set_image_data(image_data)
 
 
-static func process_raw_info(cue: Cue) -> Dictionary:
-	# [ info_translations: Dictionary ] 
-	# Info is the dictionary in cue._options
-	# Results format
-	# {
-	# "info": "string",
-	# "items": {}
-	# "tr": {} # keys translations to apply on "info", see comment in info_translations on
-	#			# image_info_modifier.gd for more info
-	# }
-	var result = cue._options
-	var info = result.get('info')
-	var info_translations = cue.get_at(0, {})
-	if info is String and info_translations is Dictionary:
-		return format_info(info, info_translations)
-	elif info_translations is Dictionary:
-		l.g("Can't process raw info in image controller, info: " + str(info))
-		return {}
-	else: 
-		l.g("Can't process raw info in image controller, info_translations not a dictionary")
-		return {}
-#	formatted_info = format_info(info)
-#	list_info(formatted_info)
-
-
-static func format_info(string: String, info_translations: Dictionary) -> Dictionary:
-	var resul: Dictionary = {}
-	var negative_prompt_pos = string.find(NEGATIVE_PROMPT)
-	var other_config_pos = string.find(CONFIG_DETAILS)
-	var positive_prompt = ''
-	var negative_prompt = ''
-	var config_details = ''
-	if other_config_pos != -1:
-		config_details = string.substr(other_config_pos)
-		string = string.substr(0, other_config_pos)
-	if negative_prompt_pos != -1:
-		positive_prompt = string.substr(0, negative_prompt_pos)
-		negative_prompt = string.substr(negative_prompt_pos)
-	else:
-		positive_prompt = string.strip_edges()
-	
-	var not_formated_entries: Array = config_details.split(',')
-	if not negative_prompt.empty():
-		not_formated_entries.push_front(negative_prompt)
-	if not positive_prompt.empty():
-		not_formated_entries.push_front(POSITIVE_PROMPT + positive_prompt)
-	
-	_add_info_entries_to_dict(not_formated_entries, resul)
-	return _translate_dict(resul, info_translations)
-
-
-static func _add_info_entries_to_dict(entries: Array, resul_dict: Dictionary):
-	var key: String
-	var value: String
-	var aux: Array
-	for entry in entries:
-		aux = entry.split(':', false, 1)
-		if aux.size() != 2:
-			continue
-		
-		key = aux[0].strip_edges()
-		value = aux[1].strip_edges()
-		resul_dict[key] = value
-		if "hires" in key.to_lower():
-			resul_dict[Consts.T2I_ENABLE_HR] = true
-	
-	return resul_dict
-
-
-static func _translate_dict(dict: Dictionary, info_translations: Dictionary) -> Dictionary:
-	var new_dict = {}
-	var translated_key
-	var other_info = ''
-	for key in dict.keys():
-		translated_key = info_translations.get(key.to_lower())
-		if translated_key == null:
-			l.g("Unrecognized value '" + key + "' on image info", l.INFO)
-			other_info += key + ": " + dict[key] + "\n"
-		else:
-			new_dict[translated_key] = dict[key]
-	
-	if not other_info.empty():
-		new_dict[OTHER_DETAILS_KEY] = other_info
-	
-	return new_dict
+#static func process_raw_info(cue: Cue) -> Dictionary:
+#	# [ info_translations: Dictionary ] 
+#	# Info is the dictionary in cue._options
+#	# Results format
+#	# {
+#	# "info": "string",
+#	# "items": {}
+#	# "tr": {} # keys translations to apply on "info", see comment in info_translations on
+#	#			# image_info_modifier.gd for more info
+#	# }
+#	var result = cue._options
+#	var info = result.get('info')
+#	var info_translations = cue.get_at(0, {})
+#	if info is String and info_translations is Dictionary:
+#		return format_info(info, info_translations)
+#	elif info_translations is Dictionary:
+#		l.g("Can't process raw info in image controller, info: " + str(info))
+#		return {}
+#	else: 
+#		l.g("Can't process raw info in image controller, info_translations not a dictionary")
+#		return {}
+##	formatted_info = format_info(info)
+##	list_info(formatted_info)
+#
+#
+#static func format_info(string: String, info_translations: Dictionary) -> Dictionary:
+#	var resul: Dictionary = {}
+#	var negative_prompt_pos = string.find(NEGATIVE_PROMPT)
+#	var other_config_pos = string.find(CONFIG_DETAILS)
+#	var positive_prompt = ''
+#	var negative_prompt = ''
+#	var config_details = ''
+#	if other_config_pos != -1:
+#		config_details = string.substr(other_config_pos)
+#		string = string.substr(0, other_config_pos)
+#	if negative_prompt_pos != -1:
+#		positive_prompt = string.substr(0, negative_prompt_pos)
+#		negative_prompt = string.substr(negative_prompt_pos)
+#	else:
+#		positive_prompt = string.strip_edges()
+#
+#	var not_formated_entries: Array = config_details.split(',')
+#	if not negative_prompt.empty():
+#		not_formated_entries.push_front(negative_prompt)
+#	if not positive_prompt.empty():
+#		not_formated_entries.push_front(POSITIVE_PROMPT + positive_prompt)
+#
+#	_add_info_entries_to_dict(not_formated_entries, resul)
+#	return _translate_dict(resul, info_translations)
+#
+#
+#static func _add_info_entries_to_dict(entries: Array, resul_dict: Dictionary):
+#	var key: String
+#	var value: String
+#	var aux: Array
+#	for entry in entries:
+#		aux = entry.split(':', false, 1)
+#		if aux.size() != 2:
+#			continue
+#
+#		key = aux[0].strip_edges()
+#		value = aux[1].strip_edges()
+#		resul_dict[key] = value
+#		if "hires" in key.to_lower():
+#			resul_dict[Consts.T2I_ENABLE_HR] = true
+#
+#	return resul_dict
+#
+#
+#static func _translate_dict(dict: Dictionary, info_translations: Dictionary) -> Dictionary:
+#	var new_dict = {}
+#	var translated_key
+#	var other_info = ''
+#	for key in dict.keys():
+#		translated_key = info_translations.get(key.to_lower())
+#		if translated_key == null:
+#			l.g("Unrecognized value '" + key + "' on image info", l.INFO)
+#			other_info += key + ": " + dict[key] + "\n"
+#		else:
+#			new_dict[translated_key] = dict[key]
+#
+#	if not other_info.empty():
+#		new_dict[OTHER_DETAILS_KEY] = other_info
+#
+#	return new_dict
 
 
 func list_info(info_dict: Dictionary):
@@ -214,7 +214,8 @@ func get_data_cue(_cue: Cue = null):
 				formatted_info.duplicate(), 
 				checkboxes_status, 
 				prompt_mode_selector.get_selected(),
-				raw_info])
+#				raw_info])
+				])
 
 
 func set_data_cue(cue: Cue):
@@ -222,7 +223,7 @@ func set_data_cue(cue: Cue):
 	formatted_info = cue.get_at(0, {}, false)
 	var checkboxes_status = cue.get_at(1, {}, false)
 	var prompt_mode = cue.get_at(2, 0, false)
-	raw_info = cue.get_at(2, null, false)
+#	raw_info = cue.get_at(2, null, false)
 	list_info(formatted_info)
 	prompt_mode_selector.select_by_label(prompt_mode)
 	for detail in details_container.get_children():

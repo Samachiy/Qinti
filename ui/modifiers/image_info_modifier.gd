@@ -3,28 +3,6 @@ extends ModifierMode
 var config: Dictionary
 var raw_info: Dictionary = {}
 
-# The purpose of this dictionary is to replace the result given by the 
-# png info api with item names that can be recognized by the constants in Const.gd,
-# that way when loading the configuation in the image in order to generate,
-# we just need to merge the configuration into the api call
-var info_translations: Dictionary = {
-	"cfg scale": Consts.I_CFG_SCALE,
-	"denoising strength": Consts.I_DENOISING_STRENGTH,
-	"ensd": Consts.SDO_ENSD,
-	"hires steps": Consts.T2I_HR_SECOND_PASS_STEPS,
-	"hires upscale": Consts.T2I_HR_SCALE,
-	"hires upscaler": Consts.T2I_HR_UPSCALER,
-	Consts.T2I_ENABLE_HR: Consts.T2I_ENABLE_HR,
-	"clip skip": Consts.SDO_CLIP_SKIP,
-	"model": Consts.SDO_MODEL,
-	"model hash": Consts.SDO_MODEL_HASH,
-	"negative prompt": Consts.I_NEGATIVE_PROMPT,
-	"positive prompt": Consts.I_PROMPT,
-	"sampler": Consts.I_SAMPLER_NAME,
-	"seed": Consts.I_SEED,
-	"size": ImageInfoController.SIZE_CONFIG_DISPLAY_NAME,
-	"steps": Consts.I_STEPS
-}
 
 
 func select_mode():
@@ -37,7 +15,7 @@ func select_mode():
 		if raw_info.empty():
 			DiffusionServer.request_image_info(self, "_on_png_info_received", image_data.base64)
 		else:
-			_on_png_info_received(raw_info)
+			_on_png_info_received(raw_info) # DELETE if we really don't need it, check that api reestruture works fine first
 	else:
 		Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "set_image").args([image_data]).execute()
 		data_cue.clone().execute()
@@ -66,8 +44,6 @@ func apply_to_api(_api):
 	if selected or data_cue == null:
 		data_cue = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "get_data_cue").execute()
 		config = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "get_config").execute()
-#		if data_cue == null:"res://Placeholders/images.png"
-#			_on_png_info_received()
 	
 	var prompt_mode = data_cue.get_at(2)
 	var prompt = [
@@ -90,6 +66,7 @@ func apply_to_api(_api):
 
 
 func _on_png_info_received(result):
+	DiffusionServer.api.get_image_info_from_result(result)
 	# Results format
 	# {
 	# "info": "string",
@@ -99,16 +76,17 @@ func _on_png_info_received(result):
 		return
 	
 	raw_info = result
-	var formatted_info = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "process_raw_info"
-			).args([info_translations]
-			).opts(raw_info
-			).execute()
-	
+#	var formatted_info = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "process_raw_info"
+#			).args([info_translations]
+#			).opts(raw_info
+#			).execute()
+	var formatted_info = DiffusionServer.api.get_image_info_from_result(result)
 	data_cue = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, 'set_data_cue').args([
 			formatted_info, 
 			{}, 
 			Consts.IMG_INFO_PROMPT_MODE_REPLACE_PROMPT,
-			raw_info])
+#			raw_info])
+			])
 	
 	if selected:
 		Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "set_image").args([image_data]).execute()

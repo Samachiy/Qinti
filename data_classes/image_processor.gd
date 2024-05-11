@@ -44,17 +44,23 @@ func process_image(image: Image, material: Material, target: Object, method: Str
 	sprite.texture = image_texture
 	sprite.material = material
 	processed_image = viewport.get_texture().get_data()
-	var error = connect("image_processed", target, method, binds, CONNECT_ONESHOT)
+	var error = connect("image_processed", target, method, binds)
 	
 	yield(VisualServer, "frame_post_draw")
 	processed_image = viewport.get_texture().get_data()
 	l.error(error, l.CONNECTION_FAILED + "on process_image")
 	
-	available = true
 	sprite.texture = null
 	sprite.material = null
 	viewport_container.visible = false
 	emit_signal("image_processed", processed_image)
+	if is_connected("image_processed", target, method):
+		disconnect("image_processed", target, method)
+	available = true
+	# if the same target and method is being used in the function that recives
+	# the signal, then a new connect("image_processed", target, method, binds)
+	# will be made before the CONNECT_ONESHOT deletes the connection, causing bugs
+	
 
 
 func image_to_base64(image: Image):

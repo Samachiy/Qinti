@@ -7,7 +7,6 @@ class_name AutoWebUI_API
 
 const MAIN_API_CONTEXT = "/sdapi/v1/"
 const TEXT2IMG_SERVICE = "txt2img"
-const IMG2IMG_SERVICE = "img2img"
 const PNG_INFO_SERVICE = "png-info"
 
 const ADDRESS_REFRESH_DIFFUSION_MODELS = "/sdapi/v1/refresh-checkpoints"
@@ -34,9 +33,11 @@ const PATH_KEY_EMBEDDINGS_DIR = "embeddings_dir"
 const PATH_KEY_CHECKPOINTS_DIR = "ckpt_dir"
 const PATH_KEY_CONTROL_DIR = "control_dir"
 
-# Modules
-var controlnet: DiffusionAPIModule = null
-var region_prompt: DiffusionAPIModule = null
+# PROGRESS KEYS
+const PROGRESS_KEY = "progress"
+const PROGRESS_STATE_KEY = "state"
+const PROGRESS_STATE_JOB_COUNT = "job_count"
+
 
 # DEFAULT_PATHS
 var models_dir: String = "models"
@@ -84,43 +85,6 @@ var txt2img_dict: Dictionary = {
 	"alwayson_scripts": {},
 }
 
-# Removed keys: 
-# styles, subseed, subseed_strength, seed_resize_from_h, seed_resize_from_w, 
-# do_not_save_samples, do_not_save_grid, sampler_index, alwayson_scripts, script_name, 
-# script_args, include_init_images, initial_noise_multiplier, inpaint_full_res_padding
-# inpainting_fill
-# (removing these gives me consistent results with web ui)
-# eta: 0, s_churn: 0, s_tmax: 0, s_tmin: 0, s_noise: 1 
-# (According to the source code, this is not that effective so it will not be used)
-# inpainting_fill
-# (too redundant with txt2img_dict)
-# steps, cfg_scale, width, height, restore_faces, tiling, negative_prompt, prompt
-# override_settings, override_settings_restore_afterwards, send_images, save_images,
-# alwayson_scripts, batch_size, n_iter, sampler_name, seed
-var img2img_dict: Dictionary = {
-	"init_images": [
-		# After reading the conde of the Automativ1111's web ui, it seems that 
-		# this array is meant to hold 1 image in general or 1 image per image requested
-		# in the batch, if there are less than the batch, the batch is resized to fit 
-		# the images sent, if it's more, then error. In summary, send just one image
-		# it's not worth bothering with mingling with some very custom functionality
-		# unless it's an extremely specific use case like processing a video WITHOUT 
-		# using controlnet or some other shennanigan like that
-		"" 
-	],
-	"resize_mode": 0, # this is not configurable, the image will be resized in this program
-	"denoising_strength": 0.7,
-	"image_cfg_scale": 0,
-#	"mask": "",
-	"mask_blur": 3,
-	"inpaint_full_res": true,
-	"inpainting_mask_invert": 0,
-}
-
-var png_info_dict: Dictionary = {
-	"image": "string"
-}
-
 
 func _ready():
 	controlnet = add_module(
@@ -148,11 +112,93 @@ func _ready():
 	clear()
 
 
+func generate(response_object: Object, response_method: String, custom_gen_data: Dictionary = {}):
+	var api_request = APIRequest.new(response_object, response_method, self)
+	var url = server_address.url + context + service
+	# ADD TO TEMPLATE
+	api_request.connect_on_request_failed(self, "_on_generation_failed")
+	if custom_gen_data.empty():
+		api_request.api_post(url, request_data)
+	else:
+		api_request.api_post(url, custom_gen_data)
+	
+	return api_request
+
+
+func get_images_from_result(result, debug: bool, img_name: String) -> Array: 
+	# This function should return an array of ImageData
+	# Debug will include the controlnet images sent
+	
+	var images_key_base64 = result.get('images')
+	var resul_base64 = []
+	if images_key_base64 is String:
+		resul_base64.append(images_key_base64)
+	elif images_key_base64 is Array:
+		for image in images_key_base64:
+			resul_base64.append(image)
+	
+	if debug:
+		# Controlnet images haven't been removed
+		return _base64_to_image_data(resul_base64, img_name)
+	
+	resul_base64 = controlnet.remove_controlnet_images_from_result(result, resul_base64)
+	return _base64_to_image_data(resul_base64, img_name)
+
+
+func get_seed_from_result(result) -> int:
+	var resul_info = result.get('info')
+	var last_seed = -1
+	if resul_info is String:
+		resul_info = JSON.parse(resul_info).result
+	if resul_info is Dictionary:
+		last_seed = int(resul_info.get('seed', -1))
+	if last_seed == -1:
+		l.g("Couldn't recover seed of last generated image")
+	
+	return last_seed
+
+
+
+
+func request_progress(response_object: Object, response_method: String):
+	var api_request = APIRequest.new(response_object, response_method, self)
+	var url = server_address.url + ADDRESS_GET_PROGRESS
+	api_request.api_get(url)
+
+
+func get_progress_from_result(result):
+	if not result is Dictionary:
+		return 0.0
+	
+	var progress = result.get(PROGRESS_KEY, 0.0)
+	if not _progress_has_job_count(result):
+		return -1.0
+	else:
+		return progress
+
+
+func _progress_has_job_count(results: Dictionary, only_zero_is_false: bool = true):
+	var state = results.get(PROGRESS_STATE_KEY, {})
+	var job_count = null
+	if state is Dictionary:
+		job_count = state.get(PROGRESS_STATE_JOB_COUNT, null)
+	
+	if job_count == null:
+		l.g("Failure to retrieve job count on pi_auto_web_ui.gd. Data: " + 
+				str(results))
+		job_count = 0
+	
+	if only_zero_is_false:
+		return int(job_count) != 0
+	else:
+		return job_count > 0
+
+
 func clear(_cue : Cue = null):
 	context = MAIN_API_CONTEXT
 	service = TEXT2IMG_SERVICE
 	request_data = txt2img_dict.duplicate(true)
-	clear_bake_queues()
+	clear_queues()
 
 
 func add_to_prompt(cue: Cue): 
@@ -212,125 +258,8 @@ func replace_parameters(cue: Cue):
 	request_data = cue._options.duplicate()
 
 
-func apply_controlnet_parameters(cue: Cue): 
-	# the config lies in the cue's dictionary (aka options)
-	controlnet.apply_parameters(cue)
-
-
 func _merge_dict(base_dict: Dictionary, overwrite_dict: Dictionary):
 	base_dict.merge(overwrite_dict, true)
-
-
-func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
-preprocessor_name: String):
-	controlnet.preprocess(response_object, response_method, image_data, preprocessor_name)
-
-
-func bake_pending_img2img(cue: Cue):
-	# [ has_empty_space: bool = false ]
-	var has_empty_space = cue.bool_at(0, false, false)
-	if img2img_to_bake.empty():
-		# if there's no img2img to use as background, that means that there MAY
-		# be empty space after baking, hence why we inform it to the funcion
-		# whether or not there is empty space
-		# Important: As for right now, we can only be certain that there is empty
-		# space when using outpainting, hence this bool is set only there
-		# POSTRELEASE use Image.is_invisible() to tell if there are any empty spaces
-		# (this requires applying a shader to invert alpha channel) rather than this
-		# one-case-only workaround, also add a checkbox on outpainting and inpainting
-		# to use this feature optionally
-		_bake_pending_mask(null, has_empty_space)
-		return
-	
-	convert_to_img2img()
-	var resul: Dictionary = img2img_dict.duplicate()
-	var height = request_data.get("height", 512)
-	var width = request_data.get("width", 512)
-	var base_image
-	for key in resul.keys():
-		match key:
-			"init_images":
-				base_image = _blend_images_at_dictionaries_key(
-						key, img2img_to_bake, width, height, true, null, false
-						)
-				base_image.save_png("user://img2img_base")
-				# warning-ignore:return_value_discarded
-				resul.erase("init_images")
-				_bake_pending_mask(base_image)
-			"mask":
-				# At the moment, there is no use for the mask in img2img thanks to the
-				# dedicated tool, hence this is not used
-				# Adding the comment here since these function will need an ImageData
-				# as image format for the input
-				resul[key] = _blend_images_at_dictionaries_key(
-						key, img2img_to_bake, width, height, false
-						)
-			"image_cfg_scale", "cfg_scale", "denoising_strength":
-				resul[key] = _average_nums_at_dictionaries_key(
-						key, img2img_to_bake, resul[key]
-						)
-			_:
-				resul[key] = _overlap_values_at_dictionaries_key(
-						key, img2img_to_bake, resul[key]
-						)
-	
-	img2img_to_bake = []
-	_merge_dict(request_data, resul)
-
-
-func _bake_pending_mask(img2img_mask: Image, has_empty_space: bool = false):
-	# This function is meant to be called inside bake_pending_img2img()
-	if mask_to_bake.empty():
-		# no need to apply any mask if this is the case
-		if img2img_mask != null:
-			# We just add the original img2img if it exists
-			request_data["init_images"] = [ImageProcessor.image_to_base64(img2img_mask)]
-			convert_to_img2img()
-		return
-	
-	convert_to_img2img()
-	# If we have to apply the mask
-	# we check if there's any need to blend or if we just apply the mask directly
-	var mask: Image = mask_to_bake[0]
-	var base_image: Image = mask_to_bake[1]
-	if img2img_mask != null:
-		# There's an image to blend (the result of the combined img2img images)
-		base_image.blend_rect_mask(
-				img2img_mask, 
-				mask, 
-				Rect2(Vector2.ZERO, img2img_mask.get_size()), 
-				Vector2.ZERO
-				)
-	else:
-		# if there's no background for the empty areas and has_empty_space
-		# we need denoising strength of 1, oterwise, we will be trying to
-		# replace noise with an empty image
-		if has_empty_space:
-			request_data["denoising_strength"] = 1
-	
-	request_data["init_images"] = [ImageProcessor.image_to_base64(base_image)]
-	request_data["mask"] = ImageProcessor.image_to_base64(mask)
-	mask_to_bake = []
-
-
-func convert_to_img2img(_cue: Cue = null):
-	# This function will copy all the changes made over the original request_data,
-	# but only the changes that are compatible with the img2img request data
-	if service == IMG2IMG_SERVICE:
-		return # it is already img2img
-	
-	for key in img2img_dict.keys():
-		request_data[key] = img2img_dict[key]
-	# Also the necessary api path changes will be applied
-	service = IMG2IMG_SERVICE
-
-
-func bake_pending_controlnets(_cue: Cue = null):
-	controlnet.bake_pending_controlnets()
-
-
-func bake_pending_regional_prompts(_cue: Cue = null):
-	return region_prompt.bake_regions()
 
 
 func get_request_data_no_images(custom_data: Dictionary = {}) -> Dictionary:
@@ -353,24 +282,33 @@ func get_request_data_no_images_no_prompts(custom_data: Dictionary = {}) -> Dict
 	return data_copy
 
 
-func get_images_from_result(result, debug: bool, img_name: String) -> Array: 
-	# This function should return an array of ImageData
-	# Debug will include the controlnet images sent
-	
-	var images_key_base64 = result.get('images')
-	var resul_base64 = []
-	if images_key_base64 is String:
-		resul_base64.append(images_key_base64)
-	elif images_key_base64 is Array:
-		for image in images_key_base64:
-			resul_base64.append(image)
-	
-	if debug:
-		# Controlnet images haven't been removed
-		return _base64_to_image_data(resul_base64, img_name)
-	
-	resul_base64 = controlnet.remove_images_from_result(result, resul_base64)
-	return _base64_to_image_data(resul_base64, img_name)
+func get_current_diffusion_model(response_object: Object, response_method: String):
+	var api_request = APIRequest.new(response_object, response_method, self)
+	var url = server_address.url + ADDRESS_GET_SERVER_CONFIG
+	api_request.api_get(url)
+
+
+func get_diffusion_model_from_result(server_config_result: Dictionary):
+	var full_name = server_config_result.get("sd_model_checkpoint", '')
+	if full_name is String:
+		full_name = full_name.substr(0, full_name.rfind(' '))
+		return full_name.get_basename()
+	else:
+		return ''
+
+
+func set_server_diffusion_model(model_file_name: String, response_object: Object, 
+success_method: String, failure_method: String):
+	var api_request = APIRequest.new(response_object, success_method, self)
+	api_request.connect_on_request_failed(response_object, failure_method)
+	var url = server_address.url + self.ADDRESS_SET_SERVER_CONFIG
+	api_request.api_post(url, {"sd_model_checkpoint": model_file_name.get_file()})
+
+
+func cancel_diffusion():
+	var api_request = APIRequest.new(self, "_on_diffusion_canceled", self)
+	var url = server_address.url + self.ADDRESS_CANCEL
+	api_request.api_post(url, {})
 
 
 func probe_server(current_server_address: ServerAddress):

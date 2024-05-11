@@ -7,9 +7,6 @@ extends MarginContainer
 
 const BLINK_IN_TIME = 0.4
 const BLINK_OUT_TIME = 0.8
-const PROGRESS_KEY = "progress"
-const PROGRESS_STATE_KEY = "state"
-const PROGRESS_STATE_JOB_COUNT = "job_count"
 const NO_LOG_AVAILABLE_1 = "NO_SERVER_LOG_AVAILABLE_1"
 const NO_LOG_AVAILABLE_2 = "NO_SERVER_LOG_AVAILABLE_2"
 
@@ -111,18 +108,12 @@ func update_progress():
 
 
 func _on_progress_retrieved(result):
-	if not result is Dictionary:
-		return
-	
-	set_progress(result.get(PROGRESS_KEY, 0.0))
-	if DiffusionServer.get_state() == Consts.SERVER_STATE_GENERATING :
-		if not has_job_count(result):
-			# We change from GENERATING state to READY state here in case the generation  
-			# was canceled because:
-			# If the generation was successfully canceled server side, there will be no  
-			# way of knowing that, but if the progress shows that nothing it's being  
-			# done, it will change the state to READY
+	var percentage = DiffusionServer.api.get_progress_from_result(result)
+	if percentage == -1:
+		if DiffusionServer.get_state() == Consts.SERVER_STATE_GENERATING:
 			DiffusionServer.set_state(Consts.SERVER_STATE_READY)
+	else:
+		set_progress(percentage)
 
 
 func _on_Timer_timeout():
@@ -170,23 +161,6 @@ func cancel(_cue: Cue = null):
 
 func _on_Cancel_pressed():
 	cancel()
-
-
-func has_job_count(results: Dictionary, only_zero_is_false: bool = true):
-	var state = results.get(PROGRESS_STATE_KEY, {})
-	var job_count = null
-	if state is Dictionary:
-		job_count = state.get(PROGRESS_STATE_JOB_COUNT, null)
-	
-	if job_count == null:
-		l.g("Failure to retrieve job count on server_state_indicator.gd. Data: " + 
-				str(results))
-		job_count = 0
-	
-	if only_zero_is_false:
-		return int(job_count) != 0
-	else:
-		return job_count > 0
 
 
 

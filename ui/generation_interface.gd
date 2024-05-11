@@ -116,12 +116,12 @@ func apply_modifiers_to_api(_cue: Cue = null):
 	modifiers_container.apply_modifiers_to_api()
 
 
-func generate(cue: Cue = null):
-	# [object_to_receive_resul: Object, function_to_receive_resul: String]
-	var object = cue.get_at(0, null)
-	var function = cue.get_at(1, '')
-	if object is Object:
-		DiffusionServer.generate(object, function)
+#func generate(cue: Cue = null):
+#	# [object_to_receive_resul: Object, function_to_receive_resul: String]
+#	var object = cue.get_at(0, null)
+#	var function = cue.get_at(1, '')
+#	if object is Object:
+#		DiffusionServer.generate(object, function)
 
 
 func _on_Main_ready():

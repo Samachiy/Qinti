@@ -93,9 +93,9 @@ func _on_InvertColors_toggled(button_pressed):
 	update_colors()
 
 
-func get_cn_config_cue(cue: Cue = null):
+func get_cn_config(cue: Cue = null):
 	# We override it in order to add the selected cn_model_type
-	var config_cue = .get_cn_config_cue(cue)
+	var config_cue = .get_cn_config(cue)
 	config_cue.args([cn_model_type])
 	return config_cue
 
