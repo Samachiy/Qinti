@@ -142,7 +142,7 @@ func set_preprocessor(cue: Cue):
 		canvas.refresh_viewport()
 
 
-func get_cn_config_cue(cue: Cue) -> Cue:
+func get_cn_config(cue: Cue) -> Cue:
 	# [ active_image: Image, default: bool = true ]
 	var active_image = cue.get_at(0, null)
 	var default = cue.bool_at(1, true, false)
@@ -150,7 +150,7 @@ func get_cn_config_cue(cue: Cue) -> Cue:
 		l.g("Couldn't create control net config in " + name + ". Missing ImageData in cue.")
 		return null
 	
-	return cn_config.get_config_cue(active_image, default)
+	return cn_config.get_controlnet_config(active_image, default)
 
 
 func get_active_image(_cue: Cue = null) -> Image:

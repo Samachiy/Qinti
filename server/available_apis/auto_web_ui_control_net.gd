@@ -34,10 +34,12 @@ func bake_pending_controlnets():
 	var controlnet_data = api.get_controlnet_data(width, height)
 	for value in controlnet_data.values():
 		_add_controlnet_to_data(value)
+	
+	return
 #	for controlnet_type in controlnet_to_bake.keys():
 #		control_net_array = controlnet_to_bake.get(controlnet_type)
 #		if control_net_array is Array and not control_net_array.empty():
-#			_bake_one_controlnet_type(control_net_array, width, height, controlnet_type) # RESUME place the resul in a dictionary
+#			_bake_one_controlnet_type(control_net_array, width, height, controlnet_type) 
 #			control_net_array.resize(0) # We empty the array since this was already added
 #
 #
@@ -60,9 +62,7 @@ func bake_pending_controlnets():
 #
 ## warning-ignore:return_value_discarded
 #	resul.erase("module") # keeping module will cause it to fail
-#	# RESUME return the resul rather than directly adding it
-#	# RESUME rename it as consolidate
-#	_add_controlnet_to_data(resul) # RESUME this will stay but we will iterate on the consolidated_controlnets. values()
+#	_add_controlnet_to_data(resul) 
 
 
 func _add_new_controlnet_to_data() -> Dictionary:

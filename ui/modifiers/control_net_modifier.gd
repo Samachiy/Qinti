@@ -9,7 +9,7 @@ var pending_preprocessor: ImageData = null
 var preprocessor_material: Material = null
 var controller_role: String = ''
 var cn_model_id: String = ''
-var config_cue: Cue = null
+var config_dict: Dictionary = {}
 var cn_model_type = ''
 var cn_model_search_string = ''
 var undoredo_data: Canvas2DUndoQueue = null
@@ -45,7 +45,7 @@ func deselect_mode():
 	undoredo_data = Cue.new(controller_role, "get_undoredo_data").execute()
 	data_cue = Cue.new(controller_role, "get_data_cue").execute()
 	active_image = Cue.new(controller_role, "get_active_image").execute()
-	config_cue = Cue.new(controller_role, "get_cn_config_cue").args(
+	config_dict = Cue.new(controller_role, "get_cn_config").args(
 			[active_image, false]).execute()
 	Cue.new(controller_role, "deselect_tools").execute()
 	selected = false
@@ -138,27 +138,29 @@ func _on_same_type_modifier_toggled():
 func apply_to_api(api):
 	if selected:
 		active_image = Cue.new(controller_role, "get_active_image").execute()
-		config_cue = Cue.new(controller_role, "get_cn_config_cue").args(
+		config_dict = Cue.new(controller_role, "get_cn_config_cue").args(
 				[active_image, false]).execute()
 	
 	if active_image == null:
-		config_cue = Cue.new(controller_role, "get_cn_config_cue").args(
+		config_dict = Cue.new(controller_role, "get_cn_config_cue").args(
 				[pending_preprocessor.image]).execute()
-	elif config_cue == null:
-		config_cue = Cue.new(controller_role, "get_cn_config_cue").args(
+	elif config_dict.empty():
+		config_dict = Cue.new(controller_role, "get_cn_config_cue").args(
 				[active_image]).execute()
 	
-	_apply_cue_to_api(config_cue, api)
+	_apply_config_to_api(config_dict, api)
 
 
-func _apply_cue_to_api(cue_to_apply: Cue, api):
+func _apply_config_to_api(config_to_apply: Dictionary, api):
 	var control_net_model = get_control_net_model_name()
 	if control_net_model.empty():
 		l.g("Canceling modifier of type: '" + name + "', model has not been downloaded yet. " +
 				"Currently downloading the model, please try again after the download ends.")
-	cue_to_apply.add_opt(Consts.CN_MODEL, get_control_net_model_name())
+		return
+	
+	config_to_apply[Consts.CN_MODEL] = control_net_model
 	if api.has_method("queue_controlnet_to_bake"):
-		api.queue_controlnet_to_bake(cue_to_apply._options, cn_model_type)
+		api.queue_controlnet_to_bake(config_to_apply, cn_model_type)
 
 
 func get_control_net_model_name(download_if_missing: bool = true) -> String:
