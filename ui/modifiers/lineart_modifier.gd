@@ -22,8 +22,8 @@ func select_mode():
 	Cue.new(Consts.ROLE_CONTROL_LINEART, "update_colors").execute()
 
 
-func _apply_config_to_api(config_cue: Cue, api):
-	cn_model_type = config_cue.get_at(0, Consts.CN_TYPE_LINEART)
+func _apply_config_to_api(config_to_apply: Dictionary, api):
+	cn_model_type = config_to_apply.get(Consts.CN_MODEL, 'lineart')
 	cn_model_search_string = type_translations.get(cn_model_type, 'lineart')
-	._apply_config_to_api(config_cue, api)
+	._apply_config_to_api(config_to_apply, api)
 

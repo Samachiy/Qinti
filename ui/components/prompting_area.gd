@@ -69,8 +69,9 @@ func _on_Generate_pressed():
 	Cue.new(Consts.ROLE_GENERATION_INTERFACE, "apply_modifiers_to_api").execute()
 	
 	Cue.new(Consts.ROLE_API, "bake_pending_img2img").execute()
+	Cue.new(Consts.ROLE_API, "bake_pending_mask").execute()
 	Cue.new(Consts.ROLE_API, "bake_pending_controlnets").execute()
-	yield(Cue.new(Consts.ROLE_API, "bake_pending_regional_prompts").execute(), "completed")
+#	yield(Cue.new(Consts.ROLE_API, "bake_pending_regional_prompts").execute(), "completed")
 	
 #	if not OS.has_feature("standalone"):
 #		Cue.new(Consts.ROLE_API, "apply_safe_mode").execute()

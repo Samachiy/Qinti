@@ -66,7 +66,6 @@ func apply_to_api(_api):
 
 
 func _on_png_info_received(result):
-	DiffusionServer.api.get_image_info_from_result(result)
 	# Results format
 	# {
 	# "info": "string",

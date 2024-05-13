@@ -50,11 +50,12 @@ func convert_to_img2img(_cue: Cue = null):
 
 
 func extract_img2img_image() -> Image:
-	var image_array = api.request_data.get("init_images", [])
-	if not image_array is Array or image_array.emptry():
-		return null
-	
-	var image = image_array[0]
+#	var image_array = api.request_data.get("init_images", [])
+#	if not image_array is Array or image_array.empty():
+#		return null
+#
+#	var image = image_array[0]
+	var image= api.request_data.get("init_images", null)
 	if image is Image:
 		return image
 	else:

@@ -138,14 +138,14 @@ func _on_same_type_modifier_toggled():
 func apply_to_api(api):
 	if selected:
 		active_image = Cue.new(controller_role, "get_active_image").execute()
-		config_dict = Cue.new(controller_role, "get_cn_config_cue").args(
+		config_dict = Cue.new(controller_role, "get_cn_config").args(
 				[active_image, false]).execute()
 	
 	if active_image == null:
-		config_dict = Cue.new(controller_role, "get_cn_config_cue").args(
+		config_dict = Cue.new(controller_role, "get_cn_config").args(
 				[pending_preprocessor.image]).execute()
 	elif config_dict.empty():
-		config_dict = Cue.new(controller_role, "get_cn_config_cue").args(
+		config_dict = Cue.new(controller_role, "get_cn_config").args(
 				[active_image]).execute()
 	
 	_apply_config_to_api(config_dict, api)

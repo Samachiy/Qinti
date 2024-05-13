@@ -91,9 +91,17 @@ func _ready():
 			DiffusionServer.FEATURE_CONTROLNET, 
 			"res://server/available_apis/auto_web_ui_control_net.gd"
 	)
-	region_prompt = add_module(
-			DiffusionServer.FEATURE_REGIONAL_PROMPTING, 
-			"res://server/available_apis/auto_web_ui_regional_prompting.gd"
+	image_info = add_module(
+			DiffusionServer.FEATURE_IMAGE_INFO, 
+			"res://server/available_apis/auto_web_ui_image_info.gd"
+	)
+	img_to_img = add_module(
+			DiffusionServer.FEATURE_IMG_TO_IMG, 
+			"res://server/available_apis/auto_web_ui_img_to_img.gd"
+	)
+	inpaint_outpaint = add_module(
+			DiffusionServer.FEATURE_INPAINT_OUTPAINT, 
+			"res://server/available_apis/auto_web_ui_inpaint_outpaint.gd"
 	)
 	extra_samplers = []
 	extra_upscalers = ["Latent"]

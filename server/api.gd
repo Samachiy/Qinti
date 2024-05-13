@@ -184,6 +184,36 @@ default_value, replace_null_with_default: bool = false): # parent
 		return aux / amount
 
 
+func get_image_to_image_data(width: int, height: int) -> Dictionary:
+	var result: Dictionary = {
+		"init_images": null, # This will return a Image object since it may be user by the mask
+		"denoising_strength": 0.7,
+		"image_cfg_scale": 0,
+	}
+	var base_image: Image
+	# RESUME this whole block from here and var resul: Dictionary = img2img_dict.duplicate()
+	for key in result.keys():
+		match key:
+			"init_images":
+				base_image = blend_images_at_dictionaries_key(
+						key, img2img_to_bake, width, height, false, null, false
+				)
+#				base_image.save_png("user://img2img_base")
+				# warning-ignore:return_value_discarded
+				result.erase("init_images")
+				# We dont encode it as base64 because inpaint_outpaint module will do that for us
+				result[key] = base_image
+			"image_cfg_scale", "cfg_scale", "denoising_strength":
+				result[key] = average_nums_at_dictionaries_key(
+						key, img2img_to_bake, result[key]
+						)
+			_:
+				result[key] = overlap_values_at_dictionaries_key(
+						key, img2img_to_bake, result[key]
+						)
+	return result
+
+
 func get_controlnet_data(width: int, height: int) -> Dictionary:
 	var data: Dictionary = {}
 	var control_net_array
@@ -299,7 +329,7 @@ func add_to_prompt(_cue: Cue):
 	name)
 
 
-func replace_prompt(cue: Cue):
+func replace_prompt(_cue: Cue):
 	# [positive_prompt, negative_prompt]
 	# also accepts a config dictionary, will use this if the arguments are emtpy
 	# the config dictionary will can be read with:
@@ -336,7 +366,7 @@ func queue_img2img_to_bake(dict: Dictionary):
 	img2img_to_bake.append(dict.duplicate(true))
 
 
-func bake_pending_img2img(_cue: Cue):
+func bake_pending_img2img(_cue: Cue = null):
 	if img_to_img is DiffusionAPIModule:
 		img_to_img.bake_pending_img2img()
 	else:
@@ -359,10 +389,10 @@ func queue_mask_to_bake(mask: Image, base_image: Image, mode: String):
 	
 	mask.convert(Image.FORMAT_RGBA8)
 	base_image.convert(Image.FORMAT_RGBA8)
-	mask_to_bake = [mask, base_image]
+	mask_to_bake = [mask, base_image, mode]
 
 
-func bake_pending_mask():
+func bake_pending_mask(_cue: Cue = null):
 	if inpaint_outpaint is DiffusionAPIModule:
 		inpaint_outpaint.bake_pending_mask()
 	else:
@@ -436,7 +466,7 @@ func bake_pending_regional_prompts(_cue: Cue = null):
 	# regions_to_bake: follows the next format:
 	# [ [rect2_1, data_dict1], [rect2_2, data_dict2], ... ]
 	# At the beginning are the lower priority regions, at the end, the hightest
-	l.g("The function 'bake_pending_controlnets' has not been overriden yet on Api: " + 
+	l.g("The function 'bake_pending_regional_prompts' has not been overriden yet on Api: " + 
 	name)
 
 

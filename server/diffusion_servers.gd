@@ -14,6 +14,9 @@ const STATE_INSTALLING = Consts.SERVER_STATE_INSTALLING
 const STATE_SHUTDOWN = Consts.SERVER_STATE_SHUTDOWN
 
 const FEATURE_CONTROLNET = "controlnet"
+const FEATURE_IMAGE_INFO = "image_info"
+const FEATURE_IMG_TO_IMG = "img_to_img"
+const FEATURE_INPAINT_OUTPAINT = "inpaint_outpaint"
 const FEATURE_REGIONAL_PROMPTING = "regional_prompting"
 
 const MSG_NO_FEATURE_GENERIC = "MESSAGE_NO_FEATURE_GENERIC"

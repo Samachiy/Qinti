@@ -95,9 +95,9 @@ func _on_InvertColors_toggled(button_pressed):
 
 func get_cn_config(cue: Cue = null):
 	# We override it in order to add the selected cn_model_type
-	var config_cue = .get_cn_config(cue)
-	config_cue.args([cn_model_type])
-	return config_cue
+	var config_dict = .get_cn_config(cue)
+	config_dict[Consts.CN_MODEL] = cn_model_type
+	return config_dict
 
 
 func get_data_cue(_cue: Cue = null):
@@ -111,6 +111,7 @@ func get_data_cue(_cue: Cue = null):
 		canvas.display_area,
 		layer_name,
 		normal_colors,
+		cn_model_type
 		])
 	
 	return cue
@@ -121,6 +122,7 @@ func set_data_cue(cue: Cue):
 	var display_area = cue.get_at(0, Rect2(Vector2.ZERO, Vector2(512, 512)))
 	var layer_name_ = cue.get_at(1, '')
 	var normal_colors_ = cue.get_at(2, true)
+	cn_model_type = cue.get_at(3, cn_model_type)
 	prepare_layer(Cue.new('', '').args([layer_name_]))
 	normal_colors = normal_colors_
 	update_colors()

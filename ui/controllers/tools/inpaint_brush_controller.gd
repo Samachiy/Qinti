@@ -128,7 +128,7 @@ func inpaint(apply_modifiers):
 	Cue.new(Consts.ROLE_API, "bake_pending_mask").execute()
 	Cue.new(Consts.ROLE_API, "bake_pending_controlnets").execute()
 	Cue.new(Consts.ROLE_API, "apply_parameters").opts(config).execute()
-	Cue.new(Consts.ROLE_API, "bake_pending_regional_prompts").execute()
+#	Cue.new(Consts.ROLE_API, "bake_pending_regional_prompts").execute()
 	
 	var prompting_area = Roles.get_node_by_role(Consts.ROLE_PROMPTING_AREA)
 	if prompting_area is Object:
