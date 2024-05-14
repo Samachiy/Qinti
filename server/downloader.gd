@@ -68,6 +68,10 @@ var controlnet_links_t2i: Dictionary = {
 		"control_v11p_sd15_softedge",
 	Consts.CN_TYPE_IP2P: "https://huggingface.co/lllyasviel/ControlNet-v1-1/resolve/main/" + \
 		"control_v11e_sd15_ip2p",
+	Consts.CN_TYPE_COLOR: "https://huggingface.co/TencentARC/T2I-Adapter/resolve/main/models/" + \
+		"t2iadapter_color_sd14v1", # Reference color
+	Consts.CN_TYPE_STYLE: "https://huggingface.co/TencentARC/T2I-Adapter/resolve/main/models/" + \
+		"t2iadapter_style_sd14v1", # Canceled, use reference only insterad
 }
 
 

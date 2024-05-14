@@ -70,7 +70,6 @@ func bake_pending_img2img():
 	convert_to_img2img()
 	var height = api.request_data.get("height", 512)
 	var width = api.request_data.get("width", 512)
-	var base_image: Image
 	var data = api.get_image_to_image_data(width, height)
 	api.request_data.merge(data, true)
 
