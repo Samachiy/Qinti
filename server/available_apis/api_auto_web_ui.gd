@@ -116,6 +116,11 @@ func _ready():
 	ADDRESS_GET_SERVER_CONFIG = "/sdapi/v1/options"
 	ADDRESS_SET_SERVER_CONFIG = "/sdapi/v1/options"
 	ADDRESS_SHUTDOWN_SERVER = "/sdapi/v1/shutdown"
+	server_urls = [
+		"http://127.0.0.1:7860",
+		"http://127.0.0.1:7861",
+		"http://127.0.0.1:7862",
+	]
 	PCData.install_python_library("psutil", false)
 	clear()
 
@@ -124,7 +129,7 @@ func generate(response_object: Object, response_method: String, custom_gen_data:
 	var api_request = APIRequest.new(response_object, response_method, self)
 	var url = server_address.url + context + service
 	# ADD TO TEMPLATE
-	api_request.connect_on_request_failed(self, "_on_generation_failed")
+	api_request.connect_on_request_failed(DiffusionServer, "_on_generation_failed")
 	if custom_gen_data.empty():
 		api_request.api_post(url, request_data)
 	else:
@@ -314,7 +319,7 @@ success_method: String, failure_method: String):
 
 
 func cancel_diffusion():
-	var api_request = APIRequest.new(self, "_on_diffusion_canceled", self)
+	var api_request = APIRequest.new(DiffusionServer, "_on_diffusion_canceled", self)
 	var url = server_address.url + self.ADDRESS_CANCEL
 	api_request.api_post(url, {})
 
@@ -339,6 +344,10 @@ func _on_probe_success(result):
 	else:
 		l.g("Can't refresh paths on AutoWebUi class API, returned configuration is: " + str(result))
 	emit_signal("server_probed", true)
+
+
+func _on_prove_failed(_result):
+	emit_signal("server_probed", false)
 
 
 func refresh_paths(api_result: Dictionary = {}):
@@ -432,10 +441,6 @@ func _interpret_api_path(api_path: String, default_path: String) -> String:
 		return install_path.plus_file(api_path)
 	else:
 		return install_path.plus_file(default_path)
-
-
-func _on_prove_failed(_result):
-	emit_signal("server_probed", false)
 
 
 func adjust_server():

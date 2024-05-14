@@ -107,6 +107,7 @@ func _on_image_generated(result):
 	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "set_text").args([
 			Consts.HELP_DESC_IMAGE_GENERATED]).execute()
 	
+	DiffusionServer.mark_generation_available()
 	Tutorials.run_with_name(Tutorials.TUT2, true, [Tutorials.TUT1])
 
 

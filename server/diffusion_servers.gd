@@ -97,6 +97,12 @@ func instance_api(api_script: GDScript) -> DiffusionAPI:
 		remove_child(api)
 	
 	api = new_api
+	var api_server_urls = api.server_urls
+	if not api_server_urls is Array or api_server_urls.empty():
+		l.g("URLs for api '" + api.filename + "' have not been set.")
+	else:
+		server_urls = api_server_urls
+	
 	var e = api.connect("data_refreshed", self, "_on_data_refreshed")
 	e = api.connect("paths_refreshed", self, "_on_paths_refreshed")
 	l.error(e, l.CONNECTION_FAILED)

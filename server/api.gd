@@ -36,7 +36,17 @@ var default_upscaler = ''
 var config_report: ConfigReport = ConfigReport.new()
 var server_address: ServerAddress = null
 
-var request_data: Dictionary = {} 
+var controlnet_bgs: Dictionary = {
+	Consts.CN_TYPE_CANNY: Color.black,
+	Consts.CN_TYPE_LINEART: Color.black,
+	Consts.CN_TYPE_MLSD: Color.black,
+	Consts.CN_TYPE_SOFTEDGE: Color.black,
+	Consts.CN_TYPE_OPENPOSE: Color.black,
+	Consts.CN_TYPE_DEPTH: Color.black,
+	Consts.CN_TYPE_NORMAL: Color.mediumpurple,
+}
+
+var request_data = {} 
 
 var img2img_to_bake: Array = [] # [ data_dict1, data_dict2, ... ]
 var controlnet_to_bake: Dictionary = {
@@ -55,15 +65,7 @@ var mask_to_bake: Array = [] # [ mask, base_image, mode ] base_image is what wil
 #							in the unmasked area, mode is MASK_MODE_INPAINT or MASK_MODE_OUTPAINT
 var regions_to_bake: Array = [] # [ [rect2_1, data_dict1], [rect2_2, data_dict2], ... ]
 
-var controlnet_bgs: Dictionary = {
-	Consts.CN_TYPE_CANNY: Color.black,
-	Consts.CN_TYPE_LINEART: Color.black,
-	Consts.CN_TYPE_MLSD: Color.black,
-	Consts.CN_TYPE_SOFTEDGE: Color.black,
-	Consts.CN_TYPE_OPENPOSE: Color.black,
-	Consts.CN_TYPE_DEPTH: Color.black,
-	Consts.CN_TYPE_NORMAL: Color.mediumpurple,
-}
+var server_urls = []
 
 # Modules
 var controlnet: DiffusionAPIModule = null
