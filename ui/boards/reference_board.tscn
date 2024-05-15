@@ -16,6 +16,5 @@ anchor_bottom = 0.0
 margin_right = 322.0
 margin_bottom = 224.0
 controller = "res://ui/controllers/reference_controller.tscn"
-canvas = "res://ui/canvas/canvas_image.tscn"
-has_overunderlay = false
+canvas = "res://ui/canvas/canvas_2d/canvas2d.tscn"
 tutorial_const = "TUTM1"

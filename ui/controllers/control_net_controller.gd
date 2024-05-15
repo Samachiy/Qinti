@@ -80,14 +80,14 @@ func update_overlay_underlay(cue: Cue):
 
 func get_preprocessor(cue: Cue):
 	# [ original_image_data: ImageData, target: Object, method: String]
+	if selected_preprocessor == DISABLE_PREPROCESSOR_KEYWORD:
+		return
+	
 	original_image_data = cue.get_at(0, original_image_data, original_image_data == null)
 	var target = cue.object_at(1, modifier, false)
 	var method = cue.str_at(2, "_on_image_preprocessed", false)
 	if original_image_data == null:
 		l.g("Couldn't set image in " + name + " controller")
-		return
-	
-	if selected_preprocessor == DISABLE_PREPROCESSOR_KEYWORD:
 		return
 	
 	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "set_text").args([

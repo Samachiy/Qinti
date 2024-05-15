@@ -1,4 +1,4 @@
-extends ControlnetNoCanvasController
+extends ControlnetController
 
 
 func _ready():
@@ -11,11 +11,21 @@ func get_data_cue(_cue: Cue = null):
 	if layer_name.empty():
 		return null
 	
-	var cue = Cue.new(Consts.ROLE_CONTROL_REFERENCE, 'set_data_cue')
-	# RESUME add the weight here
+	var cue = Cue.new(Consts.ROLE_CONTROL_IMG2IMG, 'set_data_cue')
+	
+	cue.args([
+		canvas.display_area,
+		layer_name,
+		])
+	
 	return cue
 
 
 func set_data_cue(cue: Cue):
 	clear()
-	# RESUME get the weight here
+	var display_area = cue.get_at(0, Rect2(Vector2.ZERO, Vector2(512, 512)))
+	var layer_name_ = cue.get_at(1, '')
+	prepare_layer(Cue.new('', '').args([layer_name_]))
+	if display_area is Rect2:
+		canvas.display_area = display_area
+		canvas.fit_to_rect2(display_area)
