@@ -60,6 +60,8 @@ var controlnet_to_bake: Dictionary = {
 	Consts.CN_TYPE_SCRIBBLE: [],
 	Consts.CN_TYPE_SEG: [],
 	Consts.CN_TYPE_SOFTEDGE: [],
+	Consts.CN_TYPE_COLOR: [],
+	Consts.CN_TYPE_REFERENCE: [],
 }
 var mask_to_bake: Array = [] # [ mask, base_image, mode ] base_image is what will appear
 #							in the unmasked area, mode is MASK_MODE_INPAINT or MASK_MODE_OUTPAINT
@@ -219,15 +221,24 @@ func get_image_to_image_data(width: int, height: int) -> Dictionary:
 func get_controlnet_data(width: int, height: int) -> Dictionary:
 	var data: Dictionary = {}
 	var control_net_array
+	var result: Dictionary
 	for controlnet_type in controlnet_to_bake.keys():
 		control_net_array = controlnet_to_bake.get(controlnet_type)
 		if control_net_array is Array and not control_net_array.empty():
-			data[controlnet_type] = _consolidate_one_controlnet(
+			result = _consolidate_one_controlnet(
 					control_net_array, 
 					width, 
 					height, 
 					controlnet_type
 			)
+			if controlnet_type == Consts.CN_TYPE_REFERENCE:
+# warning-ignore:return_value_discarded
+				result.erase("model")
+			else:
+# warning-ignore:return_value_discarded
+				result.erase("module")
+			
+			data[controlnet_type] = result
 	
 	return data
 
@@ -236,6 +247,7 @@ func _consolidate_one_controlnet(dictionaries: Array, width: int, height: int, t
 	var result: Dictionary = {
 		"input_image": "", # base64 image
 		"model": "", # Controlnet model to use
+		"module": "",
 		"weight": 1,
 		"guidance_start": 0, # advanced mode only
 		"guidance_end": 1, # advanced mode only

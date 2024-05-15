@@ -11,7 +11,9 @@ types = {
 "Lineart": "LINEART_MODE",
 "NormalMap": "NORMAL_MAP_MODE",
 "PNGInfo": "PNG_INFO",
-"Pose2D": "POSE2D_MODE"
+"Pose2D": "POSE2D_MODE",
+"Reference": "REFERENCE_MODE",
+"ReferenceColor": "COLOR_MODE"
 }
 order = "1 PNGInfo
 2 Img2Img
@@ -19,4 +21,6 @@ order = "1 PNGInfo
 5 Pose2D
 6 Composition
 7 Depth
-8 NormalMap"
+8 NormalMap
+9 Reference
+10 ReferenceColor"

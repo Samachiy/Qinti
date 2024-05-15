@@ -4,7 +4,6 @@ class_name ControlnetNoCanvasModifierMode
 
 export(Color) var background_color = Color.black
 
-var layer_id: String = ''
 var controller_role: String = ''
 var cn_model_id: String = ''
 var config_dict: Dictionary = {}
@@ -17,8 +16,6 @@ func select_mode():
 		return
 	selected = true
 	Cue.new(controller_role, "open_board").args([self]).execute()
-	layer_id = Cue.new(controller_role, 'prepare_layer').args([layer_id]).execute()
-	
 	if data_cue == null:
 		Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "set_image").args([image_data]).execute()
 	else:
@@ -93,10 +90,6 @@ func _on_control_net_models_refreshed(cn_model_string):
 
 func clear_board():
 	Cue.new(controller_role, "clear").execute()
-
-
-func _on_same_type_modifier_toggled():
-	Cue.new(controller_role, "update_overlay_underlay").args([name, owner]).execute()
 
 
 func apply_to_api(api):

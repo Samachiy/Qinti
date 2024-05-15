@@ -255,9 +255,11 @@ type = ExtResource( 4 )
 
 [node name="Reference" type="Node" parent="Modes"]
 script = ExtResource( 23 )
+type = ExtResource( 4 )
 
 [node name="ReferenceColor" type="Node" parent="Modes"]
 script = ExtResource( 24 )
+type = ExtResource( 4 )
 
 [node name="Pose2D" type="Node" parent="Modes"]
 script = ExtResource( 16 )
