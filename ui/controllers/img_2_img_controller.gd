@@ -128,12 +128,12 @@ func get_img2img_dict(cue: Cue = null):
 	var active_image = cue.get_at(0, null)
 	
 	var default = cue.bool_at(1, true, false)
-	var dict = DiffusionServer.api.img2img_dict.duplicate(true)
+	var dict = {} #DiffusionServer.api.img2img_dict.duplicate(true)
 	if active_image == null:
 		l.g("Couldn't create control net config in " + name + ". Missing ImageData in cue.")
 		return
 	
-	dict[Consts.I2I_INIT_IMAGES] = [active_image]
+	dict[Consts.I2I_INIT_IMAGES] = active_image
 	if not default:
 		dict[Consts.I_DENOISING_STRENGTH] = denoising_strenght.get_value()
 		dict[Consts.I_CFG_SCALE] = cfg_scale.get_value()

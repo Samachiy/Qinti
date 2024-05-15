@@ -1,18 +1,14 @@
 extends ModifierMode
 
-class_name ControlnetModifierMode
+class_name ControlnetNoCanvasModifierMode
 
 export(Color) var background_color = Color.black
 
-var layer_id: String = ''
-var pending_preprocessor: ImageData = null
-var preprocessor_material: Material = null
 var controller_role: String = ''
 var cn_model_id: String = ''
 var config_dict: Dictionary = {}
 var cn_model_type = ''
 var cn_model_search_string = ''
-var undoredo_data: Canvas2DUndoQueue = null
 var is_downloading_model: bool = false
 
 func select_mode():
@@ -20,61 +16,26 @@ func select_mode():
 		return
 	selected = true
 	Cue.new(controller_role, "open_board").args([self]).execute()
-	layer_id = Cue.new(controller_role, 'prepare_layer').args([layer_id]).execute()
-	
-	# There's no need to do special check with undoredo_data since those checks are already
-	# taken care on the controller side (in base_controller.gd)
-	undoredo_data = Cue.new(controller_role, "set_undoredo_data").args([undoredo_data]).execute()
-	
 	if data_cue == null:
-		if pending_preprocessor == null:
-			# if the selected mode changes when modifier IS selected
-			Cue.new(controller_role, "get_preprocessor").args(
-					[image_data, self]).execute()
-		else:
-			# if the selected mode changes when modifier is NOT selected
-			Cue.new(controller_role, "set_preprocessor").args(
-					[pending_preprocessor]).execute()
+		Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "set_image").args([image_data]).execute()
 	else:
 		data_cue.clone().execute()
-	
-	Cue.new(controller_role, "update_overlay_underlay").args([name, owner]).execute()
 
 
 func deselect_mode():
-	undoredo_data = Cue.new(controller_role, "get_undoredo_data").execute()
 	data_cue = Cue.new(controller_role, "get_data_cue").execute()
-	active_image = Cue.new(controller_role, "get_active_image").execute()
 	config_dict = Cue.new(controller_role, "get_cn_config").args(
-			[active_image, false]).execute()
+			[image_data.image, false]).execute()
 	Cue.new(controller_role, "deselect_tools").execute()
 	selected = false
 
 
 func prepare_mode():
-	if DiffusionServer.get_state() != Consts.SERVER_STATE_READY:
-		if not DiffusionServer.is_connected("state_changed", self, "_on_server_state_changed"):
-			var e = DiffusionServer.connect("state_changed", self, "_on_server_state_changed")
-			l.error(e, l.CONNECTION_FAILED)
-		return
-	
 	if get_control_net_model_name().empty():
 		is_downloading_model = true
 		DiffusionServer.downloader.connect(
 				"downloads_finished", self, "_on_control_net_model_downloaded", 
 				[cn_model_search_string])
-	
-	Cue.new(controller_role, "get_preprocessor").args([
-			image_data,
-			self,
-			"_on_image_preprocessed"
-	]).execute()
-
-
-func _on_server_state_changed(_prev_state: String, new_state: String):
-	if new_state == Consts.SERVER_STATE_READY:
-		if not is_prepared:
-			prepare_mode()
 
 
 func _on_control_net_model_downloaded(cn_model_string):
@@ -131,22 +92,14 @@ func clear_board():
 	Cue.new(controller_role, "clear").execute()
 
 
-func _on_same_type_modifier_toggled():
-	Cue.new(controller_role, "update_overlay_underlay").args([name, owner]).execute()
-
-
 func apply_to_api(api):
 	if selected:
-		active_image = Cue.new(controller_role, "get_active_image").execute()
 		config_dict = Cue.new(controller_role, "get_cn_config").args(
-				[active_image, false]).execute()
+				[image_data.image, false]).execute()
 	
-	if active_image == null:
+	if config_dict.empty():
 		config_dict = Cue.new(controller_role, "get_cn_config").args(
-				[pending_preprocessor.image]).execute()
-	elif config_dict.empty():
-		config_dict = Cue.new(controller_role, "get_cn_config").args(
-				[active_image]).execute()
+				[image_data.image]).execute()
 	
 	_apply_config_to_api(config_dict, api)
 
@@ -186,53 +139,10 @@ func get_control_net_model_name(download_if_missing: bool = true) -> String:
 	return ''
 
 
-func blend_active_image_with_bg() -> Image:
-	return ImageProcessor.add_background_to_image(active_image, background_color)
-
-
-func _on_image_preprocessed(result):
-	# We set the prepared related variable and stuff
-	is_prepared = true
-	if DiffusionServer.is_connected("state_changed", self, "_on_server_state_changed"):
-		DiffusionServer.disconnect("state_changed", self, "_on_server_state_changed")
-	
-	# We extract the image ansd set it accordingly
-	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "set_text").args([
-			Consts.HELP_DESC_IMAGE_PREPROCESSED]).execute()
-	
-	var image_data: ImageData = DiffusionServer.api.get_preprocessed_image(result, name)
-	if image_data == null:
-		DiffusionServer.mark_generation_available()
-		return
-	
-	if preprocessor_material != null:
-		ImageProcessor.process_image(
-				image_data.image, 
-				preprocessor_material, 
-				self, 
-				"_on_image_processed")
-	else:
-		pending_preprocessor = image_data
-		restore_image_data = pending_preprocessor
-		DiffusionServer.mark_generation_available()
-		if selected:
-			Cue.new(controller_role, "set_preprocessor").args(
-					[pending_preprocessor]).execute()
 
 
 func get_active_image() -> Image:
-	if active_image != null:
-		return active_image
-	elif pending_preprocessor != null:
-		return pending_preprocessor.image
+	if image_data != null:
+		return image_data.image
 	else:
 		return null
-
-
-func _on_image_processed(result: Image):
-	DiffusionServer.mark_generation_available()
-	pending_preprocessor = ImageData.new("preprocessed_image_" + name).load_image_object(result)
-	restore_image_data = pending_preprocessor
-	if selected:
-		Cue.new(controller_role, "set_preprocessor").args(
-				[pending_preprocessor]).execute()

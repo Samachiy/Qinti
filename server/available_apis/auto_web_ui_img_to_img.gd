@@ -63,45 +63,15 @@ func convert_to_img2img(_cue: Cue = null):
 	api.service = IMG2IMG_SERVICE
 
 
-func bake_pending_img2img(_cue: Cue):
+func bake_pending_img2img():
 	if api.img2img_to_bake.empty():
 		return
 	
 	convert_to_img2img()
-	var resul: Dictionary = img2img_dict.duplicate()
 	var height = api.request_data.get("height", 512)
 	var width = api.request_data.get("width", 512)
-	var base_image: Image
-	# RESUME this whole block from here and var resul: Dictionary = img2img_dict.duplicate()
-	for key in resul.keys():
-		match key:
-			"init_images":
-				base_image = api.blend_images_at_dictionaries_key(
-						key, api.img2img_to_bake, width, height, true, null, false
-				)
-#				base_image.save_png("user://img2img_base")
-				# warning-ignore:return_value_discarded
-				resul.erase("init_images")
-				# We dont encode it as base64 because inpaint_outpaint module will do that for us
-				resul[key] = [base_image] 
-			"mask":
-				# At the moment, there is no use for the mask in img2img thanks to the
-				# dedicated tool, hence this is not used
-				# Adding the comment here since these function will need an ImageData
-				# as image format for the input
-				resul[key] = api.blend_images_at_dictionaries_key(
-						key, api.img2img_to_bake, width, height, false
-						)
-			"image_cfg_scale", "cfg_scale", "denoising_strength":
-				resul[key] = api.average_nums_at_dictionaries_key(
-						key, api.img2img_to_bake, resul[key]
-						)
-			_:
-				resul[key] = api.overlap_values_at_dictionaries_key(
-						key, api.img2img_to_bake, resul[key]
-						)
-	# RESUME return resul rather than merging it
-	api.request_data.merge(resul, true)
+	var data = api.get_image_to_image_data(width, height)
+	api.request_data.merge(data, true)
 
 
 #func bake_pending_img2img(cue: Cue):

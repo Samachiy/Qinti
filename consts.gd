@@ -137,6 +137,8 @@ const CN_TYPE_SCRIBBLE = "scribble"
 const CN_TYPE_SEG = "seg"
 const CN_TYPE_SOFTEDGE = "softedge"
 const CN_TYPE_IP2P = "ip2p"
+const CN_TYPE_REFERENCE = "reference"
+const CN_TYPE_COLOR = "color"
 
 # ONLY AS FLAGS
 
@@ -191,6 +193,8 @@ const ROLE_CONTROL_NORMAL_MAP = "Normal Map Control"
 const ROLE_CONTROL_IMG2IMG = "Img2Img Control"
 const ROLE_CONTROL_STYLING = "Styling Control"
 const ROLE_CONTROL_REGION_PROMPT = "Regional Prompt Control"
+const ROLE_CONTROL_REFERENCE = "Reference Control"
+const ROLE_CONTROL_COLOR = "Reference Color Control"
 const ROLE_PROMPTING_AREA = "Prompting area"
 const ROLE_GENERATION_INTERFACE = "Generation interface"
 const ROLE_ACTIVE_MODIFIER = "Active modifier"

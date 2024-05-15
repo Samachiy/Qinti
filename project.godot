@@ -79,6 +79,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://ui/modifiers/control_net_modifier.gd"
 }, {
+"base": "Controller",
+"class": "ControlnetNoCanvasController",
+"language": "GDScript",
+"path": "res://ui/controllers/control_net_no_canvas_controller.gd"
+}, {
+"base": "ModifierMode",
+"class": "ControlnetNoCanvasModifierMode",
+"language": "GDScript",
+"path": "res://ui/modifiers/control_net_no_canvas_modifier.gd"
+}, {
 "base": "Reference",
 "class": "Cue",
 "language": "GDScript",
@@ -339,6 +349,8 @@ _global_script_class_icons={
 "Controller": "",
 "ControlnetController": "",
 "ControlnetModifierMode": "",
+"ControlnetNoCanvasController": "",
+"ControlnetNoCanvasModifierMode": "",
 "Cue": "",
 "CurrentModelThumbnail": "",
 "DiffusionAPI": "",

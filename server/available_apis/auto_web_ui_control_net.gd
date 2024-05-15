@@ -29,8 +29,6 @@ func bake_pending_controlnets():
 	
 	var height = api.request_data.get("height", 512)
 	var width = api.request_data.get("width", 512)
-	var control_net_array
-	var controlnet_to_bake = api.controlnet_to_bake
 	var controlnet_data = api.get_controlnet_data(width, height)
 	for value in controlnet_data.values():
 		_add_controlnet_to_data(value)

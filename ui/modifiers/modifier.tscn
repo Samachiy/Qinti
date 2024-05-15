@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://assets/icons/large_warning_icon.png" type="Texture" id=1]
 [ext_resource path="res://ui/modifiers/modifier.gd" type="Script" id=2]
@@ -22,6 +22,8 @@
 [ext_resource path="res://assets/fonts/NonoSansJP-Regular_small_dynamicfont.tres" type="DynamicFont" id=20]
 [ext_resource path="res://ui/modifiers/regional_prompting_modifier.gd" type="Script" id=21]
 [ext_resource path="res://ui/modifiers/type_regional_prompting.tres" type="Resource" id=22]
+[ext_resource path="res://ui/modifiers/reference_modifier.gd" type="Script" id=23]
+[ext_resource path="res://ui/modifiers/reference_color_modifier.gd" type="Script" id=24]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
@@ -249,6 +251,14 @@ feature_tags = "controlnet"
 
 [node name="Img2Img" type="Node" parent="Modes"]
 script = ExtResource( 14 )
+type = ExtResource( 4 )
+
+[node name="Reference" type="Node" parent="Modes"]
+script = ExtResource( 23 )
+type = ExtResource( 4 )
+
+[node name="ReferenceColor" type="Node" parent="Modes"]
+script = ExtResource( 24 )
 type = ExtResource( 4 )
 
 [node name="Pose2D" type="Node" parent="Modes"]
