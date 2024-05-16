@@ -374,6 +374,10 @@ func _on_Label_resized():
 			label.rect_position.y = main_button.rect_size.y - label.rect_size.y
 
 
+func _on_TextureButton_button_up():
+	_on_TextureButton_pressed()
+
+
 # FEATURES SIGNALS
 
 func _refresh_features():
@@ -400,7 +404,3 @@ func _on_controlnet_feature_toggled(enabled: bool) -> bool:
 		warning_icon.hint_tooltip += tr(DiffusionServer.MSG_NO_FEATURE_CONTROLNET) + "\n"
 	
 	return true
-
-
-func _on_TextureButton_button_up():
-	_on_TextureButton_pressed()
