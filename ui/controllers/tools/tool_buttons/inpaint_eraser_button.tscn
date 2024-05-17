@@ -7,7 +7,7 @@
 [ext_resource path="res://assets/icons/inpaint_tool_#g3924.png" type="Texture" id=5]
 [ext_resource path="res://ui/controllers/button_groups/canvas_tools.tres" type="ButtonGroup" id=6]
 
-[node name="InpaintBrushButton" type="TextureButton"]
+[node name="InpaintEraserButton" type="TextureButton"]
 margin_right = 40.0
 margin_bottom = 40.0
 hint_tooltip = "INPAINT_ERASER_TOOL"
@@ -20,3 +20,4 @@ texture_focused = ExtResource( 2 )
 expand = true
 stretch_mode = 4
 script = ExtResource( 1 )
+bind_feature = "inpaint_outpaint"

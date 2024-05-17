@@ -63,8 +63,7 @@ func _ready():
 	refresh_same_type = true
 	
 	# Connecting features
-	var ds = DiffusionServer
-	ds.connect_feature(ds.FEATURE_CONTROLNET, self, "_on_controlnet_feature_toggled")
+	DiffusionServer.features.connect("features_changed", self, "_on_features_changed")
 	_refresh_features()
 
 
@@ -385,22 +384,41 @@ func _refresh_features():
 	warning_icon.visible = false
 	var ds = DiffusionServer
 # warning-ignore:unused_variable
-	var feature_match: bool = false
-	feature_match = _on_controlnet_feature_toggled(ds.features.has_feature(ds.FEATURE_CONTROLNET))
+#	var feature_match: bool = false
+#	feature_match = _on_controlnet_feature_toggled(ds.features.has_feature(ds.FEATURE_CONTROLNET))
+	_on_features_changed()
 
 
-func _on_controlnet_feature_toggled(enabled: bool) -> bool:
-	# returns true if it has the feature (aka if it applies), otherwise false
+func _on_features_changed():
 	if mode == null:
 		return false
 	
-	if not mode.tags.has(DiffusionServer.FEATURE_CONTROLNET):
-		return false
-	
-	if enabled:
+	var result = reload_options()
+	if result == 1:
 		warning_icon.visible = false
-	else:
+	elif result == 0:
 		warning_icon.visible = true
-		warning_icon.hint_tooltip += tr(DiffusionServer.MSG_NO_FEATURE_CONTROLNET) + "\n"
-	
-	return true
+		warning_icon.hint_tooltip += tr(DiffusionServer.MSG_NO_FEATURE_GENERIC) + "\n"
+
+
+func reload_options(select_label: String = ''):
+	return mode.reload_combobox(option_button, select_label)
+
+
+#func _on_controlnet_feature_toggled(enabled: bool) -> bool:
+#	# returns true if it has the feature (aka if it applies), otherwise false
+#	if mode == null:
+#		return false
+#
+#	mode.reload_combobox(option_button)
+#
+#	if not mode.tags.has(DiffusionServer.FEATURE_CONTROLNET):
+#		return false
+#
+#	if enabled:
+#		warning_icon.visible = false
+#	else:
+#		warning_icon.visible = true
+#		warning_icon.hint_tooltip += tr(DiffusionServer.MSG_NO_FEATURE_CONTROLNET) + "\n"
+#
+#	return true

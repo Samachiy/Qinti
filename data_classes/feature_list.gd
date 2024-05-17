@@ -6,6 +6,8 @@ class_name FeatureList
 
 var features: Dictionary
 
+signal features_changed
+
 func connect_check_feature(feature_name: String, target_object: Object, check_method: String, 
 uncheck_method: String):
 	var feature = _get_feature(feature_name)
@@ -36,17 +38,20 @@ func has_feature(feature_name: String) -> bool:
 
 func check(feature_name: String):
 	var feature = _get_feature(feature_name)
-	feature.check()
+	if feature.check():
+		emit_signal("features_changed")
 
 
 func uncheck(feature_name: String):
 	var feature = _get_feature(feature_name)
-	feature.uncheck()
+	if feature.uncheck():
+		emit_signal("features_changed")
 
 
 func reset(feature_name: String):
 	var feature = _get_feature(feature_name)
 	feature.reset()
+	emit_signal("features_changed")
 
 
 func reset_all():
@@ -75,15 +80,27 @@ class Feature extends Reference:
 	signal feature_unchecked
 	signal feature_toggled(enabled)
 	
-	func check():
+	func check() -> bool:
+		var changed: bool = false
+		if not available:
+			changed = true
+		
 		available = true
 		emit_signal("feature_checked")
 		emit_signal("feature_toggled", true)
+		return changed
 	
-	func uncheck():
+	
+	func uncheck() -> bool:
+		var changed: bool = false
+		if available:
+			changed = true
+		
 		available = false
 		emit_signal("feature_unchecked")
 		emit_signal("feature_toggled", false)
+		return changed
+	
 	
 	func reset():
 		# Since the default feature state is true (available) reset just sets it 

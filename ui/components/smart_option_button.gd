@@ -120,6 +120,10 @@ func get_selected():
 	return item_ids.get(selected_id, null) # returns the label, not the text nor the index
 
 
+func get_selected_text():
+	return popup_menu.get_item_text(selected_id)
+
+
 func get_item_count():
 	return option_button.get_item_count()
 

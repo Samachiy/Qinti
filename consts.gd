@@ -205,6 +205,7 @@ const ROLE_SERVER_MANAGER = "Server Manager UI"
 const ROLE_DIFFUSION_SERVER = "Diffusion Server"
 const ROLE_SERVER_STATE_INDICATOR = "Server state indicator"
 const ROLE_DESCRIPTION_BAR = "Description bar"
+const ROLE_MENU_BAR = "Menu bar"
 const ROLE_ABOUT_WINDOW = "About window"
 const ROLE_LOCALE = "Locale"
 

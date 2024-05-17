@@ -6,6 +6,7 @@ const CUSTOM_PROPORTIONS_KEY = "CUSTOM"
 onready var width = $Width
 onready var height = $Height
 onready var denoising_strenght = $DenoisingStrenght
+onready var outpaint_label = $OutpaintLabel
 onready var use_modifiers = $Options/UseModifiers
 onready var available_proportions = $Proportions
 onready var outpaint_button = $Outpaint
@@ -66,6 +67,27 @@ func _ready():
 	_detect_proportion()
 	focus_gen_area()
 	select_tool()
+	var ds = DiffusionServer
+	ds.connect_feature(ds.FEATURE_INPAINT_OUTPAINT, self, "_on_inpaint_outpaint_feature_toggled")
+
+
+func _on_inpaint_outpaint_feature_toggled(enabled: bool):
+	var menu_bar = Roles.get_node_by_role(Consts.ROLE_MENU_BAR)
+	var is_advanced_ui
+	if menu_bar is Control:
+		is_advanced_ui = bool(menu_bar.get(Consts.UI_ADVANCED_GROUP))
+	
+	outpaint_button.visible = enabled
+	if enabled:
+		outpaint_label.add_to_group(Consts.UI_ADVANCED_GROUP)
+		use_modifiers.add_to_group(Consts.UI_ADVANCED_GROUP)
+		outpaint_label.visible = is_advanced_ui
+		use_modifiers.visible = is_advanced_ui
+	else:
+		outpaint_label.remove_from_group(Consts.UI_ADVANCED_GROUP)
+		use_modifiers.remove_from_group(Consts.UI_ADVANCED_GROUP)
+		outpaint_label.visible = false
+		use_modifiers.visible = false
 
 
 func _detect_proportion():
@@ -292,7 +314,7 @@ func _on_mask_generated(mask: Image, bind_input_image: Image):
 		return
 	
 	var config = {
-		Consts.I_DENOISING_STRENGTH: denoising_strenght.get_value(),
+#		Consts.I_DENOISING_STRENGTH: denoising_strenght.get_value(),
 		Consts.I2I_INPAINT_FULL_RES: true,
 	}
 	Cue.new(Consts.ROLE_API, "clear").execute()

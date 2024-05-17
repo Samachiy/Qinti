@@ -7,4 +7,4 @@ script = ExtResource( 1 )
 types = {
 "Scribble": "SCRIBBLE_MODE"
 }
-order = ""
+order = "1 Scribble controlnet"

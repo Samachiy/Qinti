@@ -25,12 +25,13 @@ func fill_combobox(smart_option_button: Control, default_select_label: String):
 		smart_option_button.select_by_label(default_select_label)
 
 
-func refill_combobox(smart_option_button: Control, current_label: String, current_text: String) -> int:
+func reload_combobox(smart_option_button: Control, current_label: String) -> int:
 	_refresh_combobox(smart_option_button)
 	var success = smart_option_button.select_by_label(current_label, false, false)
 	if success:
 		return 1 # The current option exists
 	elif current_label in types:
+		var current_text = types.get(current_label, current_label)
 		smart_option_button.add_labeled_item(current_text, current_label)
 		smart_option_button.select_by_label(current_label, true, false)
 		return 0 # The current option doesn't exist because due to lack of feature

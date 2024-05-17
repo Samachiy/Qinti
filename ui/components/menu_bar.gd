@@ -4,6 +4,7 @@ onready var main_menu = $Menu/Buttons/Menu
 onready var server_menu = $Menu/Buttons/Server
 onready var settings_menu = $Menu/Buttons/Settings
 onready var help_menu = $Menu/Buttons/Help
+onready var dev_menu = $Menu/Buttons/Developer
 onready var menu_container = $Menu
 onready var theme_buttons = $DarkLightMode/Buttons/Themes/Buttons
 onready var theme_container = $DarkLightMode/Buttons/Themes
@@ -40,6 +41,11 @@ const TUT8_OPENING_SAVING_IMG = "TUT8_OPENING_SAVING_IMG"
 const TUT9_INPAINTING = "TUT9_INPAINTING"
 const TUT10_OUTPAINTING = "TUT10_OUTPAINTING"
 
+const DEV_TOGGLE_CONTROLNET = "DEV_TOGGLE_CONTROLNET"
+const DEV_TOGGLE_INOUTPAINT = "DEV_TOGGLE_INOUTPAINT"
+const DEV_TOGGLE_IMG2IMG = "DEV_TOGGLE_IMG2IMG"
+const DEV_TOGGLE_IMG_INFO = "DEV_TOGGLE_IMG_INFO"
+
 var color_button_node = preload("res://ui/components/color_button.tscn")
 var id_to_label: Dictionary = {}
 var label_to_id: Dictionary = {}
@@ -51,11 +57,13 @@ var is_hiding: bool = false
 var tutorials_menu = PopupMenu.new()
 var languages_menu = PopupMenu.new()
 var is_themes_showing: bool = false
+var advanced_ui: bool = false
 
 signal hiding_toggled(is_hiding_value)
 
 
 func _ready():
+	Roles.request_role(self, Consts.ROLE_MENU_BAR)
 	show_hide_theme_buttons.text = SHOW_THEMES_TEXT
 	var e = ThemeChanger.connect("theme_changed", self, "_on_theme_changed")
 	l.error(e, l.CONNECTION_FAILED)
@@ -106,6 +114,13 @@ func _ready():
 	Tutorials.subscribe(self, Tutorials.TUT9)
 	Tutorials.subscribe(self, Tutorials.TUT10)
 	Tutorials.subscribe(self, Tutorials.TUTM2)
+	
+	if not OS.has_feature("standalone"):
+		connect_menu_button(dev_menu)
+		add_tr_item_checkbox(dev_menu, DEV_TOGGLE_CONTROLNET)
+		add_tr_item_checkbox(dev_menu, DEV_TOGGLE_INOUTPAINT)
+		add_tr_item_checkbox(dev_menu, DEV_TOGGLE_IMG2IMG)
+		add_tr_item_checkbox(dev_menu, DEV_TOGGLE_IMG_INFO)
 
 
 func _tutorial(tutorial_seq: TutorialSequence):
@@ -321,6 +336,7 @@ func _on_language_option_selected(id: int):
 
 
 func set_advanced_mode(value: bool):
+	advanced_ui = value
 	for node in get_tree().get_nodes_in_group(Consts.UI_MINIMALIST_GROUP):
 		if node is CanvasItem:
 			node.visible = not value
@@ -386,6 +402,35 @@ func _on_menu_option_selected(id: int):
 			Tutorials.run_with_name(Tutorials.TUT9, false)
 		TUT10_OUTPAINTING:
 			Tutorials.run_with_name(Tutorials.TUT10, false)
+		
+		DEV_TOGGLE_CONTROLNET:
+			if is_checkbox_pressed(label):
+				set_checkbox_pressed(label, false)
+				DiffusionServer.features.uncheck(DiffusionServer.FEATURE_CONTROLNET)
+			else:
+				set_checkbox_pressed(label, true)
+				DiffusionServer.features.check(DiffusionServer.FEATURE_CONTROLNET)
+		DEV_TOGGLE_INOUTPAINT:
+			if is_checkbox_pressed(label):
+				set_checkbox_pressed(label, false)
+				DiffusionServer.features.uncheck(DiffusionServer.FEATURE_INPAINT_OUTPAINT)
+			else:
+				set_checkbox_pressed(label, true)
+				DiffusionServer.features.check(DiffusionServer.FEATURE_INPAINT_OUTPAINT)
+		DEV_TOGGLE_IMG2IMG:
+			if is_checkbox_pressed(label):
+				set_checkbox_pressed(label, false)
+				DiffusionServer.features.uncheck(DiffusionServer.FEATURE_IMG_TO_IMG)
+			else:
+				set_checkbox_pressed(label, true)
+				DiffusionServer.features.check(DiffusionServer.FEATURE_IMG_TO_IMG)
+		DEV_TOGGLE_IMG_INFO:
+			if is_checkbox_pressed(label):
+				set_checkbox_pressed(label, false)
+				DiffusionServer.features.uncheck(DiffusionServer.FEATURE_IMAGE_INFO)
+			else:
+				set_checkbox_pressed(label, true)
+				DiffusionServer.features.check(DiffusionServer.FEATURE_IMAGE_INFO)
 
 
 func _on_MenuBar_resized():

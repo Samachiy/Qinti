@@ -65,30 +65,39 @@ func _ready():
 	else:
 		mode_text = text_value
 	
-	feature_tags.replace(",", "\n")
-	var feature_array = feature_tags.split("\n", false)
-	for feature in feature_array:
-		feature = feature.strip_edges()
-		if not feature.empty():
-			add_feature_tag(feature)
-	
 	if owner is Modifier:
 # warning-ignore:return_value_discarded
 		connect("mode_loaded", owner, "_on_mode_loaded")
-
-
-func add_feature_tag(tag_name):
-	if not tag_name is String:
-		l.g("Failure adding feature tag, no tag name, in: " + name)
-		return
 	
-	tags[tag_name] = true # We just need to feel somwething, anything
+#	feature_tags.replace(",", "\n")
+#	var feature_array = feature_tags.split("\n", false)
+#	for feature in feature_array:
+#		feature = feature.strip_edges()
+#		if not feature.empty():
+#			add_feature_tag(feature)
+#
+#
+#func add_feature_tag(tag_name):
+#	if not tag_name is String:
+#		l.g("Failure adding feature tag, no tag name, in: " + name)
+#		return
+#
+#	tags[tag_name] = true # We just need to feel somwething, anything
 
 
 func set_in_combobox(smart_option_button: Control, refill_combobox: bool):
 	if refill_combobox:
 		type.fill_combobox(smart_option_button, name)
+
+
+func reload_combobox(smart_option_button: Control, label: String = '') -> int:
+	# 1: The current option exists
+	# 0: The current option doesn't exist because due to lack of feature
+	# -1: The current option just doesn't exist
+	if label.empty():
+		label = smart_option_button.get_selected()
 	
+	return type.reload_combobox(smart_option_button, label)
 
 
 func set_image_data(image: ImageData):

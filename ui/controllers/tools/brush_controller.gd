@@ -121,6 +121,15 @@ func _on_canvas_connected(canvas_node: Node):
 	denoising_strenght.visible = q_img2img_module.is_main_board(canvas)
 	use_modifiers.visible = q_img2img_module.is_main_board(canvas)
 	q_img2img_button.visible = q_img2img_module.is_main_board(canvas)
+	var ds = DiffusionServer
+	ds.connect_feature(ds.FEATURE_IMG_TO_IMG, self, "_on_img2img_feature_toggled")
+
+
+func _on_img2img_feature_toggled(enabled: bool):
+	var should_show = q_img2img_module.is_main_board(canvas) and enabled
+	denoising_strenght.visible = should_show
+	use_modifiers.visible = should_show
+	q_img2img_button.visible = should_show
 
 
 func _on_QuickImg2Img_pressed():

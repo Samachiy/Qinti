@@ -37,6 +37,9 @@ func _ready():
 	scribble_defaul_image_data.load_texture(scribble_defaul_image_obj)
 	Tutorials.subscribe(self, Tutorials.TUT4)
 	Tutorials.subscribe(self, Tutorials.TUT8)
+	
+	var ds = DiffusionServer
+	ds.connect_feature(ds.FEATURE_CONTROLNET, self, "_on_controlnet_feature_toggled")
 
 
 func _tutorial(tutorial_seq: TutorialSequence):
@@ -60,7 +63,10 @@ func _tutorial(tutorial_seq: TutorialSequence):
 			tutorial_seq.add_tr_named_step(Tutorials.TUT4_MODIFIER_HELP, [board.tutorial_button])
 		Tutorials.TUT8:
 			tutorial_seq.add_tr_named_step(Tutorials.TUT8_LOAD, [load_img_button])
-		
+
+
+func _on_controlnet_feature_toggled(enabled: bool):
+	add_button.visible = enabled
 
 
 func de_highlight_modifiers(_cue: Cue = null):
@@ -166,7 +172,10 @@ func _insert_modifier(modifier: Modifier, index: int):
 	modifier.visible = true
 	modifier.is_in_modifier_area = true
 	if modifier.mode is ModifierMode:
-		modifier.mode.prepare_mode()
+		if DiffusionServer.features.has_feature(DiffusionServer.FEATURE_IMAGE_INFO):
+			modifier.mode.prepare_mode()
+		else:
+			modifier.mode.reload_options("Img2Img") # selecting a mode will automatically prepare the mode
 	modifier_container.place_modifiers()
 	
 
@@ -186,7 +195,8 @@ func _on_DropArea_modifier_drop_attempt_finished():
 
 func _on_Add_pressed():
 	add_menu.clear()
-	add_menu.add_tr_labeled_item(Consts.MENU_ADD_SCRIBBLE)
+	if DiffusionServer.features.has_feature(DiffusionServer.FEATURE_CONTROLNET):
+		add_menu.add_tr_labeled_item(Consts.MENU_ADD_SCRIBBLE)
 	add_menu.popup_at_cursor()
 
 
