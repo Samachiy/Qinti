@@ -6,7 +6,7 @@ onready var core_mode_of_image_type = $Modes/PNGInfo
 onready var alt_mode_of_image_type = $Modes/Img2Img
 onready var styling_type = $Modes/Styling
 onready var scribble_type = $Modes/Scribble
-onready var regional_prompting_type = $Modes/RegionalPrompting
+onready var regional_prompting_type = null
 onready var texture_rect = $TextureRect
 onready var main_button = $VBoxContainer/HBoxContainer/TextureButton
 onready var option_button = $VBoxContainer/Controls/SmartOptionButton
@@ -27,6 +27,7 @@ onready var warning_icon = $"%WarningIcon"
 var mode: Node = null
 var image_data: ImageData = null
 var is_in_modifier_area = true
+var is_in_delete_area = false
 var mode_name = ''
 var pressed_right = false
 var pressed_left = false
@@ -63,8 +64,9 @@ func _ready():
 	refresh_same_type = true
 	
 	# Connecting features
-	DiffusionServer.features.connect("features_changed", self, "_on_features_changed")
-	_refresh_features()
+	var  e = DiffusionServer.features.connect("features_changed", self, "_on_features_changed")
+	l.error(e, l.CONNECTION_FAILED)
+	#_refresh_features()
 
 
 func apply_modifier_in_api(api: HTTPRequest):
@@ -75,15 +77,22 @@ func apply_modifier_in_api(api: HTTPRequest):
 func set_as_image_type(image: ImageData):
 	# set_in_combobox also loads the mode, since a mode is always loaded when selected
 	# in the option_button. This will also load the image_data into the mode
-	_refresh_image_data_with(image) # This must go first since we are loading the image
-	core_mode_of_image_type.set_in_combobox(option_button, true)
+	if DiffusionServer.features.has_feature(DiffusionServer.FEATURE_IMAGE_INFO):
+		_refresh_image_data_with(image) # This must go first since we are loading the image
+		core_mode_of_image_type.set_in_combobox(option_button, true)
+	else:
+		set_as_image_type_alt(image)
 
 
 func set_as_image_type_alt(image: ImageData):
 	# This sets the modifier as img2img rather than image_info, this is intended for stuff
 	# that may not have info embedded in the image
 	_refresh_image_data_with(image) # This must go first since we are loading the image
-	alt_mode_of_image_type.set_in_combobox(option_button, true)
+	
+	if DiffusionServer.features.has_feature(DiffusionServer.FEATURE_IMG_TO_IMG):
+		alt_mode_of_image_type.set_in_combobox(option_button, true)
+	else:
+		force_set_mode(alt_mode_of_image_type)
 
 
 func set_as_style_type(styling_data: StylingData):
@@ -105,6 +114,8 @@ func set_as_scribble_type(image: ImageData):
 func set_as_regional_prompting_type(image: ImageData):
 	# set_in_combobox also loads the mode, since a mode is always loaded when selected
 	# in the option_button. This will also load the image_data into the mode
+	if regional_prompting_type == null:
+		return
 	_refresh_image_data_with(image) # This must go first since we are loading the image
 	regional_prompting_type.set_in_combobox(option_button, true)
 
@@ -172,6 +183,8 @@ func select():
 			mode.clear_board()
 			mode.select_mode()
 			Roles.request_role(self, Consts.ROLE_ACTIVE_MODIFIER, true)
+	else:
+		deselect()
 
 
 func highlight():
@@ -205,6 +218,7 @@ func delete(deleted_queue: Array):
 	highlighted = false
 	selected = false
 	is_in_modifier_area = false
+	is_in_delete_area = true
 	visible = false
 	_remove_from_parent()
 	deleted_queue.append(self)
@@ -382,7 +396,6 @@ func _on_TextureButton_button_up():
 func _refresh_features():
 	warning_icon.hint_tooltip = ''
 	warning_icon.visible = false
-	var ds = DiffusionServer
 # warning-ignore:unused_variable
 #	var feature_match: bool = false
 #	feature_match = _on_controlnet_feature_toggled(ds.features.has_feature(ds.FEATURE_CONTROLNET))
@@ -403,6 +416,10 @@ func _on_features_changed():
 
 func reload_options(select_label: String = ''):
 	return mode.reload_combobox(option_button, select_label)
+
+
+func force_set_mode(mode_to_set: Node):
+	mode_to_set.mode.reload_combobox(option_button, mode.name)
 
 
 #func _on_controlnet_feature_toggled(enabled: bool) -> bool:

@@ -25,7 +25,7 @@ func _ready():
 	
 	modulate.a8 = Consts.ACCENT_COLOR_A
 	UIOrganizer.add_to_theme_by_modulate_group(self, Consts.THEME_MODULATE_GROUP_STYLE)
-	if not bind_feature.emtpy():
+	if not bind_feature.empty():
 		var ds = DiffusionServer
 		ds.connect_feature(bind_feature, self, "_on_bind_feature_toggled")
 
@@ -36,7 +36,7 @@ func _on_bind_feature_toggled(enabled: bool):
 		if not tool_controller is ToolController:
 			return
 		
-		var main_controller = tool_controller.get_parent()
+		var main_controller = tool_controller.owner
 		if main_controller != null and main_controller.has_method("select_main_tool"):
 			main_controller.select_main_tool()
 		else:

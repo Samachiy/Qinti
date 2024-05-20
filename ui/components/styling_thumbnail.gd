@@ -17,7 +17,7 @@ func set_styling_data(format: String):
 
 
 func create_style_modifier():
-	_disconnect_modifier_if_needed("create_style_modifier")
+#	_disconnect_modifier_if_needed("create_style_modifier")
 	create_empty_modifier()
 	if modifier != null:
 		modifier.set_as_style_type(styling_data)

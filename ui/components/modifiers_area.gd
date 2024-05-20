@@ -171,11 +171,13 @@ func _insert_modifier(modifier: Modifier, index: int):
 	modifier.reparent(modifier_container, index)
 	modifier.visible = true
 	modifier.is_in_modifier_area = true
+	modifier.is_in_delete_area = false
 	if modifier.mode is ModifierMode:
-		if DiffusionServer.features.has_feature(DiffusionServer.FEATURE_IMAGE_INFO):
-			modifier.mode.prepare_mode()
-		else:
-			modifier.mode.reload_options("Img2Img") # selecting a mode will automatically prepare the mode
+		modifier.mode.prepare_mode()
+#		if DiffusionServer.features.has_feature(DiffusionServer.FEATURE_IMAGE_INFO):
+#			modifier.mode.prepare_mode()
+#		else:
+#			modifier.reload_options("Img2Img") # selecting a mode will automatically prepare the mode
 	modifier_container.place_modifiers()
 	
 
@@ -397,7 +399,3 @@ func _on_Container_child_exited_tree(node: Node):
 	
 	if update_order_on_child_exit:
 		modifier_container.place_modifiers()
-
-
-func _on_Container_tree_exiting():
-	update_order_on_child_exit = false

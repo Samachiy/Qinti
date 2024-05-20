@@ -11,15 +11,14 @@ var order_dict = {} # { 1: node_name1, 2: node_name2, ... }
 var controlnet_feature = {} # {node_name: translation_key, ...}
 var image_info_feature = {} # {node_name: translation_key, ...}
 var img_to_image_feature = {} # {node_name: translation_key, ...}
+var information_ready: bool = false
 
 
 func fill_combobox(smart_option_button: Control, default_select_label: String):
-	sort_types_and_features()
-	smart_option_button.clear()
 	_refresh_combobox(smart_option_button)
-	for type in types.keys():
-		if is_supported_mode(type):
-			smart_option_button.add_labeled_item(types[type], type)
+#	for type in types.keys():
+#		if is_supported_mode(type):
+#			smart_option_button.add_labeled_item(types[type], type)
 	
 	if not default_select_label.empty():
 		smart_option_button.select_by_label(default_select_label)
@@ -40,6 +39,7 @@ func reload_combobox(smart_option_button: Control, current_label: String) -> int
 
 
 func _refresh_combobox(smart_option_button: Control):
+	sort_types_and_features()
 	smart_option_button.clear()
 	for type in types.keys():
 		if is_supported_mode(type):
@@ -107,6 +107,9 @@ func clasify_feature(array: Array):
 
 
 func sort_types_and_features():
+	if information_ready:
+		return
+	
 	if order_dict.empty():
 		parser_order()
 	
@@ -129,3 +132,4 @@ func sort_types_and_features():
 		sorted[type] = types_copy[type]
 	
 	types = sorted
+	information_ready = true
