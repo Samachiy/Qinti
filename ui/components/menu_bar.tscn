@@ -52,8 +52,16 @@ focus_mode = 2
 text = "HELP"
 switch_on_hover = true
 
-[node name="Spacing" type="Control" parent="Menu/Buttons"]
+[node name="Developer" type="MenuButton" parent="Menu/Buttons"]
 margin_left = 242.0
+margin_right = 316.0
+margin_bottom = 96.0
+focus_mode = 2
+text = "Developer"
+switch_on_hover = true
+
+[node name="Spacing" type="Control" parent="Menu/Buttons"]
+margin_left = 320.0
 margin_right = 1020.0
 margin_bottom = 96.0
 size_flags_horizontal = 3

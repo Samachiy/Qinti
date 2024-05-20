@@ -96,7 +96,7 @@ func select_by_label(unique_label, print_error: bool = true, send_signal: bool =
 	if index == null:
 		if print_error:
 			l.g("The label '" + unique_label + "' is not on the smart options button list at: " 
-			+ get_path())
+			+ get_path() + ". Selecting first modifier in list.")
 		return false
 	
 	select(index, send_signal)
@@ -118,6 +118,10 @@ func select(index: int, send_signal: bool = true):
 
 func get_selected():
 	return item_ids.get(selected_id, null) # returns the label, not the text nor the index
+
+
+func get_selected_text():
+	return popup_menu.get_item_text(selected_id)
 
 
 func get_item_count():

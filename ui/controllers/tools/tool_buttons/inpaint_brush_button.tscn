@@ -20,3 +20,4 @@ texture_focused = ExtResource( 2 )
 expand = true
 stretch_mode = 4
 script = ExtResource( 1 )
+bind_feature = "inpaint_outpaint"

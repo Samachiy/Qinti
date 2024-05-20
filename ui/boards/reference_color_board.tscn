@@ -18,4 +18,3 @@ margin_bottom = 224.0
 controller = "res://ui/controllers/reference_color_controller.tscn"
 canvas = "res://ui/canvas/canvas_image.tscn"
 has_overunderlay = false
-tutorial_const = "TUTM1"

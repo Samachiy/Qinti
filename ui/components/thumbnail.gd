@@ -76,12 +76,12 @@ func set_image_data(image_data_: ImageData):
 
 
 func create_info_modifier():
-	_disconnect_modifier_if_needed("create_info_modifier")
+#	_disconnect_modifier_if_needed("create_info_modifier")
 	create_empty_modifier()
 	if modifier != null:
 		modifier.set_as_image_type(current_image_data)
 		# This is so that when we remove it, another one replace it for future drag_data
-		modifier.connect("tree_exited", self, "create_info_modifier", [], CONNECT_ONESHOT)
+#		modifier.connect("tree_exited", self, "create_info_modifier", [], CONNECT_ONESHOT)
 
 
 func create_empty_modifier():
@@ -96,23 +96,23 @@ func create_empty_modifier():
 		modifier.is_in_modifier_area = false
 
 
-func _disconnect_modifier_if_needed(self_create_method: String, self_create_object: Object = self):
-	if not is_in_tree:
-		return
-	
-	if modifier != null and modifier.get_parent() == self:
-		# We do this since the next create_empty_modifier() will free the current modifier and 
-		# create another, since the free() is queued, tree_exited will be activated once a new 
-		# modifier has been created, deleting the new modifier too which will call this function
-		# again, creating an infinite loop
-		# This is only assuming a new modifier is created right after the previous exits
-		# So far, this only happens in:
-		#	- thumbnail > create_info_modifier()
-		# this doesn't happen in:
-		#	- styling_thumbnail > create_style_modifier()
-		#	- preview_thumbnail > create_img2img_modifier() 
-		if modifier.is_connected("tree_exited", self_create_object, self_create_method):
-			modifier.disconnect("tree_exited", self_create_object, self_create_method)
+#func _disconnect_modifier_if_needed(self_create_method: String, self_create_object: Object = self):
+#	if not is_in_tree:
+#		return
+#
+#	if modifier != null and modifier.get_parent() == self:
+#		# We do this since the next create_empty_modifier() will free the current modifier and 
+#		# create another, since the free() is queued, tree_exited will be activated once a new 
+#		# modifier has been created, deleting the new modifier too which will call this function
+#		# again, creating an infinite loop
+#		# This is only assuming a new modifier is created right after the previous exits
+#		# So far, this only happens in:
+#		#	- thumbnail > create_info_modifier()
+#		# this doesn't happen in:
+#		#	- styling_thumbnail > create_style_modifier()
+#		#	- preview_thumbnail > create_img2img_modifier() 
+#		if modifier.is_connected("tree_exited", self_create_object, self_create_method):
+#			modifier.disconnect("tree_exited", self_create_object, self_create_method)
 
 
 func set_to_new_position():
@@ -127,9 +127,7 @@ func get_y_end_pos():
 
 
 func get_drag_data(_position: Vector2):
-	if modifier == null:
-		l.g("Modifier node was never created, can't get drag data")
-		return null
+	create_info_modifier()
 	
 	var mydata = modifier
 	var preview = TextureRect.new()

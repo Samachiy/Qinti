@@ -57,6 +57,10 @@ signal state_changed(previous_state, next_state)
 
 
 func _ready():
+	features.add_feature(FEATURE_CONTROLNET)
+	features.add_feature(FEATURE_IMAGE_INFO)
+	features.add_feature(FEATURE_IMG_TO_IMG)
+	features.add_feature(FEATURE_INPAINT_OUTPAINT)
 	Roles.request_role(self, Consts.ROLE_DIFFUSION_SERVER)
 	Roles.request_role_on_roles_cleared(self, Consts.ROLE_DIFFUSION_SERVER)
 	Director.connect_global_save_cues_requested(self, "_on_global_save_cues_requested")

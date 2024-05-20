@@ -12,10 +12,12 @@ func get_data_cue(_cue: Cue = null):
 		return null
 	
 	var cue = Cue.new(Consts.ROLE_CONTROL_COLOR, 'set_data_cue')
-	# RESUME add the weight here
 	return cue
 
 
-func set_data_cue(cue: Cue):
+func set_data_cue(_cue: Cue):
 	clear()
-	# RESUME get the weight here
+
+
+func _fill_menu():
+	pass # There's nothing to fill

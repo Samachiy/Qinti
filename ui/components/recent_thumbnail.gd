@@ -28,7 +28,7 @@ func set_batch_image_data(images_data_: Array):
 	
 	current_image_index = 0
 	set_image_data(images_data[current_image_index])
-	create_info_modifier()
+	#create_info_modifier()
 	
 	return true
 
@@ -112,3 +112,18 @@ func _on_RecentThumbnail_mouse_entered():
 
 func _on_RecentThumbnail_mouse_exited():
 	highlight.visible = false
+
+
+func get_drag_data(_position: Vector2):
+	create_info_modifier()
+	
+	var mydata = modifier
+	var preview = TextureRect.new()
+	preview.expand = true
+	preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
+	preview.texture = current_image_data.texture
+	preview.rect_size = rect_size
+	set_drag_preview(preview)
+	Cue.new(Consts.ROLE_GENERATION_INTERFACE, "set_on_top").args([preview]).execute()
+	Cue.new(Consts.UI_DROP_GROUP, "enable_drop").execute()
+	return mydata

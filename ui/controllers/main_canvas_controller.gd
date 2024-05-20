@@ -186,8 +186,14 @@ func set_images_in_generation_area(cue: Cue):
 		image_viewer_relay.connect_relay(self, "_on_image_change_requested")
 	
 	generation_area.set_images_data(cue._arguments)
-	if not brush_tool.visible and not eraser_tool.visible:
-		modify_gen_area_tool.select_tool()
+	var change_tool: bool = true
+	if brush_tool.visible or eraser_tool.visible or \
+	inpaint_brush_tool.visible or inpaint_eraser_tool.visible:
+		change_tool = false
+	
+	if change_tool:
+		select_main_tool() # Selects modify gen area tool
+	
 	canvas.refresh_viewport()
 	main_canvas_layer = canvas.select_layer(MAIN_LAYER_NAME)
 	canvas.current_layer = generation_area
@@ -198,6 +204,10 @@ func set_images_in_generation_area(cue: Cue):
 		canvas.message_area.enable_next_prev(true)
 	else:
 		canvas.message_area.enable_next_prev(false)
+
+
+func select_main_tool(_cue: Cue = null):
+	modify_gen_area_tool.select_tool()
 
 
 func get_generation_area(_cue: Cue = null):

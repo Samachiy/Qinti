@@ -15,12 +15,12 @@ types = {
 "Reference": "REFERENCE_MODE",
 "ReferenceColor": "COLOR_MODE"
 }
-order = "1 PNGInfo
-2 Img2Img
-3 Lineart
-5 Pose2D
-6 Composition
-7 Depth
-8 NormalMap
-9 Reference
-10 ReferenceColor"
+order = "1 PNGInfo image_info
+2 Img2Img img_to_img
+3 Lineart controlnet
+5 Pose2D controlnet
+6 Composition controlnet
+7 Depth controlnet
+8 NormalMap controlnet
+9 Reference controlnet
+10 ReferenceColor controlnet"
