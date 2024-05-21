@@ -65,9 +65,9 @@ func _ready():
 	else:
 		mode_text = text_value
 	
-	if owner is Modifier:
-# warning-ignore:return_value_discarded
-		connect("mode_loaded", owner, "_on_mode_loaded")
+	
+	var error = connect("mode_loaded", owner, "_on_mode_loaded")
+	l.error(error, l.CONNECTION_FAILED)
 	
 #	feature_tags.replace(",", "\n")
 #	var feature_array = feature_tags.split("\n", false)

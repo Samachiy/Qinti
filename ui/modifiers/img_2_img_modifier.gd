@@ -28,6 +28,7 @@ func select_mode():
 
 
 func deselect_mode():
+	Cue.new(controller_role, "pause_layer").execute()
 	undoredo_data = Cue.new(controller_role, "get_undoredo_data").execute()
 	data_cue = Cue.new(controller_role, "get_data_cue").execute()
 	active_image = Cue.new(controller_role, "get_active_image").execute()

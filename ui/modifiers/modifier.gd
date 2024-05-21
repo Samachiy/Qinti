@@ -134,7 +134,8 @@ func _refresh_label():
 	if mode.name == "Styling":
 		label_bg.modulate.a8 = Consts.LABEL_FONT_COLOR_INVERSE_A
 		UIOrganizer.add_to_theme_by_modulate_group(label_bg, Consts.THEME_MODULATE_GROUP_TYPE)
-		label.connect("resized", self, "_on_Label_resized")
+		if not label.is_connected("resized", self, "_on_Label_resized"):
+			label.connect("resized", self, "_on_Label_resized")
 		label.visible = true
 		label.text = mode.styling_data.file_cluster.name
 		_on_Label_resized()
@@ -419,23 +420,14 @@ func reload_options(select_label: String = ''):
 
 
 func force_set_mode(mode_to_set: Node):
-	mode_to_set.mode.reload_combobox(option_button, mode.name)
+	mode_to_set.reload_combobox(option_button, mode.name)
 
 
-#func _on_controlnet_feature_toggled(enabled: bool) -> bool:
-#	# returns true if it has the feature (aka if it applies), otherwise false
-#	if mode == null:
-#		return false
-#
-#	mode.reload_combobox(option_button)
-#
-#	if not mode.tags.has(DiffusionServer.FEATURE_CONTROLNET):
-#		return false
-#
-#	if enabled:
-#		warning_icon.visible = false
-#	else:
-#		warning_icon.visible = true
-#		warning_icon.hint_tooltip += tr(DiffusionServer.MSG_NO_FEATURE_CONTROLNET) + "\n"
-#
-#	return true
+func force_set_mode_label(mode_node_name: String):
+	var mode_to_set = types_container.get(mode_node_name)
+	if mode_to_set is ModifierMode:
+		mode_to_set.reload_combobox(option_button, mode_node_name)
+	else:
+		l.g("Modifier mode '" + mode_node_name + "' resulted in '" + str(mode_to_set) + 
+				"'. Can't set mode.")
+

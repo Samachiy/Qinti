@@ -38,7 +38,6 @@ render_target_update_mode = 3
 [node name="Permanent" parent="Display/Viewport/Offset/Pivot" instance=ExtResource( 3 )]
 
 [node name="Mask" type="TextureRect" parent="."]
-visible = false
 modulate = Color( 1, 1, 1, 0.752941 )
 margin_right = 100.0
 margin_bottom = 100.0
