@@ -1,8 +1,11 @@
 <div align="center">
 
-![Qinti](qinti_icon.png)
-<br>
 # Qinti UI
+
+<p align="center">
+  <img alt="Main Interface" src="./assets/github/main_interface_high_mid_size.png" width="45%">
+  <img alt="LoRA configuration" src="./assets/github/lora_interface_high_mid_size.png" width="45%">
+</p>
 
 ![License](https://img.shields.io/github/license/samachiy/qinti?svg=true)
 
@@ -10,11 +13,9 @@
 
 Qinti UI is an open source frontend made with Godot for image generation that aims to be both easy to use and for professional use.
 
-It also comes in the form of an executable, so the frontend itself doesn't need to be installed, just click and run, it is currently available for Linux and Windows.
+It also comes in the form of an executable, so the frontend itself doesn't need to be installed, just click and run. It is currently available for Linux and Windows.
 
 The project uses the AGPL license to ensure that it will always be free and open source.
-
-
 
 # Features
 
@@ -33,13 +34,13 @@ https://github.com/Samachiy/Qinti/assets/155751973/84399745-4e89-4de7-b369-4d7b3
 
 
 ## Misc
-    - Infinite canvas
-    - Use of Textural inversion, LoRAs, Lycoris, etc
-    - Model resources management
-    - Supports both Automatic1111 Web UI and SD.Next as backends
-    - Modular use of generated images metadata to generate other images
-    - Inbuilt tutorials
-    - Automatic1111 Web UI installation (beta feature)
+- Infinite canvas
+- Use of Textural inversion, LoRAs, Lycoris, etc
+- Model resources management
+- Supports both Automatic1111 Web UI and SD.Next as backends
+- Modular use of generated images metadata to generate other images
+- Inbuilt tutorials
+- Automatic1111 Web UI installation (beta feature)
 
 
 https://github.com/Samachiy/Qinti/assets/155751973/fe350ae5-c6e2-4f8e-a0f4-d471179a1a51
@@ -53,13 +54,13 @@ https://github.com/Samachiy/Qinti/assets/155751973/fe350ae5-c6e2-4f8e-a0f4-d4711
 ### Windows
 
 1. Download
-2. Decompress
+2. Decompress tar file
 3. Run Qinti.exe
 
 ### Linux
 
 1. Download
-2. Decompress
+2. Decompress zip file
 3. Make Qinti.x86_64 executable
 4. Run Qinti.x86_64
 
