@@ -130,6 +130,12 @@ func _on_Main_ready():
 		PCData.make_file_executable_recursive(PCData.globalize_path(LINUX_SCRIPTS_PATH))
 
 
+func save():
+	# Call Active board > controller_node > consolidate data (if it has such method)
+	# Call SaveLoad
+	pass
+
+
 func exit(_cue: Cue = null):
 	get_tree().root.propagate_notification(NOTIFICATION_WM_QUIT_REQUEST)
 

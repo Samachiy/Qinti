@@ -9,6 +9,10 @@ const CHUNK_SIZE = 700
 const MAX_SCALE = 20
 const MIN_SCALE = 0.1
 
+const SAVE_LAYER = 0
+const SAVE_MASK = 1
+const SAVE_LIMITS = 2
+
 # The offset is meant for when we have to expand the drawing limits to the left 
 # or upwards. since the top-left corner is the position, you expand it not only 
 # by changing the size, but the position too, this will put the image out
@@ -50,6 +54,7 @@ var prev_scale: Vector2 = Vector2.ONE
 var scale_counter: Vector2 = Vector2.ONE
 var saved_offset_data: Array = [] # [limits: rect2, move_offset: vect2, expand_offset: vect2]
 var default_texture_material = preload('res://ui/materials/layer_texture_material.tres')
+var _save_data: Dictionary = {}
 
 
 func _ready():
@@ -617,9 +622,25 @@ func clear_mask():
 
 
 func consolidate():
+	_save_data[SAVE_LAYER] = get_image()
+	_save_data[SAVE_MASK] = get_mask()
 	permanent_area.consolidate()
 	permanent_mask_area.consolidate()
 
+
+func get_save_data():
+	var layer_image = _save_data.get(SAVE_LAYER, null)
+	var layer_mask = _save_data.get(SAVE_MASK, null)
+	var result_data = {}
+	if layer_image is Image:
+		result_data[SAVE_LAYER] = ImageProcessor.image_to_base64(layer_image)
+	if layer_mask is Image:
+		if not layer_mask.is_invisible():
+			result_data[SAVE_MASK] = ImageProcessor.image_to_base64(layer_mask)
+	
+	result_data[SAVE_LIMITS] = limits
+	return result_data
+ 
 
 func is_empty(exception_nodes: Array = []):
 	# Empty here is treated as the node being invisible because we still need 

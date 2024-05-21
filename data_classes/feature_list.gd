@@ -4,6 +4,24 @@ class_name FeatureList
 
 # All features wll be enabled by default, it's a duty of every api to disable lacking features
 
+
+# UI filtering currently has the present characteristics:
+# CONTROLNET
+# - Modifier change button refills it's options (Modifier refill)
+# - Hides add scribble option
+# 	- If there's nothing add to the 'plus' modifier-area button, it hides too
+# IMAGE INFO
+# - Modifier change button refills it's options (Modifier refill)
+# - On dropping image into modifiers area, changes to image_to_image rather than image_info
+# IMAGE TO IMAGE
+# - Modifier change button refills it's options (Modifier refill)
+# - Hides quick drawing to ai image button and it's settings	
+# - On droping image on modifiers area, do drops it but adds a warning icon 
+# INPAINT OUTPAINT
+# - Hides inpaint eraser and brush		
+# - Hides outpaint button in modify gen area (and it's setting, if any)	
+
+
 var features: Dictionary
 
 signal features_changed

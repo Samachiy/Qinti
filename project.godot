@@ -444,6 +444,7 @@ enabled=PoolStringArray( "res://addons/guion/plugin.cfg", "res://addons/notes_ta
 [global]
 
 "auto ac"=false
+impor=false
 
 [gui]
 
@@ -484,3 +485,4 @@ environment/default_environment="res://default_env.tres"
 [statistics]
 
 force_include=PoolStringArray(  )
+ignore=PoolStringArray( "res://.import/*", "res://.github/*", "res://addons/*", "*.import", "res://assets/github/*" )

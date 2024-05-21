@@ -47,7 +47,7 @@ var layers_registry: Dictionary = {}
 var undoredo_queue: Canvas2DUndoQueue = Canvas2DUndoQueue.new(UNDO_REDO_LIMIT)
 var temp_tool_undoredo: Canvas2DUndoQueue = null
 var display_area: Rect2 # the area that has to be displayed when resizing the GUI
-var generation_area: GenerationArea2D
+var generation_area: GenerationArea2D = null
 var shadow_inactive_area: bool = false
 var active_area_proportions: Vector2 = Vector2.ZERO
 var board_owner: Node = null
@@ -306,6 +306,8 @@ func add_region_layer(id: String = ''):
 
 func remove_layer(id: String):
 	var layer = layers_registry.get(id, null)
+# warning-ignore:return_value_discarded
+	layers_registry.erase(id)
 	return remove_layer_object(layer)
 
 
@@ -558,6 +560,17 @@ func get_canvas_limits(add_gen_area: bool) -> Rect2:
 		return limits
 	else:
 		return Rect2(Vector2.ZERO, Vector2.ZERO)
+
+
+func get_save_data():
+	var layer_obj
+	var result_data = {}
+	for layer_key in layers_registry:
+		layer_obj = layers_registry[layer_key]
+		if layer_obj is Layer2D:
+			result_data[layer_key] = layer_obj.get_save_data()
+	
+	return result_data
 
 
 func _on_gui_input(event):

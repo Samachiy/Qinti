@@ -127,8 +127,6 @@ func get_y_end_pos():
 
 
 func get_drag_data(_position: Vector2):
-	create_info_modifier()
-	
 	var mydata = modifier
 	var preview = TextureRect.new()
 	preview.expand = true

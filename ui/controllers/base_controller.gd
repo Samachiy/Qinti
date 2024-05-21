@@ -93,6 +93,7 @@ func open_board(cue: Cue = null):
 	if cue is Cue:
 		modifier = cue.get_at(0, null, false)
 	
+	Roles.request_role(self, Consts.ROLE_ACTIVE_BOARD, true)
 	Cue.new(Consts.ROLE_GENERATION_INTERFACE, "hide_boards").execute()
 	emit_signal("visible_board_requested")
 

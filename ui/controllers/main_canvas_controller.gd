@@ -140,7 +140,7 @@ func _on_load_ready(_is_loading_from_file):
 func _on_Controller_hiding():
 	gen_area_image = generation_area.get_contained_image()
 	gen_area_mask = generation_area.get_contained_mask()
-	pass
+	pause_layer()
 
 
 func update_canvas_overlay_underlay(cue: Cue):
@@ -223,6 +223,12 @@ func prepare_layer():
 	
 	main_canvas_layer = canvas.select_layer(MAIN_LAYER_NAME)
 	main_canvas_layer.visible = true
+
+
+func pause_layer(_cue: Cue = null):
+	var layer = canvas.select_layer(MAIN_LAYER_NAME)
+	if layer != null:
+		layer.consolidate()
 
 
 func apply_parameters_to_api(_cue: Cue = null):

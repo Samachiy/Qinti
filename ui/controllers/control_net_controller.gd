@@ -53,6 +53,13 @@ func prepare_layer(cue: Cue):
 	return layer_id
 
 
+func pause_layer(_cue: Cue = null):
+	var layer = canvas.select_layer(layer_name)
+	if layer != null:
+		layer.consolidate()
+		layer.visible = false
+
+
 func reset_layer():
 	var layer = canvas.select_layer(layer_name)
 	if layer != null:
@@ -173,11 +180,6 @@ func get_active_image(_cue: Cue = null) -> Image:
 
 
 func clear(_cue: Cue = null):
-	var layer = canvas.select_layer(layer_name)
-	if layer != null:
-		layer.consolidate()
-		layer.visible = false
-	
 	layer_name = ''
 
 
