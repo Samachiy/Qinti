@@ -12,7 +12,7 @@ onready var description_bar = $Bars/DescriptionBar
 onready var main_margin = $MarginContainer
 onready var forced_close_timer = $ForcedCloseTimer
 
-#var prev_board = null
+var prev_board = null
 var main_board = null
 var windows_ready: bool = false
 var server_ready: bool = false
@@ -56,7 +56,13 @@ func get_open_board(_cue: Cue = null):
 			return board_child
 
 
-func hide_boards(_cue: Cue = null):
+func hide_boards(cue: Cue = null):
+	# [ next_board_to_show: Node ]
+	var current_board = Roles.get_node_by_role(Consts.ROLE_ACTIVE_BOARD)
+	var next_board = cue.get_at(0)
+	if current_board != next_board:
+		prev_board = current_board
+	
 	var board_child
 	var is_board
 	for child in board_container.get_children():
@@ -66,7 +72,10 @@ func hide_boards(_cue: Cue = null):
 		is_board = board_child is Control and board_child.has_method("show_board")
 		if not is_board:
 			continue
-			
+		
+		if board_child == next_board:
+			# Current board should always be showing
+			continue
 #		if child.visible and board_child != main_board:
 #			prev_board = board_child
 		
@@ -79,24 +88,26 @@ func show_modifier_board(_cue: Cue = null):
 	if prev_board_modifier == null:
 		return
 
-	hide_boards()
-	prev_board_modifier.select()
-#	prev_board.show_board()
-#	prev_board.show_alt_board_switch()
+#	hide_boards(Cue.new("", "").args([prev_board]))
+	prev_board_modifier.select() # Select already hides the board (calls open_board)
 
 
 func show_main_board(_cue: Cue = null):
 	if main_board == null:
 		return
 	
-	hide_boards()
+	#hide_boards(Cue.new("", "").args([main_board]))
 	var prev_board_modifier = Roles.get_node_by_role(Consts.ROLE_ACTIVE_MODIFIER, false)
 	if prev_board_modifier == null:
-		main_board.show_board()
+		Cue.new(Consts.ROLE_CANVAS, "open_board").execute()
+		# main_board.show_board() # we use the cue rather than using show_board()
+		# because open_board also sets role_active_board and hides the boards
 		main_board.hide_alt_board_switch()
 	else:
 		prev_board_modifier.deselect()
-		main_board.show_board()
+		Cue.new(Consts.ROLE_CANVAS, "open_board").execute()
+		# main_board.show_board() # we use the cue rather than using show_board()
+		# because open_board also sets role_active_board and hides the boards
 		main_board.show_alt_board_switch()
 
 
@@ -130,10 +141,19 @@ func _on_Main_ready():
 		PCData.make_file_executable_recursive(PCData.globalize_path(LINUX_SCRIPTS_PATH))
 
 
-func save():
+func save(path: String):
 	# Call Active board > controller_node > consolidate data (if it has such method)
 	# Call SaveLoad
-	pass
+	Cue.new(Consts.ROLE_ACTIVE_BOARD, "consolidate_layer").execute()
+	Director.save_file_at_path(path)
+
+
+func load_file(path: String):
+	Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute(false)
+	Director.load_file_at_path(path)
+	Cue.new(Consts.ROLE_CANVAS, "open_board").execute()
+	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "set_text").args([
+			Consts.HELP_DESC_SAVE_FILE_LOADED]).execute()
 
 
 func exit(_cue: Cue = null):

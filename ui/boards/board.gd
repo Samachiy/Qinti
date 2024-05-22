@@ -143,6 +143,10 @@ func hide_board():
 	if parent == null:
 		return
 	
+	if not parent.visible:
+		# No need to hide if it already is
+		return
+	
 	if controller_node is Controller:
 		controller_node._on_Controller_hiding()
 		controller_node.remove_from_description_group() # for the description bar

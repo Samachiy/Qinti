@@ -206,7 +206,9 @@ func deselect_active_modifier():
 	# Warning, from code to ui, highlight -> select and select -> editing
 	# thus this exits edit mode
 	if Roles.has_role(Consts.ROLE_ACTIVE_MODIFIER):
-		Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute()
+		var active_modifier = Roles.get_node_by_role(Consts.ROLE_ACTIVE_MODIFIER)
+		if active_modifier != self:
+			Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute()
 
 
 func delete(deleted_queue: Array):

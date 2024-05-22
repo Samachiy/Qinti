@@ -57,10 +57,17 @@ func prepare_layer(cue: Cue):
 
 
 func pause_layer(_cue: Cue = null):
+	l.p("Paused controller" + name)
 	var layer = canvas.select_layer(layer_name)
 	if layer != null:
 		layer.consolidate()
 		layer.visible = false
+
+
+func consolidate_layer(_cue: Cue = null):
+	var layer = canvas.select_layer(layer_name)
+	if layer != null:
+		layer.consolidate()
 
 
 func reset_layer():

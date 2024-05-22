@@ -52,6 +52,8 @@ var gen_area_mask: Image = null
 func _ready():
 	Roles.request_role(self, Consts.ROLE_CANVAS, true)
 	Roles.request_role_on_roles_cleared(self, Consts.ROLE_CANVAS)
+	Roles.request_role(board_owner, Consts.ROLE_ACTIVE_BOARD, true)
+	l.p(board_owner.name)
 	var e = DiffusionServer.connect("samplers_refreshed", self, "_on_samplers_refreshed")
 	l.error(e, l.CONNECTION_FAILED)
 	e = DiffusionServer.connect("upscalers_refreshed", self, "_on_upscalers_refreshed")
@@ -226,6 +228,13 @@ func prepare_layer():
 
 
 func pause_layer(_cue: Cue = null):
+	l.p("Paused controller" + name)
+	var layer = canvas.select_layer(MAIN_LAYER_NAME)
+	if layer != null:
+		layer.consolidate()
+
+
+func consolidate_layer(_cue: Cue = null):
 	var layer = canvas.select_layer(MAIN_LAYER_NAME)
 	if layer != null:
 		layer.consolidate()
