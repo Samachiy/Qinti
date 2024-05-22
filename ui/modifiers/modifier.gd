@@ -433,3 +433,6 @@ func force_set_mode_label(mode_node_name: String):
 		l.g("Modifier mode '" + mode_node_name + "' resulted in '" + str(mode_to_set) + 
 				"'. Can't set mode.")
 
+
+func get_mode_data():
+	pass

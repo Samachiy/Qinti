@@ -399,3 +399,23 @@ func _on_Container_child_exited_tree(node: Node):
 	
 	if update_order_on_child_exit:
 		modifier_container.place_modifiers()
+
+
+func _save_cues(_is_file_save):
+	var modifiers_data = {}
+	for modifier in modifier_container.get_children():
+		if modifier is Modifier:
+			modifier.get_mode_data()
+			
+	Director.add_save_cue(
+			Consts.SAVE, Consts.ROLE_MODIFIERS_AREA, 
+			"load_modifiers", [modifiers_data]
+	)
+
+
+func load_modifiers(cue: Cue):
+	# [ layer_daya ]
+	var layers_data = cue.get_at(0, {})
+	if canvas is Canvas2D:
+		canvas.remove_all_layers()
+		canvas.add_layers_data(layers_data)
