@@ -628,7 +628,7 @@ func consolidate():
 	permanent_mask_area.consolidate()
 
 
-func get_save_data():
+func get_save_data() -> Dictionary:
 	var layer_image = _save_data.get(SAVE_LAYER, null)
 	var layer_mask = _save_data.get(SAVE_MASK, null)
 	var result_data = {}
@@ -641,6 +641,15 @@ func get_save_data():
 	result_data[SAVE_LIMITS] = limits
 	return result_data
  
+
+func set_save_data(data: Dictionary):
+	var image_base64 = data.get(SAVE_LAYER, '')
+	var new_limits = data.get(SAVE_LIMITS, limits)
+	limits = new_limits
+	refresh_limits()
+	if image_base64 is String and not image_base64.empty():
+		draw_texture_at(ImageProcessor.png_base64_to_image(image_base64), limits.position, false)
+
 
 func is_empty(exception_nodes: Array = []):
 	# Empty here is treated as the node being invisible because we still need 

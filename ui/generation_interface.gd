@@ -151,6 +151,7 @@ func save(path: String):
 func load_file(path: String):
 	Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute(false)
 	Director.load_file_at_path(path)
+	Director.use_up_locker(Consts.SAVE)
 	Cue.new(Consts.ROLE_CANVAS, "open_board").execute()
 	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "set_text").args([
 			Consts.HELP_DESC_SAVE_FILE_LOADED]).execute()

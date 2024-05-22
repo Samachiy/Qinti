@@ -304,6 +304,16 @@ func add_region_layer(id: String = ''):
 	return id
 
 
+func remove_all_layers():
+	var layer
+	for layer_id in layers_registry:
+		layer = layers_registry.get(layer_id, null)
+# warning-ignore:return_value_discarded
+		remove_layer_object(layer)
+	
+	layers_registry.clear()
+
+
 func remove_layer(id: String):
 	var layer = layers_registry.get(id, null)
 # warning-ignore:return_value_discarded
@@ -562,7 +572,7 @@ func get_canvas_limits(add_gen_area: bool) -> Rect2:
 		return Rect2(Vector2.ZERO, Vector2.ZERO)
 
 
-func get_save_data():
+func get_save_data() -> Dictionary:
 	var layer_obj
 	var result_data = {}
 	for layer_key in layers_registry:
@@ -571,6 +581,14 @@ func get_save_data():
 			result_data[layer_key] = layer_obj.get_save_data()
 	
 	return result_data
+
+
+func add_layers_data(layers_data: Dictionary):
+	var layer
+	for layer_key in layers_data:
+		add_layer(layer_key)
+		layer = layers_registry.get(layer_key)
+		layer.set_save_data(layers_data[layer_key])
 
 
 func _on_gui_input(event):

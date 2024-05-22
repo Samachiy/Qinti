@@ -70,6 +70,16 @@ func image_to_base64(image: Image):
 	return Marshalls.raw_to_base64(image.save_png_to_buffer())
 
 
+func png_base64_to_image(image_base64: String):
+	if image_base64.empty():
+		return ''
+	
+	var raw_image_data = Marshalls.base64_to_raw(image_base64)
+	var new_image: Image = Image.new()
+	new_image.load_png_from_buffer(raw_image_data)
+	return new_image
+
+
 
 func blend_images(base_image: Image, blend_image: Image, fit_mode: int = DEFAULT):
 	var fitted_blend_image = blend_image
