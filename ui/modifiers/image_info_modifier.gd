@@ -1,8 +1,12 @@
 extends ModifierMode
 
 var config: Dictionary
-var raw_info: Dictionary = {}
+#var raw_info: Dictionary = {}
 
+const LAYER_ID = "layer"
+const PARAMETERS = "param"
+const CONTROLLER_DATA = "controller"
+const ACTIVE_IMAGE = "active_img"
 
 
 func select_mode():
@@ -12,10 +16,10 @@ func select_mode():
 	Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "open_board").args([self]).execute()
 	if data_cue == null:
 		Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "set_image").args([image_data]).execute()
-		if raw_info.empty():
-			DiffusionServer.request_image_info(self, "_on_png_info_received", image_data.base64)
-		else:
-			_on_png_info_received(raw_info) # DELETE if we really don't need it, check that api reestruture works fine first
+#		if raw_info.empty():
+#			DiffusionServer.request_image_info(self, "_on_png_info_received", image_data.base64)
+#		else:
+#			_on_png_info_received(raw_info) # DELETE if we really don't need it, check that api reestruture works fine first
 	else:
 		Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "set_image").args([image_data]).execute()
 		data_cue.clone().execute()
@@ -74,7 +78,7 @@ func _on_png_info_received(result):
 	if not result is Dictionary:
 		return
 	
-	raw_info = result
+#	raw_info = result
 #	var formatted_info = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "process_raw_info"
 #			).args([info_translations]
 #			).opts(raw_info
@@ -90,6 +94,21 @@ func _on_png_info_received(result):
 	if selected:
 		Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "set_image").args([image_data]).execute()
 		data_cue.clone().execute()
+
+
+func get_mode_data():
+	var data = {
+		CONTROLLER_DATA: data_cue,
+		ACTIVE_IMAGE: ImageProcessor.image_to_base64(get_active_image()),
+		PARAMETERS: config
+	}
+	return data
+
+
+func set_mode_data(data: Dictionary):
+	data_cue = data.get(CONTROLLER_DATA, null)
+	active_image = data.get(ACTIVE_IMAGE, null)
+	config = data.get(PARAMETERS, {})
 
 
 

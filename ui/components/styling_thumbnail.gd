@@ -30,6 +30,7 @@ func get_drag_data(position):
 	create_style_modifier()
 	return .get_drag_data(position)
 
+
 func is_match(text: String):
 	if styling_data == null:
 		return text.empty() # If there's nothing to match, will return true
@@ -38,6 +39,16 @@ func is_match(text: String):
 		return true
 	
 	return styling_data.file_cluster.match_string(text)
+
+
+func is_named(text: String):
+	if styling_data == null:
+		return false # If there's nothing to match, will return true
+		
+	if text.empty():
+		return false
+	
+	return styling_data.file_cluster.match_name(text)
 
 
 func _on_pressed():

@@ -1,5 +1,7 @@
 extends ModifierMode
 
+const CONTROLLER_DATA = "controller"
+
 
 var styling_data: StylingData = null
 var controller_role = Consts.ROLE_CONTROL_STYLING
@@ -42,4 +44,15 @@ func apply_to_api(_api):
 
 func clear_board():
 	Cue.new(controller_role, "clear").execute()
+
+
+func get_mode_data():
+	var data = {
+		CONTROLLER_DATA: data_cue,
+	}
+	return data
+
+
+func set_mode_data(data: Dictionary):
+	data_cue = data.get(CONTROLLER_DATA, null)
 

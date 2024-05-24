@@ -7,20 +7,29 @@ const STRENGHT = "strenght_core"
 const POS_PROMTP_EXTRA = "positive_extra_prompt"
 const NEG_PROMTP_EXTRA = "negative_extra_prompt"
 const STRENGHT_EXTRA = "strenght_extra"
+
 const LORA_FORMAT = "<lora:{0}:{1}>"
 const LYCORIS_FORMAT = "<lyco:{0}:{1}>"
 const TI_FORMAT = "({0}:{1})"
 const NORMAL_TOKENS_FORMAT = "({0}:{1})"
 
+const LORA_ID = 0
+const LYCORIS_ID = 1
+const TI_ID = 2
+const NORMAL_TOKENS_ID = 3
+
 var format: String
-var is_negative: bool = false
-var prompt_core: String = ''
-var strenght_core: float = 1.0
-var positive_prompt_extra: String = ''
-var negative_prompt_extra: String = ''
-var strenght_extra: float = 1.0
 var file_cluster: FileCluster = null
-var description: String = ''
+
+# The following values are extracted from file_cluster after calling reload_data
+# All of them can be left empty if there's no file cluster
+var is_negative: bool = false 
+var prompt_core: String = '' 
+var strenght_core: float = 1.0 
+var positive_prompt_extra: String = '' 
+var negative_prompt_extra: String = '' 
+var strenght_extra: float = 1.0
+var description: String = '' # 
 
 #signal style_preview_changed(image_data)
 

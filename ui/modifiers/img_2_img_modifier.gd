@@ -1,5 +1,10 @@
 extends ModifierMode
 
+const LAYER_ID = "layer"
+const PARAMETERS = "param"
+const CONTROLLER_DATA = "controller"
+const ACTIVE_IMAGE = "active_img"
+
 var layer_id: String = ''
 var controller_role: String = Consts.ROLE_CONTROL_IMG2IMG
 var img2img_dict = null
@@ -74,3 +79,20 @@ func get_active_image():
 		return image_data.image
 	else:
 		return null
+
+
+func get_mode_data():
+	var data = {
+		LAYER_ID: layer_id,
+		CONTROLLER_DATA: data_cue,
+		ACTIVE_IMAGE: ImageProcessor.image_to_base64(get_active_image()),
+		PARAMETERS: img2img_dict
+	}
+	return data
+
+
+func set_mode_data(data: Dictionary):
+	layer_id = data.get(LAYER_ID, '')
+	data_cue = data.get(CONTROLLER_DATA, null)
+	active_image = data.get(ACTIVE_IMAGE, null)
+	img2img_dict = data.get(PARAMETERS, {})

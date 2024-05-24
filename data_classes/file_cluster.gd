@@ -145,6 +145,10 @@ func match_string(string: String) -> bool:
 		return false
 
 
+func match_name(string: String) -> bool:
+	return name == string
+
+
 func get_image_data() -> ImageData:
 	if image_data == null:
 		if not image_file.empty():
