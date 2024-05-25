@@ -2,6 +2,10 @@ extends ModifierMode
 
 class_name ControlnetNoCanvasModifierMode
 
+const PARAMETERS = "param"
+const CONTROLLER_DATA = "controller"
+const ACTIVE_IMAGE = "active_img"
+
 export(Color) var background_color = Color.black
 
 var controller_role: String = ''
@@ -139,10 +143,23 @@ func get_control_net_model_name(download_if_missing: bool = true) -> String:
 	return ''
 
 
-
-
 func get_active_image() -> Image:
 	if image_data != null:
 		return image_data.image
 	else:
 		return null
+
+
+func get_mode_data():
+	var data = {
+		CONTROLLER_DATA: data_cue,
+		ACTIVE_IMAGE: ImageProcessor.image_to_base64(get_active_image()),
+		PARAMETERS: config_dict
+	}
+	return data
+
+
+func set_mode_data(data: Dictionary):
+	data_cue = data.get(CONTROLLER_DATA, null)
+	active_image = data.get(ACTIVE_IMAGE, null)
+	config_dict = data.get(PARAMETERS, {})

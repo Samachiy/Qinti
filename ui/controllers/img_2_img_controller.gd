@@ -57,10 +57,17 @@ func prepare_layer(cue: Cue):
 
 
 func pause_layer(_cue: Cue = null):
+	l.p("Paused controller" + name)
 	var layer = canvas.select_layer(layer_name)
 	if layer != null:
 		layer.consolidate()
 		layer.visible = false
+
+
+func consolidate_layer(_cue: Cue = null):
+	var layer = canvas.select_layer(layer_name)
+	if layer != null:
+		layer.consolidate()
 
 
 func reset_layer():
@@ -237,3 +244,17 @@ func _on_active_image_save_path_selected(path: String, overwrite: bool = true):
 func _on_scroll_changed():
 	var scrollbar = scroll.get_v_scrollbar()
 	UIOrganizer.show_v_scroll_indicator(scrollbar, top_gradient, bottom_gradient)
+
+
+func _save_cues(_is_file_save):
+	if canvas is Canvas2D:
+		var layers_data = canvas.get_save_data()
+		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_layers", [layers_data])
+
+
+func load_layers(cue: Cue):
+	# [ layer_daya ]
+	var layers_data = cue.get_at(0, {})
+	if canvas is Canvas2D:
+		canvas.remove_all_layers()
+		canvas.add_layers_data(layers_data)

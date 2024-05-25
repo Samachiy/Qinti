@@ -2,6 +2,11 @@ extends ModifierMode
 
 class_name ControlnetModifierMode
 
+const LAYER_ID = "layer"
+const PARAMETERS = "param"
+const CONTROLLER_DATA = "controller"
+const ACTIVE_IMAGE = "active_img"
+
 export(Color) var background_color = Color.black
 
 var layer_id: String = ''
@@ -238,3 +243,21 @@ func _on_image_processed(result: Image):
 	if selected:
 		Cue.new(controller_role, "set_preprocessor").args(
 				[pending_preprocessor]).execute()
+
+
+func get_mode_data():
+	var data = {
+		LAYER_ID: layer_id,
+		CONTROLLER_DATA: data_cue,
+		ACTIVE_IMAGE: ImageProcessor.image_to_base64(get_active_image()),
+		PARAMETERS: config_dict
+	}
+	return data
+
+
+func set_mode_data(data: Dictionary):
+	layer_id = data.get(LAYER_ID, '')
+	data_cue = data.get(CONTROLLER_DATA, null)
+	active_image = data.get(ACTIVE_IMAGE, null)
+	config_dict = data.get(PARAMETERS, {})
+	

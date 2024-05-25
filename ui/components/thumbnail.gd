@@ -35,6 +35,13 @@ func is_match(_text: String):
 	return true
 
 
+func is_named(_text: String):
+	# This function will be called more times on it's lifespan, program it accordingly
+	l.g("The function 'is_named' has not been overriden yet on thumbnail: " + 
+	filename)
+	return false
+
+
 func _fill_menu():
 	l.g("The function '_fill_menu' has not been overriden yet on thumbnail: " + 
 	filename)

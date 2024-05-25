@@ -54,10 +54,17 @@ func prepare_layer(cue: Cue):
 
 
 func pause_layer(_cue: Cue = null):
+	l.p("Paused controller" + name)
 	var layer = canvas.select_layer(layer_name)
 	if layer != null:
 		layer.consolidate()
 		layer.visible = false
+
+
+func consolidate_layer(_cue: Cue = null):
+	var layer = canvas.select_layer(layer_name)
+	if layer != null:
+		layer.consolidate()
 
 
 func reset_layer():
@@ -238,35 +245,15 @@ func _on_scroll_changed():
 	UIOrganizer.show_v_scroll_indicator(scrollbar, top_gradient, bottom_gradient, 8)
 
 
+func _save_cues(_is_file_save):
+	if canvas is Canvas2D:
+		var layers_data = canvas.get_save_data()
+		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_layers", [layers_data])
 
-#func _middle_click_drag(event: InputEventMouseMotion):
-#	if layer2d == null:
-#		return
-#
-#	layer2d.move_layer_by(canvas.convert_movement(event.relative))
-#
-#
-#func _scroll_up(_event: InputEventMouseButton):
-#	if layer2d == null:
-#		return
-#
-#	var rect2: Rect2 = layer2d.limits
-#	var amount_x = SCROLL_SCALE_AMOUNT * rect2.size.x / rect2.size.y
-#	var amount_y = SCROLL_SCALE_AMOUNT #* rect2.size.y / rect2.size.x
-#	rect2.size.x = max(0, rect2.size.x + amount_x)
-#	rect2.size.y = max(0, rect2.size.y + amount_y)
-#	layer2d.expand_limits(rect2, true)
-#
-#
-#func _scroll_down(_event: InputEventMouseButton):
-#	if layer2d == null:
-#		return
-#
-#	var rect2: Rect2 = layer2d.limits
-#	var amount_x = SCROLL_SCALE_AMOUNT * rect2.size.x / rect2.size.y
-#	var amount_y = SCROLL_SCALE_AMOUNT #* rect2.size.y / rect2.size.x
-#	if rect2.size.y - amount_y <= 1:
-#		return
-#	rect2.size.x = max(0, rect2.size.x - amount_x)
-#	rect2.size.y = max(0, rect2.size.y - amount_y)
-#	layer2d.expand_limits(rect2, true)
+
+func load_layers(cue: Cue):
+	# [ layer_daya ]
+	var layers_data = cue.get_at(0, {})
+	if canvas is Canvas2D:
+		canvas.remove_all_layers()
+		canvas.add_layers_data(layers_data)

@@ -13,6 +13,7 @@ var active_image_data: ImageData = null
 var restore_image_data: ImageData = null
 var is_prepared: bool = false
 var tags: Dictionary = {} # The feature name is the key, the translation key error msg is the value
+var loaded_once: bool = false
 
 signal mode_loaded(mode_node)
 
@@ -56,6 +57,22 @@ func get_active_image():
 	# This function has to return an ImageData object
 	l.g("The function 'get_active_image' has not been overriden yet on modifier mode: " + 
 	name)
+
+
+func get_mode_data():
+	# This function will be called more times on it's lifespan, program it accordingly
+	# This function must return the needed info to restore it's state using
+	# set_mode_data(data: Dictionary). Must return a dictionary
+	l.g("The function 'get_mode_data' has not been overriden yet on Controller: " + 
+	filename)
+
+
+func set_mode_data(_data: Dictionary):
+	# This function will be called more times on it's lifespan, program it accordingly
+	# This function must restore a modifier state using the data from
+	# get_mode_data()
+	l.g("The function 'set_mode_data' has not been overriden yet on Controller: " + 
+	filename)
 	
 
 func _ready():
@@ -120,4 +137,5 @@ func load_mode():
 		l.g("The mode '" + name + "' is not on the type list." + 
 		name)
 	else:
+		loaded_once = true
 		emit_signal("mode_loaded", self)

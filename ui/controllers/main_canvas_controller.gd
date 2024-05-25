@@ -52,6 +52,8 @@ var gen_area_mask: Image = null
 func _ready():
 	Roles.request_role(self, Consts.ROLE_CANVAS, true)
 	Roles.request_role_on_roles_cleared(self, Consts.ROLE_CANVAS)
+	Roles.request_role(board_owner, Consts.ROLE_ACTIVE_BOARD, true)
+	l.p(board_owner.name)
 	var e = DiffusionServer.connect("samplers_refreshed", self, "_on_samplers_refreshed")
 	l.error(e, l.CONNECTION_FAILED)
 	e = DiffusionServer.connect("upscalers_refreshed", self, "_on_upscalers_refreshed")
@@ -226,6 +228,13 @@ func prepare_layer():
 
 
 func pause_layer(_cue: Cue = null):
+	l.p("Paused controller" + name)
+	var layer = canvas.select_layer(MAIN_LAYER_NAME)
+	if layer != null:
+		layer.consolidate()
+
+
+func consolidate_layer(_cue: Cue = null):
 	var layer = canvas.select_layer(MAIN_LAYER_NAME)
 	if layer != null:
 		layer.consolidate()
@@ -492,3 +501,18 @@ func _on_HiResType_option_selected(label_id, _index_id):
 func _on_scroll_changed():
 	var scrollbar = scroll.get_v_scrollbar()
 	UIOrganizer.show_v_scroll_indicator(scrollbar, top_gradient, bottom_gradient)
+
+
+func _save_cues(_is_file_save):
+	if canvas is Canvas2D:
+		var layers_data = canvas.get_save_data()
+		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_layers", [layers_data])
+
+
+func load_layers(cue: Cue):
+	# [ layer_daya ]
+	var layers_data = cue.get_at(0, {})
+	if canvas is Canvas2D:
+		canvas.remove_all_layers()
+		canvas.add_layers_data(layers_data)
+	

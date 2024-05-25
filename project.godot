@@ -427,6 +427,7 @@ ImageProcessor="*res://data_classes/image_processor.tscn"
 Tutorials="*res://ui/components/tutorials.tscn"
 Locale="*res://ui/components/locale.gd"
 Python="*res://data_classes/python_interface.gd"
+HashCalculator="*res://data_classes/hash_calculator.gd"
 
 [display]
 

@@ -165,6 +165,26 @@ func show_only_thumbnail_matches(match_string: String):
 			child.visible = child.is_match(match_string)
 
 
+func get_thumbnail_by_name(thumbnail_name: String):
+	var resul = []
+	for child in get_children():
+		if not is_instance_valid(child):
+			continue
+		
+		if child.is_queued_for_deletion():
+			continue
+		
+		if child is Thumbnail and child.is_named(thumbnail_name):
+			resul.append(child)
+	
+	if resul.empty():
+		return null
+	elif resul.size() == 1:
+		return resul[0]
+	else:
+		return resul
+
+
 func _get_lowest_array_element(column_sizes: Array) -> int:
 	var min_size = column_sizes[0]
 	var min_element = 0

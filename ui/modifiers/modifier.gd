@@ -2,6 +2,10 @@ extends MarginContainer
 
 class_name Modifier
 
+const SELECTED_MODE_NAME = "selected"
+const IMAGE_DATA = "image"
+const IMAGE_NAME = "image_name"
+
 onready var core_mode_of_image_type = $Modes/PNGInfo
 onready var alt_mode_of_image_type = $Modes/Img2Img
 onready var styling_type = $Modes/Styling
@@ -206,7 +210,9 @@ func deselect_active_modifier():
 	# Warning, from code to ui, highlight -> select and select -> editing
 	# thus this exits edit mode
 	if Roles.has_role(Consts.ROLE_ACTIVE_MODIFIER):
-		Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute()
+		var active_modifier = Roles.get_node_by_role(Consts.ROLE_ACTIVE_MODIFIER)
+		if active_modifier != self:
+			Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute()
 
 
 func delete(deleted_queue: Array):
@@ -430,4 +436,42 @@ func force_set_mode_label(mode_node_name: String):
 	else:
 		l.g("Modifier mode '" + mode_node_name + "' resulted in '" + str(mode_to_set) + 
 				"'. Can't set mode.")
+
+
+func get_modes_data():
+	var data = {}
+	for mode_node in types_container.get_children():
+		if mode_node is ModifierMode and mode_node.loaded_once:
+			data[mode_node.name] = mode_node.get_mode_data()
+	
+	data[SELECTED_MODE_NAME] = mode_name
+	data[IMAGE_DATA] = image_data.get_base64()
+	data[IMAGE_NAME] = image_data.image_name
+
+
+func set_modes_data(data: Dictionary):
+	var mode_node
+	var default_mode: String = ''
+	image_data = ImageData.new(data.get(IMAGE_NAME, ""))
+	image_data.load_base64(data.get(SELECTED_MODE_NAME, ""))
+	
+	for mode_key in data:
+		if default_mode.empty():
+			default_mode = mode_key
+		mode_node = types_container.get_node_or_null(mode_key)
+		if mode_node is ModifierMode:
+			mode_node.set_mode_data(data[mode_node])
+	
+	var select_mode = data.get(SELECTED_MODE_NAME, "")
+	if select_mode.empty():
+		select_mode = default_mode
+	
+	_refresh_image_data_with(image_data)
+	force_set_mode_label(select_mode)
+	_refresh_label()
+
+
+
+
+
 
