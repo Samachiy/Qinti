@@ -142,9 +142,15 @@ func _on_Main_ready():
 
 
 func save(path: String):
+	# RESUME show load messages that says: Calculating and storing models ID
+	# Solve hashes
+	HashCalculator.pause_hashing_thread()
+	# RESUME make modifiers in use and model in use to hash their stuff in fast queue
+	yield(HashCalculator.start_hashing_thread(), "fast_queue_finished")
 	# Call Active board > controller_node > consolidate data (if it has such method)
-	# Call SaveLoad
 	Cue.new(Consts.ROLE_ACTIVE_BOARD, "consolidate_layer").execute()
+	
+	# Call SaveLoad
 	Director.save_file_at_path(path)
 
 

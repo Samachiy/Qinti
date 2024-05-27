@@ -8,44 +8,92 @@ var queue: Array = [] # [ [path1, object1, method1], [path2, object2, method2], 
 var fast_queue: Array = [] # [ [path1, object1, method1], [path2, object2, method2], ... ]
 var qh_repeat_check: Dictionary = {}
 var thread: Thread = null
+var is_running_fast_queue: bool = false setget set_is_running_fast_queue
+var is_running_queue: bool = false setget set_is_running_queue
+var paused_thread: bool = false
 
 signal fast_queue_finished
 signal queue_finished
+# warning-ignore:unused_signal
 signal queue_next_task_request
 
 
 func _ready():
-	connect("queue_next_task_request", self, "_run_next_queued_hash_task")
+	var e = connect("queue_next_task_request", self, "_run_next_queued_hash_task")
+	l.error(e, l.CONNECTION_FAILED)
 
 
-func thread_hash_file(path: String, receiving_obj: Object, receiving_method: String):
+func set_is_running_fast_queue(value: bool):
+	if is_running_fast_queue and not value:
+		emit_signal("fast_queue_finished")
+	
+	is_running_fast_queue = value
+
+
+func set_is_running_queue(value: bool):
+	if is_running_fast_queue and not value:
+		emit_signal("queue_finished")
+	
+	is_running_queue = value
+
+
+func hash_file_thread(path: String, receiving_obj: Object, receiving_method: String, start: bool):
 	queue.append([path, receiving_obj, receiving_method])
+	if start:
+		start_hashing_thread()
+
+
+func hash_file_fast_thread(path: String, receiving_obj: Object, receiving_method: String, start: bool):
+	fast_queue.append([path, receiving_obj, receiving_method])
+	if start:
+		start_hashing_thread()
+
+
+func start_hashing_thread():
+	paused_thread = false
 	if thread == null and thread.is_alive():
-		pass # We will have to wait
+		pass # We will have to wait, the thread will emit the signal 
+		# to run _run_next_queued_hash_task()
 	else:
 		# Available, proceed with queue
 		_run_next_queued_hash_task()
+	
+	return self
+
+
+func pause_hashing_thread():
+	paused_thread = true
 
 
 func _run_next_queued_hash_task():
-	l.p("new has task queued")
+	if paused_thread:
+		return
+	
+	l.p("new hash task queued")
 	if thread is Thread and thread.is_active():
-		_dispose_thread(thread)
+		_dispose_thread()
 	
 	var task_info = []
 	if fast_queue.empty():
 		if not queue.empty():
 			task_info = queue.pop_front()
 			task_info.append(0)
+			is_running_queue = true
+			is_running_fast_queue = false
 	else:
 		task_info = fast_queue.pop_front()
 		task_info.append(COOLDOWN)
+		is_running_queue = false
+		is_running_fast_queue = true
 	
 	if task_info.size() < 4:
+		is_running_queue = false
+		is_running_fast_queue = false
 		return
 	
 	thread = Thread.new()
-	thread.start(self, "_hash_file_and_send", task_info)
+	var e = thread.start(self, "_hash_file_and_send", task_info)
+	l.error(e, "Error starting thread to hash file: " + str(task_info))
 
 
 func _hash_file_and_send(info: Array):
@@ -65,7 +113,7 @@ func _hash_file_and_send(info: Array):
 	call_deferred("emit_signal", "queue_next_task_request")
 
 
-func _dispose_thread(thread: Thread):
+func _dispose_thread():
 	if thread is Thread:
 		thread.wait_to_finish()
 		thread = null
@@ -100,7 +148,7 @@ func quick_hash_file(path):
 	
 	file.open(path, File.READ)
 	# Update the context after reading each chunk.
-	for i in range(QUICK_HASH_CHUNKS):
+	for _i in range(QUICK_HASH_CHUNKS):
 		if file.eof_reached():
 			break
 		
