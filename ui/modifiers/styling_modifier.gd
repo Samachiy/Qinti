@@ -6,6 +6,7 @@ const CONTROLLER_DATA = "controller"
 var styling_data: StylingData = null
 var controller_role = Consts.ROLE_CONTROL_STYLING
 var prompt_cue: Cue = null
+var is_hash_requested: bool = false
 
 
 func select_mode():
@@ -26,6 +27,10 @@ func deselect_mode():
 
 
 func prepare_mode():
+	if is_hash_requested:
+		return
+	
+	styling_data.file_cluster.solve_hash(false)
 	pass
 
 
@@ -44,6 +49,14 @@ func apply_to_api(_api):
 
 func clear_board():
 	Cue.new(controller_role, "clear").execute()
+
+
+func get_model_hash():
+	styling_data.file_cluster.get_hash()
+
+
+func queue_hash_now():
+	styling_data.file_cluster.solve_hash(true)
 
 
 func get_mode_data():

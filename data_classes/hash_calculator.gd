@@ -6,11 +6,13 @@ const COOLDOWN = 5 # seconds
 
 var queue: Array = [] # [ [path1, object1, method1], [path2, object2, method2], ... ]
 var fast_queue: Array = [] # [ [path1, object1, method1], [path2, object2, method2], ... ]
+var solved: Dictionary = {} # { path1: sha256_hash1, path2: sha256_hash2, ... ]
 var qh_repeat_check: Dictionary = {}
 var thread: Thread = null
 var is_running_fast_queue: bool = false setget set_is_running_fast_queue
 var is_running_queue: bool = false setget set_is_running_queue
 var paused_thread: bool = false
+var mutex
 
 signal fast_queue_finished
 signal queue_finished
@@ -19,6 +21,7 @@ signal queue_next_task_request
 
 
 func _ready():
+	mutex = Mutex.new()
 	var e = connect("queue_next_task_request", self, "_run_next_queued_hash_task")
 	l.error(e, l.CONNECTION_FAILED)
 
@@ -110,6 +113,7 @@ func _hash_file_and_send(info: Array):
 	if cooldown > 0:
 		yield(get_tree().create_timer(cooldown), "timeout")
 	
+	# So that the thread finish first and the signal is sent after
 	call_deferred("emit_signal", "queue_next_task_request")
 
 
@@ -119,13 +123,18 @@ func _dispose_thread():
 		thread = null
 
 
-func hash_file(path):
+func hash_file(path) -> String:
 	var ctx = HashingContext.new()
 	var file = File.new()
 	# Start a SHA-256 context.
 	ctx.start(HashingContext.HASH_SHA256)
 	if not file.file_exists(path):
-		return
+		return ''
+	
+	# If we already calculated this before in the queue, then we will just return the result
+	var res_hash = solved.get(path, "")
+	if res_hash != "":
+		return res_hash
 	
 	file.open(path, File.READ)
 	# Update the context after reading each chunk.
@@ -135,16 +144,24 @@ func hash_file(path):
 	# Get the computed hash.
 	var res = ctx.finish()
 	# Convert the hash to hexadecimal number in String
-	return res.hex_encode()
+	res_hash = res.hex_encode()
+	# We add the solved hash in case a repeated element is in the queue and avoid
+	# calculation the same hash twice. A mutex is use since this function will
+	# be accesed by a thread
+	mutex.lock()
+	solved[path] = res_hash
+	mutex.unlock()
+	
+	return res_hash
 
 
-func quick_hash_file(path):
+func quick_hash_file(path) -> String:
 	var ctx = HashingContext.new()
 	var file = File.new()
 	# Start a SHA-256 context.
 	ctx.start(HashingContext.HASH_SHA256)
 	if not file.file_exists(path):
-		return
+		return ''
 	
 	file.open(path, File.READ)
 	# Update the context after reading each chunk.
@@ -158,9 +175,10 @@ func quick_hash_file(path):
 	var res = ctx.finish()
 	# Convert the hash to hexadecimal number in String
 	var hex_str = res.hex_encode()
-	var hex_str_abr = hex_str.substr(0, 10)
+	var hex_str_abr = hex_str.substr(0, 11)
 	if qh_repeat_check.has(hex_str_abr):
-		l.g("Repeated quick hash: " + str(qh_repeat_check[hex_str_abr] + " and " + str([hex_str, path])))
+		l.g("Repeated quick hash: " + str(qh_repeat_check[hex_str_abr] + " and " 
+				+ str([hex_str, path])))
 	else:
 		qh_repeat_check[hex_str_abr] = [hex_str, path]
 	

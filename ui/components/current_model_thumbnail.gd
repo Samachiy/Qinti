@@ -28,8 +28,14 @@ func cue_cluster(cue: Cue):
 	var cluster = cue.get_at(0, null)
 	if cluster != null:
 		set_cluster(cluster)
+		file_cluster.solve_hash(false)
 		set_label(file_cluster.name)
 		stop_animation()
+
+
+func queue_hash_now(_cue: Cue = null):
+	if file_cluster is FileCluster:
+		file_cluster.solve_hash(true)
 
 
 func start_animation(_cue: Cue = null):
