@@ -189,6 +189,8 @@ func _to_string():
 	if not metadata_file.empty():
 		string += ", metadata"
 	
+	string += "QHash: " + get_q_hash()
+	
 	return string
 
 

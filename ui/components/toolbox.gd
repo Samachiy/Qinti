@@ -15,7 +15,7 @@ var lycoris_thread: Thread
 var ti_thread: Thread
 var refreshed_containers: Dictionary = {}
 
-signal containers_refreshed
+signal file_clusters_refreshed
 
 func _ready():
 	#recent_container.container.load_images_from_folder("res://Placeholders/") # for test purposes
@@ -144,6 +144,12 @@ func add_TIs(thread: bool = true):
 		_set_clusters(ti_container, clusters, StylingData.TI_FORMAT)
 
 
+func get_style_thumbnails_by_q_hash(cue: Cue):
+	# [ q_hash ]
+	var q_hash = cue.get_at(0, '')
+	return all_container.container.get_thumbnail_q_hash(q_hash)
+
+
 func add_all_clusters():
 # warning-ignore:return_value_discarded
 	refreshed_containers.erase(all_container)
@@ -185,7 +191,7 @@ signal_refresh: bool = true, clear_container_first: bool = true):
 	container.load_file_clusters(clusters, styling_format)
 	refreshed_containers[container] = true
 	if signal_refresh:
-		emit_signal("containers_refreshed")
+		emit_signal("file_clusters_refreshed")
 
 
 func _dispose_thread(thread: Thread):
@@ -232,10 +238,6 @@ func _on_TextualInversion_external_path_requested():
 	OS.set_clipboard(DiffusionServer.api.get_textual_inversion_dir())
 
 
-func _on_Toolbox_containers_refreshed():
-	refresh_all_timer.start()
-
-
 func _on_RefreshAllTimer_timeout():
 	refresh_all_timer.stop()
 	add_all_clusters()
@@ -247,3 +249,7 @@ func _on_All_container_selected():
 	
 	if all_container.visible:
 		add_all_clusters()
+
+
+func _on_Toolbox_file_clusters_refreshed():
+	refresh_all_timer.start()

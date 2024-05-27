@@ -41,6 +41,16 @@ func is_match(text: String):
 	return styling_data.file_cluster.match_string(text)
 
 
+func is_model(model_q_hash: String) -> bool:
+	var q_hash = styling_data.file_cluster.get_q_hash()
+	if q_hash.empty():
+		return false
+	elif model_q_hash.empty():
+		return false
+	else:
+		return q_hash == model_q_hash
+
+
 func is_named(text: String):
 	if styling_data == null:
 		return false # If there's nothing to match, will return true
