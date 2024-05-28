@@ -472,6 +472,10 @@ func set_modes_data(data: Dictionary):
 
 
 
+func queue_hash_now():
+	if styling_type.loaded_once:
+		styling_type.queue_hash_now()
+
 
 
 

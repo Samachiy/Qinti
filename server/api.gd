@@ -195,7 +195,6 @@ func get_image_to_image_data(width: int, height: int) -> Dictionary:
 		"image_cfg_scale": 0,
 	}
 	var base_image: Image
-	# RESUME this whole block from here and var resul: Dictionary = img2img_dict.duplicate()
 	for key in result.keys():
 		match key:
 			"init_images":

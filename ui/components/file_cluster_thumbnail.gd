@@ -32,6 +32,13 @@ func is_match(text: String):
 		return file_cluster.match_string(text)
 
 
+func is_q_hash_match(text: String):
+	if text.empty():
+		return true
+	else:
+		return file_cluster.match_q_hash(text)
+
+
 func clear_cluster():
 	if file_cluster == null:
 		return
@@ -78,6 +85,4 @@ func _on_Label_resized():
 			label.rect_size.y = 0
 			yield(get_tree(), "idle_frame")
 			label.rect_position.y = rect_size.y - label.rect_size.y
-			
-			
 

@@ -9,6 +9,7 @@ var thumbnails_order: Array = [] # this refers to the order in the columns
 var temp_children: Array = []
 var thumbnails_loaded: bool = false
 var contained_clusters: Dictionary = {}
+var contained_thumbnails_q_hash: Dictionary = {}
 
 
 func _ready():
@@ -60,6 +61,8 @@ func load_file_clusters(clusters: Dictionary, styling_format: String):
 		new_thumbnail.set_cluster(cluster)
 		if not styling_format.empty():
 			new_thumbnail.set_styling_data(styling_format)
+		
+		contained_thumbnails_q_hash[cluster.get_q_hash()] = new_thumbnail
 	
 	refresh_order()
 
@@ -77,6 +80,7 @@ func clear():
 	
 	temp_children.clear()
 	contained_clusters.clear()
+	contained_thumbnails_q_hash.clear()
 
 
 func create_thumbnail(set_as_first: bool = true):
@@ -165,7 +169,7 @@ func show_only_thumbnail_matches(match_string: String):
 			child.visible = child.is_match(match_string)
 
 
-func get_thumbnail_by_name(thumbnail_name: String):
+func get_thumbnails_by_name(thumbnail_name: String) -> Array:
 	var resul = []
 	for child in get_children():
 		if not is_instance_valid(child):
@@ -177,12 +181,26 @@ func get_thumbnail_by_name(thumbnail_name: String):
 		if child is Thumbnail and child.is_named(thumbnail_name):
 			resul.append(child)
 	
-	if resul.empty():
-		return null
-	elif resul.size() == 1:
-		return resul[0]
-	else:
-		return resul
+	return resul
+
+
+func get_thumbnails_by_q_hash(main_file_q_hash: String) -> Array:
+	var resul = []
+	for child in get_children():
+		if not is_instance_valid(child):
+			continue
+		
+		if child.is_queued_for_deletion():
+			continue
+		
+		if child is FileClusterThumbnail and child.is_q_hash_match(main_file_q_hash):
+			resul.append(child)
+	
+	return resul
+
+
+func get_thumbnail_q_hash(main_file_q_hash) -> FileClusterThumbnail:
+	return contained_thumbnails_q_hash.get(main_file_q_hash, null)
 
 
 func _get_lowest_array_element(column_sizes: Array) -> int:

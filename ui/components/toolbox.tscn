@@ -89,10 +89,8 @@ categories = ExtResource( 1 )
 
 [node name="RefreshAllTimer" type="Timer" parent="."]
 
-[connection signal="containers_refreshed" from="." to="." method="_on_Toolbox_containers_refreshed"]
+[connection signal="file_clusters_refreshed" from="." to="." method="_on_Toolbox_file_clusters_refreshed"]
 [connection signal="container_selected" from="TabContainer/STYLING/All" to="." method="_on_All_container_selected"]
-[connection signal="external_path_requested" from="TabContainer/STYLING/All" to="." method="_on_TextualInversion_external_path_requested"]
-[connection signal="refresh_requested" from="TabContainer/STYLING/All" to="." method="_on_TextualInversion_refresh_requested"]
 [connection signal="external_path_requested" from="TabContainer/STYLING/Loras" to="." method="_on_Loras_external_path_requested"]
 [connection signal="refresh_requested" from="TabContainer/STYLING/Loras" to="." method="_on_Loras_refresh_requested"]
 [connection signal="external_path_requested" from="TabContainer/STYLING/Lycoris" to="." method="_on_Lycoris_external_path_requested"]

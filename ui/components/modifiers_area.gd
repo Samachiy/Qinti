@@ -402,20 +402,36 @@ func _on_Container_child_exited_tree(node: Node):
 
 
 func _save_cues(_is_file_save):
-	var modifiers_data = {}
+	var modifiers_data = []
 	for modifier in modifier_container.get_children():
 		if modifier is Modifier:
-			modifier.get_mode_data()
+			modifiers_data.append(modifier.get_mode_data())
 			
 	Director.add_save_cue(
 			Consts.SAVE, Consts.ROLE_MODIFIERS_AREA, 
-			"load_modifiers", [modifiers_data]
+			"load_modifiers", modifiers_data
 	)
 
 
 func load_modifiers(cue: Cue):
-	# [ layer_daya ]
-	var layers_data = cue.get_at(0, {})
-	if canvas is Canvas2D:
-		canvas.remove_all_layers()
-		canvas.add_layers_data(layers_data)
+	# [ modifier_data1, modifier_data2, modifier_data3, ... ] 
+	clear_modifiers()
+	var new_modifier
+	for modifier_data in cue._arguments:
+		if modifier_data is Dictionary:
+			new_modifier = MODIFIER_NODE.instance()
+			modifier_container.add_child(new_modifier)
+			new_modifier.set_modes_data(modifier_data)
+			modifier_container.place_modifiers()
+
+
+func clear_modifiers():
+	for modifier in modifier_container.get_children():
+		if modifier is Modifier:
+			modifier.queue_free()
+
+
+func queue_hash_now(_cue: Cue = null):
+	for modifier in modifier_container.get_children():
+		if modifier is Modifier:
+			modifier.queue_hash_now()
