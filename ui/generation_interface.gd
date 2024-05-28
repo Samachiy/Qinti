@@ -16,6 +16,7 @@ var prev_board = null
 var main_board = null
 var windows_ready: bool = false
 var server_ready: bool = false
+var restore_flags: Dictionary = {}
 
 func _ready():
 	Roles.request_role(self, Consts.ROLE_GENERATION_INTERFACE)
@@ -28,6 +29,8 @@ func _ready():
 			Consts.UI_CURRENT_MODEL_THUMBNAIL_GROUP)
 	UIOrganizer.set_locale('en')
 	Director.connect_game_closing(self, "_on_game_closing")
+	Director.connect_game_pre_closing(self, "_on_game_pre_closing")
+	Director.connect_file_load_requested(self, "_on_file_load_requested")
 	var e = DiffusionServer.connect("server_ready", self, "_on_server_ready")
 	l.error(e, l.CONNECTION_FAILED)
 	detect_main_board()
@@ -209,6 +212,15 @@ func _on_server_ready():
 	server_ready = true
 
 
+func _on_game_pre_closing():
+	# RESUME overwrite the flags here to previous values
+	if restore_flags.empty():
+		return
+	
+	load_flag_data(restore_flags.duplicate())
+	pass
+
+
 func _on_game_closing():
 #	if not OS.has_feature("standalone"):
 #		get_tree().quit()
@@ -230,3 +242,28 @@ func _on_game_closing():
 func _on_ForcedCloseTimer_timeout():
 	l.g("Forced close timeout reached, server may still be active", l.INFO)
 	get_tree().quit()
+
+
+
+func _save_cues(_is_file_save):
+	var flags = Flags.flag_catalog
+	flags.erase(Consts.I_SAMPLER_NAME)
+	Director.add_save_cue(Consts.SAVE, Consts.ROLE_MODEL_SELECTOR, "load_parameters", [], flags)
+
+
+func load_parameters(cue: Cue):
+	var param_flags: Dictionary = cue._options
+	load_flag_data(param_flags)
+
+
+func load_flag_data(data: Dictionary):
+	var flag: Flag
+	for flag_name in data:
+		flag = Flags.ref(flag_name)
+		flag.set_value(data[flag_name][Flag.VALUE])
+
+
+func _on_file_load_requested(_path):
+	if restore_flags.empty():
+		restore_flags = Flags.flag_catalog.duplicate()
+	

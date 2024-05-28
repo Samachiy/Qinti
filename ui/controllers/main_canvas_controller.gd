@@ -507,6 +507,7 @@ func _save_cues(_is_file_save):
 	if canvas is Canvas2D:
 		var layers_data = canvas.get_save_data()
 		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_layers", [layers_data])
+		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_sampler", [selected_sampler])
 
 
 func load_layers(cue: Cue):
@@ -515,4 +516,8 @@ func load_layers(cue: Cue):
 	if canvas is Canvas2D:
 		canvas.remove_all_layers()
 		canvas.add_layers_data(layers_data)
-	
+
+
+func load_sampler(cue: Cue):
+	var sampler_name = cue.get_at(0, DEFAULT_SAMPLER)
+	samplers.select_by_label(sampler_name, false)

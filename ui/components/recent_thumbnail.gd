@@ -33,6 +33,15 @@ func set_batch_image_data(images_data_: Array):
 	return true
 
 
+func get_base64_images():
+	var result = []
+	for image in images_data:
+		if image is ImageData:
+			result.append([image.image_name, image.base64])
+	
+	return result
+
+
 func set_up_relay():
 	image_viewer_relay = ImageViewerRelay.new()
 	image_viewer_relay.connect_relay(self, "_on_image_change_requested")
