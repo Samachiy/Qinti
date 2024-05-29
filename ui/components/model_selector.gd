@@ -233,10 +233,10 @@ func load_model_with_q_hash(q_hash: String) -> bool:
 		# If we reach here, that means we got the right model
 		exists = true
 		if not server_is_ready:
-			queued_model_load = current_model
+			queued_model_load = file_cluster
 		else:
-			previous_model = current_model
-			set_diffusion_model(queued_model_load)
+			previous_model = file_cluster
+			set_diffusion_model(file_cluster)
 		
 		break
 	

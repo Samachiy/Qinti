@@ -419,6 +419,11 @@ func _fill_menu():
 	canvas.menu.add_tr_labeled_item(Consts.MENU_SAVE_CANVAS_AS)
 
 
+func cue_menu_option(cue: Cue):
+	# [ menu_option_label ]
+	_on_Menu_option_pressed(cue.str_at(0, ''), -1)
+
+
 func _on_Menu_option_pressed(label_id, _index_id):
 	match label_id:
 		Consts.MENU_SAVE_CANVAS:

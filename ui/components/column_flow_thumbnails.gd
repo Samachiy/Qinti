@@ -205,6 +205,7 @@ func get_thumbnail_q_hash(main_file_q_hash) -> FileClusterThumbnail:
 
 func get_thumnails(amount: int = -1):
 	var result = []
+	amount = int(min(amount, get_child_count()))
 	if amount == -1:
 		for child in get_children():
 			if child is Thumbnail:

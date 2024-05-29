@@ -647,8 +647,11 @@ func set_save_data(data: Dictionary):
 	var new_limits = data.get(SAVE_LIMITS, limits)
 	limits = new_limits
 	refresh_limits()
+	var image_texture = ImageTexture.new()
+	
 	if image_base64 is String and not image_base64.empty():
-		draw_texture_at(ImageProcessor.png_base64_to_image(image_base64), limits.position, false)
+		image_texture.create_from_image(ImageProcessor.png_base64_to_image(image_base64))
+		draw_texture_at(image_texture, limits.position, false)
 
 
 func is_empty(exception_nodes: Array = []):

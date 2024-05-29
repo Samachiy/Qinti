@@ -141,7 +141,7 @@ func get_q_hash():
 		return ''
 	
 	if main_file_q_hash.empty():
-		main_file_q_hash = HashCalculator.quick_hash_file(main_file)
+		main_file_q_hash = HashCalculator.quick_hash_file(path.plus_file(main_file))
 		return main_file_q_hash
 	else:
 		return main_file_q_hash
@@ -153,7 +153,7 @@ func get_hash(force: bool = false) -> String:
 	
 	if main_file_hash.empty():
 		if force:
-			main_file_hash = HashCalculator.hash_file(main_file)
+			main_file_hash = HashCalculator.hash_file(path.plus_file(main_file))
 			save_hashes()
 			return main_file_hash
 		else:
@@ -169,11 +169,12 @@ func solve_hash(fast_queue: bool):
 		return
 	
 	get_q_hash()
+	var main_file_path = path.plus_file(main_file)
 	if main_file_hash.empty():
 		if fast_queue:
-			HashCalculator.hash_file_thread(main_file, self, "_on_hash_solved", false)
+			HashCalculator.hash_file_thread(main_file_path, self, "_on_hash_solved", false)
 		else:
-			HashCalculator.hash_file_fast_thread(main_file, self, "_on_hash_solved", false)
+			HashCalculator.hash_file_fast_thread(main_file_path, self, "_on_hash_solved", false)
 
 
 func _on_hash_solved(new_hash: String):
@@ -238,8 +239,8 @@ func match_q_hash(q_hash: String):
 		return false
 	
 	# if we DO have alternate files and haven't reached a conclusion yet
-	for file_path in alt_mains:
-		if HashCalculator.quick_hash_file(file_path) == q_hash:
+	for file_name in alt_mains:
+		if HashCalculator.quick_hash_file(path.plus_file(file_name)) == q_hash:
 			return true
 	
 	return false
@@ -251,7 +252,7 @@ func match_hash(sha256_hash: String):
 	# calculation method of quick hash. There are other checks for repeated
 	# quick hashes, so this function is just here as backup in the worst case scenario
 	if main_file_hash.empty():
-		main_file_hash = HashCalculator.hash_file(main_file)
+		main_file_hash = HashCalculator.hash_file(path.plus_file(main_file))
 		return main_file_hash == sha256_hash
 	elif main_file_hash == sha256_hash:
 		return true

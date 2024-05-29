@@ -30,3 +30,7 @@ func request_load_message(cue: Cue):
 	# [ text: String]
 	var text = cue.str_at(0, '')
 	loading_dialog.display_text(text)
+
+
+func close_load_message(_cue: Cue = null):
+	loading_dialog.hide()

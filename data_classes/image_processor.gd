@@ -70,13 +70,14 @@ func image_to_base64(image: Image):
 	return Marshalls.raw_to_base64(image.save_png_to_buffer())
 
 
-func png_base64_to_image(image_base64: String):
+func png_base64_to_image(image_base64: String) -> Image:
 	if image_base64.empty():
-		return ''
+		return null
 	
 	var raw_image_data = Marshalls.base64_to_raw(image_base64)
 	var new_image: Image = Image.new()
-	new_image.load_png_from_buffer(raw_image_data)
+	var error = new_image.load_png_from_buffer(raw_image_data)
+	l.error(error, "Failure to conver base64 to image in ImageProcessor")
 	return new_image
 
 

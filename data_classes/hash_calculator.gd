@@ -28,14 +28,16 @@ func _ready():
 
 func set_is_running_fast_queue(value: bool):
 	if is_running_fast_queue and not value:
-		emit_signal("fast_queue_finished")
+		if fast_queue.empty():
+			emit_signal("fast_queue_finished")
 	
 	is_running_fast_queue = value
 
 
 func set_is_running_queue(value: bool):
 	if is_running_fast_queue and not value:
-		emit_signal("queue_finished")
+		if queue.empty():
+			emit_signal("queue_finished")
 	
 	is_running_queue = value
 
@@ -54,18 +56,28 @@ func hash_file_fast_thread(path: String, receiving_obj: Object, receiving_method
 
 func start_hashing_thread():
 	paused_thread = false
-	if thread == null and thread.is_alive():
+	if thread != null and thread.is_alive():
 		pass # We will have to wait, the thread will emit the signal 
 		# to run _run_next_queued_hash_task()
 	else:
 		# Available, proceed with queue
-		_run_next_queued_hash_task()
+		call_deferred("_run_next_queued_hash_task")
 	
 	return self
 
 
 func pause_hashing_thread():
 	paused_thread = true
+
+
+func switch_to_fast_queue():
+	self.is_running_queue = false
+	self.is_running_fast_queue = true
+
+
+func switch_to_normal_queue():
+	self.is_running_queue = true
+	self.is_running_fast_queue = false
 
 
 func _run_next_queued_hash_task():
@@ -81,17 +93,15 @@ func _run_next_queued_hash_task():
 		if not queue.empty():
 			task_info = queue.pop_front()
 			task_info.append(0)
-			is_running_queue = true
-			is_running_fast_queue = false
+			switch_to_normal_queue()
 	else:
 		task_info = fast_queue.pop_front()
 		task_info.append(COOLDOWN)
-		is_running_queue = false
-		is_running_fast_queue = true
+		switch_to_fast_queue()
 	
 	if task_info.size() < 4:
-		is_running_queue = false
-		is_running_fast_queue = false
+		self.is_running_queue = false
+		self.is_running_fast_queue = false
 		return
 	
 	thread = Thread.new()
@@ -124,16 +134,19 @@ func _dispose_thread():
 
 
 func hash_file(path) -> String:
+	l.p("hashing file: " + path)
 	var ctx = HashingContext.new()
 	var file = File.new()
 	# Start a SHA-256 context.
 	ctx.start(HashingContext.HASH_SHA256)
 	if not file.file_exists(path):
+		l.p("hash file doesn't exist: " + path)
 		return ''
 	
 	# If we already calculated this before in the queue, then we will just return the result
 	var res_hash = solved.get(path, "")
 	if res_hash != "":
+		l.p("hash already solved: " + path)
 		return res_hash
 	
 	file.open(path, File.READ)
@@ -152,6 +165,7 @@ func hash_file(path) -> String:
 	solved[path] = res_hash
 	mutex.unlock()
 	
+	l.p("hashed file: " + path)
 	return res_hash
 
 
@@ -177,8 +191,9 @@ func quick_hash_file(path) -> String:
 	var hex_str = res.hex_encode()
 	var hex_str_abr = hex_str.substr(0, 11)
 	if qh_repeat_check.has(hex_str_abr):
-		l.g("Repeated quick hash: " + str(qh_repeat_check[hex_str_abr] + " and " 
-				+ str([hex_str, path])))
+		if qh_repeat_check[hex_str_abr][1] != path:
+			l.g("Repeated quick hash: " + str(qh_repeat_check[hex_str_abr]) + " and " 
+				+ str([hex_str, path]))
 	else:
 		qh_repeat_check[hex_str_abr] = [hex_str, path]
 	

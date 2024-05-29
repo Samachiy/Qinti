@@ -1,6 +1,7 @@
 extends Panel
 
 const MSG_SHUTTING_DOWN_SERVER = "MESSAGE_SHUTTING_DOWN_SERVER"
+const MSG_CALCULATING_HASHES = "MESSAGE_CALCULATING_HASHES"
 const LINUX_SCRIPTS_PATH = "res://dependencies/scripts/system/"
 
 onready var board_container = $MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Boards
@@ -17,8 +18,10 @@ var main_board = null
 var windows_ready: bool = false
 var server_ready: bool = false
 var restore_flags: Dictionary = {}
+var current_project_path: String = ''
 
 func _ready():
+	var error = get_tree().connect("files_dropped", self, "_on_files_dropped")
 	Roles.request_role(self, Consts.ROLE_GENERATION_INTERFACE)
 	Roles.request_role(Consts.UI_DROP_GROUP, Consts.UI_DROP_GROUP)
 	Roles.request_role(Consts.UI_CANVAS_WITH_SHADOW_AREA, Consts.UI_CANVAS_WITH_SHADOW_AREA)
@@ -144,26 +147,69 @@ func _on_Main_ready():
 		PCData.make_file_executable_recursive(PCData.globalize_path(LINUX_SCRIPTS_PATH))
 
 
-func save(path: String):
-	# RESUME show load messages that says: Calculating and storing models ID
+func save_as(cue: Cue):
+	# [ use_current_path ]
+	var use_current_path = cue.bool_at(0, false)
+	var dir = Directory.new()
+	if use_current_path and dir.file_exists(use_current_path):
+		save_file(current_project_path)
+	else:
+		Cue.new(Consts.ROLE_FILE_PICKER,  "request_dialog").args([
+				self,
+				"save_file",
+				FileDialog.MODE_SAVE_FILE
+			]).opts({
+				tr("SUPPORTED_SAVE_PROJECT_FORMAT"): "*.qps"
+			}).execute()
+
+
+func save_file(path: String):
+	# overwrite is just there because 
+	Director.set_up_locker(Consts.SAVE)
+	# show load messages that says: Calculating and storing models ID
+	Cue.new(Consts.ROLE_DIALOGS, "request_load_message").args([MSG_CALCULATING_HASHES]).execute()
 	# Solve hashes
 	HashCalculator.pause_hashing_thread()
+	HashCalculator.switch_to_fast_queue()
 	Cue.new(Consts.UI_CURRENT_MODEL_THUMBNAIL_GROUP, "queue_hash_now").execute()
 	Cue.new(Consts.ROLE_MODIFIERS_AREA, "queue_hash_now").execute()
 	yield(HashCalculator.start_hashing_thread(), "fast_queue_finished")
+	Cue.new(Consts.ROLE_DIALOGS, "close_load_message").execute()
+	
 	# Call Active board > controller_node > consolidate data (if it has such method)
-	Cue.new(Consts.ROLE_ACTIVE_BOARD, "consolidate_layer").execute()
+	Cue.new(Consts.ROLE_ACTIVE_BOARD, "consolidate_canvas").execute()
+	
 	# Call SaveLoad
+	current_project_path = path
 	Director.save_file_at_path(path)
 
 
+func load_from(_cue: Cue = null):
+	Cue.new(Consts.ROLE_FILE_PICKER,  "request_dialog").args([
+			self,
+			"load_file",
+			FileDialog.MODE_SAVE_FILE
+		]).opts({
+			tr("SUPPORTED_SAVE_PROJECT_FORMAT"): "*.qps"
+		}).execute()
+
+
 func load_file(path: String):
+	current_project_path = path
 	Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute(false)
 	Director.load_file_at_path(path)
 	Director.use_up_locker(Consts.SAVE)
 	Cue.new(Consts.ROLE_CANVAS, "open_board").execute()
 	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "set_text").args([
 			Consts.HELP_DESC_SAVE_FILE_LOADED]).execute()
+
+
+func _on_files_dropped(files: PoolStringArray, _screen: int):
+	if files.size() >= 1:
+		var file_path: String = files[0]
+		var extension = file_path.get_extension()
+		if extension == "qps":
+			load_file(file_path)
 
 
 func exit(_cue: Cue = null):
@@ -248,7 +294,7 @@ func _on_ForcedCloseTimer_timeout():
 func _save_cues(_is_file_save):
 	var flags = Flags.flag_catalog
 	flags.erase(Consts.I_SAMPLER_NAME)
-	Director.add_save_cue(Consts.SAVE, Consts.ROLE_MODEL_SELECTOR, "load_parameters", [], flags)
+	Director.add_save_cue(Consts.SAVE, Consts.ROLE_GENERATION_INTERFACE, "load_parameters", [], flags)
 
 
 func load_parameters(cue: Cue):
