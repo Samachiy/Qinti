@@ -246,9 +246,11 @@ func _on_scroll_changed():
 
 
 func _save_cues(_is_file_save):
+	if controller_role.empty():
+		l.g("Controller role empty at: " + name)
 	if canvas is Canvas2D:
 		var layers_data = canvas.get_save_data()
-		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_layers", [layers_data])
+		Director.add_save_cue(Consts.SAVE, controller_role, "load_layers", [layers_data])
 
 
 func load_layers(cue: Cue):

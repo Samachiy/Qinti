@@ -82,6 +82,7 @@ func _ready():
 	if auto_role and controller_role.empty():
 		var role_name = format_file_name(name)
 		Roles.request_role(self, role_name)
+		controller_role = role_name
 	elif not controller_role.empty():
 		Roles.request_role(self, controller_role)
 	else:

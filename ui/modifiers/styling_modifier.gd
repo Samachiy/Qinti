@@ -75,11 +75,15 @@ func queue_hash_now():
 
 
 func get_mode_data():
-	var clean_data_cue: Cue
-	clean_data_cue = data_cue.clone()
-	clean_data_cue._arguments.clear()
+	var disassembled_data_cue = []
+	if data_cue is Cue:
+		disassembled_data_cue = data_cue.disassemble()
+		var clean_data_cue: Cue
+		clean_data_cue = data_cue.clone()
+		clean_data_cue._arguments.clear()
+		disassembled_data_cue = clean_data_cue.disassemble()
 	var data = {
-		CONTROLLER_DATA: clean_data_cue,
+		CONTROLLER_DATA: disassembled_data_cue,
 		FileCluster.HASH: get_model_hash(),
 		FileCluster.Q_HASH: get_model_q_hash(),
 	}
@@ -87,7 +91,8 @@ func get_mode_data():
 
 
 func set_mode_data(data: Dictionary):
-	data_cue = data.get(CONTROLLER_DATA, null)
+	var disassembled_data_cue = data.get(CONTROLLER_DATA, [])
+	data_cue = Cue.new('', '').assemble(disassembled_data_cue, false)
 	q_hash = data.get(FileCluster.Q_HASH, "")
 	sha256_hash = data.get(FileCluster.HASH, "")
 	retrieve_styling_data_q_hash(true)

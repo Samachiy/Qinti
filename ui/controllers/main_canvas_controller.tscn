@@ -20,6 +20,7 @@ rect_min_size = Vector2( 0, 87 )
 rect_clip_content = true
 size_flags_stretch_ratio = 0.35
 script = ExtResource( 2 )
+controller_role = "Canvas"
 
 [node name="Configs" type="ScrollContainer" parent="."]
 anchor_right = 1.0
@@ -29,8 +30,8 @@ size_flags_vertical = 3
 follow_focus = true
 
 [node name="Settings" type="HBoxContainer" parent="Configs"]
-margin_right = 225.0
-margin_bottom = 240.0
+margin_right = 1024.0
+margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 12

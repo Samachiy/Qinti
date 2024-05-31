@@ -100,7 +100,7 @@ func add_recent_png_images(cue: Cue):
 
 
 func add_recent_data_images(cue: Cue):
-	# [image1: ImageDAta, image2: ImageDAta, image3: ImageDAta, ...]
+	# [image1: ImageData, image2: ImageData, image3: ImageData, ...]
 	return _add_recent_images(cue._arguments)
 
 
@@ -253,3 +253,38 @@ func _on_All_container_selected():
 
 func _on_Toolbox_file_clusters_refreshed():
 	refresh_all_timer.start()
+
+
+func _save_cues(_is_file_save):
+	var images_data = []
+	var thumbnails = recent_container.container.get_thumnails(2)
+	for thumbnail in thumbnails:
+		if thumbnail is RecentThumbnail:
+			images_data.append(thumbnail.get_base64_images())
+	
+	Director.add_save_cue(
+			Consts.SAVE, 
+			Consts.ROLE_TOOLBOX, 
+			"load_recent_images_data", 
+			images_data)
+
+
+func load_recent_images_data(cue: Cue):
+	# [ image_base64_array1, image_base64_array2, ...]
+	# image_base64_array = [ [image_name1, image_base64_1], [image_name2, image_base64_2], ...]
+	recent_container.clear()
+	var images_data 
+	var image_base64: String = ''
+	var image_name: String  = ''
+	var aux: ImageData
+	for entry in cue._arguments:
+		images_data = []
+		for data in entry:
+			image_name = data[0]
+			image_base64 = data[1]
+			aux = ImageData.new(image_name)
+			aux.load_base64(image_base64)
+			images_data.append(aux)
+		
+		if not images_data.empty():
+			_add_recent_images(images_data)

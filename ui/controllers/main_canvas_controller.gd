@@ -169,8 +169,8 @@ func _on_CanvasController_canvas_connected(_canvas: Node):
 			"_on_DiscardGeneration_pressed",
 			"_on_prev_pressed",
 			"_on_next_pressed")
-	Roles.request_role(self, Consts.ROLE_GEN_AREA, true)
-	Roles.request_role_on_roles_cleared(self, Consts.ROLE_GEN_AREA)
+	Roles.request_role(generation_area, Consts.ROLE_GEN_AREA, true)
+	Roles.request_role_on_roles_cleared(generation_area, Consts.ROLE_GEN_AREA)
 
 
 func set_images_in_generation_area(cue: Cue):
@@ -419,6 +419,11 @@ func _fill_menu():
 	canvas.menu.add_tr_labeled_item(Consts.MENU_SAVE_CANVAS_AS)
 
 
+func cue_menu_option(cue: Cue):
+	# [ menu_option_label ]
+	_on_Menu_option_pressed(cue.str_at(0, ''), -1)
+
+
 func _on_Menu_option_pressed(label_id, _index_id):
 	match label_id:
 		Consts.MENU_SAVE_CANVAS:
@@ -507,6 +512,7 @@ func _save_cues(_is_file_save):
 	if canvas is Canvas2D:
 		var layers_data = canvas.get_save_data()
 		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_layers", [layers_data])
+		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_sampler", [selected_sampler])
 
 
 func load_layers(cue: Cue):
@@ -515,4 +521,8 @@ func load_layers(cue: Cue):
 	if canvas is Canvas2D:
 		canvas.remove_all_layers()
 		canvas.add_layers_data(layers_data)
-	
+
+
+func load_sampler(cue: Cue):
+	var sampler_name = cue.get_at(0, DEFAULT_SAMPLER)
+	samplers.select_by_label(sampler_name, false)

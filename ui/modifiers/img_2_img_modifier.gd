@@ -82,9 +82,12 @@ func get_active_image():
 
 
 func get_mode_data():
+	var disassembled_data_cue = []
+	if data_cue is Cue:
+		disassembled_data_cue = data_cue.disassemble()
 	var data = {
 		LAYER_ID: layer_id,
-		CONTROLLER_DATA: data_cue,
+		CONTROLLER_DATA: disassembled_data_cue,
 		ACTIVE_IMAGE: ImageProcessor.image_to_base64(get_active_image()),
 		PARAMETERS: img2img_dict
 	}
@@ -93,6 +96,11 @@ func get_mode_data():
 
 func set_mode_data(data: Dictionary):
 	layer_id = data.get(LAYER_ID, '')
-	data_cue = data.get(CONTROLLER_DATA, null)
-	active_image = data.get(ACTIVE_IMAGE, null)
+	var disassembled_data_cue = data.get(CONTROLLER_DATA, [])
+	data_cue = Cue.new('', '').assemble(disassembled_data_cue, false)
+	var active_image_base64 = data.get(ACTIVE_IMAGE, '')
+	if not active_image_base64.empty():
+		active_image = ImageProcessor.png_base64_to_image(active_image_base64)
+	else:
+		l.g("Tried to load from file an empty image_bse64 string onto mode: " + name)
 	img2img_dict = data.get(PARAMETERS, {})

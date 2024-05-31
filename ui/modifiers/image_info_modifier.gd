@@ -97,17 +97,19 @@ func _on_png_info_received(result):
 
 
 func get_mode_data():
+	var disassembled_data_cue = []
+	if data_cue is Cue:
+		disassembled_data_cue = data_cue.disassemble()
 	var data = {
-		CONTROLLER_DATA: data_cue,
-		ACTIVE_IMAGE: ImageProcessor.image_to_base64(get_active_image()),
+		CONTROLLER_DATA: disassembled_data_cue,
 		PARAMETERS: config
 	}
 	return data
 
 
 func set_mode_data(data: Dictionary):
-	data_cue = data.get(CONTROLLER_DATA, null)
-	active_image = data.get(ACTIVE_IMAGE, null)
+	var disassembled_data_cue = data.get(CONTROLLER_DATA, [])
+	data_cue = Cue.new('', '').assemble(disassembled_data_cue, false)
 	config = data.get(PARAMETERS, {})
 
 

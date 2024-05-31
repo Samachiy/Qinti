@@ -197,3 +197,47 @@ func _on_Close_pressed():
 
 func _on_DiffusionModels_external_path_requested():
 	OS.set_clipboard(DiffusionServer.api.get_checkpoints_dir())
+
+
+func _save_cues(_is_file_save):
+	var data = {
+		FileCluster.HASH: current_model.get_hash(),
+		FileCluster.Q_HASH: current_model.get_q_hash(),
+	}
+	Director.add_save_cue(Consts.SAVE, Consts.ROLE_MODEL_SELECTOR, "load_data", [], data)
+
+
+func load_data(cue: Cue):
+	var q_hash = cue.get_option(FileCluster.Q_HASH, '')
+	var sha256_hash = cue.get_option(FileCluster.HASH, '')
+	if load_model_with_q_hash(q_hash):
+		pass # Success, nothing to do here
+	else:
+		# RESUME show a missing model popup with the sha256 in the pop up
+		# and telling to download it a civitai and load the file again
+		pass
+
+
+func load_model_with_q_hash(q_hash: String) -> bool:
+	# returns true if the model exists, false otherwise
+	if q_hash.empty():
+		return false
+	
+	var exists = false
+	var target_q_hash
+	for file_cluster in clusters.values():
+		target_q_hash = file_cluster.get_q_hash()
+		if target_q_hash != q_hash:
+			continue
+		
+		# If we reach here, that means we got the right model
+		exists = true
+		if not server_is_ready:
+			queued_model_load = file_cluster
+		else:
+			previous_model = file_cluster
+			set_diffusion_model(file_cluster)
+		
+		break
+	
+	return exists

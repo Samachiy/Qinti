@@ -176,6 +176,12 @@ func add_tool_icon(button_icon: TextureButton):
 	added_tools_area.add_child(button_icon)
 
 
+func consolidate_canvas(_cue: Cue = null):
+	if controller_node is Controller:
+		if controller_node.has_method("consolidate_layer"):
+			controller_node.consolidate_layer()
+
+
 func _on_SwitchCanvasModifier_pressed():
 	if is_main_board:
 		Cue.new(Consts.ROLE_GENERATION_INTERFACE, "show_modifier_board").execute()

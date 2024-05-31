@@ -20,6 +20,11 @@ const LIGHT_MODE_TEXT = "LIGHT_MODE"
 const DARK_MODE_TEXT = "DARK_MODE"
 
 const EXIT = "EXIT"
+const SAVE_PROJECT = "SAVE_PROJECT"
+const SAVE_PROJECT_AS = "SAVE_PROJECT_AS"
+const SAVE_CANVAS_IMAGE = "SAVE_CANVAS_IMAGE"
+const SAVE_CANVAS_IMAGE_AS = "SAVE_CANVAS_IMAGE_AS"
+const LOAD_PROJECT = "LOAD_PROJECT"
 const NEW = "NEW"
 const RESTART_SERVER = "RESTART_SERVER"
 const REINSTALL_OR_CHANGE_SERVER = "REINSTALL_OR_CHANGE_SERVER"
@@ -76,6 +81,14 @@ func _ready():
 	connect_menu_button(tutorials_menu)
 	# Adding items
 	#add_tr_item_button(main_menu, NEW)
+	add_tr_item_button(main_menu, SAVE_PROJECT)
+	add_tr_item_button(main_menu, SAVE_PROJECT_AS)
+	add_separator(main_menu)
+	add_tr_item_button(main_menu, SAVE_CANVAS_IMAGE)
+	add_tr_item_button(main_menu, SAVE_CANVAS_IMAGE_AS)
+	add_separator(main_menu)
+	add_tr_item_button(main_menu, LOAD_PROJECT)
+	add_separator(main_menu)
 	add_tr_item_button(main_menu, EXIT)
 	add_tr_item_button(server_menu, SHOW_SERVER_STATE)
 	add_separator(server_menu)
@@ -353,6 +366,26 @@ func _on_menu_option_selected(id: int):
 	match label:
 		EXIT:
 			exit()
+		SAVE_PROJECT:
+			Cue.new(Consts.ROLE_GENERATION_INTERFACE, "save_as").args([false]).execute()
+		SAVE_PROJECT_AS:
+			Cue.new(Consts.ROLE_GENERATION_INTERFACE, "save_as").args([false]).execute()
+		LOAD_PROJECT:
+			Cue.new(Consts.ROLE_GENERATION_INTERFACE, "save_as").args([false]).execute()
+		SAVE_CANVAS_IMAGE:
+			Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute(false)
+			Cue.new(Consts.ROLE_CANVAS, "open_board").execute()
+			yield(get_tree(), "idle_frame")
+			Cue.new(Consts.ROLE_CANVAS, "cue_menu_option").args(
+					[Consts.MENU_SAVE_CANVAS]).execute()
+		SAVE_CANVAS_IMAGE_AS:
+			Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute(false)
+			Cue.new(Consts.ROLE_CANVAS, "open_board").execute()
+			yield(get_tree(), "idle_frame")
+			Cue.new(Consts.ROLE_CANVAS, "cue_menu_option").args([
+					Consts.MENU_SAVE_CANVAS_AS]).execute()
+		LOAD_PROJECT:
+			Cue.new(Consts.ROLE_GENERATION_INTERFACE, "load_from").args([false]).execute()
 		NEW:
 			Director.reload_current_scene(true)
 		RESTART_SERVER:
@@ -485,13 +518,17 @@ class MenuCheckbox extends Reference:
 		
 		menu_event_receiver = menu_event_receiver_
 		flag = Flags.ref(flag_name)
-		Director.connect_global_file_loaded(self, "_on_global_file_loaded")
-
-
-	func _on_global_file_loaded():
 		flag.set_up(true, null, null, is_pressed())
+		Director.connect_global_file_loaded(self, "_on_global_file_loaded")
+	
+	
+	func _on_global_file_loaded():
 		# flag.setup must be called alfter global file load since global file replaces
 		# all flag data
+		update_with_flag()
+	
+	
+	func update_with_flag(_cue: Cue = null):
 		var checked = flag.get_value() == 1
 		if checked != is_pressed():
 			menu_event_receiver._on_menu_option_selected(id)

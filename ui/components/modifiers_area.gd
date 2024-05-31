@@ -405,7 +405,7 @@ func _save_cues(_is_file_save):
 	var modifiers_data = []
 	for modifier in modifier_container.get_children():
 		if modifier is Modifier:
-			modifiers_data.append(modifier.get_mode_data())
+			modifiers_data.append(modifier.get_modes_data())
 			
 	Director.add_save_cue(
 			Consts.SAVE, Consts.ROLE_MODIFIERS_AREA, 

@@ -183,4 +183,23 @@ func _append_styling_data(styling_data: StylingData, is_negative: bool):
 	else:
 		positive_prompt.text += styling_data.get_positive_prompt()
 		negative_prompt.text += styling_data.get_negative_prompt()
-		
+
+
+func _save_cues(_is_file_save):
+	var config: Dictionary = {
+		Consts.I_PROMPT: positive_prompt.text,
+		Consts.I_NEGATIVE_PROMPT: negative_prompt.text,
+		Consts.I_SEED: int(seed_field.text),
+	}
+	Director.add_save_cue(
+			Consts.SAVE, 
+			Consts.ROLE_PROMPTING_AREA, 
+			"load_prompt_and_seed", 
+			[], 
+			config)
+
+
+func load_prompt_and_seed(cue: Cue):
+	positive_prompt.text = cue.get_option(Consts.I_PROMPT, '')
+	negative_prompt.text = cue.get_option(Consts.I_NEGATIVE_PROMPT, '')
+	seed_field.text = str(cue.get_option(Consts.I_SEED, -1))
