@@ -426,13 +426,15 @@ func reload_options(select_label: String = ''):
 
 
 func force_set_mode(mode_to_set: Node):
-	mode_to_set.reload_combobox(option_button, mode.name)
+	mode_to_set.reload_combobox(option_button, mode_to_set.name)
+	_on_SmartOptionButton_option_selected(mode_to_set.name, -1)
 
 
 func force_set_mode_label(mode_node_name: String):
-	var mode_to_set = types_container.get(mode_node_name)
+	var mode_to_set = types_container.get_node_or_null(mode_node_name)
 	if mode_to_set is ModifierMode:
 		mode_to_set.reload_combobox(option_button, mode_node_name)
+		_on_SmartOptionButton_option_selected(mode_node_name, -1)
 	else:
 		l.g("Modifier mode '" + mode_node_name + "' resulted in '" + str(mode_to_set) + 
 				"'. Can't set mode.")
@@ -447,20 +449,21 @@ func get_modes_data():
 	data[SELECTED_MODE_NAME] = mode_name
 	data[IMAGE_DATA] = image_data.get_base64()
 	data[IMAGE_NAME] = image_data.image_name
+	return data
 
 
 func set_modes_data(data: Dictionary):
 	var mode_node
 	var default_mode: String = ''
 	image_data = ImageData.new(data.get(IMAGE_NAME, ""))
-	image_data.load_base64(data.get(SELECTED_MODE_NAME, ""))
+	image_data.load_base64(data.get(IMAGE_DATA, ""))
 	
 	for mode_key in data:
 		if default_mode.empty():
 			default_mode = mode_key
 		mode_node = types_container.get_node_or_null(mode_key)
 		if mode_node is ModifierMode:
-			mode_node.set_mode_data(data[mode_node])
+			mode_node.set_mode_data(data[mode_node.name])
 	
 	var select_mode = data.get(SELECTED_MODE_NAME, "")
 	if select_mode.empty():

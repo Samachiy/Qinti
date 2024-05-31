@@ -22,11 +22,13 @@ var current_project_path: String = ''
 
 func _ready():
 	var error = get_tree().connect("files_dropped", self, "_on_files_dropped")
+	l.error(error, l.CONNECTION_FAILED)
 	Roles.request_role(self, Consts.ROLE_GENERATION_INTERFACE)
 	Roles.request_role(Consts.UI_DROP_GROUP, Consts.UI_DROP_GROUP)
 	Roles.request_role(Consts.UI_CANVAS_WITH_SHADOW_AREA, Consts.UI_CANVAS_WITH_SHADOW_AREA)
 	Roles.request_role(Consts.UI_AI_PROCESS_ONGOING_GROUP, Consts.UI_AI_PROCESS_ONGOING_GROUP)
 	Roles.request_role(Consts.UI_HAS_DESCRIPTION_GROUP, Consts.UI_HAS_DESCRIPTION_GROUP)
+	Roles.request_role(Consts.UI_UPDATE_FLAG_ON_LOAD_GROUP, Consts.UI_UPDATE_FLAG_ON_LOAD_GROUP)
 	Roles.request_role(
 			Consts.UI_CURRENT_MODEL_THUMBNAIL_GROUP, 
 			Consts.UI_CURRENT_MODEL_THUMBNAIL_GROUP)
@@ -199,6 +201,7 @@ func load_file(path: String):
 	Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute(false)
 	Director.load_file_at_path(path)
 	Director.use_up_locker(Consts.SAVE)
+	Cue.new(Consts.UI_UPDATE_FLAG_ON_LOAD_GROUP, "update_with_flag").execute()
 	Cue.new(Consts.ROLE_CANVAS, "open_board").execute()
 	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "set_text").args([
 			Consts.HELP_DESC_SAVE_FILE_LOADED]).execute()

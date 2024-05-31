@@ -19,22 +19,29 @@ func _ready():
 		if requieres_flag:
 			l.g("Checkbox does not have a flag assigned at: " + get_path())
 	else:
+		add_to_group(Consts.UI_UPDATE_FLAG_ON_LOAD_GROUP)
 		Director.connect_global_file_loaded(self, "_on_global_file_loaded")
 
 
 func _on_global_file_loaded():
-	var flag_name = Consts.get(flag_name_const)
-	if flag_name == null:
-		l.g("Checkbox has a flag not registered in consts assigned at: " + get_path())
-		return
+	update_with_flag()
+
+
+func update_with_flag(_cue: Cue = null):
+	if flag == null or not flag.exists():
+		var flag_name = Consts.get(flag_name_const)
+		if flag_name == null:
+			l.g("Checkbox has a flag not registered in consts assigned at: " + get_path())
+			return
+		
+		if not flag_prefix_node_name.is_empty():
+			var prefix_node = get_node_or_null(flag_prefix_node_name)
+			if prefix_node != null:
+				flag_name = prefix_node.name + "_" + flag_name
+		
+		flag = Flags.ref(flag_name)
+		flag.set_up(is_global_flag, null, null, get_value())
 	
-	if not flag_prefix_node_name.is_empty():
-		var prefix_node = get_node_or_null(flag_prefix_node_name)
-		if prefix_node != null:
-			flag_name = prefix_node.name + "_" + flag_name
-	
-	flag = Flags.ref(flag_name)
-	flag.set_up(is_global_flag, null, null, get_value())
 	if flag.value == 0:
 		pressed = false
 	else:

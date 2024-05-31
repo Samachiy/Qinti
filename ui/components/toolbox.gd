@@ -272,6 +272,7 @@ func _save_cues(_is_file_save):
 func load_recent_images_data(cue: Cue):
 	# [ image_base64_array1, image_base64_array2, ...]
 	# image_base64_array = [ [image_name1, image_base64_1], [image_name2, image_base64_2], ...]
+	recent_container.clear()
 	var images_data 
 	var image_base64: String = ''
 	var image_name: String  = ''

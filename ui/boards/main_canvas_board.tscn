@@ -13,8 +13,8 @@ custom_constants/margin_bottom = 0
 [node name="Board" parent="." instance=ExtResource( 1 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 276.0
-margin_bottom = 156.0
+margin_right = 322.0
+margin_bottom = 224.0
 controller = "res://ui/controllers/main_canvas_controller.tscn"
 canvas = "res://ui/canvas/canvas_2d/canvas2d.tscn"
 is_main_board = true

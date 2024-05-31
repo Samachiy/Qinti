@@ -151,15 +151,23 @@ func get_active_image() -> Image:
 
 
 func get_mode_data():
+	var disassembled_data_cue = []
+	if data_cue is Cue:
+		disassembled_data_cue = data_cue.disassemble()
 	var data = {
-		CONTROLLER_DATA: data_cue,
-		ACTIVE_IMAGE: ImageProcessor.image_to_base64(get_active_image()),
+		CONTROLLER_DATA: disassembled_data_cue,
+#		ACTIVE_IMAGE: ImageProcessor.image_to_base64(get_active_image()),
 		PARAMETERS: config_dict
 	}
 	return data
 
 
 func set_mode_data(data: Dictionary):
-	data_cue = data.get(CONTROLLER_DATA, null)
-	active_image = data.get(ACTIVE_IMAGE, null)
+	var disassembled_data_cue = data.get(CONTROLLER_DATA, [])
+	data_cue = Cue.new('', '').assemble(disassembled_data_cue, false)
+#	var active_image_base64 = data.get(ACTIVE_IMAGE, '')
+#	if not active_image_base64.empty():
+#		active_image = ImageProcessor.png_base64_to_image(active_image_base64)
+#	else:
+#		l.g("Tried to load from file an empty image_bse64 string onto mode: " + name)
 	config_dict = data.get(PARAMETERS, {})

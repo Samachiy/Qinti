@@ -20,6 +20,7 @@ rect_min_size = Vector2( 0, 87 )
 rect_clip_content = true
 size_flags_stretch_ratio = 0.35
 script = ExtResource( 2 )
+controller_role = "Canvas"
 
 [node name="Configs" type="ScrollContainer" parent="."]
 anchor_right = 1.0

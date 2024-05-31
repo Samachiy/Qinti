@@ -518,13 +518,17 @@ class MenuCheckbox extends Reference:
 		
 		menu_event_receiver = menu_event_receiver_
 		flag = Flags.ref(flag_name)
-		Director.connect_global_file_loaded(self, "_on_global_file_loaded")
-
-
-	func _on_global_file_loaded():
 		flag.set_up(true, null, null, is_pressed())
+		Director.connect_global_file_loaded(self, "_on_global_file_loaded")
+	
+	
+	func _on_global_file_loaded():
 		# flag.setup must be called alfter global file load since global file replaces
 		# all flag data
+		update_with_flag()
+	
+	
+	func update_with_flag(_cue: Cue = null):
 		var checked = flag.get_value() == 1
 		if checked != is_pressed():
 			menu_event_receiver._on_menu_option_selected(id)

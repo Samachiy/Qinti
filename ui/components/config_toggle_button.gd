@@ -19,17 +19,24 @@ func _ready():
 		if requieres_flag:
 			l.g("Toggle button does not have a flag assigned at: " + get_path())
 	else:
+		add_to_group(Consts.UI_UPDATE_FLAG_ON_LOAD_GROUP)
 		Director.connect_global_file_loaded(self, "_on_global_file_loaded")
 
 
 func _on_global_file_loaded():
-	var flag_name = Consts.get(flag_name_const)
-	if flag_name == null:
-		l.g("Toggle button has a flag not registered in consts assigned at: " + get_path())
-		return
+	update_with_flag()
+
+
+func update_with_flag(_cue: Cue = null):
+	if flag == null or not flag.exists():
+		var flag_name = Consts.get(flag_name_const)
+		if flag_name == null:
+			l.g("Toggle button has a flag not registered in consts assigned at: " + get_path())
+			return
 		
-	flag = Flags.ref(flag_name)
-	flag.set_up(is_global_flag, null, null, get_value())
+		flag = Flags.ref(flag_name)
+		flag.set_up(null, null, null, get_value())
+	
 	if flag.value == 0:
 		pressed = false
 	else:

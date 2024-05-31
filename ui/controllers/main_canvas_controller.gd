@@ -169,8 +169,8 @@ func _on_CanvasController_canvas_connected(_canvas: Node):
 			"_on_DiscardGeneration_pressed",
 			"_on_prev_pressed",
 			"_on_next_pressed")
-	Roles.request_role(self, Consts.ROLE_GEN_AREA, true)
-	Roles.request_role_on_roles_cleared(self, Consts.ROLE_GEN_AREA)
+	Roles.request_role(generation_area, Consts.ROLE_GEN_AREA, true)
+	Roles.request_role_on_roles_cleared(generation_area, Consts.ROLE_GEN_AREA)
 
 
 func set_images_in_generation_area(cue: Cue):

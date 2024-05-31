@@ -227,6 +227,7 @@ const UI_CURRENT_MODEL_THUMBNAIL_GROUP = "Current model thumbnails"
 const UI_MINIMALIST_GROUP = "minimalist_ui"
 const UI_ADVANCED_GROUP = "advanced_ui"
 const UI_DROP_GROUP = "drop ui" # As in drag and drop
+const UI_UPDATE_FLAG_ON_LOAD_GROUP = "update flag on file load ui"
 const UI_CANVAS_WITH_SHADOW_AREA = "canvas with shadow ui"
 const UI_AI_PROCESS_ONGOING_GROUP = "ai loading group"
 const UI_HAS_DESCRIPTION_GROUP = "has description group"

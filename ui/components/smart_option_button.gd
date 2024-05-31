@@ -36,6 +36,7 @@ func _ready():
 		if requieres_flag:
 			l.g("Smart option button does not have a flag assigned at: " + get_path())
 	else:
+		add_to_group(Consts.UI_UPDATE_FLAG_ON_LOAD_GROUP)
 		Director.connect_global_file_loaded(self, "_on_global_file_loaded")
 
 
@@ -48,8 +49,26 @@ func _on_global_file_loaded():
 	flag = Flags.ref(flag_name)
 	flag.set_up(is_global_flag, null, null, selected_id)
 	if select_flag_on_global_load:
-# warning-ignore:return_value_discarded
+	# warning-ignore:return_value_discarded
 		select_flag_value()
+
+
+func update_with_flag(_cue: Cue = null):
+	if flag == null or not flag.exists():
+		var flag_name = Consts.get(flag_name_const)
+		if flag_name == null:
+			l.g("Smart option button has a flag not registered in consts assigned at: " + get_path())
+			return
+		
+		flag = Flags.ref(flag_name)
+		flag.set_up(is_global_flag, null, null, selected_id)
+	
+	# warning-ignore:return_value_discarded
+	select_flag_value()
+
+
+func _on_save_file_loaded():
+	pass
 
 
 func select_flag_value() -> bool:
