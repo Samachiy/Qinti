@@ -60,11 +60,11 @@ func apply_to_api(_api):
 	
 	match prompt_mode:
 		Consts.IMG_INFO_PROMPT_MODE_APPEND_PROMPT:
-			Cue.new(Consts.ROLE_API, "apply_parameters").opts(config).execute()
-			Cue.new(Consts.ROLE_API, "add_to_prompt").args(prompt).execute()
+			Cue.new(Consts.ROLE_API, "cue_apply_parameters").opts(config).execute()
+			Cue.new(Consts.ROLE_API, "cue_add_to_prompt").args(prompt).execute()
 		Consts.IMG_INFO_PROMPT_MODE_REPLACE_PROMPT:
-			Cue.new(Consts.ROLE_API, "apply_parameters").opts(config).execute()
-			Cue.new(Consts.ROLE_API, "replace_prompt").args(prompt).execute()
+			Cue.new(Consts.ROLE_API, "cue_apply_parameters").opts(config).execute()
+			Cue.new(Consts.ROLE_API, "cue_replace_prompt").args(prompt).execute()
 		_:
 			l.g("Not a valid prompt mode '" + prompt_mode + "' in image info modifier")
 

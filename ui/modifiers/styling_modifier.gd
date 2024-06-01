@@ -53,7 +53,7 @@ func apply_to_api(_api):
 			styling_data.get_positive_prompt(),
 			styling_data.get_negative_prompt()
 		]
-		prompt_cue =  Cue.new(Consts.ROLE_API, "add_to_prompt").args(dict)
+		prompt_cue =  Cue.new(Consts.ROLE_API, "cue_add_to_prompt").args(dict)
 	
 	prompt_cue.clone().execute()
 

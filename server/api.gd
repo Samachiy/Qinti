@@ -332,27 +332,62 @@ func get_progress_from_result(_result) -> float:
 # TXT2IMG
 
 
-func add_to_prompt(_cue: Cue): 
+func cue_add_to_prompt(cue: Cue): 
 	# [positive_prompt, negative_prompt]
 	# also accepts a config dictionary, will use this if the arguments are emtpy
 	# the config dictionary will can be read with:
 	#	var p_prompt = cue.get_option(Consts.I_PROMPT, '') 
 	#	var n_prompt = cue.get_option(Consts.I_NEGATIVE_PROMPT, '')
+	var positive_prompt: String = cue.get_at(0, '', false)
+	if positive_prompt.empty():
+		positive_prompt = cue.get_option(Consts.I_PROMPT, '')
+		
+	var negative_prompt: String = cue.get_at(1, '', false)
+	if negative_prompt.empty():
+		negative_prompt = cue.get_option(Consts.I_NEGATIVE_PROMPT, '')
+	
+	add_to_prompt(positive_prompt, negative_prompt)
+
+
+func add_to_prompt(positive_prompt: String, negative_prompt: String): 
 	l.g("The function 'add_to_prompt' has not been overriden yet on Api: " + 
 	name)
 
 
-func replace_prompt(_cue: Cue):
+func cue_replace_prompt(cue: Cue):
 	# [positive_prompt, negative_prompt]
 	# also accepts a config dictionary, will use this if the arguments are emtpy
 	# the config dictionary will can be read with:
 	#	var p_prompt = cue.get_option(Consts.I_PROMPT, '') 
 	#	var n_prompt = cue.get_option(Consts.I_NEGATIVE_PROMPT, '')
+	var positive_prompt: String = cue.get_at(0, '', false)
+	if positive_prompt.empty():
+		positive_prompt = cue.get_option(Consts.I_PROMPT, '')
+		
+	var negative_prompt: String = cue.get_at(1, '', false)
+	if negative_prompt.empty():
+		negative_prompt = cue.get_option(Consts.I_NEGATIVE_PROMPT, '')
+	
+	replace_prompt(positive_prompt, negative_prompt)
+
+
+func replace_prompt(positive_prompt: String, negative_prompt: String):
 	l.g("The function 'replace_prompt' has not been overriden yet on Api: " + 
 	name)
 
 
-func apply_parameters(_cue: Cue): 
+func cue_apply_parameters(cue: Cue): 
+	# the parameters lies in the cue's dictionary (aka options), those must be applied/merged to
+	# request_data, they will come using the names specified in Consts.gd, so running it with
+	# translate_dictionary() may be needed
+	
+	var config = cue._options.duplicate()
+	config.erase(Consts.I_PROMPT) # Prompts are to be appended with add_to_prompt() 
+	config.erase(Consts.I_NEGATIVE_PROMPT) # Prompts are to be appended with add_to_prompt() 
+	apply_parameters(config)
+
+
+func apply_parameters(parameters: Dictionary): 
 	# the parameters lies in the cue's dictionary (aka options), those must be applied/merged to
 	# request_data, they will come using the names specified in Consts.gd, so running it with
 	# translate_dictionary() may be needed
@@ -360,11 +395,13 @@ func apply_parameters(_cue: Cue):
 	name)
 
 
-func replace_parameters(_cue: Cue): 
-	# the parameters lies in the cue's dictionary (aka options), request_data values must
-	# be entirely replaced with those here, values that don't exist in the dictionary should 
-	# not be in request_data either. Configs will come using the names specified in Consts.gd, 
-	# so running it with translate_dictionary() may be needed
+func cue_replace_parameters(cue: Cue): 
+	# the config lies in the cue's dictionary (aka options)
+	var parameters = cue._options.duplicate()
+	replace_parameters(parameters)
+
+
+func replace_parameters(parameters: Dictionary):
 	l.g("The function 'replace_parameters' has not been overriden yet on Api: " + 
 	name)
 

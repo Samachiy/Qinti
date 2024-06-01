@@ -253,12 +253,12 @@ func replicate(replace_all: bool = true):
 	var config
 	if replace_all:
 		config = get_all_config()
-		Cue.new(Consts.ROLE_API, "replace_parameters").opts(config).execute()
+		Cue.new(Consts.ROLE_API, "cue_replace_parameters").opts(config).execute()
 	else:
 		config = get_config()
 		Cue.new(Consts.ROLE_PROMPTING_AREA, "add_prompt_and_seed_to_api").execute()
 		Cue.new(Consts.ROLE_CANVAS, "apply_parameters_to_api").execute()
-		Cue.new(Consts.ROLE_API, "apply_parameters").opts(config).execute()
+		Cue.new(Consts.ROLE_API, "cue_apply_parameters").opts(config).execute()
 	
 	var prompting_area = Roles.get_node_by_role(Consts.ROLE_PROMPTING_AREA)
 	if prompting_area is Object:

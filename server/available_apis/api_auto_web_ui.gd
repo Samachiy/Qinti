@@ -214,15 +214,12 @@ func clear(_cue : Cue = null):
 	clear_queues()
 
 
-func add_to_prompt(cue: Cue): 
+func add_to_prompt(positive_prompt: String, negative_prompt: String): 
 	# [positive_prompt, negative_prompt]
 	# also accepts a config dictionary, will use this if the arguments are emtpy
 	
 	var old_value: String = ''
 	# Adding the positive prompt, checking args first, then options if empty
-	var positive_prompt: String = cue.get_at(0, '', false)
-	if positive_prompt.empty():
-		positive_prompt = cue.get_option(Consts.I_PROMPT, '')
 	if not positive_prompt.empty():
 		old_value = request_data[Consts.I_PROMPT].strip_edges()
 		if old_value.empty():
@@ -231,9 +228,6 @@ func add_to_prompt(cue: Cue):
 			request_data[Consts.I_PROMPT] += ", " + positive_prompt.strip_edges()
 	
 	# Adding the negative prompt, checking args first, then options if empty
-	var negative_prompt: String = cue.get_at(1, '', false)
-	if negative_prompt.empty():
-		negative_prompt = cue.get_option(Consts.I_NEGATIVE_PROMPT, '')
 	if not negative_prompt.empty():
 		old_value = request_data[Consts.I_NEGATIVE_PROMPT].strip_edges()
 		if old_value.empty():
@@ -242,33 +236,27 @@ func add_to_prompt(cue: Cue):
 			request_data[Consts.I_NEGATIVE_PROMPT] += ", " + negative_prompt.strip_edges()
 
 
-func replace_prompt(cue: Cue):
+func replace_prompt(positive_prompt: String, negative_prompt: String):
 	# [positive_prompt, negative_prompt]
-	var positive_prompt = cue.get_at(0, '')
-	var negative_prompt = cue.get_at(1, '')
 	if positive_prompt is String:
 		request_data[Consts.I_PROMPT] = positive_prompt.strip_edges()
 	if negative_prompt is String:
 		request_data[Consts.I_NEGATIVE_PROMPT] = negative_prompt.strip_edges()
-	
 
 
-func apply_parameters(cue: Cue): 
+func apply_parameters(parameters: Dictionary): 
 	# the parameters lies in the cue's dictionary (aka options)
-	var config = cue._options.duplicate()
-	var override_settings = config.get(Consts.I_OVERRIDE_SETTINGS)
+	var override_settings = parameters.get(Consts.I_OVERRIDE_SETTINGS)
 	if override_settings is Dictionary and not override_settings.empty():
 		_merge_dict(request_data["override_settings"], override_settings)
-		config.erase(Consts.I_OVERRIDE_SETTINGS)
+		parameters.erase(Consts.I_OVERRIDE_SETTINGS)
 	
-	config.erase(Consts.I_PROMPT) # Prompts are to be appended with add_to_prompt() 
-	config.erase(Consts.I_NEGATIVE_PROMPT) # Prompts are to be appended with add_to_prompt() 
-	_merge_dict(request_data, config)
+	_merge_dict(request_data, parameters)
 
 
-func replace_parameters(cue: Cue): 
+func replace_parameters(parameters: Dictionary): 
 	# the config lies in the cue's dictionary (aka options)
-	request_data = cue._options.duplicate()
+	request_data = parameters
 
 
 func _merge_dict(base_dict: Dictionary, overwrite_dict: Dictionary):
@@ -327,7 +315,6 @@ func cancel_diffusion():
 func probe_server(current_server_address: ServerAddress):
 	# checks if server is there, signals server_probed(success: bool)
 	server_address = current_server_address
-	DiffusionServer.set_state(Consts.SERVER_STATE_LOADING) # move line to stater
 	var api_request = APIRequest.new(self, "_on_probe_success", self)
 	api_request.connect_on_request_failed(self, "_on_prove_failed")
 	api_request.push_server_down_error = false
