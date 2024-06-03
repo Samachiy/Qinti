@@ -13,11 +13,11 @@ const MASK_MODE_INPAINT = "inpaint"
 const MASK_MODE_OUTPAINT = "outpaint"
 
 # Technically this should be consts, but since they need to be overriden, we set them as vars
-var SUBDIR_LORA = ""
-var SUBDIR_LYCORIS = ""
-var SUBDIR_TI = ""
-var SUBDIR_DIFFUSION_MODELS = ""
-var SUBDIR_CONTROLNET_MODELS = ""
+var DIR_LORA = ""
+var DIR_LYCORIS = ""
+var DIR_TI = ""
+var DIR_DIFFUSION_MODELS = ""
+var DIR_CONTROLNET_MODELS = ""
 var DOWNLOAD_SUBDIR_LORA = ""
 var DOWNLOAD_SUBDIR_LYCORIS = ""
 var DOWNLOAD_SUBDIR_TI = ""
@@ -283,8 +283,13 @@ func clear_queues():
 
 
 func clear(_cue : Cue = null): 
+	clear_queues()
+	reset_data()
+
+
+func reset_data():
 	# Clears the request_data back to it's original state
-	l.g("The function 'clear' has not been overriden yet on Api: " + 
+	l.g("The function 'reset_data' has not been overriden yet on Api: " + 
 	name)
 
 
@@ -349,7 +354,7 @@ func cue_add_to_prompt(cue: Cue):
 	add_to_prompt(positive_prompt, negative_prompt)
 
 
-func add_to_prompt(positive_prompt: String, negative_prompt: String): 
+func add_to_prompt(_positive_prompt: String, _negative_prompt: String): 
 	l.g("The function 'add_to_prompt' has not been overriden yet on Api: " + 
 	name)
 
@@ -371,7 +376,7 @@ func cue_replace_prompt(cue: Cue):
 	replace_prompt(positive_prompt, negative_prompt)
 
 
-func replace_prompt(positive_prompt: String, negative_prompt: String):
+func replace_prompt(_positive_prompt: String, _negative_prompt: String):
 	l.g("The function 'replace_prompt' has not been overriden yet on Api: " + 
 	name)
 
@@ -387,7 +392,7 @@ func cue_apply_parameters(cue: Cue):
 	apply_parameters(config)
 
 
-func apply_parameters(parameters: Dictionary): 
+func apply_parameters(_parameters: Dictionary): 
 	# the parameters lies in the cue's dictionary (aka options), those must be applied/merged to
 	# request_data, they will come using the names specified in Consts.gd, so running it with
 	# translate_dictionary() may be needed
@@ -401,7 +406,7 @@ func cue_replace_parameters(cue: Cue):
 	replace_parameters(parameters)
 
 
-func replace_parameters(parameters: Dictionary):
+func replace_parameters(_parameters: Dictionary):
 	l.g("The function 'replace_parameters' has not been overriden yet on Api: " + 
 	name)
 
@@ -587,23 +592,23 @@ func refresh_paths(_data = null):
 
 
 func get_lora_dir() -> String:
-	return SUBDIR_LORA
+	return DIR_LORA
 
 
 func get_lycoris_dir() -> String:
-	return SUBDIR_LYCORIS
+	return DIR_LYCORIS
 
 
 func get_textual_inversion_dir() -> String:
-	return SUBDIR_TI
+	return DIR_TI
 
 
 func get_checkpoints_dir() -> String:
-	return SUBDIR_DIFFUSION_MODELS
+	return DIR_DIFFUSION_MODELS
 
 
 func get_controlnet_dir() -> String:
-	return SUBDIR_CONTROLNET_MODELS
+	return DIR_CONTROLNET_MODELS
 
 
 func get_installation_dir() -> String:
