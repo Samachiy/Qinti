@@ -104,6 +104,8 @@ DEPTH_MODE,Depth map,Mapa de profundidad
 NORMAL_MAP_MODE,Normal map,Mapa de normales
 POSE2D_MODE,Reuse pose,Reusar pose
 IMG2IMG_MODE,Image to image,Imagen a Imagen
+REFERENCE_MODE,Reference image,Imagen de referencia
+COLOR_MODE,Reference colors,Colores de referencia
 TRY_PNG_INFO_IMAGE,Replicate,Replicar
 TRY_PNG_INFO_IMAGE_CHECKED,Only checked parameters,Solo parametros marcados
 TRY_PNG_INFO_IMAGE_ALL,All,Todo
@@ -178,6 +180,7 @@ MESSAGE_NO_FEATURE_CONTROLNET,"The current server doesn’t support Control Net,
 MESSAGE_INSTALL_FAILED_KEY_INPUT_DRIVERS,"Installation failed, please update the computer drivers and try again. If the installation still fails, please consult the Github page of the project or install the server manually","La instalación falló, por favor actualice los controladores del computador y vuelva a intentarlo. Si la instalación sigue fallando, consulte la página de GitHub del proyecto o instale el servidor manualmente."
 MESSAGE_RUN_FAILED,"Failure to start server, please check the logs and consult the issue in the Github page of the project","La inicailización del servidor falló, porfavor revise los registros del programa y consulte el problema en la página de GitHub del proyecto"
 MESSAGE_SHUTTING_DOWN_SERVER,Closing server. Please wait a moment.,Cerrando servidor. Por favor espere.
+MSG_CALCULATING_HASHES,Calculating models hash code,Calculando códigos hash de los modelos
 SELECT_FOLDER,Select folder,Seleccionar carpeta
 RESUME,Resume,Continuar
 INSTALL,Install,Instalar
@@ -199,7 +202,13 @@ SAVE_PREVIEW,Save preview,Guardar vista previa
 SAVE_PREVIEW_AS,Save preview as. . .,Guardar vista previa como. . .
 SAVE_ACTIVE_IMAGE,Save active image,Guardar imagen activa
 SAVE_ACTIVE_IMAGE_AS,Save active image as. . .,Guardar imagen activa como. . .
+SAVE_PROJECT,Save project,Guardar proyecto
+SAVE_PROJECT_AS,Save project as. . .,Guardar proyecto como. . .
+SAVE_CANVAS_IMAGE,Save canvas image,Guadar imagen del canvas
+SAVE_CANVAS_IMAGE_AS,Save canvas image as. . .,Guadar imagen del canvas como. . .
+LOAD_PROJECT,Load project,Abrir proyecto
 SUPPORTED_SAVE_IMAGE_FORMAT,Supported formats,Formatos soportados
+SUPPORTED_SAVE_PROJECT_FORMAT,Qinti Project Save,Archivo de projecto Qinti
 EDIT,Edit,Editar
 MENU,Menu,Menú
 HELP,Help,Ayuda
@@ -257,6 +266,7 @@ HELP_DESC_INFO_COPIED_CLIPBOARD,Info copied to clipboard.,Información de copiad
 HELP_DESC_IMAGE_GEN_FAILED,Failed image generation. Please check the program and server logs for more info.,Generación de imagen fallida. Porfavor revise los registros del programa y el servidor para más información.
 HELP_DESC_PREPROCESSOR_IN_PROCESS,Preprocessing image. Some preprocessors may take a long time during the first use if it’s downloading a missing module.,La imagen esta siendo preprocesada. Algunos preprocesadores pueden demorarse en el primer uso en cas de estar descargando algún modulo faltante.
 HELP_DESC_IMAGE_PREPROCESSED,Image preprocessed.,Imagen preprocesada.
+HELP_DESC_SAVE_FILE_LOADED,Project file loaded,Archivo de projecto cargada
 NO_SERVER_LOG_AVAILABLE_1,The server state is currently not being monitored.,El estado del servidor no esta siendo actualmente monitoreado.
 NO_SERVER_LOG_AVAILABLE_2,Servers that weren’t initialized by this program can’t be monitored.,Servidores no inicializados por este programa no puede ser monitoreados.
 GENERATING_IMAGE,Generating image,Generando imagen

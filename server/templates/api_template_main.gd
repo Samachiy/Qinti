@@ -147,8 +147,10 @@ func add_to_prompt(positive_prompt: String, negative_prompt: String):
 	name)
 
 
-func replace_prompt(positive_prompt: String, negative_prompt: String):
+func replace_prompt(positive_prompt, negative_prompt):
 	# This function will append to the positive and negastive prompt the given variables
+	# If any of the prompt is null rather than String, that means that we should not replace 
+	# it
 	
 	# Delete the following message once the function is ready:
 	l.g("The function 'replace_prompt' has not been overriden yet on Api: " + 

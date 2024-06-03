@@ -68,14 +68,21 @@ func _ready():
 			_on_GenImageLayOpacity_value_changed(gen_image_lay_opacity.get_value())
 			_on_GenMaskLayOpacity_value_changed(gen_mask_lay_opacity.get_value())
 	
-	if separate_overunderlay:
-		modifier_lay_opacity.visible = false
-		modifier_underlay_opacity.visible = true
-		modifier_overlay_opacity.visible = true
+		if separate_overunderlay:
+			modifier_lay_opacity.visible = false
+			modifier_underlay_opacity.visible = true
+			modifier_overlay_opacity.visible = true
+		else:
+			modifier_lay_opacity.visible = true
+			modifier_underlay_opacity.visible = false
+			modifier_overlay_opacity.visible = false
 	else:
-		modifier_lay_opacity.visible = true
-		modifier_underlay_opacity.visible = false
-		modifier_overlay_opacity.visible = false
+		if canvas_node is Canvas2D:
+			canvas_node.modifiers_overlay.visible = false
+			canvas_node.gen_image_overlay.visible = false
+			canvas_node.gen_mask_overlay.visible = false
+			canvas_node.underlay.visible = false
+		
 	
 	_update_lays()
 	

@@ -235,7 +235,7 @@ func add_to_prompt(positive_prompt: String, negative_prompt: String):
 			request_data[Consts.I_NEGATIVE_PROMPT] += ", " + negative_prompt.strip_edges()
 
 
-func replace_prompt(positive_prompt: String, negative_prompt: String):
+func replace_prompt(positive_prompt, negative_prompt):
 	# [positive_prompt, negative_prompt]
 	if positive_prompt is String:
 		request_data[Consts.I_PROMPT] = positive_prompt.strip_edges()
@@ -248,6 +248,7 @@ func apply_parameters(parameters: Dictionary):
 	var override_settings = parameters.get(Consts.I_OVERRIDE_SETTINGS)
 	if override_settings is Dictionary and not override_settings.empty():
 		_merge_dict(request_data["override_settings"], override_settings)
+# warning-ignore:return_value_discarded
 		parameters.erase(Consts.I_OVERRIDE_SETTINGS)
 	
 	_merge_dict(request_data, parameters)

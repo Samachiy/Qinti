@@ -287,4 +287,6 @@ func load_recent_images_data(cue: Cue):
 			images_data.append(aux)
 		
 		if not images_data.empty():
+			# If there's demand to also restore gen layer contents, then it would go here
+# warning-ignore:return_value_discarded
 			_add_recent_images(images_data)

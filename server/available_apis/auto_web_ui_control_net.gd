@@ -19,7 +19,7 @@ var controlnet_dict: Dictionary = {
 	"guidance_start": 0, # advanced mode only
 	"guidance_end": 1, # advanced mode only
 	#"pixel_perfect": false, # advance mode only, if needed
-	"control_mode": 2, # 0 = balanced, 1 = prompt more important, 2 = controlnet more important
+	"control_mode": 0, # 0 = balanced, 1 = prompt more important, 2 = controlnet more important
 }
 
 

@@ -361,22 +361,13 @@ func add_to_prompt(_positive_prompt: String, _negative_prompt: String):
 
 func cue_replace_prompt(cue: Cue):
 	# [positive_prompt, negative_prompt]
-	# also accepts a config dictionary, will use this if the arguments are emtpy
-	# the config dictionary will can be read with:
-	#	var p_prompt = cue.get_option(Consts.I_PROMPT, '') 
-	#	var n_prompt = cue.get_option(Consts.I_NEGATIVE_PROMPT, '')
-	var positive_prompt: String = cue.get_at(0, '', false)
-	if positive_prompt.empty():
-		positive_prompt = cue.get_option(Consts.I_PROMPT, '')
-		
-	var negative_prompt: String = cue.get_at(1, '', false)
-	if negative_prompt.empty():
-		negative_prompt = cue.get_option(Consts.I_NEGATIVE_PROMPT, '')
+	var positive_prompt = cue.get_at(0, '', false)
+	var negative_prompt = cue.get_at(1, '', false)
 	
 	replace_prompt(positive_prompt, negative_prompt)
 
 
-func replace_prompt(_positive_prompt: String, _negative_prompt: String):
+func replace_prompt(_positive_prompt, _negative_prompt):
 	l.g("The function 'replace_prompt' has not been overriden yet on Api: " + 
 	name)
 
