@@ -63,11 +63,17 @@ func clear_board():
 
 
 func get_model_hash():
-	return styling_data.file_cluster.get_hash()
+	if styling_data == null:
+		return sha256_hash
+	else:
+		return styling_data.file_cluster.get_hash()
 
 
 func get_model_q_hash():
-	return styling_data.file_cluster.get_q_hash()
+	if styling_data == null:
+		return q_hash
+	else:
+		return styling_data.file_cluster.get_q_hash()
 
 
 func queue_hash_now():

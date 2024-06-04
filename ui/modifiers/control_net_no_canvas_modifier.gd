@@ -35,11 +35,12 @@ func deselect_mode():
 
 
 func prepare_mode():
-	if get_control_net_model_name().empty():
-		is_downloading_model = true
-		DiffusionServer.downloader.connect(
-				"downloads_finished", self, "_on_control_net_model_downloaded", 
-				[cn_model_search_string])
+	if not is_downloading_model:
+		if get_control_net_model_name().empty():
+			is_downloading_model = true
+			DiffusionServer.downloader.connect(
+					"downloads_finished", self, "_on_control_net_model_downloaded", 
+					[cn_model_search_string])
 
 
 func _on_control_net_model_downloaded(cn_model_string):

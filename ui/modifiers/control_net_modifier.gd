@@ -19,6 +19,7 @@ var cn_model_type = ''
 var cn_model_search_string = ''
 var undoredo_data: Canvas2DUndoQueue = null
 var is_downloading_model: bool = false
+var is_preprocessed: bool = false
 
 
 func select_mode():
@@ -65,17 +66,19 @@ func prepare_mode():
 			l.error(e, l.CONNECTION_FAILED)
 		return
 	
-	if get_control_net_model_name().empty():
-		is_downloading_model = true
-		DiffusionServer.downloader.connect(
-				"downloads_finished", self, "_on_control_net_model_downloaded", 
-				[cn_model_search_string])
+	if not is_downloading_model:
+		if get_control_net_model_name().empty():
+			is_downloading_model = true
+			DiffusionServer.downloader.connect(
+					"downloads_finished", self, "_on_control_net_model_downloaded", 
+					[cn_model_search_string])
 	
-	Cue.new(controller_role, "get_preprocessor").args([
-			image_data,
-			self,
-			"_on_image_preprocessed"
-	]).execute()
+	if not is_preprocessed:
+		Cue.new(controller_role, "get_preprocessor").args([
+				image_data,
+				self,
+				"_on_image_preprocessed"
+		]).execute()
 
 
 func _on_server_state_changed(_prev_state: String, new_state: String):
@@ -219,6 +222,7 @@ func _on_image_preprocessed(result):
 				self, 
 				"_on_image_processed")
 	else:
+		is_preprocessed = true
 		pending_preprocessor = image_data
 		restore_image_data = pending_preprocessor
 		DiffusionServer.mark_generation_available()
@@ -240,6 +244,7 @@ func _on_image_processed(result: Image):
 	DiffusionServer.mark_generation_available()
 	pending_preprocessor = ImageData.new("preprocessed_image_" + name).load_image_object(result)
 	restore_image_data = pending_preprocessor
+	is_preprocessed = true
 	if selected:
 		Cue.new(controller_role, "set_preprocessor").args(
 				[pending_preprocessor]).execute()
@@ -265,6 +270,10 @@ func set_mode_data(data: Dictionary):
 	var active_image_base64 = data.get(ACTIVE_IMAGE, '')
 	if not active_image_base64.empty():
 		active_image = ImageProcessor.png_base64_to_image(active_image_base64)
+		is_preprocessed = true
+		if data_cue == null:
+			pending_preprocessor = ImageData.new("preprocessed_image_" + name)
+			pending_preprocessor.load_image_object(active_image)
 	else:
 		l.g("Tried to load from file an empty image_bse64 string onto mode: " + name)
 	config_dict = data.get(PARAMETERS, {})

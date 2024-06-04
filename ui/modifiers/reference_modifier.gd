@@ -22,6 +22,7 @@ func prepare_mode():
 	# if it was the already preprocessed image
 	pending_preprocessor = image_data
 	restore_image_data = pending_preprocessor
+	is_preprocessed = true
 	if selected:
 		Cue.new(controller_role, "set_preprocessor").args(
 				[pending_preprocessor]).execute()

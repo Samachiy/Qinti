@@ -131,9 +131,11 @@ func write_prompt(cue: Cue):
 	if pos_prompt is String and positive_prompt.text.strip_edges().empty():
 		positive_prompt.text = pos_prompt
 		positive_prompt.label.visible = false
+		positive_prompt.update_text()
 	if neg_prompt is String and negative_prompt.text.strip_edges().empty():
 		negative_prompt.text = neg_prompt
 		negative_prompt.label.visible = false
+		negative_prompt.update_text()
 
 
 
@@ -201,5 +203,7 @@ func _save_cues(_is_file_save):
 
 func load_prompt_and_seed(cue: Cue):
 	positive_prompt.text = cue.get_option(Consts.I_PROMPT, '')
+	positive_prompt.update_text()
 	negative_prompt.text = cue.get_option(Consts.I_NEGATIVE_PROMPT, '')
+	negative_prompt.update_text()
 	seed_field.text = str(cue.get_option(Consts.I_SEED, -1))
