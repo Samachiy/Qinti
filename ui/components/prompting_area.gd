@@ -120,8 +120,8 @@ func add_prompt_and_seed_to_api(_cue: Cue = null):
 		Consts.I_SEED: int(seed_field.text),
 	}
 	
-	Cue.new(Consts.ROLE_API, "apply_parameters").opts(dict).execute()
-	Cue.new(Consts.ROLE_API, "add_to_prompt").opts(config).execute()
+	Cue.new(Consts.ROLE_API, "cue_apply_parameters").opts(dict).execute()
+	Cue.new(Consts.ROLE_API, "cue_add_to_prompt").opts(config).execute()
 
 
 func write_prompt(cue: Cue):

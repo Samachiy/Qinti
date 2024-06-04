@@ -38,7 +38,7 @@ func get_prompt_cue(_cue: Cue = null):
 		style_details.get_positive_prompt(),
 		style_details.get_negative_prompt()
 	]
-	return Cue.new(Consts.ROLE_API, "add_to_prompt").args(dict)
+	return Cue.new(Consts.ROLE_API, "cue_add_to_prompt").args(dict)
 
 
 func clear(_cue: Cue = null):

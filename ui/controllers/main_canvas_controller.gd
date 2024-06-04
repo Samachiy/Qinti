@@ -302,7 +302,7 @@ func apply_parameters_to_api(_cue: Cue = null):
 	if not selected_sampler.empty():
 		dict[Consts.I_SAMPLER_NAME] = selected_sampler
 	
-	Cue.new(Consts.ROLE_API, "apply_parameters").opts(dict).execute()
+	Cue.new(Consts.ROLE_API, "cue_apply_parameters").opts(dict).execute()
 
 
 func calculate_hi_res_base_measures(target_width: int, target_height: int, max_area_pixels: int):

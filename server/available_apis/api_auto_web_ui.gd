@@ -107,11 +107,11 @@ func _ready():
 	extra_upscalers = ["Latent"]
 	default_sampler = "Euler"
 	default_upscaler = "Latent"
-	SUBDIR_LORA = lora_dir
-	SUBDIR_LYCORIS = lyco_dir
-	SUBDIR_TI = embeddings_dir
-	SUBDIR_DIFFUSION_MODELS = ckpt_dir
-	SUBDIR_CONTROLNET_MODELS = control_dir
+	DIR_LORA = lora_dir
+	DIR_LYCORIS = lyco_dir
+	DIR_TI = embeddings_dir
+	DIR_DIFFUSION_MODELS = ckpt_dir
+	DIR_CONTROLNET_MODELS = control_dir
 	ADDRESS_GET_CONTROLNET_SETTINGS = "/controlnet/settings"
 	ADDRESS_GET_SERVER_CONFIG = "/sdapi/v1/options"
 	ADDRESS_SET_SERVER_CONFIG = "/sdapi/v1/options"
@@ -207,22 +207,18 @@ func _progress_has_job_count(results: Dictionary, only_zero_is_false: bool = tru
 		return job_count > 0
 
 
-func clear(_cue : Cue = null):
+func reset_data():
 	context = MAIN_API_CONTEXT
 	service = TEXT2IMG_SERVICE
 	request_data = txt2img_dict.duplicate(true)
-	clear_queues()
 
 
-func add_to_prompt(cue: Cue): 
+func add_to_prompt(positive_prompt: String, negative_prompt: String): 
 	# [positive_prompt, negative_prompt]
 	# also accepts a config dictionary, will use this if the arguments are emtpy
 	
 	var old_value: String = ''
 	# Adding the positive prompt, checking args first, then options if empty
-	var positive_prompt: String = cue.get_at(0, '', false)
-	if positive_prompt.empty():
-		positive_prompt = cue.get_option(Consts.I_PROMPT, '')
 	if not positive_prompt.empty():
 		old_value = request_data[Consts.I_PROMPT].strip_edges()
 		if old_value.empty():
@@ -231,9 +227,6 @@ func add_to_prompt(cue: Cue):
 			request_data[Consts.I_PROMPT] += ", " + positive_prompt.strip_edges()
 	
 	# Adding the negative prompt, checking args first, then options if empty
-	var negative_prompt: String = cue.get_at(1, '', false)
-	if negative_prompt.empty():
-		negative_prompt = cue.get_option(Consts.I_NEGATIVE_PROMPT, '')
 	if not negative_prompt.empty():
 		old_value = request_data[Consts.I_NEGATIVE_PROMPT].strip_edges()
 		if old_value.empty():
@@ -242,33 +235,28 @@ func add_to_prompt(cue: Cue):
 			request_data[Consts.I_NEGATIVE_PROMPT] += ", " + negative_prompt.strip_edges()
 
 
-func replace_prompt(cue: Cue):
+func replace_prompt(positive_prompt, negative_prompt):
 	# [positive_prompt, negative_prompt]
-	var positive_prompt = cue.get_at(0, '')
-	var negative_prompt = cue.get_at(1, '')
 	if positive_prompt is String:
 		request_data[Consts.I_PROMPT] = positive_prompt.strip_edges()
 	if negative_prompt is String:
 		request_data[Consts.I_NEGATIVE_PROMPT] = negative_prompt.strip_edges()
-	
 
 
-func apply_parameters(cue: Cue): 
+func apply_parameters(parameters: Dictionary): 
 	# the parameters lies in the cue's dictionary (aka options)
-	var config = cue._options.duplicate()
-	var override_settings = config.get(Consts.I_OVERRIDE_SETTINGS)
+	var override_settings = parameters.get(Consts.I_OVERRIDE_SETTINGS)
 	if override_settings is Dictionary and not override_settings.empty():
 		_merge_dict(request_data["override_settings"], override_settings)
-		config.erase(Consts.I_OVERRIDE_SETTINGS)
+# warning-ignore:return_value_discarded
+		parameters.erase(Consts.I_OVERRIDE_SETTINGS)
 	
-	config.erase(Consts.I_PROMPT) # Prompts are to be appended with add_to_prompt() 
-	config.erase(Consts.I_NEGATIVE_PROMPT) # Prompts are to be appended with add_to_prompt() 
-	_merge_dict(request_data, config)
+	_merge_dict(request_data, parameters)
 
 
-func replace_parameters(cue: Cue): 
+func replace_parameters(parameters: Dictionary): 
 	# the config lies in the cue's dictionary (aka options)
-	request_data = cue._options.duplicate()
+	request_data = parameters
 
 
 func _merge_dict(base_dict: Dictionary, overwrite_dict: Dictionary):
@@ -327,7 +315,6 @@ func cancel_diffusion():
 func probe_server(current_server_address: ServerAddress):
 	# checks if server is there, signals server_probed(success: bool)
 	server_address = current_server_address
-	DiffusionServer.set_state(Consts.SERVER_STATE_LOADING) # move line to stater
 	var api_request = APIRequest.new(self, "_on_probe_success", self)
 	api_request.connect_on_request_failed(self, "_on_prove_failed")
 	api_request.push_server_down_error = false
@@ -355,76 +342,76 @@ func refresh_paths(api_result: Dictionary = {}):
 	var install_path = get_installation_dir()
 	var confirmation_path = install_path.plus_file(models_dir)
 	
-	SUBDIR_LORA = install_path.plus_file(lora_dir)
+	DIR_LORA = install_path.plus_file(lora_dir)
 	aux = api_result.get(PATH_KEY_LORA_DIR, '')
 	if aux is String and not aux.empty():
-		SUBDIR_LORA = _interpret_api_path(aux, lora_dir)
-		PCData.conditional_make_dir_recursive(SUBDIR_LORA, confirmation_path)
+		DIR_LORA = _interpret_api_path(aux, lora_dir)
+		PCData.conditional_make_dir_recursive(DIR_LORA, confirmation_path)
 		
-	l.g("LoRA models directory set as: " + SUBDIR_LORA, l.DEBUG)
+	l.g("LoRA models directory set as: " + DIR_LORA, l.DEBUG)
 	
-	SUBDIR_LYCORIS = install_path.plus_file(lyco_dir)
+	DIR_LYCORIS = install_path.plus_file(lyco_dir)
 	aux = api_result.get(PATH_KEY_LYCO_DIR, '')
 	if aux is String and not aux.empty():
-		SUBDIR_LYCORIS = _interpret_api_path(aux, lyco_dir)
-		PCData.conditional_make_dir_recursive(SUBDIR_LYCORIS, confirmation_path)
+		DIR_LYCORIS = _interpret_api_path(aux, lyco_dir)
+		PCData.conditional_make_dir_recursive(DIR_LYCORIS, confirmation_path)
 		
-	l.g("LyCORIS models directory set as: " + SUBDIR_LYCORIS, l.DEBUG)
+	l.g("LyCORIS models directory set as: " + DIR_LYCORIS, l.DEBUG)
 	
-	SUBDIR_TI = install_path.plus_file(embeddings_dir)
+	DIR_TI = install_path.plus_file(embeddings_dir)
 	aux = api_result.get(PATH_KEY_EMBEDDINGS_DIR, '')
 	if aux is String and not aux.empty():
-		SUBDIR_TI = _interpret_api_path(aux, embeddings_dir)
-		PCData.conditional_make_dir_recursive(SUBDIR_TI, confirmation_path)
+		DIR_TI = _interpret_api_path(aux, embeddings_dir)
+		PCData.conditional_make_dir_recursive(DIR_TI, confirmation_path)
 		
-	l.g("Textual inversion models directory set as: " + SUBDIR_TI, l.DEBUG)
+	l.g("Textual inversion models directory set as: " + DIR_TI, l.DEBUG)
 	
-	SUBDIR_DIFFUSION_MODELS = install_path.plus_file(ckpt_dir)
+	DIR_DIFFUSION_MODELS = install_path.plus_file(ckpt_dir)
 	aux = api_result.get(PATH_KEY_CHECKPOINTS_DIR, '')
 	if aux is String and not aux.empty():
-		SUBDIR_DIFFUSION_MODELS = _interpret_api_path(aux, ckpt_dir)
-		PCData.conditional_make_dir_recursive(SUBDIR_DIFFUSION_MODELS, confirmation_path)
+		DIR_DIFFUSION_MODELS = _interpret_api_path(aux, ckpt_dir)
+		PCData.conditional_make_dir_recursive(DIR_DIFFUSION_MODELS, confirmation_path)
 		
-	l.g("Diffusion models directory set as: " + SUBDIR_DIFFUSION_MODELS, l.DEBUG)
+	l.g("Diffusion models directory set as: " + DIR_DIFFUSION_MODELS, l.DEBUG)
 	
-	SUBDIR_CONTROLNET_MODELS = install_path.plus_file(control_dir)
+	DIR_CONTROLNET_MODELS = install_path.plus_file(control_dir)
 	aux = api_result.get(PATH_KEY_CONTROL_DIR, '')
 	if aux is String and not aux.empty():
 		var dir: Directory = Directory.new()
 		var multiple_possible_dirs: bool = false
 		var default_dir = install_path.plus_file(control_dir)
-		SUBDIR_CONTROLNET_MODELS = _interpret_api_path(aux, control_dir)
+		DIR_CONTROLNET_MODELS = _interpret_api_path(aux, control_dir)
 		
-		if dir.dir_exists(SUBDIR_CONTROLNET_MODELS.plus_file("controlnet")):
-			SUBDIR_CONTROLNET_MODELS = SUBDIR_CONTROLNET_MODELS.plus_file("controlnet")
+		if dir.dir_exists(DIR_CONTROLNET_MODELS.plus_file("controlnet")):
+			DIR_CONTROLNET_MODELS = DIR_CONTROLNET_MODELS.plus_file("controlnet")
 		
-		if default_dir != SUBDIR_CONTROLNET_MODELS and dir.dir_exists(default_dir):
+		if default_dir != DIR_CONTROLNET_MODELS and dir.dir_exists(default_dir):
 			multiple_possible_dirs = true
 		
 		if  multiple_possible_dirs:
 			# check which one has more clusters, current folder or default
 			# Get file num from both sides and pick who has most
 			var custom_dir_models = Cue.new(Consts.ROLE_FILE_PICKER, "get_file_paths").args([
-				SUBDIR_CONTROLNET_MODELS, ".pth", ".safetensors"
+				DIR_CONTROLNET_MODELS, ".pth", ".safetensors"
 			]).execute()
 			var default_dir_models = Cue.new(Consts.ROLE_FILE_PICKER, "get_file_paths").args([
 				default_dir, ".pth", ".safetensors"
 			]).execute()
 			# Printing found models amount for debug purposes
-			l.g("Control Net models in " + SUBDIR_CONTROLNET_MODELS + ": " + 
+			l.g("Control Net models in " + DIR_CONTROLNET_MODELS + ": " + 
 					str(custom_dir_models.size()), l.DEBUG)
 			l.g("Control Net models in " + default_dir + ": " + 
 					str(default_dir_models.size()), l.DEBUG)
 			
 			# Selecting the winning model
 			if default_dir_models.size() >= custom_dir_models.size():
-				SUBDIR_CONTROLNET_MODELS = install_path.plus_file(control_dir)
+				DIR_CONTROLNET_MODELS = install_path.plus_file(control_dir)
 			else:
-				pass # SUBDIR_CONTROLNET_MODELS already has the custom path
+				pass # DIR_CONTROLNET_MODELS already has the custom path
 			
-		PCData.conditional_make_dir_recursive(SUBDIR_CONTROLNET_MODELS, confirmation_path)
+		PCData.conditional_make_dir_recursive(DIR_CONTROLNET_MODELS, confirmation_path)
 		
-	l.g("Control Net models directory set as: " + SUBDIR_CONTROLNET_MODELS, l.DEBUG)
+	l.g("Control Net models directory set as: " + DIR_CONTROLNET_MODELS, l.DEBUG)
 	
 	emit_signal("paths_refreshed")
 
@@ -445,15 +432,26 @@ func _interpret_api_path(api_path: String, default_path: String) -> String:
 
 func adjust_server():
 	# checks configuration and configures server if needed, signals server_verified(success: bool)
-#	if not configure_server:
-#		emit_signal("server_adjusted", true)
-#		return
 	
+	# This is just for debug purposes
 	config_report.add(CONTROLNET_CONFIG)
+	
+	# We are going the check cn (controlnet) configuration
+	# "auto-web-ui check controlnet num" is the id of this sequence, it will be used
+	# to, on next startup, go directly to the valid API endpoint
 	var check_cn = APISequence.new(self, "auto-web-ui check controlnet num", APISequence.NO_STOP)
 	var url = server_address.url
+	
+	# if API endpoint ADDRESS_GET_CONTROLNET_SETTINGS succeds, it will send the result
+	# to _config_check_controlnet_1
 	check_cn.add_get(url + ADDRESS_GET_CONTROLNET_SETTINGS, "_config_check_controlnet_1")
+	# if the previous API endpoint fails, it will try instead ADDRESS_GET_SERVER_CONFIG, and if
+	# ut succeds, it will send the result to _config_check_controlnet_2
 	check_cn.add_get(url + ADDRESS_GET_SERVER_CONFIG, "_config_check_controlnet_2")
+	
+	# This will start the sequence of API calls, it will stop on first success and on the 
+	# next startup will call directly the valid API endpoint, or try again from the beginning 
+	# if for whatever reason it fails
 	check_cn.run_success(true)
 
 
@@ -474,7 +472,10 @@ func _config_check_controlnet_1(result, api_sequence: APISequence):
 		l.g("Couldn't check Control Net api configuration, result: " + str(result), l.DEBUG)
 		return
 	
+	# This is just for debug purposes
 	config_report.success_get(CONTROLNET_CONFIG, num, RECOMMENDED_MODELS_NUM)
+	
+	# This line s just in case, it will stop the sequence since we succeded
 	api_sequence.force_stop()
 	
 	if num != RECOMMENDED_MODELS_NUM:
@@ -502,7 +503,10 @@ func _config_check_controlnet_2(result, api_sequence: APISequence):
 		emit_signal("server_adjusted", false)
 		return
 	
+	# This is just for debug purposes
 	config_report.success_get(CONTROLNET_CONFIG, num, RECOMMENDED_MODELS_NUM)
+	
+	# This line s just in case, it will stop the sequence since we succeded
 	api_sequence.force_stop()
 	
 	if num != RECOMMENDED_MODELS_NUM:
@@ -573,7 +577,7 @@ func _on_server_shutdown_failure(result: int):
 
 func refresh_data(what: String):
 	var is_all = what == REFRESH_ALL
-	var resul = {}
+	var result = {}
 	var success
 	
 	if is_all or what == REFRESH_CONTROLNET_MODELS:
@@ -581,27 +585,31 @@ func refresh_data(what: String):
 		api_request.connect_on_request_failed(self, "_on_contronet_models_failed_refresh")
 		var url = server_address.url + ADDRESS_GET_CONTROLNET_MODEL_LIST
 		success = yield(api_request.api_get(url), "api_request_finished")
-		resul[REFRESH_CONTROLNET_MODELS] = success
+		
+		result[REFRESH_CONTROLNET_MODELS] = success
 	
 	if is_all or what == REFRESH_SAMPLERS:
 		var api_request = APIRequest.new(self, "_on_samplers_refreshed", self)
 		var url = server_address.url + ADDRESS_GET_SAMPLERS
 		success = yield(api_request.api_get(url), "api_request_finished")
-		resul[REFRESH_SAMPLERS] = success
+		
+		result[REFRESH_SAMPLERS] = success
 	
 	if is_all or what == REFRESH_UPSCALERS:
 		var api_request = APIRequest.new(self, "_on_upscalers_refreshed", self)
 		var url = server_address.url + ADDRESS_GET_UPSCALERS
 		success = yield(api_request.api_get(url), "api_request_finished")
-		resul[REFRESH_UPSCALERS] = success
+		
+		result[REFRESH_UPSCALERS] = success
 	
 	if is_all or what == REFRESH_MODELS:
 		var api_request = APIRequest.new(self, "_on_diffusion_models_refreshed", self)
 		var url = server_address.url + ADDRESS_REFRESH_DIFFUSION_MODELS
 		success = yield(api_request.api_post(url, {}), "api_request_finished")
-		resul[REFRESH_MODELS] = success
+		
+		result[REFRESH_MODELS] = success
 	
-	emit_signal("data_refreshed", resul)
+	emit_signal("data_refreshed", result)
 
 
 func _on_contronet_models_refreshed(result):

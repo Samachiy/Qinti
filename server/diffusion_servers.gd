@@ -290,57 +290,6 @@ func _on_global_save_cues_requested():
 
 
 
-
-
-
-## DEPRECATED unless api endpoint does something in a future update
-#func refresh_diffusion_models(_result):
-#	# REMOTE server behaviour may be different
-#	# We take an argument since if we have already loaded the models, then a refresh
-#	# request means that we also need to refresh the models server side and then
-#	# refresh locally.
-#	if not is_api_initialized():
-#		return
-#
-#	var api_request
-#	var url
-#	if diffusion_models == null:
-#		api_request = APIRequest.new(self, "_on_diffusion_models_refreshed", api)
-#		url = server_address.url + api.ADDRESS_GET_DIFFUSION_MODEL_LIST
-#		api_request.api_get(url)
-#	else:
-#		api_request = APIRequest.new(self, "refresh_diffusion_models", api)
-#		api_request.connect_on_request_failed(self, "refresh_diffusion_models")
-#		diffusion_models = null
-#		url = server_address.url + api.ADDRESS_REFRESH_DIFFUSION_MODELS
-#		api_request.api_post(url, {})
-#
-#
-#func _on_diffusion_models_refreshed(result):
-#	var success = result is Array and not result.empty()
-#	if success:
-#		diffusion_models = {}
-#	else:
-#		l.g("Couldn't retrieve the diffusion models")
-#		diffusion_models = null
-#		return
-#
-#	var model_key: String = ''
-#	for model_info in result:
-#		if model_info is Dictionary:
-#			model_key = model_info.get("filename", '')
-#			model_key = model_key.get_basename()
-#
-#		if model_key.empty():
-#			continue
-#
-#		diffusion_models[model_key] = model_info
-#
-#	emit_signal("diffusion_models_refreshed")
-#	if retrieving_start_info:
-#		mark_server_ready()
-
-
 func mark_generation_available():
 	if downloader.is_downloading:
 		# Downloader will mark server ready by itself

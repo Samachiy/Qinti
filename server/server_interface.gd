@@ -39,6 +39,7 @@ func initialize_connection(server_urls: Array, server_api: DiffusionAPI):
 	DiffusionServer.set_state(Consts.SERVER_STATE_LOADING)
 	start_if_probe_failure = true
 	api.probe_server(current_server_address)
+	DiffusionServer.set_state(Consts.SERVER_STATE_LOADING) 
 
 
 func wait_for_connection(server_urls: Array, server_api: DiffusionAPI):
@@ -55,6 +56,7 @@ func wait_for_connection(server_urls: Array, server_api: DiffusionAPI):
 	l.g("Waiting for server with API: " + get_api_name(), l.INFO)
 	start_if_probe_failure = false
 	api.probe_server(current_server_address)
+	DiffusionServer.set_state(Consts.SERVER_STATE_LOADING) 
 
 
 func set_server_address(server_urls: Array):
@@ -114,6 +116,7 @@ func start_server():
 	Cue.new(Consts.ROLE_SERVER_MANAGER, "start_server").execute()
 	start_if_probe_failure = false
 	api.probe_server(current_server_address)
+	DiffusionServer.set_state(Consts.SERVER_STATE_LOADING) 
 
 
 func stop_server():
@@ -142,6 +145,7 @@ func _on_Timer_timeout():
 	timer.stop()
 	current_server_address.cycle_next_url()
 	api.probe_server(current_server_address) 
+	DiffusionServer.set_state(Consts.SERVER_STATE_LOADING) 
 
 
 func _is_api_loaded(current_step: String):
