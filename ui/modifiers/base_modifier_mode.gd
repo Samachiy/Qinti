@@ -23,7 +23,7 @@ func select_mode():
 	l.g("The function 'select_mode' has not been overriden yet on modifier mode: " + 
 	name)
 
-func deselect_mode():
+func deselect_mode(_is_mode_change: bool):
 	# This function will be called more times on it's lifespan, program it accordingly
 	l.g("The function 'deselect_mode' has not been overriden yet on modifier mode: " + 
 	name)

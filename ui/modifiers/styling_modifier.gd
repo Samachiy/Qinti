@@ -2,6 +2,9 @@ extends ModifierMode
 
 const CONTROLLER_DATA = "controller"
 
+const MSG_REQUEST_STYLE_DOWNLOAD_CIVITAI = "MESSAGE_REQUEST_MODEL_DOWNLOAD_CIVITAI"
+const MSG_NO_STYLE_MODEL = "MESSAGE_NO_STYLE_MODEL"
+
 
 var styling_data: StylingData = null
 var controller_role = Consts.ROLE_CONTROL_STYLING
@@ -17,9 +20,11 @@ func select_mode():
 	
 	selected = true
 	if styling_data == null:
-		add_warning_no_styling_data()
-		Cue.new(controller_role, "open_board").args([self]).execute() 
-		# RESUME open error board instead and load info
+		Cue.new(Consts.ROLE_CONTROL_ERROR, "open_board").args([self]).execute() 
+		Cue.new(Consts.ROLE_CONTROL_ERROR, "display_error").args([
+				MSG_REQUEST_STYLE_DOWNLOAD_CIVITAI,
+				sha256_hash.substr(0, 10),
+		]).execute()
 		return
 	
 	Cue.new(controller_role, "open_board").args([self]).execute()
@@ -29,17 +34,23 @@ func select_mode():
 		data_cue.clone().execute()
 
 
-func deselect_mode():
+func deselect_mode(is_mode_change: bool):
 	selected = false
-	data_cue = Cue.new(controller_role, "get_data_cue").execute()
-	prompt_cue = Cue.new(controller_role, "get_prompt_cue").execute()
+	if styling_data != null:
+		data_cue = Cue.new(controller_role, "get_data_cue").execute()
+		prompt_cue = Cue.new(controller_role, "get_prompt_cue").execute()
+	elif is_mode_change:
+		remove_warning_no_styling_data()
 
 
 func prepare_mode():
 	if is_hash_requested:
 		return
 	
-	styling_data.file_cluster.solve_hash(false)
+	if styling_data == null:
+		add_warning_no_styling_data()
+	else:
+		styling_data.file_cluster.solve_hash(false)
 
 
 func apply_to_api(_api):
@@ -81,6 +92,9 @@ func queue_hash_now():
 
 
 func get_mode_data():
+	if selected and styling_data != null:
+		data_cue = Cue.new(controller_role, "get_data_cue").execute()
+	
 	var disassembled_data_cue = []
 	if data_cue is Cue:
 		disassembled_data_cue = data_cue.disassemble()
@@ -129,7 +143,6 @@ func retrieve_styling_data_q_hash(connect_if_failure: bool):
 #			styling_data = thumbnail.styling_data
 	
 	if styling_data == null:
-		add_warning_no_styling_data()
 		if not connect_if_failure:
 			return
 		
@@ -154,14 +167,27 @@ func _on_toolbox_file_clusters_refreshed():
 					"file_clusters_refreshed", 
 					self, 
 					"_on_toolbox_file_clusters_refreshed")
+	else:
+		remove_warning_no_styling_data()
 
 
 func _on_same_type_modifier_toggled():
-	pass
+	pass # Nothing to do here, just overriding so that a warning doesn't show up
 
 
 func add_warning_no_styling_data():
-	# RESUME add warning icon and on load, show the error board if clicked
-	pass
+	if owner is Control:
+		var warning_icon = owner.get("warning_icon")
+		if warning_icon is TextureRect:
+			warning_icon.visible = true
+			warning_icon.hint_tooltip += tr(MSG_NO_STYLE_MODEL) + "\n"
+
+
+func remove_warning_no_styling_data():
+	if owner is Control:
+		var warning_icon = owner.get("warning_icon")
+		if warning_icon is TextureRect:
+			warning_icon.visible = false
+			warning_icon.hint_tooltip = ""
 	
 

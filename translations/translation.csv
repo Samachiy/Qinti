@@ -180,7 +180,7 @@ MESSAGE_NO_FEATURE_CONTROLNET,"The current server doesn’t support Control Net,
 MESSAGE_INSTALL_FAILED_KEY_INPUT_DRIVERS,"Installation failed, please update the computer drivers and try again. If the installation still fails, please consult the Github page of the project or install the server manually","La instalación falló, por favor actualice los controladores del computador y vuelva a intentarlo. Si la instalación sigue fallando, consulte la página de GitHub del proyecto o instale el servidor manualmente."
 MESSAGE_RUN_FAILED,"Failure to start server, please check the logs and consult the issue in the Github page of the project","La inicailización del servidor falló, porfavor revise los registros del programa y consulte el problema en la página de GitHub del proyecto"
 MESSAGE_SHUTTING_DOWN_SERVER,Closing server. Please wait a moment.,Cerrando servidor. Por favor espere.
-MSG_CALCULATING_HASHES,Calculating models hash code,Calculando códigos hash de los modelos
+MESSAGE_CALCULATING_HASHES,Calculating models hash code,Calculando códigos hash de los modelos
 SELECT_FOLDER,Select folder,Seleccionar carpeta
 RESUME,Resume,Continuar
 INSTALL,Install,Instalar

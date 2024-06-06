@@ -18,7 +18,7 @@ func select_mode():
 		data_cue.clone().execute()
 
 
-func deselect_mode():
+func deselect_mode(_is_mode_change: bool):
 	data_cue = Cue.new(controller_role, "get_data_cue").execute()
 	active_image = Cue.new(controller_role, "get_active_image").execute()
 	active_regions = Cue.new(controller_role, "get_active_regions").execute()

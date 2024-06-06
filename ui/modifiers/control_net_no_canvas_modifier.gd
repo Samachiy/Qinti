@@ -29,7 +29,7 @@ func select_mode():
 		data_cue.clone().execute()
 
 
-func deselect_mode():
+func deselect_mode(_is_mode_change: bool):
 	data_cue = Cue.new(controller_role, "get_data_cue").execute()
 	config_dict = Cue.new(controller_role, "get_cn_config").args(
 			[image_data.image, false]).execute()
@@ -155,6 +155,11 @@ func get_active_image() -> Image:
 
 
 func get_mode_data():
+	if selected:
+		data_cue = Cue.new(controller_role, "get_data_cue").execute()
+		config_dict = Cue.new(controller_role, "get_cn_config").args(
+				[image_data.image, false]).execute()
+	
 	var disassembled_data_cue = []
 	if data_cue is Cue:
 		disassembled_data_cue = data_cue.disassemble()

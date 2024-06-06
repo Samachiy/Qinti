@@ -43,9 +43,11 @@ func _on_scroll_changed():
 
 
 func display_error(cue: Cue):
-	# [ text, info_to_copy ]
+	# [ text, info_to_copy, extra_text, extra_info_to_copy ]
 	var text = cue.str_at(0, '')
 	var info = cue.str_at(1, '', false)
+	var extra_text = cue.str_at(0, '')
+	var extra_info = cue.str_at(1, '', false)
 	display_text(text, info)
 
 

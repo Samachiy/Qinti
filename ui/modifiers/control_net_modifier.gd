@@ -48,7 +48,7 @@ func select_mode():
 	Cue.new(controller_role, "update_overlay_underlay").args([name, owner]).execute()
 
 
-func deselect_mode():
+func deselect_mode(_is_mode_change: bool):
 	Cue.new(controller_role, "pause_layer").execute()
 	undoredo_data = Cue.new(controller_role, "get_undoredo_data").execute()
 	data_cue = Cue.new(controller_role, "get_data_cue").execute()
@@ -251,6 +251,12 @@ func _on_image_processed(result: Image):
 
 
 func get_mode_data():
+	if selected:
+		data_cue = Cue.new(controller_role, "get_data_cue").execute()
+		active_image = Cue.new(controller_role, "get_active_image").execute()
+		config_dict = Cue.new(controller_role, "get_cn_config").args(
+				[active_image, false]).execute()
+	
 	var disassembled_data_cue = []
 	if data_cue is Cue:
 		disassembled_data_cue = data_cue.disassemble()

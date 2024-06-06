@@ -25,7 +25,7 @@ func select_mode():
 		data_cue.clone().execute()
 
 
-func deselect_mode():
+func deselect_mode(_is_mode_change: bool):
 	selected = false
 	data_cue = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "get_data_cue").execute()
 	config = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "get_config").execute()
@@ -97,6 +97,9 @@ func _on_png_info_received(result):
 
 
 func get_mode_data():
+	if selected:
+		data_cue = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "get_data_cue").execute()
+		config = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "get_config").execute()
 	var disassembled_data_cue = []
 	if data_cue is Cue:
 		disassembled_data_cue = data_cue.disassemble()

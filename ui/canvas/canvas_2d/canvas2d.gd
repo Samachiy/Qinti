@@ -51,6 +51,7 @@ var generation_area: GenerationArea2D = null
 var shadow_inactive_area: bool = false
 var active_area_proportions: Vector2 = Vector2.ZERO
 var board_owner: Node = null
+var skip_save_queue: Dictionary = {}
 
 # warning-ignore:unused_signal
 signal left_click(event)
@@ -312,6 +313,16 @@ func remove_all_layers():
 		remove_layer_object(layer)
 	
 	layers_registry.clear()
+
+
+func mark_layer_skip_save_as(id: String, skip_save: bool):
+	if skip_save:
+		var layer = layers_registry.get(id, null)
+		if layer != null:
+			skip_save_queue[id] = layer
+	else:
+		# warning-ignore:return_value_discarded
+		skip_save_queue.erase(id)
 
 
 func remove_layer(id: String):
@@ -576,6 +587,9 @@ func get_save_data() -> Dictionary:
 	var layer_obj
 	var result_data = {}
 	for layer_key in layers_registry:
+		if layer_key in skip_save_queue:
+			continue
+		
 		layer_obj = layers_registry[layer_key]
 		if layer_obj is Layer2D:
 			result_data[layer_key] = layer_obj.get_save_data()
