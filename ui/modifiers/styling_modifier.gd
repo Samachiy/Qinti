@@ -156,6 +156,10 @@ func _on_toolbox_file_clusters_refreshed():
 					"_on_toolbox_file_clusters_refreshed")
 
 
+func _on_same_type_modifier_toggled():
+	pass
+
+
 func add_warning_no_styling_data():
 	# RESUME add warning icon and on load, show the error board if clicked
 	pass

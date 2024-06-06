@@ -15,13 +15,16 @@ var cn_model_type = ''
 var cn_model_search_string = ''
 var is_downloading_model: bool = false
 
+func _ready():
+	controller_role = Consts.ROLE_CONTROL_COLOR
+
 func select_mode():
 	if selected:
 		return
 	selected = true
 	Cue.new(controller_role, "open_board").args([self]).execute()
 	if data_cue == null:
-		Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "set_image").args([image_data]).execute()
+		Cue.new(controller_role, "set_image").args([image_data]).execute()
 	else:
 		data_cue.clone().execute()
 

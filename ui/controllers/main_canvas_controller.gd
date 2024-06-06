@@ -200,7 +200,7 @@ func set_images_in_generation_area(cue: Cue):
 	main_canvas_layer = canvas.select_layer(MAIN_LAYER_NAME)
 	canvas.current_layer = generation_area
 	if focus:
-		canvas.display_area = generation_area.limits
+		canvas.display_area = generation_area.get_limits_with_margin()
 	canvas.message_area.show_area(focus)
 	if cue._arguments.size() > 1:
 		canvas.message_area.enable_next_prev(true)

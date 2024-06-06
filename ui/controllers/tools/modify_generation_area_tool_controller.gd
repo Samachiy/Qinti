@@ -106,8 +106,9 @@ func _detect_proportion():
 
 
 func focus_gen_area():
-	canvas.fit_to_rect2(generation_area.limits)
-	canvas.display_area = generation_area.limits
+	var area = generation_area.get_limits_with_margin()
+	canvas.fit_to_rect2(area)
+	canvas.display_area = area
 
 
 func reload_description(_cue: Cue = null):

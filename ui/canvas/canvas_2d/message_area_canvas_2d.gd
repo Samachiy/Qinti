@@ -41,8 +41,9 @@ func set_msg_button_modulate(button: Control):
 
 
 func get_y_displacement_amount():
+	var displacement = (rect_size.y + message_bg.rect_size.y) * 0.5
 	if visible and displace_canvas:
-		return rect_size.y
+		return displacement
 	else:
 		return 0
 
