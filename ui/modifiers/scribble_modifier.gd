@@ -7,8 +7,8 @@ func _ready():
 	cn_model_search_string = cn_model_type
 
 
-func deselect_mode():
-	.deselect_mode()
+func deselect_mode(is_same_modifer: bool):
+	.deselect_mode(is_same_modifer)
 	if owner is Modifier:
 		var image_data = ImageData.new(cn_model_type + "_image")
 		image_data.load_image_object(active_image)

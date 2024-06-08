@@ -21,6 +21,15 @@ var cn_model_type: String = ''
 var image_data: ImageData = null
 
 
+func _ready():
+	# Adding the scroll indicators
+	if scroll is ScrollContainer and top_gradient != null and bottom_gradient != null:
+		var gradient_group = Consts.THEME_MODULATE_GROUP_STYLE
+		UIOrganizer.add_to_theme_by_modulate_group(top_gradient, gradient_group)
+		UIOrganizer.add_to_theme_by_modulate_group(bottom_gradient, gradient_group)
+		scroll.get_v_scrollbar().connect("changed", self, "_on_scroll_changed")
+
+
 func set_image(cue: Cue):
 	image_data = cue.get_at(0, null)
 	if image_data == null:

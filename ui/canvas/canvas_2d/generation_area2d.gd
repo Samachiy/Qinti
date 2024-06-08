@@ -41,6 +41,15 @@ func _ready():
 #			get_contained_image()
 
 
+func get_limits_with_margin():
+	var margin = Vector2(12, 12)
+	var area = limits
+	area.size += margin
+	area.position -= margin / 2
+	return area
+	
+
+
 func set_area_size(new_size: Vector2):
 	var prev_pos = rect_position
 	.set_max_size(Rect2(prev_pos, new_size))

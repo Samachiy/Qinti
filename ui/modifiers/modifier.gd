@@ -31,7 +31,7 @@ onready var warning_icon = $"%WarningIcon"
 var mode: Node = null
 var image_data: ImageData = null
 var is_in_modifier_area = true
-var is_in_delete_area = false
+var is_in_delete_area = false setget set_is_in_delete_area
 var mode_name = ''
 var pressed_right = false
 var pressed_left = false
@@ -170,7 +170,7 @@ func deselect(_cue: Cue = null):
 	editing_indicator.visible = false
 	editing_icon.visible = false
 	if mode != null:
-		mode.deselect_mode()
+		mode.deselect_mode(false)
 
 
 func select(): 
@@ -215,6 +215,20 @@ func deselect_active_modifier():
 			Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute()
 
 
+func set_is_in_delete_area(value):
+	if is_in_delete_area == value:
+		l.g("Modifier changed delete area status but the status was the same", l.WARNING)
+		return 
+	
+	is_in_delete_area = value
+	if is_in_delete_area:
+		for mode in types_container:
+			mode._on_deleted_modifier()
+	else:
+		for mode in types_container:
+			mode._on_undeleted_modifier()
+
+
 func delete(deleted_queue: Array):
 	# The deleted queue is there so that there is a possibility for the delete to be undone
 	if selected:
@@ -225,7 +239,7 @@ func delete(deleted_queue: Array):
 	highlighted = false
 	selected = false
 	is_in_modifier_area = false
-	is_in_delete_area = true
+	self.is_in_delete_area = true
 	visible = false
 	_remove_from_parent()
 	deleted_queue.append(self)
@@ -262,7 +276,7 @@ func _on_mode_loaded(new_mode):
 	
 	if selected:
 		if old_mode != null:
-			old_mode.deselect_mode()
+			old_mode.deselect_mode(true)
 		
 		new_mode.select_mode()
 	elif is_in_modifier_area:

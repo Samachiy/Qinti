@@ -1,5 +1,6 @@
 extends MarginContainer
 
+const MSG_REQUEST_MODEL_DOWNLOAD_CIVITAI = "MESSAGE_REQUEST_MODEL_DOWNLOAD_CIVITAI"
 
 onready var models_container = $Margin/HBoxContainer/DiffusionModels
 onready var close_button = $Margin/MarginContainer/Close
@@ -209,13 +210,14 @@ func _save_cues(_is_file_save):
 
 func load_data(cue: Cue):
 	var q_hash = cue.get_option(FileCluster.Q_HASH, '')
-	var sha256_hash = cue.get_option(FileCluster.HASH, '')
+	var sha256_hash: String = cue.get_option(FileCluster.HASH, '')
 	if load_model_with_q_hash(q_hash):
 		pass # Success, nothing to do here
 	else:
-		# RESUME show a missing model popup with the sha256 in the pop up
-		# and telling to download it a civitai and load the file again
-		pass
+		Cue.new(Consts.ROLE_DIALOGS, "request_user_action").args([
+				MSG_REQUEST_MODEL_DOWNLOAD_CIVITAI,
+				sha256_hash.substr(0, 10
+		)]).execute()
 
 
 func load_model_with_q_hash(q_hash: String) -> bool:

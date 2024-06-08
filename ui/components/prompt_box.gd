@@ -23,6 +23,10 @@ func _on_text_changed():
 		label.visible = false
 
 
+func update_text():
+	_on_text_changed()
+
+
 func _on_focus_entered():
 	label.visible = false
 

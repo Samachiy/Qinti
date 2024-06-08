@@ -11,6 +11,8 @@ export var top: bool = false
 export var bottom: bool = false
 export var right: bool = false
 export var left: bool = false
+export var in_box_proportion: float = 0.5
+export var idle_modulate: int = 255
 
 var vertical: bool = false
 var horizontal: bool = false
@@ -28,6 +30,11 @@ var type = ''
 var viewport_container: ViewportContainer = null
 
 func _ready():
+	modulate.a8 = idle_modulate
+# warning-ignore:return_value_discarded
+	connect("mouse_entered", self, "_on_mouse_entered")
+# warning-ignore:return_value_discarded
+	connect("mouse_exited", self, "_on_mouse_exited")
 	if owner != null and owner is Layer2D:
 		layer = owner
 		canvas = owner.get("canvas")
@@ -67,6 +74,14 @@ func _ready():
 	if valid_button:
 		connect_button()
 		offset_texture()
+
+
+func _on_mouse_entered():
+	modulate.a8 = 255
+
+
+func _on_mouse_exited():
+	modulate.a8 = idle_modulate
 
 
 func connect_button():
@@ -217,21 +232,26 @@ func snap(grid_size: int):
 
 
 func offset_texture():
-	var offset = texture_normal.get_size() / 2
-	var in_box_amount = offset #Vector2.ZERO
+	var offset = texture_normal.get_size() * rect_scale #/ 2
+	var in_box_amount = offset * in_box_proportion #Vector2.ZERO
 	if top:
-		margin_top = - offset.y
+		margin_top = - offset.y + in_box_amount.y
 		margin_bottom = in_box_amount.y
 	elif bottom:
 		margin_bottom = - offset.y
 		margin_top = - in_box_amount.y
+	else:
+		margin_top = - offset.y / 2
+		
 
 	if right:
 		margin_right = - offset.x
 		margin_left = - in_box_amount.x
 	elif left:
-		margin_left = - offset.x
+		margin_left = - offset.x + in_box_amount.x
 		margin_right = in_box_amount.x
+	else:
+		margin_left = - offset.x / 2
 
 
 func activate():
@@ -240,3 +260,7 @@ func activate():
 
 func deactivate():
 	active = false
+
+
+func _reposition_with():
+	pass
