@@ -216,7 +216,17 @@ func deselect_active_modifier():
 
 
 func set_is_in_delete_area(value):
-	is_in_delete_area = true
+	if is_in_delete_area == value:
+		l.g("Modifier changed delete area status but the status was the same", l.WARNING)
+		return 
+	
+	is_in_delete_area = value
+	if is_in_delete_area:
+		for mode in types_container:
+			mode._on_deleted_modifier()
+	else:
+		for mode in types_container:
+			mode._on_undeleted_modifier()
 
 
 func delete(deleted_queue: Array):

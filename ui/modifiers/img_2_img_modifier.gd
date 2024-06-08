@@ -110,3 +110,15 @@ func set_mode_data(data: Dictionary):
 	else:
 		l.g("Tried to load from file an empty image_bse64 string onto mode: " + name)
 	img2img_dict = data.get(PARAMETERS, {})
+
+
+func _on_deleted_modifier():
+	layer_id = Cue.new(controller_role, 'mark_skip_layer_save').args([layer_id, true]).execute()
+
+
+func _on_undeleted_modifier():
+	layer_id = Cue.new(controller_role, 'mark_skip_layer_save').args([layer_id, false]).execute()
+
+
+func _on_destroyed_modifier():
+	Cue.new(controller_role, 'remove_layer').args([layer_id]).execute()

@@ -341,8 +341,8 @@ func remove_layer_object(layer: Node) -> bool:
 		return false
 
 
-func get_layer(layer_number: int):
-	return layers.get_child(layer_number)
+func get_layer(layer_id: String):
+	return layers_registry.get(layer_id)
 
 
 func select_layer(layer_id: String):
