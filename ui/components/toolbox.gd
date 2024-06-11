@@ -14,6 +14,7 @@ var lora_thread: Thread
 var lycoris_thread: Thread
 var ti_thread: Thread
 var refreshed_containers: Dictionary = {}
+var save_recent_img_amount: int = 5
 
 signal file_clusters_refreshed
 
@@ -255,9 +256,14 @@ func _on_Toolbox_file_clusters_refreshed():
 	refresh_all_timer.start()
 
 
+func set_recent_img_save_amount(cue: Cue):
+	# [ amount ]
+	save_recent_img_amount = cue.int_at(0, save_recent_img_amount)
+
+
 func _save_cues(_is_file_save):
 	var images_data = []
-	var thumbnails = recent_container.container.get_thumnails(2)
+	var thumbnails = recent_container.container.get_thumnails(save_recent_img_amount)
 	for thumbnail in thumbnails:
 		if thumbnail is RecentThumbnail:
 			images_data.append(thumbnail.get_base64_images())
@@ -277,7 +283,9 @@ func load_recent_images_data(cue: Cue):
 	var image_base64: String = ''
 	var image_name: String  = ''
 	var aux: ImageData
-	for entry in cue._arguments:
+	var entry
+	for i in range(cue._arguments.size()):
+		entry = cue._arguments[-i - 1] # We iterate in reverse
 		images_data = []
 		for data in entry:
 			image_name = data[0]

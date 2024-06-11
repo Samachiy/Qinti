@@ -171,6 +171,8 @@ const FLAG_LAY_GEN_MASK_OPACITY = 'lay_gen_mask_opacity'
 const FLAG_HI_RES_TYPE = 'hi_res_type'
 const FLAG_HI_RES_UPSCALER = 'hi_res_upscaler'
 const FLAG_HI_RES_START_AT= 'hi_res_start_at'
+const FLAG_SAVE_RECENT_IMG_AMOUNT = 'recent_img_amount'
+# ONLY AS FLAGS SAVE SETTINGS
 
 # ROLES CONSTANTS
 const ROLE_API = "API"
@@ -210,6 +212,7 @@ const ROLE_DESCRIPTION_BAR = "Description bar"
 const ROLE_MENU_BAR = "Menu bar"
 const ROLE_ABOUT_WINDOW = "About window"
 const ROLE_LOCALE = "Locale"
+const ROLE_SAVE_SETTINGS = "Save Settings UI"
 
 # Server states
 const SERVER_STATE_GENERATING = "GENERATING_IMAGE"

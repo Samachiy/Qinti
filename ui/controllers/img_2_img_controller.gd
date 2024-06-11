@@ -58,9 +58,9 @@ func prepare_layer(cue: Cue):
 
 func mark_skip_layer_save(cue: Cue):
 	# [layer_name: String, skip_save: bool]
-	var layer_name = cue.str_at(0, '')
+	var layer_name_id = cue.str_at(0, '')
 	var skip_save = cue.bool_at(1, false)
-	canvas.mark_layer_skip_save_as(layer_name, skip_save)
+	canvas.mark_layer_skip_save_as(layer_name_id, skip_save)
 
 
 func pause_layer(_cue: Cue = null):

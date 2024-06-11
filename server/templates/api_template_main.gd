@@ -353,7 +353,7 @@ func adjust_server():
 	
 	# The contents of this function will be highy dependant on the bakcend, some
 	# will need to be configured, others not, others will need extensively. For a reference
-	# of this function working in the wild, please check on
+	# of this function working in the wild, please check on:
 	# server/available_apis/api_auto_web_ui.gd
 	# 		adjust_server()
 	# 		_config_check_controlnet_1() 

@@ -145,6 +145,8 @@ func close(_cue: Cue = null):
 
 
 func emit_safe_image_signal(signal_name: String):
+	if image_viewer_relay == null or not is_instance_valid(image_viewer_relay):
+		l.g("Image viewer relay is " + str(image_viewer_relay))
 	if counter in range(0, images.size()):
 		image_viewer_relay.emit_signal(signal_name, counter, images[counter])
 

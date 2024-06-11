@@ -141,7 +141,10 @@ func _refresh_label():
 		if not label.is_connected("resized", self, "_on_Label_resized"):
 			label.connect("resized", self, "_on_Label_resized")
 		label.visible = true
-		label.text = mode.styling_data.file_cluster.name
+		if mode.styling_data == null:
+			label.text = mode.MISSING_MODEL_NAME
+		else:
+			label.text = mode.styling_data.file_cluster.name
 		_on_Label_resized()
 	else:
 		label.visible = false
@@ -222,11 +225,11 @@ func set_is_in_delete_area(value):
 	
 	is_in_delete_area = value
 	if is_in_delete_area:
-		for mode in types_container:
-			mode._on_deleted_modifier()
+		for mode_node in types_container.get_children():
+			mode_node._on_deleted_modifier()
 	else:
-		for mode in types_container:
-			mode._on_undeleted_modifier()
+		for mode_node in types_container.get_children():
+			mode_node._on_undeleted_modifier()
 
 
 func delete(deleted_queue: Array):
@@ -382,7 +385,11 @@ func _on_Label_resized():
 	if not label.visible:
 		return
 	
-	yield(get_tree(), "idle_frame")
+	var tree = get_tree()
+	if tree == null or not is_instance_valid(tree):
+		return
+	
+	yield(tree, "idle_frame")
 	if label.rect_position.y < 0:
 		label.rect_position.y = 0
 		

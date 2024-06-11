@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://ui/generation_interface.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ui/components/file_dialog.gd" type="Script" id=2]
@@ -22,6 +22,7 @@
 [ext_resource path="res://ui/dialogs/confirmation_dialog.gd" type="Script" id=20]
 [ext_resource path="res://ui/dialogs/info_dialog.gd" type="Script" id=21]
 [ext_resource path="res://ui/dialogs/loading_dialog.gd" type="Script" id=22]
+[ext_resource path="res://ui/components/pre_save_settings.tscn" type="PackedScene" id=23]
 
 [node name="Main" type="CanvasLayer"]
 script = ExtResource( 16 )
@@ -32,6 +33,7 @@ script = ExtResource( 16 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
+theme = ExtResource( 5 )
 script = ExtResource( 9 )
 
 [node name="StyleEditDialog" type="WindowDialog" parent="ManualDialogs"]
@@ -75,6 +77,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = 0.0
 margin_bottom = 0.0
+
+[node name="SaveSettings" parent="ManualDialogs" instance=ExtResource( 23 )]
 
 [node name="InstallerUI" parent="." instance=ExtResource( 6 )]
 visible = false

@@ -19,6 +19,8 @@ var windows_ready: bool = false
 var server_ready: bool = false
 var restore_flags: Dictionary = {}
 var current_project_path: String = ''
+var current_save_settings: Dictionary = {}
+var confirm_current_settings: bool = false
 
 func _ready():
 	var error = get_tree().connect("files_dropped", self, "_on_files_dropped")
@@ -153,23 +155,49 @@ func save_as(cue: Cue):
 	# [ use_current_path ]
 	var use_current_path = cue.bool_at(0, false)
 	var dir = Directory.new()
-	if use_current_path and dir.file_exists(use_current_path):
-		save_file(current_project_path)
+	if use_current_path and dir.file_exists(current_project_path):
+		if confirm_current_settings:
+			request_save_settings(current_project_path)
+		else:
+			save_file(current_project_path, current_save_settings)
 	else:
 		Cue.new(Consts.ROLE_FILE_PICKER,  "request_dialog").args([
 				self,
-				"save_file",
+				"request_save_settings",
 				FileDialog.MODE_SAVE_FILE
 			]).opts({
 				tr("SUPPORTED_SAVE_PROJECT_FORMAT"): "*.qps"
 			}).execute()
 
 
-func save_file(path: String):
-	# overwrite is just there because 
+func request_save_settings(path: String):
+	if not current_save_settings.empty():
+		Cue.new(Consts.ROLE_SAVE_SETTINGS,  "set_settings").opts(
+				current_save_settings
+		).execute()
+	
+	Cue.new(Consts.ROLE_SAVE_SETTINGS,  "request_settings").args([
+			self,
+			"save_file",
+			path
+		]).execute()
+	
+
+
+func save_file(path: String, save_settings: Dictionary):
+	# Setting the save settings
+	var recent_img_amount = save_settings.get(SaveSettingsUI.RECENT_IMG_AMOUNT, -1)
+	if recent_img_amount != -1:
+		Cue.new(Consts.ROLE_TOOLBOX, "set_recent_img_save_amount").args([
+				recent_img_amount
+		]).execute()
+	
+	
 	Director.set_up_locker(Consts.SAVE)
 	# show load messages that says: Calculating and storing models ID
-	Cue.new(Consts.ROLE_DIALOGS, "request_load_message").args([MSG_CALCULATING_HASHES]).execute()
+	Cue.new(Consts.ROLE_DIALOGS, "request_load_message").args([
+			MSG_CALCULATING_HASHES
+	]).execute()
 	# Solve hashes
 	HashCalculator.pause_hashing_thread()
 	HashCalculator.switch_to_fast_queue()
@@ -183,6 +211,7 @@ func save_file(path: String):
 	
 	# Call SaveLoad
 	current_project_path = path
+	confirm_current_settings = false
 	Director.save_file_at_path(path)
 
 
@@ -262,12 +291,10 @@ func _on_server_ready():
 
 
 func _on_game_pre_closing():
-	# RESUME overwrite the flags here to previous values
 	if restore_flags.empty():
 		return
 	
 	load_flag_data(restore_flags.duplicate())
-	pass
 
 
 func _on_game_closing():
@@ -301,8 +328,12 @@ func _save_cues(_is_file_save):
 
 
 func load_parameters(cue: Cue):
+	# [ save_parameters ]
+	# All the other parameters/flags are in cue options
 	var param_flags: Dictionary = cue._options
 	load_flag_data(param_flags)
+	current_save_settings = cue.get_at(0, {}, false) # RESUME remove the last arguments once old saves are replaced
+	confirm_current_settings = true
 
 
 func load_flag_data(data: Dictionary):
