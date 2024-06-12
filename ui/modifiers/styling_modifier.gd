@@ -119,10 +119,15 @@ func set_mode_data(data: Dictionary):
 
 
 func retrieve_styling_data_q_hash(connect_if_failure: bool):
-	styling_data = Cue.new(
+	var styling_thumbnail = Cue.new(
 			Consts.ROLE_TOOLBOX, 
-			"get_thumbnail_q_hash"
+			"get_style_thumbnails_by_q_hash"
 			).args([q_hash]).execute()
+	
+	if styling_thumbnail is StylingThumbnail:
+		styling_data = styling_thumbnail.styling_data
+	else:
+		styling_data = null
 	
 	# DEPRECATED code, keep just in case q_hash is not good enough and we need to \
 	# change it to this method
@@ -189,5 +194,16 @@ func remove_warning_no_styling_data():
 		if warning_icon is TextureRect:
 			warning_icon.visible = false
 			warning_icon.hint_tooltip = ""
-	
+
+
+func _on_deleted_modifier():
+	pass
+
+
+func _on_undeleted_modifier():
+	pass
+
+
+func _on_destroyed_modifier():
+	pass
 

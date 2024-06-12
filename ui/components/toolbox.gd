@@ -105,11 +105,12 @@ func add_recent_data_images(cue: Cue):
 	return _add_recent_images(cue._arguments)
 
 
-func _add_recent_images(images_data: Array) -> RecentThumbnail:
+func _add_recent_images(images_data: Array, refresh_order: bool = true) -> RecentThumbnail:
 	# [image1: PoolByteArray, image2: PoolByteArray, image3: PoolByteArray, ...]
 	var thumbnail = recent_container.create_thumbnail()
 	thumbnail.set_batch_image_data(images_data)
-	recent_container.refresh_order()
+	if refresh_order:
+		recent_container.refresh_order()
 	last_recent_thumbnail = thumbnail
 	return thumbnail
 
@@ -297,4 +298,6 @@ func load_recent_images_data(cue: Cue):
 		if not images_data.empty():
 			# If there's demand to also restore gen layer contents, then it would go here
 # warning-ignore:return_value_discarded
-			_add_recent_images(images_data)
+			_add_recent_images(images_data, false)
+	
+	recent_container.refresh_order()

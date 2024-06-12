@@ -236,6 +236,34 @@ func load_file(path: String):
 			Consts.HELP_DESC_SAVE_FILE_LOADED]).execute()
 
 
+
+func _save_cues(_is_file_save):
+	var flags = Flags.flag_catalog
+	flags.erase(Consts.I_SAMPLER_NAME)
+	Director.add_save_cue(Consts.SAVE, Consts.ROLE_GENERATION_INTERFACE, "load_parameters", [], flags)
+
+
+func load_parameters(cue: Cue):
+	# [ save_parameters ]
+	# All the other parameters/flags are in cue options
+	var param_flags: Dictionary = cue._options
+	load_flag_data(param_flags)
+	current_save_settings = cue.get_at(0, {}, false) # RESUME remove the last arguments once old saves are replaced
+	confirm_current_settings = true
+
+
+func load_flag_data(data: Dictionary):
+	var flag: Flag
+	for flag_name in data:
+		flag = Flags.ref(flag_name)
+		flag.set_value(data[flag_name][Flag.VALUE])
+
+
+func _on_file_load_requested(_path):
+	if restore_flags.empty():
+		restore_flags = Flags.flag_catalog.duplicate()
+
+
 func _on_files_dropped(files: PoolStringArray, _screen: int):
 	if files.size() >= 1:
 		var file_path: String = files[0]
@@ -318,32 +346,4 @@ func _on_game_closing():
 func _on_ForcedCloseTimer_timeout():
 	l.g("Forced close timeout reached, server may still be active", l.INFO)
 	get_tree().quit()
-
-
-
-func _save_cues(_is_file_save):
-	var flags = Flags.flag_catalog
-	flags.erase(Consts.I_SAMPLER_NAME)
-	Director.add_save_cue(Consts.SAVE, Consts.ROLE_GENERATION_INTERFACE, "load_parameters", [], flags)
-
-
-func load_parameters(cue: Cue):
-	# [ save_parameters ]
-	# All the other parameters/flags are in cue options
-	var param_flags: Dictionary = cue._options
-	load_flag_data(param_flags)
-	current_save_settings = cue.get_at(0, {}, false) # RESUME remove the last arguments once old saves are replaced
-	confirm_current_settings = true
-
-
-func load_flag_data(data: Dictionary):
-	var flag: Flag
-	for flag_name in data:
-		flag = Flags.ref(flag_name)
-		flag.set_value(data[flag_name][Flag.VALUE])
-
-
-func _on_file_load_requested(_path):
-	if restore_flags.empty():
-		restore_flags = Flags.flag_catalog.duplicate()
 	

@@ -64,7 +64,7 @@ func get_mode_data():
 	# This function must return the needed info to restore it's state using
 	# set_mode_data(data: Dictionary). Must return a dictionary
 	l.g("The function 'get_mode_data' has not been overriden yet on modifier mode: " + 
-	filename)
+	name)
 
 
 func set_mode_data(_data: Dictionary):
@@ -72,22 +72,22 @@ func set_mode_data(_data: Dictionary):
 	# This function must restore a modifier state using the data from
 	# get_mode_data()
 	l.g("The function 'set_mode_data' has not been overriden yet on modifier mode: " + 
-	filename)
+	name)
 
 
 func _on_deleted_modifier():
 	l.g("The function '_on_deleted_modifier' has not been overriden yet on modifier mode: " + 
-	filename)
+	name)
 
 
 func _on_undeleted_modifier():
 	l.g("The function '_on_undeleted_modifier' has not been overriden yet on modifier mode: " + 
-	filename)
+	name)
 
 
 func _on_destroyed_modifier():
 	l.g("The function '_on_destroyed_modifier' has not been overriden yet on modifier mode: " + 
-	filename)
+	name)
 
 
 

@@ -220,7 +220,8 @@ func deselect_active_modifier():
 
 func set_is_in_delete_area(value):
 	if is_in_delete_area == value:
-		l.g("Modifier changed delete area status but the status was the same", l.WARNING)
+		if value:
+			l.g("Modifier changed delete area status but the status was the same", l.WARNING)
 		return 
 	
 	is_in_delete_area = value
@@ -296,6 +297,7 @@ func _on_SmartOptionButton_option_selected(option_label, _id):
 		return
 	
 	mode_node.load_mode()
+	refresh_active_modifier_same_type()
 
 
 func get_active_image() -> Image:
@@ -337,6 +339,11 @@ func _on_Active_toggled(button_pressed):
 	if not refresh_same_type:
 		return
 	
+	refresh_active_modifier_same_type()
+
+
+func refresh_active_modifier_same_type():
+	l.p("refreshed same type")
 	var active_mod = Roles.get_node_by_role(Consts.ROLE_ACTIVE_MODIFIER, false)
 	if active_mod != null and active_mod.has_method("_on_Active_toggled"):
 		if mode_name == active_mod.mode_name:

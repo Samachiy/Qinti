@@ -35,7 +35,7 @@ func set_is_running_fast_queue(value: bool):
 
 
 func set_is_running_queue(value: bool):
-	if is_running_fast_queue and not value:
+	if is_running_queue and not value:
 		if queue.empty():
 			emit_signal("queue_finished")
 	
@@ -92,11 +92,11 @@ func _run_next_queued_hash_task():
 	if fast_queue.empty():
 		if not queue.empty():
 			task_info = queue.pop_front()
-			task_info.append(0)
+			task_info.append(COOLDOWN)
 			switch_to_normal_queue()
 	else:
 		task_info = fast_queue.pop_front()
-		task_info.append(COOLDOWN)
+		task_info.append(0)
 		switch_to_fast_queue()
 	
 	if task_info.size() < 4:
@@ -121,6 +121,7 @@ func _hash_file_and_send(info: Array):
 		obj.call(method, new_hash)
 	
 	if cooldown > 0:
+		l.p("waiting for cooldown of: " + str(cooldown) + " for: " + path)
 		yield(get_tree().create_timer(cooldown), "timeout")
 	
 	# So that the thread finish first and the signal is sent after

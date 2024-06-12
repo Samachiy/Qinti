@@ -233,5 +233,22 @@ func get_save_data() -> Dictionary:
  
 
 func set_save_data(data: Dictionary):
+	var img_num = data.get(SAVE_IMG_NUM, -1)
+	if img_num > -1:
+		var last_recent_thumbnail = Cue.new(
+				Consts.ROLE_TOOLBOX, 
+				"get_last_recent_thumbnail"
+		).execute()
+		if last_recent_thumbnail is RecentThumbnail:
+			last_recent_thumbnail.set_up_relay()
+			#last_recent_thumbnail.load_image_data_by_index(img_num)
+			Cue.new(Consts.ROLE_CANVAS, "set_images_in_generation_area"
+				).args(
+					last_recent_thumbnail.images_data
+				).opts({
+					'relay': last_recent_thumbnail.image_viewer_relay,
+					'focus': true
+				}).execute()
+			set_image_num(img_num)
+	
 	.set_save_data(data)
-	# RESUME retrieve last recent image and set the image number
