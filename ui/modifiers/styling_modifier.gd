@@ -157,7 +157,7 @@ func retrieve_styling_data_q_hash(connect_if_failure: bool):
 					"file_clusters_refreshed", 
 					self, 
 					"_on_toolbox_file_clusters_refreshed")
-	else:
+	elif data_cue is Cue:
 		# warning-ignore:return_value_discarded
 		data_cue.args([styling_data])
 	

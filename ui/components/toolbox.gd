@@ -14,7 +14,7 @@ var lora_thread: Thread
 var lycoris_thread: Thread
 var ti_thread: Thread
 var refreshed_containers: Dictionary = {}
-var save_recent_img_amount: int = 5
+var save_recent_img_amount: int = 20
 
 signal file_clusters_refreshed
 
@@ -226,6 +226,10 @@ func _on_TextualInversion_refresh_requested():
 
 func get_last_recent_thumbnail(_cue: Cue = null):
 	return last_recent_thumbnail
+
+
+func get_recent_thumbnail_number(_cue: Cue = null):
+	return recent_container.container.thumbnails_children.size()
 
 
 func _on_Loras_external_path_requested():

@@ -4,9 +4,11 @@ class_name SaveSettingsUI
 
 
 const RECENT_IMG_AMOUNT = Consts.FLAG_SAVE_RECENT_IMG_AMOUNT
+const TOTAL_RECENT_IMAGES = "TOTAL_RECENT_IMAGES"
 
 
 onready var recent_img_amount = $MarginContainer/RecentAmount
+onready var recent_img_total_label = $MarginContainer/RecentAmount/RecentAmountLabel
 
 
 var call_object: Object = null
@@ -29,6 +31,7 @@ func request_settings(cue: Cue = null):
 	call_method = request_method
 	call_path = path
 	
+	refresh_total_recent_images()
 	popup_centered()
 
 
@@ -69,3 +72,8 @@ func _on_SaveSettings_confirmed():
 		l.g("Can't show save setting interface, not a valid method. Object: " + 
 				str(call_object) + " Method: " + str(call_method))
 		return
+
+
+func refresh_total_recent_images():
+	var total = Cue.new(Consts.ROLE_TOOLBOX, "get_recent_thumbnail_number").execute()
+	recent_img_total_label.text = tr(TOTAL_RECENT_IMAGES).format(total)

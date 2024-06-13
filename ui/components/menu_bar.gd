@@ -81,7 +81,7 @@ func _ready():
 	connect_menu_button(tutorials_menu)
 	# Adding items
 	#add_tr_item_button(main_menu, NEW)
-	add_tr_item_button(main_menu, SAVE_PROJECT)
+	add_tr_item_button(main_menu, SAVE_PROJECT, KEY_S + KEY_MASK_CTRL)
 	add_tr_item_button(main_menu, SAVE_PROJECT_AS)
 	add_separator(main_menu)
 	add_tr_item_button(main_menu, SAVE_CANVAS_IMAGE)
@@ -175,7 +175,7 @@ func add_separator(menu, label: String = ''):
 	id_counter += 1
 
 
-func add_tr_item_button(menu, label: String):
+func add_tr_item_button(menu, label: String, accelerator: int = -1):
 	if _has_id_label_conflicts(id_counter, label):
 		return
 	
@@ -183,6 +183,9 @@ func add_tr_item_button(menu, label: String):
 	popup.add_item(label, id_counter)
 	id_to_label[id_counter] = label
 	label_to_id[label] = id_counter
+	if accelerator != -1:
+		popup.set_item_accelerator(id_counter, accelerator)
+	
 	id_counter += 1
 
 
@@ -367,11 +370,11 @@ func _on_menu_option_selected(id: int):
 		EXIT:
 			exit()
 		SAVE_PROJECT:
-			Cue.new(Consts.ROLE_GENERATION_INTERFACE, "save_as").args([false]).execute()
+			Cue.new(Consts.ROLE_GENERATION_INTERFACE, "save_as").args([true]).execute()
 		SAVE_PROJECT_AS:
 			Cue.new(Consts.ROLE_GENERATION_INTERFACE, "save_as").args([false]).execute()
 		LOAD_PROJECT:
-			Cue.new(Consts.ROLE_GENERATION_INTERFACE, "save_as").args([false]).execute()
+			Cue.new(Consts.ROLE_GENERATION_INTERFACE, "load_from").execute()
 		SAVE_CANVAS_IMAGE:
 			Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute(false)
 			Cue.new(Consts.ROLE_CANVAS, "open_board").execute()

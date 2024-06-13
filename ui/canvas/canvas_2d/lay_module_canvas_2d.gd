@@ -118,6 +118,7 @@ class Lay extends Reference:
 		
 		var image_texture = ImageTexture.new()
 		image_texture.create_from_image(image)
+		image_texture.flags = Texture.FLAG_FILTER
 		node.texture = image_texture
 		node.material = material
 	

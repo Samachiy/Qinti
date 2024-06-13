@@ -110,7 +110,7 @@ func get_clusters():
 
 
 func get_items():
-	return container.temp_children
+	return container.thumbnails_children
 
 
 func _on_ClearText_pressed():
