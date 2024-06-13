@@ -200,7 +200,15 @@ func blend_active_image_with_bg() -> Image:
 	return ImageProcessor.add_background_to_image(active_image, background_color)
 
 
+func _on_image_preprocess_failed(_result):
+	DiffusionServer.mark_generation_available()
+
+
 func _on_image_preprocessed(result):
+	if result == null:
+		DiffusionServer.mark_generation_available()
+		return
+	
 	# We set the prepared related variable and stuff
 	is_prepared = true
 	if DiffusionServer.is_connected("state_changed", self, "_on_server_state_changed"):

@@ -245,9 +245,9 @@ func get_controlnet_data(width: int, height: int) -> Dictionary:
 func _consolidate_one_controlnet(dictionaries: Array, width: int, height: int, type: String):
 	var result: Dictionary = {
 		"input_image": "", # base64 image
-		"model": "", # Controlnet model to use
-		"module": "",
-		"weight": 1,
+		"model": "", # Controlnet model to use, will appear in all controlnets except on reference image
+		"module": "", # Only used on the reference image controlnet, otherwise, this value will not exist
+		"weight": 1, # Strnght of the controlnet to apply
 		"guidance_start": 0, # advanced mode only
 		"guidance_end": 1, # advanced mode only
 		"control_mode": 2, # 0 = balanced, 1 = prompt more important, 2 = controlnet more important
@@ -484,10 +484,16 @@ func bake_pending_controlnets(_cue: Cue = null):
 		l.g("Tried to use 'bake_pending_controlnets' but api has no controlnet module")
 
 
-func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
+func preprocess(response_object: Object, response_method: String, failure_method: String, 
+image_data: ImageData, 
 preprocessor_name: String):
+	if not is_instance_valid(response_object):
+		l.g("Can't preprocess image, invalid response object. Type: " + preprocessor_name, 
+				l.WARNING)
+	
 	if controlnet is DiffusionAPIModule:
-		controlnet.preprocess(response_object, response_method, image_data, preprocessor_name)
+		DiffusionServer.set_state(Consts.SERVER_STATE_PREPROCESSING)
+		controlnet.preprocess(response_object, response_method, failure_method, image_data, preprocessor_name)
 	else:
 		l.g("Tried to use 'preprocess' but api has no controlnet module")
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://server/available_apis/api_auto_web_ui.gd" type="Script" id=1]
+[ext_resource path="res://server/available_apis/auto_web_ui_main.gd" type="Script" id=1]
 
 [node name="AutomaticWebUI" type="HTTPRequest"]
 script = ExtResource( 1 )

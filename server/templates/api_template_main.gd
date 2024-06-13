@@ -283,7 +283,7 @@ func refresh_data(what_to_refresh: String):
 	#		DiffusionServers.upscalers
 	
 	# For a practival example of this function, you can find one at:
-	# server/available_apis/api_auto_web_ui.gd > refresh_data()
+	# server/available_apis/auto_web_ui_main_api.gd > refresh_data()
 	
 	# Delete the following message once the function is ready:
 	l.g("The function 'refresh_data' has not been overriden yet on Api: " + 
@@ -354,7 +354,7 @@ func adjust_server():
 	# The contents of this function will be highy dependant on the bakcend, some
 	# will need to be configured, others not, others will need extensively. For a reference
 	# of this function working in the wild, please check on:
-	# server/available_apis/api_auto_web_ui.gd
+	# server/available_apis/auto_web_ui_main_api.gd
 	# 		adjust_server()
 	# 		_config_check_controlnet_1() 
 	# 		_config_check_controlnet_2()
