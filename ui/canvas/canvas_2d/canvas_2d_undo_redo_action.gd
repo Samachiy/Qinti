@@ -60,5 +60,7 @@ func destroy():
 
 func merge():
 	for node in change_nodes:
+		if not is_instance_valid(node):
+			continue
 		if node is CanvasItem:
 			owner_layer.move_to_permanent(node)

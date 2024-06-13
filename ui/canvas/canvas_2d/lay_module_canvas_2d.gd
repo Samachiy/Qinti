@@ -77,97 +77,6 @@ func set_visibility(id: String, visible: float):
 		l.g("No lay was found, no alpha was set. Lay id: " + id)
 
 
-#func create_new_overlay(image: Image):
-#	var size = modifiers_overlay.rect_size
-#	var new_image = Image.new()
-#	new_image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
-#	overlay_image = new_image
-#	ImageProcessor.blend_images(overlay_image, image)
-#
-#
-#func append_overlay(image: Image):
-#	if image == null:
-#		return
-#
-#	if overlay_image == null:
-#		create_new_overlay(image)
-#	else:
-#		ImageProcessor.blend_images(overlay_image, image)
-#
-#
-#func update_overlay(overlay_material):
-#	if overlay_image == null:
-#		modifiers_overlay.texture = null
-#		return
-#
-#	var image_texture = ImageTexture.new()
-#	image_texture.create_from_image(overlay_image)
-#	modifiers_overlay.texture = image_texture
-#	modifiers_overlay.material = overlay_material
-#
-#
-#func set_overlay_material(overlay_material):
-#	modifiers_overlay.material = overlay_material
-#
-#
-#func clear_overlay():
-#	modifiers_overlay.texture = null
-#	overlay_image = null
-#
-#
-#func create_new_underlay(image: Image):
-#	# We use the overlay for the size since the overlay is also the active area
-#	var size = modifiers_overlay.rect_size 
-#	var new_image = Image.new()
-#	new_image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
-#	underlay_image = new_image
-#	ImageProcessor.blend_images(underlay_image, image)
-#
-#
-#func append_underlay(image: Image):
-#	if image == null:
-#		return
-#
-#	if underlay_image == null:
-#		create_new_underlay(image)
-#	else:
-#		ImageProcessor.blend_images(underlay_image, image)
-#
-#
-#func update_underlay(underlay_material):
-#	if underlay_image == null:
-#		underlay.texture = null
-#		return
-#
-#	var image_texture = ImageTexture.new()
-#	image_texture.create_from_image(underlay_image)
-#	underlay.texture = image_texture
-#	underlay.material = underlay_material
-#
-#
-#func clear_underlay():
-#	underlay.texture = null
-#	underlay_image = null
-#
-#
-#func set_underlay_material(underlay_material):
-#	underlay.material = underlay_material
-#
-#
-#func set_overunderlay_alpha(opacity: float):
-#	modifiers_overlay.modulate.a = opacity
-#	underlay.modulate.a = opacity
-#
-#
-#func get_overunderlay_alpha():
-#	return modifiers_overlay.modulate.a
-#
-#
-#func set_overunderlay_visibility(visibility: bool):
-#	modifiers_overlay.visible = visibility
-#	underlay.visible = visibility
-
-
 class Lay extends Reference:
 	var image: Image = null
 	var node: Node = null
@@ -209,6 +118,7 @@ class Lay extends Reference:
 		
 		var image_texture = ImageTexture.new()
 		image_texture.create_from_image(image)
+		image_texture.flags = Texture.FLAG_FILTER
 		node.texture = image_texture
 		node.material = material
 	

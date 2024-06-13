@@ -215,28 +215,38 @@ func _on_OverunderlayContainer_mouse_exited_areas():
 
 func _on_ModifierLayOpacity_value_changed(value):
 	if canvas_node is Canvas2D:
-		canvas_node.lay.set_alpha(canvas_node.MODIFIERS_OVERLAY, value)
-		canvas_node.lay.set_alpha(canvas_node.MODIFIERS_UNDERLAY, value)
+		set_lay_slider_value(modifier_overlay_opacity, value, canvas_node.MODIFIERS_OVERLAY)
+		set_lay_slider_value(modifier_underlay_opacity, value, canvas_node.MODIFIERS_UNDERLAY)
 
 
 func _on_ModifierOverLayOpacity_value_changed(value):
 	if canvas_node is Canvas2D:
-		canvas_node.lay.set_alpha(canvas_node.MODIFIERS_OVERLAY, value)
+		set_lay_slider_value(modifier_overlay_opacity, value, canvas_node.MODIFIERS_OVERLAY)
 
 
 func _on_ModifierUnderLayOpacity_value_changed(value):
 	if canvas_node is Canvas2D:
-		canvas_node.lay.set_alpha(canvas_node.MODIFIERS_UNDERLAY, value)
+		set_lay_slider_value(modifier_underlay_opacity, value, canvas_node.MODIFIERS_UNDERLAY)
 
 
 func _on_GenImageLayOpacity_value_changed(value):
 	if canvas_node is Canvas2D:
-		canvas_node.lay.set_alpha(canvas_node.GEN_IMAGE_OVERLAY, value)
+		set_lay_slider_value(gen_image_lay_opacity, value, canvas_node.GEN_IMAGE_OVERLAY)
 
 
 func _on_GenMaskLayOpacity_value_changed(value):
 	if canvas_node is Canvas2D:
-		canvas_node.lay.set_alpha(canvas_node.GEN_MASK_OVERLAY, value)
+		set_lay_slider_value(gen_mask_lay_opacity, value, canvas_node.GEN_MASK_OVERLAY)
+
+
+func set_lay_slider_value(slider: Control, value: float, lay_name: String):
+	var lay_module = slider.get_node_or_null("LayModuleBoardSlider")
+	if lay_module == null:
+		l.g("Lay module is null on slider:" + slider.get_path())
+		return
+	
+	canvas_node.lay.set_visibility(lay_name, lay_module.is_enabled())
+	canvas_node.lay.set_alpha(lay_name, value)
 
 
 func _on_Tutorial_pressed():

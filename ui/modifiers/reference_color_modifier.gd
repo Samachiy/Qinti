@@ -23,3 +23,15 @@ func apply_to_api(api):
 				[proportional_image]).execute()
 	
 	_apply_config_to_api(config_dict, api)
+
+
+func _on_deleted_modifier():
+	pass
+
+
+func _on_undeleted_modifier():
+	pass
+
+
+func _on_destroyed_modifier():
+	pass

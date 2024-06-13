@@ -26,8 +26,10 @@ func deselect_tool():
 		undoredo_act.add_undo_cue(Cue.new('', 'set_permanent_area_alpha').args([255]))
 		undoredo_act.add_redo_cue(Cue.new('', 'hide_nodes').args(flip_hidden_strokes.values()))
 		undoredo_act.add_redo_cue(Cue.new('', 'set_permanent_area_alpha').args([0]))
+		flip_texture = null
 	else:
 		flip_texture.queue_free()
+		flip_texture = null
 	
 	flip_hidden_strokes = {}
 	layer = null
@@ -40,7 +42,9 @@ func _on_Reset_pressed():
 		
 		node.set("visible", true)
 	
-	flip_texture.queue_free()
+	flip_texture.visible = false
+	flip_texture.flip_h = false
+	flip_texture.flip_v = false
 
 
 func _on_FlipH_pressed():
@@ -56,12 +60,14 @@ func _on_FlipV_pressed():
 
 
 func create_flip_screenshot():
-	if flip_texture == null:
+	if flip_texture == null or not is_instance_valid(flip_texture):
 		var image = layer.get_image(Rect2(Vector2.ZERO, layer.limits.size))
 		var image_texture = ImageTexture.new()
 		image_texture.create_from_image(image)
-		flip_texture = layer.draw_texture_at(image_texture, Vector2.ZERO, true)
+		flip_texture = layer.draw_texture_at(image_texture, Vector2.ZERO + layer.limits.position, false)
 		flip_hidden_strokes = layer.hide_strokes() # this needs to go after screenshot
 		flip_texture.visible = true
 # warning-ignore:return_value_discarded
 		flip_hidden_strokes.erase(flip_texture)
+	elif not flip_texture.visible:
+		flip_texture.visible = true

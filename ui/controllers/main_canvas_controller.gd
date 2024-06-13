@@ -516,7 +516,15 @@ func _save_cues(_is_file_save):
 
 
 func load_layers(cue: Cue):
-	# [ layer_daya ]
+	# [ layer_data ]
+	var layers_data = cue.get_at(0, {})
+	if canvas is Canvas2D:
+		canvas.remove_all_layers()
+		canvas.add_layers_data(layers_data)
+
+
+func load_gen_area(cue: Cue):
+	# [ gen_area_data ]
 	var layers_data = cue.get_at(0, {})
 	if canvas is Canvas2D:
 		canvas.remove_all_layers()

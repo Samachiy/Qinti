@@ -14,6 +14,7 @@ var lora_thread: Thread
 var lycoris_thread: Thread
 var ti_thread: Thread
 var refreshed_containers: Dictionary = {}
+var save_recent_img_amount: int = 20
 
 signal file_clusters_refreshed
 
@@ -104,11 +105,12 @@ func add_recent_data_images(cue: Cue):
 	return _add_recent_images(cue._arguments)
 
 
-func _add_recent_images(images_data: Array) -> RecentThumbnail:
+func _add_recent_images(images_data: Array, refresh_order: bool = true) -> RecentThumbnail:
 	# [image1: PoolByteArray, image2: PoolByteArray, image3: PoolByteArray, ...]
 	var thumbnail = recent_container.create_thumbnail()
 	thumbnail.set_batch_image_data(images_data)
-	recent_container.refresh_order()
+	if refresh_order:
+		recent_container.refresh_order()
 	last_recent_thumbnail = thumbnail
 	return thumbnail
 
@@ -226,6 +228,10 @@ func get_last_recent_thumbnail(_cue: Cue = null):
 	return last_recent_thumbnail
 
 
+func get_recent_thumbnail_number(_cue: Cue = null):
+	return recent_container.container.thumbnails_children.size()
+
+
 func _on_Loras_external_path_requested():
 	OS.set_clipboard(DiffusionServer.api.get_lora_dir())
 
@@ -255,9 +261,14 @@ func _on_Toolbox_file_clusters_refreshed():
 	refresh_all_timer.start()
 
 
+func set_recent_img_save_amount(cue: Cue):
+	# [ amount ]
+	save_recent_img_amount = cue.int_at(0, save_recent_img_amount)
+
+
 func _save_cues(_is_file_save):
 	var images_data = []
-	var thumbnails = recent_container.container.get_thumnails(2)
+	var thumbnails = recent_container.container.get_thumnails(save_recent_img_amount)
 	for thumbnail in thumbnails:
 		if thumbnail is RecentThumbnail:
 			images_data.append(thumbnail.get_base64_images())
@@ -277,7 +288,9 @@ func load_recent_images_data(cue: Cue):
 	var image_base64: String = ''
 	var image_name: String  = ''
 	var aux: ImageData
-	for entry in cue._arguments:
+	var entry
+	for i in range(cue._arguments.size()):
+		entry = cue._arguments[-i - 1] # We iterate in reverse
 		images_data = []
 		for data in entry:
 			image_name = data[0]
@@ -289,4 +302,6 @@ func load_recent_images_data(cue: Cue):
 		if not images_data.empty():
 			# If there's demand to also restore gen layer contents, then it would go here
 # warning-ignore:return_value_discarded
-			_add_recent_images(images_data)
+			_add_recent_images(images_data, false)
+	
+	recent_container.refresh_order()

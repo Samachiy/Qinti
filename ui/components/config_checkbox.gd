@@ -11,6 +11,7 @@ export(bool) var is_global_flag = true
 # the config dictionaries that the api uses
 var flag: Flag = null 
 
+signal flag_loaded(flag_ref)
 
 func _ready():
 	var error = connect("toggled", self, "_on_config_checkbox_toggled")
@@ -46,6 +47,8 @@ func update_with_flag(_cue: Cue = null):
 		pressed = false
 	else:
 		pressed = true
+	
+	emit_signal("flag_loaded", flag)
 
 
 func get_value():

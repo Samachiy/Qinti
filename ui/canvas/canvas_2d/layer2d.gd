@@ -644,14 +644,21 @@ func get_save_data() -> Dictionary:
 
 func set_save_data(data: Dictionary):
 	var image_base64 = data.get(SAVE_LAYER, '')
+	var mask_base64 = data.get(SAVE_LAYER, '')
+	# RESUME load active mask
 	var new_limits = data.get(SAVE_LIMITS, limits)
 	limits = new_limits
 	refresh_limits()
-	var image_texture = ImageTexture.new()
 	
+	var image_texture = ImageTexture.new()
 	if image_base64 is String and not image_base64.empty():
 		image_texture.create_from_image(ImageProcessor.png_base64_to_image(image_base64))
 		draw_texture_at(image_texture, limits.position, false)
+	
+	var mask_texture = ImageTexture.new()
+	if mask_base64 is String and not mask_base64.empty():
+		mask_texture.create_from_image(ImageProcessor.png_base64_to_image(mask_base64))
+		draw_texture_at(mask_texture, limits.position, false)
 
 
 func is_empty(exception_nodes: Array = []):

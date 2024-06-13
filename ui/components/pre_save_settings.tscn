@@ -1,0 +1,47 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui/components/config_slider.tscn" type="PackedScene" id=1]
+[ext_resource path="res://ui/components/pre_save_settings.gd" type="Script" id=2]
+
+[node name="SaveSettings" type="ConfirmationDialog"]
+visible = true
+margin_left = -395.0
+margin_top = 196.0
+margin_right = 5.0
+margin_bottom = 596.0
+dialog_text = "Container text
+"
+script = ExtResource( 2 )
+
+[node name="MarginContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 51.0
+margin_right = -8.0
+margin_bottom = -42.0
+size_flags_horizontal = 3
+
+[node name="RecentLabel" type="Label" parent="MarginContainer"]
+margin_right = 384.0
+margin_bottom = 20.0
+text = "PLEASE_SELECT_AMOUNT_OF_RECENT_IMAGES"
+
+[node name="RecentAmount" parent="MarginContainer" instance=ExtResource( 1 )]
+margin_top = 24.0
+margin_right = 384.0
+margin_bottom = 54.0
+min_value = 1.0
+max_value = 50.0
+default_value = 5.0
+no_upward_limit = true
+flag_name_const = "FLAG_SAVE_RECENT_IMG_AMOUNT"
+
+[node name="RecentAmountLabel" type="Label" parent="MarginContainer/RecentAmount"]
+margin_left = 384.0
+margin_top = 5.0
+margin_right = 384.0
+margin_bottom = 25.0
+
+[connection signal="confirmed" from="." to="." method="_on_SaveSettings_confirmed"]
+[connection signal="popup_hide" from="." to="." method="_on_SaveSettings_popup_hide"]

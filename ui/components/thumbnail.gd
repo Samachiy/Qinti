@@ -2,7 +2,7 @@ extends TextureRect
 
 class_name Thumbnail
 
-const MODIFIER_NODE = preload("res://ui/modifiers/modifier.tscn")
+var MODIFIER_NODE = load("res://ui/modifiers/modifier.tscn")
 
 onready var menu = $"%Menu"
 

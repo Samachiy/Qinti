@@ -605,6 +605,24 @@ func add_layers_data(layers_data: Dictionary):
 		layer.set_save_data(layers_data[layer_key])
 
 
+func get_gen_area_data():
+	if generation_area == null or not is_instance_valid(generation_area):
+		return {}
+	else:
+		return generation_area.get_save_data()
+
+
+func set_gen_area_data(gen_area_data: Dictionary):
+	if generation_area == null:
+		return
+	
+	generation_area.queue_free()
+	add_generation_area()
+	
+	if not gen_area_data.empty():
+		generation_area.set_save_data(gen_area_data)
+
+
 func _on_gui_input(event):
 	if not event is InputEventMouse:
 		return

@@ -6,6 +6,8 @@ const SIGNAL_VIEW_CHANGED_DELAY = 0.2
 const IDLE_VIEW_CHANGED_DELAY = 1.2
 const EDIT_VIEW_CHANGED_DELAY = 0.8
 
+const SAVE_IMG_NUM = "img num"
+
 onready var view_changed_timer = $ViewChangedTimer
 
 var images_data: Array = []
@@ -15,6 +17,7 @@ var send_bg_if_empty: bool = false
 var counter: int = 0
 var is_image_edited: bool = false
 var pending_view_update: bool = false
+var has_images: bool = false
 
 signal view_changed(image)
 
@@ -78,6 +81,7 @@ func set_image(image_data: ImageData):
 	result_sublayer = draw_texture_at(image_data.texture, limits.position, false, result_sublayer)
 	refresh_size_with(Rect2(limits.position, image_data.get_size()))
 	#canvas.add_texture_undoredo(result_sublayer, self)
+	has_images = true
 	yield(get_tree(), "idle_frame")
 	_on_ViewChangedTimer_timeout()
 	refresh_viewport()
@@ -101,6 +105,7 @@ func next(image_viewer_relay: ImageViewerRelay):
 	
 	counter = new_pos
 	#set_image(images_data[counter]) # the signal below will take charge of loading the image
+	# by calling generation_area.set_image_num(index) in the controller
 	if image_viewer_relay != null:
 		image_viewer_relay.emit_signal("image_changed", counter, images_data[counter])
 
@@ -120,6 +125,7 @@ func prev(image_viewer_relay: ImageViewerRelay):
 	
 	counter = new_pos
 	#set_image(images_data[counter]) # the signal below will take charge of loading the image
+	# by calling generation_area.set_image_num(index) in the controller
 	if image_viewer_relay != null:
 		image_viewer_relay.emit_signal("image_changed", counter, images_data[counter])
 
@@ -132,6 +138,7 @@ func clear_images():
 	clear_image()
 	is_image_edited = false
 	_on_ViewChangedTimer_timeout()
+	has_images = false
 
 
 func _on_layer_moved(_limits):
@@ -207,3 +214,41 @@ func _on_ViewChangedTimer_timeout():
 
 func _on_Pivot_child_entered_tree(_node):
 	is_image_edited = true
+
+
+
+func get_save_data() -> Dictionary:
+	var data: Dictionary = .get_save_data()
+	if has_images:
+		data[SAVE_IMG_NUM] = counter
+		if not is_image_edited:
+# warning-ignore:return_value_discarded
+			data.erase(SAVE_LAYER)
+# warning-ignore:return_value_discarded
+			data.erase(SAVE_MASK)
+	else:
+		data[SAVE_IMG_NUM] = -1
+	
+	return data
+ 
+
+func set_save_data(data: Dictionary):
+	var img_num = data.get(SAVE_IMG_NUM, -1)
+	if img_num > -1:
+		var last_recent_thumbnail = Cue.new(
+				Consts.ROLE_TOOLBOX, 
+				"get_last_recent_thumbnail"
+		).execute()
+		if last_recent_thumbnail is RecentThumbnail:
+			last_recent_thumbnail.set_up_relay()
+			#last_recent_thumbnail.load_image_data_by_index(img_num)
+			Cue.new(Consts.ROLE_CANVAS, "set_images_in_generation_area"
+				).args(
+					last_recent_thumbnail.images_data
+				).opts({
+					'relay': last_recent_thumbnail.image_viewer_relay,
+					'focus': true
+				}).execute()
+			set_image_num(img_num)
+	
+	.set_save_data(data)

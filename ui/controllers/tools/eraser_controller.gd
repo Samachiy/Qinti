@@ -144,12 +144,15 @@ func _on_ResetImage_pressed():
 	
 	var hidden_strokes: Dictionary = layer.hide_strokes()
 	if not modifier is ModifierMode:
+		# If we are talking about something that it is not a modifier (like the main canvas)
+		# then we just clean the canvas instead
 		var undoredo_act: Canvas2DUndoAction = canvas.undoredo_queue.add(layer)
 		undoredo_act.add_undo_cue(Cue.new('', 'show_nodes').args(hidden_strokes.values()))
 		undoredo_act.add_redo_cue(Cue.new('', 'hide_nodes').args(hidden_strokes.values()))
 		return
 	
 	var restore_image = modifier.restore_image_data
+	#restore_image.image.save_png("user://restore.png")
 	if restore_image is ImageData:
 		var previous_offsets = layer.get_offsets_data()
 		layer.limits.size = restore_image.get_size()

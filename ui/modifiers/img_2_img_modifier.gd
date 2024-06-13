@@ -113,12 +113,21 @@ func set_mode_data(data: Dictionary):
 
 
 func _on_deleted_modifier():
-	layer_id = Cue.new(controller_role, 'mark_skip_layer_save').args([layer_id, true]).execute()
+	if layer_id.empty():
+		return
+	
+	Cue.new(controller_role, 'mark_skip_layer_save').args([layer_id, true]).execute()
 
 
 func _on_undeleted_modifier():
-	layer_id = Cue.new(controller_role, 'mark_skip_layer_save').args([layer_id, false]).execute()
+	if layer_id.empty():
+		return
+	
+	Cue.new(controller_role, 'mark_skip_layer_save').args([layer_id, false]).execute()
 
 
 func _on_destroyed_modifier():
+	if layer_id.empty():
+		return
+	
 	Cue.new(controller_role, 'remove_layer').args([layer_id]).execute()

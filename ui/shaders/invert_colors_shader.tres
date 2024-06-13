@@ -2,10 +2,9 @@
 
 [resource]
 code = "shader_type canvas_item;
-render_mode blend_premul_alpha;
+// render_mode blend_premul_alpha;
 // blend mode premult alpha does not apply here because it apparently causes some
-// trouble on regions where alpha = 0 in which they come out as not transparent - after
-// Some retesting I don't know what the comment is aluding to
+// trouble on regions where alpha = 0 in which they come out as not transparent
 
 void fragment(){
 	vec4 color = texture(TEXTURE, UV);

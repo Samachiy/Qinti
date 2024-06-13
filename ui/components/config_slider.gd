@@ -31,6 +31,7 @@ var flag_name
 
 
 signal value_changed(value)
+signal flag_loaded(flag_ref)
 
 func _ready():
 	if not Engine.editor_hint:
@@ -77,6 +78,7 @@ func update_with_flag(_cue: Cue = null):
 		flag.set_up(is_global_flag, null, null, get_value())
 	
 	set_value(flag.get_value())
+	emit_signal("flag_loaded", flag)
 
 
 func set_label(value):
@@ -187,6 +189,10 @@ func set_amount_label(value: String, send_signal: bool):
 		flag.value = aux
 	if send_signal and not Engine.editor_hint:
 		emit_signal("value_changed", aux)
+
+
+func resend_value_changed_signal():
+	emit_signal("value_changed", last_value)
 
 
 func trim_value(value):

@@ -141,7 +141,10 @@ func _refresh_label():
 		if not label.is_connected("resized", self, "_on_Label_resized"):
 			label.connect("resized", self, "_on_Label_resized")
 		label.visible = true
-		label.text = mode.styling_data.file_cluster.name
+		if mode.styling_data == null:
+			label.text = mode.MISSING_MODEL_NAME
+		else:
+			label.text = mode.styling_data.file_cluster.name
 		_on_Label_resized()
 	else:
 		label.visible = false
@@ -217,16 +220,17 @@ func deselect_active_modifier():
 
 func set_is_in_delete_area(value):
 	if is_in_delete_area == value:
-		l.g("Modifier changed delete area status but the status was the same", l.WARNING)
+		if value:
+			l.g("Modifier changed delete area status but the status was the same", l.WARNING)
 		return 
 	
 	is_in_delete_area = value
 	if is_in_delete_area:
-		for mode in types_container:
-			mode._on_deleted_modifier()
+		for mode_node in types_container.get_children():
+			mode_node._on_deleted_modifier()
 	else:
-		for mode in types_container:
-			mode._on_undeleted_modifier()
+		for mode_node in types_container.get_children():
+			mode_node._on_undeleted_modifier()
 
 
 func delete(deleted_queue: Array):
@@ -293,6 +297,7 @@ func _on_SmartOptionButton_option_selected(option_label, _id):
 		return
 	
 	mode_node.load_mode()
+	refresh_active_modifier_same_type()
 
 
 func get_active_image() -> Image:
@@ -334,6 +339,10 @@ func _on_Active_toggled(button_pressed):
 	if not refresh_same_type:
 		return
 	
+	refresh_active_modifier_same_type()
+
+
+func refresh_active_modifier_same_type():
 	var active_mod = Roles.get_node_by_role(Consts.ROLE_ACTIVE_MODIFIER, false)
 	if active_mod != null and active_mod.has_method("_on_Active_toggled"):
 		if mode_name == active_mod.mode_name:
@@ -382,7 +391,11 @@ func _on_Label_resized():
 	if not label.visible:
 		return
 	
-	yield(get_tree(), "idle_frame")
+	var tree = get_tree()
+	if tree == null or not is_instance_valid(tree):
+		return
+	
+	yield(tree, "idle_frame")
 	if label.rect_position.y < 0:
 		label.rect_position.y = 0
 		

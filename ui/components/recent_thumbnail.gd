@@ -20,17 +20,34 @@ func set_batch_image_data(images_data_: Array):
 		return false
 	
 	images_data = images_data_
+	update_count_label()
+	
+	current_image_index = 0
+	set_image_data(images_data[current_image_index])
+	
+	return true
+
+
+func load_image_data_by_index(index: int):
+	if index < images_data.size():
+		update_count_label()
+		current_image_index = index
+		set_image_data(images_data[current_image_index])
+
+
+func get_current_image_data() -> ImageData:
+	if current_image_index < images_data.size():
+		return images_data[current_image_index]
+	else:
+		return null
+
+
+func update_count_label():
 	if images_data.size() == 1:
 		count_label.visible = false
 	else:
 		count_label.visible = true
 		count_label.text = str(images_data.size())
-	
-	current_image_index = 0
-	set_image_data(images_data[current_image_index])
-	#create_info_modifier()
-	
-	return true
 
 
 func get_base64_images():

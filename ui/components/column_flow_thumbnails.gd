@@ -6,7 +6,7 @@ var image_spacing: int = 15
 var thumbnail_packed_scene
 var image_width: int = 0
 var thumbnails_order: Array = [] # this refers to the order in the columns
-var temp_children: Array = []
+var thumbnails_children: Array = []
 var thumbnails_loaded: bool = false
 var contained_clusters: Dictionary = {}
 var contained_file_thumbnails_q_hash: Dictionary = {}
@@ -74,11 +74,11 @@ func refresh_order():
 
 
 func clear():
-	for child in temp_children:
+	for child in thumbnails_children:
 		if is_instance_valid(child):
 			child.queue_free()
 	
-	temp_children.clear()
+	thumbnails_children.clear()
 	contained_clusters.clear()
 	contained_file_thumbnails_q_hash.clear()
 
@@ -86,7 +86,7 @@ func clear():
 func create_thumbnail(set_as_first: bool = true):
 	var new_thumbnail = thumbnail_packed_scene.instance()
 	add_child(new_thumbnail)
-	temp_children.append(new_thumbnail)
+	thumbnails_children.append(new_thumbnail)
 	if set_as_first:
 		move_child(new_thumbnail, 0)
 	return new_thumbnail

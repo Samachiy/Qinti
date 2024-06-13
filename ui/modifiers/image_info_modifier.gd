@@ -116,6 +116,16 @@ func set_mode_data(data: Dictionary):
 	config = data.get(PARAMETERS, {})
 
 
+func _on_deleted_modifier():
+	pass
+
+
+func _on_undeleted_modifier():
+	pass
+
+
+func _on_destroyed_modifier():
+	pass
 
 
 
