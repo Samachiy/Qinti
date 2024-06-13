@@ -55,7 +55,7 @@ func extract_img2img_image() -> Image:
 #		return null
 #
 #	var image = image_array[0]
-	var image= api.request_data.get("init_images", null)
+	var image = api.request_data.get("init_images", null)
 	if image is Image:
 		return image
 	else:
@@ -63,44 +63,65 @@ func extract_img2img_image() -> Image:
 
 
 func bake_pending_mask():
-	var img2img_image = extract_img2img_image()
-	if api.mask_to_bake.empty():
-		if api.img2img_to_bake.empty():
-			return
-		elif img2img_image is Image:
-			api.request_data["init_images"] = [ImageProcessor.image_to_base64(img2img_image)]
-			return
-		else:
-			l.g("Extracting img2img image failed when baking pending mask and no mask was queued")
-			return
-	
-	
-	var mask: Image = api.mask_to_bake[0]
-	var base_image: Image = api.mask_to_bake[1]
-	var mode: String = api.mask_to_bake[2]
+	var data: Dictionary = api.get_mask_data()
 	if api.img2img_to_bake.empty():
 		convert_to_img2img()
-		api.request_data["init_images"] = [ImageProcessor.image_to_base64(base_image)]
-		api.request_data["mask"] = ImageProcessor.image_to_base64(mask)
-	else:
-		if not img2img_image is Image:
-			l.g("Extracting img2img image failed when baking pending mask and mask is queued")
-			return
-			
-		if mode == DiffusionAPI.MASK_MODE_INPAINT:
-			base_image.blend_rect_mask(
-					img2img_image, 
-					mask, 
-					Rect2(Vector2.ZERO, img2img_image.get_size()), 
-					Vector2.ZERO
-					)
-		elif mode == DiffusionAPI.MASK_MODE_OUTPAINT:
-			api.request_data["denoising_strength"] = 1
+	
+	var base_image = data.get("init_images", '')
+	var mask = data.get("mask", '')
+	
+	if base_image.empty():
+		l.g("Can't bake pending mask, base image is empty")
+		return
+	
+	if mask.empty():
+		l.g("Can't bake pending mask, mask is empty")
+		return
+	
+	api.request_data["init_images"] = [base_image]
+	api.request_data["mask"] = mask
+	if data.has("denoising_strength"):
+		api.request_data["denoising_strength"] = data["denoising_strength"]
 		
-#		base_image.save_png("user://inoutpaint_base.png")
-#		mask.save_png("user://inoutpaint_mask.png")
-		api.request_data["init_images"] = [ImageProcessor.image_to_base64(base_image)]
-		api.request_data["mask"] = ImageProcessor.image_to_base64(mask)
+	
+#	var img2img_image = extract_img2img_image()
+#	if api.mask_to_bake.empty():
+#		if api.img2img_to_bake.empty():
+#			return
+#		elif img2img_image is Image:
+#			api.request_data["init_images"] = [ImageProcessor.image_to_base64(img2img_image)]
+#			return
+#		else:
+#			l.g("Extracting img2img image failed when baking pending mask and no mask was queued")
+#			return
+#
+#
+##	var mask: Image = api.mask_to_bake[0]
+##	var base_image: Image = api.mask_to_bake[1]
+#	var mode: String = api.mask_to_bake[2]
+#	if api.img2img_to_bake.empty():
+#		convert_to_img2img()
+#		api.request_data["init_images"] = [ImageProcessor.image_to_base64(base_image)]
+#		api.request_data["mask"] = ImageProcessor.image_to_base64(mask)
+#	else:
+#		if not img2img_image is Image:
+#			l.g("Extracting img2img image failed when baking pending mask and mask is queued")
+#			return
+#
+#		if mode == DiffusionAPI.MASK_MODE_INPAINT:
+#			base_image.blend_rect_mask(
+#					img2img_image, 
+#					mask, 
+#					Rect2(Vector2.ZERO, img2img_image.get_size()), 
+#					Vector2.ZERO
+#					)
+#		elif mode == DiffusionAPI.MASK_MODE_OUTPAINT:
+#			api.request_data["denoising_strength"] = 1
+#
+##		base_image.save_png("user://inoutpaint_base.png")
+##		mask.save_png("user://inoutpaint_mask.png")
+#		api.request_data["init_images"] = [ImageProcessor.image_to_base64(base_image)]
+#		api.request_data["mask"] = ImageProcessor.image_to_base64(mask)
 
 
 #func bake_pending_mask(img2img_fill: Image, has_empty_space: bool = false):

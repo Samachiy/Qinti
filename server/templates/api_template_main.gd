@@ -183,12 +183,14 @@ func apply_parameters(parameters: Dictionary):
 #			"height": 512,
 #			"restore_faces": false,
 #			"tiling": false,
+#			"mask_blur": 3,
+#			"inpaint_full_res": true,
+#			"inpainting_mask_invert": 0, # 0 is false, 1 is true
 #			"negative_prompt": "",
 #			"override_settings": {
 #				"CLIP_stop_at_last_layers": 1, # commonly known as clip skip
 #				"sd_model_checkpoint": "model_name",
-#				"sd_checkpoint_hash": "a1234", # The hash sent by the server, if any, currently just used
-#											# because generated images metadata tend to have it
+#				"sd_checkpoint_hash": "a1234", # The hash sent by the server, if any
 #				"eta_noise_seed_delta": 0, # Commonly known as ENSD},
 #			}
 #		}

@@ -1,20 +1,5 @@
 extends DiffusionAPIModule
 
-#bake pending img2img
-#    if no img2img to bake:
-#        bake mask(null, has_empty_space):
-#            if theres mask to bake:
-#                convert to img2img
-#                place mask on request data
-#            else:
-#                return
-#    else:
-#        convert to img2img
-#        merge_keys and bake mask(mask)
-#
-#
-#Calculate empty space using image.is_invisible()
-
 const IMG2IMG_SERVICE = "img2img"
 
 # Removed keys: 
@@ -64,14 +49,12 @@ func convert_to_img2img(_cue: Cue = null):
 
 
 func bake_pending_img2img():
-	if api.img2img_to_bake.empty():
-		return
-	
 	convert_to_img2img()
 	var height = api.request_data.get("height", 512)
 	var width = api.request_data.get("width", 512)
 	var data = api.get_image_to_image_data(width, height)
 	api.request_data.merge(data, true)
+	api.request_data[Consts.I2I_INIT_IMAGES] = [api.request_data[Consts.I2I_INIT_IMAGES]]
 
 
 #func bake_pending_img2img(cue: Cue):

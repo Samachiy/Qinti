@@ -111,7 +111,7 @@ func inpaint(apply_modifiers):
 	var config = {
 		Consts.I_DENOISING_STRENGTH: denoising_strenght.get_value(),
 		# mask is base64 since it's applied directly, no blend
-		Consts.I2I_MASK: ImageProcessor.image_to_base64(mask),
+		# Consts.I2I_MASK: ImageProcessor.image_to_base64(mask),
 		Consts.I2I_MASK_BLUR: mask_blur.get_value(),
 		Consts.I2I_INPAINT_FULL_RES: inpaint_full.pressed,
 		Consts.I2I_INPAINTING_MASK_INVERT: int(invert_mask.pressed)
