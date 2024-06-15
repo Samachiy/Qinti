@@ -16,10 +16,12 @@ class_name FeatureList
 # IMAGE TO IMAGE
 # - Modifier change button refills it's options (Modifier refill)
 # - Hides quick drawing to ai image button and it's settings	
+# - Hides main canvas right click option 
 # - On droping image on modifiers area, do drops it but adds a warning icon 
 # INPAINT OUTPAINT
 # - Hides inpaint eraser and brush		
 # - Hides outpaint button in modify gen area (and it's setting, if any)	
+# - Hides main canvas right click option 
 
 
 var features: Dictionary

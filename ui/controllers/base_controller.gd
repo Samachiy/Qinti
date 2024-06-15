@@ -209,9 +209,13 @@ func _left_click_drag(event: InputEventMouseMotion):
 func _right_click(event: InputEventMouseButton):
 	if active_tool != null:
 		if not active_tool.right_click(event):
-			canvas.menu.popup_at_cursor()
+			show_menu()
 	else:
-		canvas.menu.popup_at_cursor()
+		show_menu()
+
+
+func show_menu():
+	canvas.menu.popup_at_cursor()
 
 
 func _right_click_drag(event: InputEventMouseMotion):

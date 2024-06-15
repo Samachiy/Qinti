@@ -143,7 +143,7 @@ func _on_AIProcessButton_pressed():
 	if brush_controller == null:
 		return
 	
-	brush_controller.inpaint(use_modifiers.pressed)
+	brush_controller.inpaint()
 
 
 func _on_ClearMask_pressed():

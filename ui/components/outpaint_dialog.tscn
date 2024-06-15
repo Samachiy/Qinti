@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui/components/config_checkbox.gd" type="Script" id=1]
+[ext_resource path="res://ui/components/outpaint_dialog.gd" type="Script" id=2]
+
+[node name="OutpaintDialog" type="WindowDialog"]
+margin_right = 206.0
+margin_bottom = 140.0
+script = ExtResource( 2 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Options" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 206.0
+margin_bottom = 28.0
+
+[node name="UseModifiers" type="CheckBox" parent="VBoxContainer/Options" groups=["advanced_ui"]]
+margin_right = 129.0
+margin_bottom = 28.0
+pressed = true
+text = "USE_MODIFIERS"
+script = ExtResource( 1 )
+requieres_flag = false
+is_global_flag = false
+
+[node name="Spacing" type="Control" parent="VBoxContainer"]
+margin_top = 32.0
+margin_right = 206.0
+margin_bottom = 110.0
+size_flags_vertical = 3
+
+[node name="Generate" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+margin_left = 68.0
+margin_top = 114.0
+margin_right = 206.0
+margin_bottom = 140.0
+size_flags_horizontal = 8
+text = "GENERATE_BUTTON"

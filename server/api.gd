@@ -249,20 +249,18 @@ func get_mask_data():
 	var mode: String = mask_to_bake[2]
 	var data = {}
 	if mask_img2img_fill is Image:
-		if mode == DiffusionAPI.MASK_MODE_INPAINT:
+		if mode == MASK_MODE_INPAINT:
 			base_image.blend_rect_mask(
 					mask_img2img_fill, 
 					mask, 
 					Rect2(Vector2.ZERO, mask_img2img_fill.get_size()), 
 					Vector2.ZERO
 					)
-			data[Consts.I2I_INIT_IMAGES] = ImageProcessor.image_to_base64(base_image)
-			data[Consts.I2I_MASK] = ImageProcessor.image_to_base64(mask)
-		elif mode == DiffusionAPI.MASK_MODE_OUTPAINT:
+		elif mode == MASK_MODE_OUTPAINT:
 			data[Consts.I_DENOISING_STRENGTH] = 1
-	else:
-		data[Consts.I2I_INIT_IMAGES] = ImageProcessor.image_to_base64(base_image)
-		data[Consts.I2I_MASK] = ImageProcessor.image_to_base64(mask)
+	
+	data[Consts.I2I_INIT_IMAGES] = ImageProcessor.image_to_base64(base_image)
+	data[Consts.I2I_MASK] = ImageProcessor.image_to_base64(mask)
 	
 	return data
 

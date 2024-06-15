@@ -41,7 +41,6 @@ func _ready():
 			brush_greyscale.visible = true
 		else:
 			brush_greyscale.visible = false
-	
 
 
 func reload_description(_cue: Cue = null):
@@ -118,6 +117,10 @@ func _on_GreyscaleLightness_value_changed(value):
 
 func _on_canvas_connected(canvas_node: Node):
 	._on_canvas_connected(canvas_node)
+	
+	if q_img2img_module.is_main_board(canvas):
+		Roles.request_role(self, Consts.ROLE_CONTROL_QUICK_PAINT)
+	
 	denoising_strenght.visible = q_img2img_module.is_main_board(canvas)
 	use_modifiers.visible = q_img2img_module.is_main_board(canvas)
 	q_img2img_button.visible = q_img2img_module.is_main_board(canvas)
@@ -133,11 +136,39 @@ func _on_img2img_feature_toggled(enabled: bool):
 
 
 func _on_QuickImg2Img_pressed():
+	quick_img2img()
+
+
+func quick_img2img(cue: Cue = null):
+	if cue != null:
+		set_settings_cue(cue)
+	
 	q_img2img_module.quick_image_to_image(
 			use_modifiers.pressed, 
 			canvas, 
 			denoising_strenght.get_value()
 	)
+
+
+func set_settings_cue(cue: Cue):
+	# [ use_modifiers: bool ]
+	# The rest of settings are in the options
+	
+	# Updating settings values with those of the cue
+	denoising_strenght.set_value(cue.get_option(
+			Consts.I_DENOISING_STRENGTH, 
+			denoising_strenght.get_value()
+	))
+	use_modifiers.pressed = cue.get_at(0, use_modifiers.pressed)
+	_on_UseModifiers_toggled(use_modifiers.pressed)
+
+
+func get_settings_cue(_cue: Cue = null):
+	return Cue.new(Consts.ROLE_CONTROL_IN_PAINT, "set_settings_cue").args([
+				use_modifiers.pressed
+	]).opts({
+			Consts.I_DENOISING_STRENGTH: denoising_strenght.get_value(),
+	})
 
 
 func _on_UseModifiers_visibility_changed():

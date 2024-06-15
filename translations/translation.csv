@@ -1,10 +1,17 @@
 key,en,es
 GENERATE_BUTTON,Generate,Generar
+STANDARD_GENERATION,Generate,Generate
 INPAINT_BUTTON,Inpaint,Regenerar selección
-INPAINT_SETTINGS,Inpaint settings,Regenerar selección – Configuración
+INPAINT_SETTINGS,Inpaint – Settings,Regenerar selección – Configuración
+INPAINT_WITH,Inpaint . . .,Regenerar selección con. . .
 QUICK_IMG2IMG,Quick canvas to image,Canvas a imagen rápido
+QUICK_IMG2IMG_SETTINGS,Quick canvas to image – Settings,Canvas a imagen rápido – Configuración
+QUICK_IMG2IMG_WITH,Quick canvas to image . . .,Canvas a imagen rápido con. . .
 OUTPAINT_BUTTON,Outpaint,Generar espacios vacíos
-OUTPAINT_SETTINGS,Outpaint settings,Generar espacios vacíos – Configuración
+OUTPAINT_SETTINGS,Outpaint – Settings,Generar espacios vacíos – Configuración
+OUTPAINT_WITH,Outpaint . . .,Generar espacios vacíos con. . .
+GENERATE_WITH,Generation . . .,Generar con. . . 
+GENERATION,Quick generation,Generación
 CANVAS,Canvas,Canvas
 COMPOSITION_BOARD,Reuse composition,Reusar composición
 DEPTH_BOARD,Depth map,Mapa de profundidad
