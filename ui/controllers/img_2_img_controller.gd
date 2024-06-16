@@ -159,8 +159,6 @@ func get_img2img_dict(cue: Cue = null):
 		dict[Consts.I_DENOISING_STRENGTH] = denoising_strenght.get_value()
 		dict[Consts.I_CFG_SCALE] = cfg_scale.get_value()
 	
-	dict[Consts.I2I_MASK] = ""
-	
 	return dict
 
 

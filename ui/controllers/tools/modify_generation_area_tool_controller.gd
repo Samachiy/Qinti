@@ -69,13 +69,11 @@ func _ready():
 	select_tool()
 	var ds = DiffusionServer
 	ds.connect_feature(ds.FEATURE_INPAINT_OUTPAINT, self, "_on_inpaint_outpaint_feature_toggled")
+	Roles.request_role(self, Consts.ROLE_CONTROL_OUT_PAINT)
 
 
 func _on_inpaint_outpaint_feature_toggled(enabled: bool):
-	var menu_bar = Roles.get_node_by_role(Consts.ROLE_MENU_BAR)
-	var is_advanced_ui
-	if menu_bar is Control:
-		is_advanced_ui = bool(menu_bar.get(Consts.UI_ADVANCED_GROUP))
+	var is_advanced_ui =  Cue.new(Consts.ROLE_MENU_BAR, "is_advanced_ui").execute()
 	
 	outpaint_button.visible = enabled
 	if enabled:
@@ -302,15 +300,28 @@ func _update_shadow_areas():
 	Cue.new(Consts.UI_CANVAS_WITH_SHADOW_AREA, "set_shadow_area_cue").args([size]).execute()
 
 
-func outpaint():
-#	var mask: Image = canvas.current_layer.get_visible_mask()
+func outpaint(cue: Cue = null):
+	if cue != null:
+		set_settings_cue(cue)
+	
 	var size = generation_area.limits.size
 	var image: Image = generation_area.get_contained_image()
 	var base_image: Image = Image.new()
 	base_image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
-	#base_image.blend_rect(image, Rect2(Vector2.ZERO, image.get_size()), Vector2.ZERO)
 	ImageProcessor.blend_images(base_image, image)
 	ImageProcessor.process_image(base_image, outpaint_material, self, "_on_mask_generated", [image])
+
+
+func set_settings_cue(cue: Cue):
+	# [ use_modifiers: bool ]
+	
+	use_modifiers.pressed = cue.get_at(0, use_modifiers.pressed)
+
+
+func get_settings_cue(_cue: Cue = null):
+	return Cue.new(Consts.ROLE_CONTROL_IN_PAINT, "set_settings_cue").args([
+				use_modifiers.pressed
+		])
 
 
 func _on_mask_generated(mask: Image, bind_input_image: Image):

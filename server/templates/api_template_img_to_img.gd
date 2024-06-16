@@ -1,9 +1,22 @@
 extends DiffusionAPIModule
 
 
-func bake_pending_img2img():
-	# this must apply pending img2img and mask to request data
-	# img2img_to_bake: an array of dictionaries with keys using the names specified in Consts.gd
-	# mask_to_bake: an array of arrays with the structure: [ mask, background_for_the_masked_image ]
+func bake_pending_img2img(has_mask: bool):
+	# this must apply pending img2img to request data
+	
+	var height # <--- RETRIEVE HEIGHT FROM REQUEST_DATA AND ADD IT HERE
+	var width # <--- RETRIEVE WIDTH FROM REQUEST_DATA AND ADD IT HERE
+	
+	var img2img_data = api.get_image_to_image_data(width, height)
+	# img2img_data is a dictionary, it's values must be added to request_data. Below is 
+	# an example with all the values
+	
+#	var img2img_dict: Dictionary = {
+#		"init_images": "" # base64 image
+#		"denoising_strength": 0.7,
+#		"image_cfg_scale": 0,
+#	}
+	
+	# Delete the following message once the function is ready:
 	l.g("The function 'bake_pending_img2img' has not been overriden yet on Api: " + 
 	name)

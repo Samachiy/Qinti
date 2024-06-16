@@ -63,6 +63,7 @@ var controlnet_to_bake: Dictionary = {
 	Consts.CN_TYPE_COLOR: [],
 	Consts.CN_TYPE_REFERENCE: [],
 }
+var mask_img2img_fill: Image = null
 var mask_to_bake: Array = [] # [ mask, base_image, mode ] base_image is what will appear
 #							in the unmasked area, mode is MASK_MODE_INPAINT or MASK_MODE_OUTPAINT
 var regions_to_bake: Array = [] # [ [rect2_1, data_dict1], [rect2_2, data_dict2], ... ]
@@ -204,8 +205,8 @@ func get_image_to_image_data(width: int, height: int) -> Dictionary:
 #				base_image.save_png("user://img2img_base")
 				# warning-ignore:return_value_discarded
 				result.erase("init_images")
-				# We dont encode it as base64 because inpaint_outpaint module will do that for us
-				result[key] = base_image
+				mask_img2img_fill = base_image
+				result[key] = ImageProcessor.image_to_base64(base_image)
 			"image_cfg_scale", "cfg_scale", "denoising_strength":
 				result[key] = average_nums_at_dictionaries_key(
 						key, img2img_to_bake, result[key]
@@ -242,12 +243,34 @@ func get_controlnet_data(width: int, height: int) -> Dictionary:
 	return data
 
 
+func get_mask_data():
+	var mask: Image = mask_to_bake[0]
+	var base_image: Image = mask_to_bake[1]
+	var mode: String = mask_to_bake[2]
+	var data = {}
+	if mask_img2img_fill is Image:
+		if mode == MASK_MODE_INPAINT:
+			base_image.blend_rect_mask(
+					mask_img2img_fill, 
+					mask, 
+					Rect2(Vector2.ZERO, mask_img2img_fill.get_size()), 
+					Vector2.ZERO
+					)
+		elif mode == MASK_MODE_OUTPAINT:
+			data[Consts.I_DENOISING_STRENGTH] = 1
+	
+	data[Consts.I2I_INIT_IMAGES] = ImageProcessor.image_to_base64(base_image)
+	data[Consts.I2I_MASK] = ImageProcessor.image_to_base64(mask)
+	
+	return data
+
+
 func _consolidate_one_controlnet(dictionaries: Array, width: int, height: int, type: String):
 	var result: Dictionary = {
 		"input_image": "", # base64 image
-		"model": "", # Controlnet model to use
-		"module": "",
-		"weight": 1,
+		"model": "", # Controlnet model to use, will appear in all controlnets except on reference image
+		"module": "", # Only used on the reference image controlnet, otherwise, this value will not exist
+		"weight": 1, # Strnght of the controlnet to apply
 		"guidance_start": 0, # advanced mode only
 		"guidance_end": 1, # advanced mode only
 		"control_mode": 2, # 0 = balanced, 1 = prompt more important, 2 = controlnet more important
@@ -276,6 +299,7 @@ func _consolidate_one_controlnet(dictionaries: Array, width: int, height: int, t
 func clear_queues():
 	img2img_to_bake = []
 	mask_to_bake = []
+	mask_img2img_fill = null
 	regions_to_bake = []
 	for array in controlnet_to_bake.values():
 		if array is Array:
@@ -413,6 +437,9 @@ func queue_img2img_to_bake(dict: Dictionary):
 
 
 func bake_pending_img2img(_cue: Cue = null):
+	if img2img_to_bake.empty():
+		return
+	
 	if img_to_img is DiffusionAPIModule:
 		img_to_img.bake_pending_img2img()
 	else:
@@ -439,6 +466,9 @@ func queue_mask_to_bake(mask: Image, base_image: Image, mode: String):
 
 
 func bake_pending_mask(_cue: Cue = null):
+	if mask_to_bake.empty():
+		return
+	
 	if inpaint_outpaint is DiffusionAPIModule:
 		inpaint_outpaint.bake_pending_mask()
 	else:
@@ -478,16 +508,25 @@ func queue_controlnet_to_bake(dict: Dictionary, type: String):
 
 
 func bake_pending_controlnets(_cue: Cue = null):
+	if controlnet_to_bake.empty():
+		return
+	
 	if controlnet is DiffusionAPIModule:
 		controlnet.bake_pending_controlnets()
 	else:
 		l.g("Tried to use 'bake_pending_controlnets' but api has no controlnet module")
 
 
-func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
+func preprocess(response_object: Object, response_method: String, failure_method: String, 
+image_data: ImageData, 
 preprocessor_name: String):
+	if not is_instance_valid(response_object):
+		l.g("Can't preprocess image, invalid response object. Type: " + preprocessor_name, 
+				l.WARNING)
+	
 	if controlnet is DiffusionAPIModule:
-		controlnet.preprocess(response_object, response_method, image_data, preprocessor_name)
+		DiffusionServer.set_state(Consts.SERVER_STATE_PREPROCESSING)
+		controlnet.preprocess(response_object, response_method, failure_method, image_data, preprocessor_name)
 	else:
 		l.g("Tried to use 'preprocess' but api has no controlnet module")
 

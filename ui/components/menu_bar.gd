@@ -175,6 +175,10 @@ func add_separator(menu, label: String = ''):
 	id_counter += 1
 
 
+func is_advanced_ui(_cue: Cue = null):
+	return advanced_ui
+
+
 func add_tr_item_button(menu, label: String, accelerator: int = -1):
 	if _has_id_label_conflicts(id_counter, label):
 		return

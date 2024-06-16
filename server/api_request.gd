@@ -40,6 +40,8 @@ func _request(data, method):
 		l.g("Error: " + str(error) + ". Killing http request, no signal will be sent. " + 
 				"Failed to send request to url: " + request_url + ". Method: " + 
 				str(method))
+		
+		emit_signal("api_request_failed", -1)
 		safe_free()
 
 

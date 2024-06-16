@@ -57,6 +57,10 @@ func _on_server_state_changed(_prev_state: String, new_state: String):
 			pending_generation = false
 
 
+func generate(_cue: Cue = null):
+	_on_Generate_pressed()
+
+
 func _on_Generate_pressed():
 	if DiffusionServer.get_state() != Consts.SERVER_STATE_READY:
 		if DiffusionServer.get_state() != Consts.SERVER_STATE_GENERATING:

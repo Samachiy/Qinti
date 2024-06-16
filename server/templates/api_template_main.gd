@@ -183,12 +183,14 @@ func apply_parameters(parameters: Dictionary):
 #			"height": 512,
 #			"restore_faces": false,
 #			"tiling": false,
+#			"mask_blur": 3,
+#			"inpaint_full_res": true,
+#			"inpainting_mask_invert": 0, # 0 is false, 1 is true
 #			"negative_prompt": "",
 #			"override_settings": {
 #				"CLIP_stop_at_last_layers": 1, # commonly known as clip skip
 #				"sd_model_checkpoint": "model_name",
-#				"sd_checkpoint_hash": "a1234", # The hash sent by the server, if any, currently just used
-#											# because generated images metadata tend to have it
+#				"sd_checkpoint_hash": "a1234", # The hash sent by the server, if any
 #				"eta_noise_seed_delta": 0, # Commonly known as ENSD},
 #			}
 #		}
@@ -283,7 +285,7 @@ func refresh_data(what_to_refresh: String):
 	#		DiffusionServers.upscalers
 	
 	# For a practival example of this function, you can find one at:
-	# server/available_apis/api_auto_web_ui.gd > refresh_data()
+	# server/available_apis/auto_web_ui_main_api.gd > refresh_data()
 	
 	# Delete the following message once the function is ready:
 	l.g("The function 'refresh_data' has not been overriden yet on Api: " + 
@@ -354,7 +356,7 @@ func adjust_server():
 	# The contents of this function will be highy dependant on the bakcend, some
 	# will need to be configured, others not, others will need extensively. For a reference
 	# of this function working in the wild, please check on:
-	# server/available_apis/api_auto_web_ui.gd
+	# server/available_apis/auto_web_ui_main_api.gd
 	# 		adjust_server()
 	# 		_config_check_controlnet_1() 
 	# 		_config_check_controlnet_2()

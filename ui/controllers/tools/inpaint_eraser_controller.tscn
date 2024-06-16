@@ -49,7 +49,7 @@ margin_right = 279.0
 margin_bottom = 86.0
 text = "INPAINT_SETTINGS"
 
-[node name="DenoisingStrenght" parent="." groups=["advanced_ui"] instance=ExtResource( 1 )]
+[node name="DenoisingStrenght" parent="." instance=ExtResource( 1 )]
 margin_top = 90.0
 margin_right = 279.0
 margin_bottom = 120.0

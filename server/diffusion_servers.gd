@@ -202,12 +202,12 @@ func _on_generation_failed(_result):
 			str(api.get_request_data_no_images_no_prompts(last_gen_data)))
 
 
-func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
-preprocessor_name: String):
+func preprocess(response_object: Object, response_method: String, failure_method: String, 
+image_data: ImageData, preprocessor_name: String):
 	if not is_api_initialized():
 		return
 	
-	api.preprocess(response_object, response_method, image_data, preprocessor_name)
+	api.preprocess(response_object, response_method, failure_method, image_data, preprocessor_name)
 
 
 func generate(response_object: Object, response_method: String, custom_gen_data: Dictionary = {}):

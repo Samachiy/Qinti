@@ -102,13 +102,11 @@ func remove_controlnet_images_from_result(result, images_base64: Array) -> Array
 	return images_base64
 
 
-func preprocess(response_object: Object, response_method: String, image_data: ImageData, 
-preprocessor_name: String):
-	if not is_instance_valid(response_object):
-		l.g("Can't preprocess image, invalid response object. Type: " + preprocessor_name, 
-				l.WARNING)
+func preprocess(response_object: Object, response_method: String, failure_method: String, 
+image_data: ImageData, preprocessor_name: String):
 	
 	var api_request = APIRequest.new(response_object, response_method, self)
+	api_request.connect_on_request_failed(DiffusionServer, failure_method)
 	var url = api.server_address.url + ADDRESS_CONTROLNET_PREPROCESS
 	var data = {
 		Consts.PREP_ONLY_MODULE: preprocessor_name,

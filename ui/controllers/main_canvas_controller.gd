@@ -414,9 +414,45 @@ func reload_description(_cue: Cue = null):
 	}).execute()
 
 
+func show_menu():
+	canvas.menu.clear()
+	_fill_menu()
+	canvas.menu.popup_at_cursor()
+
+
 func _fill_menu():
 	canvas.menu.add_tr_labeled_item(Consts.MENU_SAVE_CANVAS)
 	canvas.menu.add_tr_labeled_item(Consts.MENU_SAVE_CANVAS_AS)
+	if not Roles.has_role(Consts.ROLE_MENU_BAR):
+		return
+	
+	var f = DiffusionServer.features
+	var has_in_out_paint = f.has_feature(DiffusionServer.FEATURE_INPAINT_OUTPAINT)
+	var has_img2img = f.has_feature(DiffusionServer.FEATURE_IMG_TO_IMG)
+	var is_advanced_ui =  Cue.new(Consts.ROLE_MENU_BAR, "is_advanced_ui").execute()
+	canvas.menu.add_separator(Consts.MENU_SEP_GENERATION)
+	canvas.menu.add_tr_labeled_item(Consts.MENU_STANDARD_GENERATION)
+	
+	if has_in_out_paint:
+		canvas.menu.add_tr_labeled_item(Consts.MENU_INPAINT_BUTTON)
+		canvas.menu.add_tr_labeled_item(Consts.MENU_OUTPAINT_BUTTON)
+	
+	if has_img2img:
+		canvas.menu.add_tr_labeled_item(Consts.MENU_QUICK_IMG2IMG)
+	
+	if is_advanced_ui:
+		if has_in_out_paint or has_img2img:
+			canvas.menu.add_separator(Consts.MENU_SEP_GENERATE_WITH)
+		
+		if has_in_out_paint:
+			canvas.menu.add_tr_labeled_item(Consts.MENU_INPAINT_WITH)
+			canvas.menu.add_tr_labeled_item(Consts.MENU_OUTPAINT_WITH)
+	
+		if has_img2img:
+			canvas.menu.add_tr_labeled_item(Consts.MENU_QUICK_IMG2IMG_WITH)
+	elif has_in_out_paint:
+		canvas.menu.add_separator(Consts.MENU_SEP_GENERATE_WITH)
+		canvas.menu.add_tr_labeled_item(Consts.MENU_INPAINT_WITH)
 
 
 func cue_menu_option(cue: Cue):
@@ -448,6 +484,20 @@ func _on_Menu_option_pressed(label_id, _index_id):
 				]).opts({
 					tr("SUPPORTED_SAVE_IMAGE_FORMAT"): "*.png" # donetr
 				}).execute()
+		Consts.MENU_STANDARD_GENERATION:
+			Cue.new(Consts.ROLE_PROMPTING_AREA, "generate").execute()
+		Consts.MENU_INPAINT_BUTTON:
+			Cue.new(Consts.ROLE_CONTROL_IN_PAINT, "inpaint").execute()
+		Consts.MENU_OUTPAINT_BUTTON:
+			Cue.new(Consts.ROLE_CONTROL_OUT_PAINT, "generate").execute()
+		Consts.MENU_QUICK_IMG2IMG:
+			Cue.new(Consts.ROLE_CONTROL_QUICK_PAINT, "generate").execute()
+		Consts.MENU_INPAINT_WITH:
+			Cue.new(Consts.ROLE_DIALOG_IN_PAINT, "request_dialog").execute()
+		Consts.MENU_OUTPAINT_WITH:
+			Cue.new(Consts.ROLE_DIALOG_OUT_PAINT, "request_dialog").execute()
+		Consts.MENU_QUICK_IMG2IMG_WITH:
+			Cue.new(Consts.ROLE_DIALOG_QUICK_PAINT, "request_dialog").execute()
 
 
 func _on_canvas_save_path_selected(path: String, overwrite: bool = true):

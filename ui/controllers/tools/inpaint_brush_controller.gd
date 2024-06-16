@@ -24,6 +24,8 @@ func _ready():
 		brush_opacity.visible = true
 	else:
 		brush_opacity.visible = false
+		
+	Roles.request_role(self, Consts.ROLE_CONTROL_IN_PAINT)
 
 
 func reload_description(_cue: Cue = null):
@@ -105,17 +107,19 @@ func _on_canvas_connected(canvas_node: Node):
 	generation_area = canvas_node.generation_area
 
 
-func inpaint(apply_modifiers):
-	var mask: Image = generation_area.get_contained_mask()
-	var input_image: Image = generation_area.get_contained_image()
+func inpaint(cue: Cue = null):
+	if cue != null:
+		set_settings_cue(cue)
+	
+	var apply_modifiers = use_modifiers.pressed
 	var config = {
 		Consts.I_DENOISING_STRENGTH: denoising_strenght.get_value(),
-		# mask is base64 since it's applied directly, no blend
-		Consts.I2I_MASK: ImageProcessor.image_to_base64(mask),
 		Consts.I2I_MASK_BLUR: mask_blur.get_value(),
 		Consts.I2I_INPAINT_FULL_RES: inpaint_full.pressed,
 		Consts.I2I_INPAINTING_MASK_INVERT: int(invert_mask.pressed)
 	}
+	var mask: Image = generation_area.get_contained_mask()
+	var input_image: Image = generation_area.get_contained_image()
 	Cue.new(Consts.ROLE_API, "clear").execute()
 	DiffusionServer.api.queue_mask_to_bake(mask, input_image, DiffusionAPI.MASK_MODE_INPAINT)
 	
@@ -124,7 +128,7 @@ func inpaint(apply_modifiers):
 	
 	if apply_modifiers:
 		Cue.new(Consts.ROLE_GENERATION_INTERFACE, "apply_modifiers_to_api").execute()
-	Cue.new(Consts.ROLE_API, "bake_pending_img2img").args([false]).execute()
+	#Cue.new(Consts.ROLE_API, "bake_pending_img2img").args([false]).execute()
 	Cue.new(Consts.ROLE_API, "bake_pending_mask").execute()
 	Cue.new(Consts.ROLE_API, "bake_pending_controlnets").execute()
 	Cue.new(Consts.ROLE_API, "cue_apply_parameters").opts(config).execute()
@@ -135,6 +139,38 @@ func inpaint(apply_modifiers):
 		DiffusionServer.generate(prompting_area, "_on_image_generated")
 	else:
 		l.g("Can't inpaint, there's no node with the role ROLE_PROMPTING_AREA")
+
+
+func set_settings_cue(cue: Cue):
+	# [ use_modifiers: bool ]
+	# The rest of settings are in the options
+	
+	# Updating settings values with those of the cue
+	denoising_strenght.set_value(cue.get_option(
+			Consts.I_DENOISING_STRENGTH, 
+			denoising_strenght.get_value()
+	))
+	mask_blur.set_value(cue.get_option(
+			Consts.I2I_MASK_BLUR, 
+			mask_blur.get_value()
+	))
+	inpaint_full.pressed = cue.get_option(Consts.I2I_INPAINT_FULL_RES, inpaint_full.pressed)
+	_on_InpaintFullRes_toggled(inpaint_full.pressed)
+	invert_mask.pressed = cue.get_option(Consts.I2I_INPAINTING_MASK_INVERT, invert_mask.pressed)
+	_on_InvertMask_toggled(invert_mask.pressed)
+	use_modifiers.pressed = cue.get_at(0, use_modifiers.pressed)
+	_on_UseModifiers_toggled(use_modifiers.pressed)
+
+
+func get_settings_cue(_cue: Cue = null):
+	return Cue.new(Consts.ROLE_CONTROL_IN_PAINT, "inpaint").args([
+			use_modifiers.pressed
+	]).opts({
+			Consts.I_DENOISING_STRENGTH: denoising_strenght.get_value(),
+			Consts.I2I_MASK_BLUR: mask_blur.get_value(),
+			Consts.I2I_INPAINT_FULL_RES: inpaint_full.pressed,
+			Consts.I2I_INPAINTING_MASK_INVERT: invert_mask.pressed,
+	})
 
 
 func _on_BrushSize_value_changed(value):
