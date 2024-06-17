@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://ui/canvas/canvas_2d/canvas2d.gd" type="Script" id=1]
 [ext_resource path="res://ui/canvas/canvas_2d/canvas2d_grid.gd" type="Script" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://ui/canvas/canvas_2d/lay_module_canvas_2d.gd" type="Script" id=8]
 [ext_resource path="res://ui/canvas/canvas_2d/canvas2d_pointer.gd" type="Script" id=9]
 [ext_resource path="res://ui/shaders/pointer_invert_screen_colors_mask_material.tres" type="Material" id=10]
+[ext_resource path="res://themes/main_theme.tres" type="Theme" id=11]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.156863, 0.156863, 0.156863, 1 )
@@ -244,6 +245,11 @@ custom_colors/font_color_pressed = Color( 1, 1, 1, 1 )
 text = "DISCARD_GEN_IMAGE"
 
 [node name="Menu" parent="." instance=ExtResource( 6 )]
+modulate = Color( 1, 1, 1, 0.784314 )
+margin_right = 166.0
+margin_bottom = 185.0
+theme = ExtResource( 11 )
+theme_type_variation = "HugePopupMenu"
 
 [node name="OverunderlayModule" type="Node" parent="."]
 script = ExtResource( 8 )

@@ -1,6 +1,6 @@
 extends WindowDialog
 
-onready var use_modifiers = $VBoxContainer/GridContainer/UseModifiers
+onready var use_modifiers = $VBoxContainer/Options/UseModifiers
 onready var local_generate_button = $"%Generate"
 
 

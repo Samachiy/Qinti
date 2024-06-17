@@ -344,7 +344,10 @@ func _on_Active_toggled(button_pressed):
 
 func refresh_active_modifier_same_type():
 	var active_mod = Roles.get_node_by_role(Consts.ROLE_ACTIVE_MODIFIER, false)
-	if active_mod != null and active_mod.has_method("_on_Active_toggled"):
+	if active_mod != null and is_instance_valid(active_mod):
+		if not active_mod.has_method("_on_Active_toggled"):
+			return
+		
 		if mode_name == active_mod.mode_name:
 			active_mod.mode._on_same_type_modifier_toggled()
 

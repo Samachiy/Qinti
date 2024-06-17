@@ -416,6 +416,7 @@ func reload_description(_cue: Cue = null):
 
 func show_menu():
 	canvas.menu.clear()
+	canvas.menu.modulate.a8 = 150
 	_fill_menu()
 	canvas.menu.popup_at_cursor()
 

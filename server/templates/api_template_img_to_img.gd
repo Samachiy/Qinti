@@ -2,7 +2,7 @@ extends DiffusionAPIModule
 
 
 func bake_pending_img2img(has_mask: bool):
-	# this must apply pending img2img to request data
+	# This function must apply pending img2img to request_data
 	
 	var height # <--- RETRIEVE HEIGHT FROM REQUEST_DATA AND ADD IT HERE
 	var width # <--- RETRIEVE WIDTH FROM REQUEST_DATA AND ADD IT HERE

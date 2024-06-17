@@ -76,4 +76,4 @@ func _on_SaveSettings_confirmed():
 
 func refresh_total_recent_images():
 	var total = Cue.new(Consts.ROLE_TOOLBOX, "get_recent_thumbnail_number").execute()
-	recent_img_total_label.text = tr(TOTAL_RECENT_IMAGES).format(total)
+	recent_img_total_label.text = tr(TOTAL_RECENT_IMAGES).format([total])

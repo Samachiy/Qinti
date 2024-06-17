@@ -25,6 +25,7 @@ func get_image_info_from_result(_result) -> Dictionary:
 	#		- ImageInfoController.OTHER_DETAILS_KEY: {text/string of the info}
 	#			Example: "PNG_INFO_OTHER": "VAE: vae.pth\n Version: 1.7.0\n"
 	
+	var parsed_data = {}
 	# Here is a list of Const.gd parameters commonly relevant for image info:
 	# 	Consts.I_CFG_SCALE
 	# 	Consts.I_DENOISING_STRENGTH
@@ -46,7 +47,7 @@ func get_image_info_from_result(_result) -> Dictionary:
 	# 	ImageInfoController.SIZE_CONFIG_DISPLAY_NAME
 	# As long as this parameters are covered, I would say it is good enough
 	
-	# Small dictionary to return example:
+	# Example of parsed_data dictionary to return example:
 	# var parsed_result = {
 	#	Consts.I_PROMPT: "Landscape",
 	#	Consts.I_NEGATIVE_PROMPT: "EasyNegative"
@@ -59,4 +60,4 @@ func get_image_info_from_result(_result) -> Dictionary:
 	# Delete the following message once the function is ready:
 	l.g("The function 'get_image_info_from_result' has not been overriden yet on Api: " + 
 	name)
-	return {}
+	return parsed_data

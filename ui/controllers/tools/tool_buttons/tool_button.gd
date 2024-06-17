@@ -9,6 +9,7 @@ extends TextureButton
 export(bool) var has_right_click = false
 export(String) var bind_feature = ''
 
+var tooltip = preload("res://ui/components/custom_tooltip.tscn")
 var tool_controller = null
 #var pressed_right: bool = false
 var pressed_left: bool = false
@@ -61,8 +62,8 @@ func _on_gui_input(event):
 		pressed_left = event.pressed
 
 
-#func set_canvas(node):
-#	if tool_controller != null:
-#		tool_controller.set_canvas(node)
-#	else:
-#		l.g("tool controller is null for the button: " + name)
+func _make_custom_tooltip(for_text: String):
+	var tooltip_node = tooltip.instance()
+	tooltip_node.text = for_text
+	tooltip_node.rect_min_size.x = 200
+	return tooltip_node
