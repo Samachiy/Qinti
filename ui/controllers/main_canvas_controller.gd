@@ -562,8 +562,10 @@ func _on_scroll_changed():
 func _save_cues(_is_file_save):
 	if canvas is Canvas2D:
 		var layers_data = canvas.get_save_data()
+		var gen_area_data = canvas.get_gen_area_data()
 		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_layers", [layers_data])
 		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_sampler", [selected_sampler])
+		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_gen_aera", [gen_area_data])
 
 
 func load_layers(cue: Cue):
@@ -576,10 +578,10 @@ func load_layers(cue: Cue):
 
 func load_gen_area(cue: Cue):
 	# [ gen_area_data ]
-	var layers_data = cue.get_at(0, {})
+	var gen_area_data = cue.get_at(0, {})
 	if canvas is Canvas2D:
-		canvas.remove_all_layers()
-		canvas.add_layers_data(layers_data)
+		_on_DiscardGeneration_pressed()
+		canvas.set_gen_area_data(gen_area_data)
 
 
 func load_sampler(cue: Cue):

@@ -18,6 +18,8 @@ var request_url: String = ''
 var request_data = ''
 var push_server_down_error: bool = true
 var cue_on_finish: Array = []
+var cue_on_success: Array = []
+var cue_on_fail: Array = []
 var print_network_error: bool = true
 var finish_signal_sent: bool = false
 var downloading_full_file: String = ''
@@ -111,16 +113,22 @@ _headers: PoolStringArray, _body: PoolByteArray):
 	
 	if no_result or failed_response:
 		emit_signal("api_request_failed", response_code)
+		send_cues(cue_on_fail)
 		signal_finish(false)
 	else:
 		emit_signal("api_request_processed", result)
+		send_cues(cue_on_success)
 		signal_finish(true)
 	
-	for cue in cue_on_finish:
-		if cue is Cue:
-			cue.execute()
+	send_cues(cue_on_finish)
 	
 	safe_free()
+
+
+func send_cues(cue_array: Array):
+	for cue in cue_array:
+		if cue is Cue:
+			cue.execute()
 
 
 func connect_on_request_processed(response_object: Object, response_method: String, 

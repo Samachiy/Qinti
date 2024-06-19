@@ -761,11 +761,18 @@ text = "SERVER_TYPE"
 [node name="OpenAvailableServers" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectServer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
 margin_left = 97.0
-margin_right = 330.0
+margin_right = 318.0
 margin_bottom = 28.0
 rect_min_size = Vector2( 200, 0 )
 size_flags_horizontal = 3
 requieres_flag = false
+
+[node name="OpenAvailableServersWarning" type="Label" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox/VBox/SelectServer"]
+unique_name_in_owner = true
+margin_left = 330.0
+margin_top = 4.0
+margin_right = 330.0
+margin_bottom = 24.0
 
 [node name="Spacing" type="Control" parent="ChooseInstalledDirOption/VBox/Body/Options/HBox"]
 margin_left = 342.0

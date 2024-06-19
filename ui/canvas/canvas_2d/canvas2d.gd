@@ -361,6 +361,9 @@ func set_current_layer(value):
 	if value == current_layer:
 		return
 	
+	if is_instance_valid(current_layer) and current_layer is Layer2D:
+		current_layer.hide_mask()
+	
 	if value is Layer2D:
 		current_layer = value
 	elif value is RegionLayer2D:
@@ -425,6 +428,7 @@ func fit_to_rect2(rect2: Rect2):
 	else:
 		zoom = proportion_diff.y
 	
+	#yield(get_tree(), "idle_frame")
 	set_zoom(zoom, false)
 	camera.position = rect2.get_center()
 	camera.position.y += message_area.get_y_displacement_amount() / 2 * zoom
@@ -616,6 +620,7 @@ func set_gen_area_data(gen_area_data: Dictionary):
 	if generation_area == null:
 		return
 	
+	generation_area.clear_images()
 	generation_area.queue_free()
 	add_generation_area()
 	
@@ -656,9 +661,10 @@ func refresh_viewport():
 	# VIewports in godot can't be manually updated, however, does
 	# works but IN THE CONTEXT this function is currently used.
 	# Please use it while keeping that in mind
+	var pre_pos = camera.position.x
 	camera.position.x += 1
 	yield(VisualServer, "frame_post_draw")
-	camera.position.x -= 1
+	camera.position.x = pre_pos
 
 
 

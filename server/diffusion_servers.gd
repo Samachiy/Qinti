@@ -192,16 +192,6 @@ func regenerate():
 			generate(last_gen_response_object, last_gen_response_method, last_gen_data)
 
 
-func _on_generation_failed(_result):
-	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "set_text").args([
-			Consts.HELP_DESC_IMAGE_GEN_FAILED]).execute()
-	cancel_diffusion()
-	cancel_download()
-	set_state(STATE_READY)
-	l.g("Image generation failed. Parameters: " + 
-			str(api.get_request_data_no_images_no_prompts(last_gen_data)))
-
-
 func preprocess(response_object: Object, response_method: String, failure_method: String, 
 image_data: ImageData, preprocessor_name: String):
 	if not is_api_initialized():
@@ -210,18 +200,33 @@ image_data: ImageData, preprocessor_name: String):
 	api.preprocess(response_object, response_method, failure_method, image_data, preprocessor_name)
 
 
-func generate(response_object: Object, response_method: String, custom_gen_data: Dictionary = {}):
+func generate(response_object: Object, response_method: String, custom_gen_data: Dictionary = {},
+cue_on_finish: Array = [], cue_on_success: Array = [], cue_on_fail: Array = []):
 	if not is_api_initialized():
-		return
+		return null
 	
 	last_gen_response_object = response_object
 	last_gen_response_method = response_method
 	# The next code notifies the server_state_indicator for a state change
 	set_state(Consts.SERVER_STATE_GENERATING)
 	
-	generation_request = api.generate(response_object, response_method, custom_gen_data)
 	Python.add_next_line()
 	last_gen_data = api.request_data.duplicate(true)
+	generation_request = api.generate(response_object, response_method, custom_gen_data)
+	generation_request.cue_on_success = cue_on_success
+	generation_request.cue_on_fail = cue_on_fail
+	generation_request.cue_on_finish = cue_on_finish
+	return generation_request
+
+
+func _on_generation_failed(_result):
+	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "set_text").args([
+			Consts.HELP_DESC_IMAGE_GEN_FAILED]).execute()
+	cancel_diffusion()
+	cancel_download()
+	set_state(STATE_READY)
+	l.g("Image generation failed. Parameters: " + 
+			str(api.get_request_data_no_images_no_prompts(last_gen_data)))
 
 
 func request_image_info(response_object: Object, response_method: String, image_base64: String):
