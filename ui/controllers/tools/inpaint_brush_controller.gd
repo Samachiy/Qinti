@@ -17,6 +17,7 @@ var size = 40
 var opacity = 255
 var eraser_controller = null
 var generation_area = null
+var last_mask: Image = null
 
 func _ready():
 	eraser_controller = get_node_or_null(inpaint_eraser)
@@ -71,6 +72,7 @@ func select_tool():
 
 
 func deselect_tool():
+	last_mask = get_mask()
 	canvas.hide_all_masks()
 	visible = false
 	canvas.pointer.clear()
@@ -107,6 +109,18 @@ func _on_canvas_connected(canvas_node: Node):
 	generation_area = canvas_node.generation_area
 
 
+func get_mask():
+	var inp_eraser_selected = eraser_controller is Control and eraser_controller.is_visible_in_tree()
+	var inp_brush_selected = is_visible_in_tree()
+	var mask
+	if inp_eraser_selected or inp_brush_selected:
+		mask = generation_area.get_contained_mask()
+	else:
+		mask = last_mask
+	
+	return mask
+
+
 func inpaint(cue: Cue = null):
 	if cue != null:
 		set_settings_cue(cue)
@@ -118,7 +132,8 @@ func inpaint(cue: Cue = null):
 		Consts.I2I_INPAINT_FULL_RES: inpaint_full.pressed,
 		Consts.I2I_INPAINTING_MASK_INVERT: int(invert_mask.pressed)
 	}
-	var mask: Image = generation_area.get_contained_mask()
+	
+	var mask: Image = get_mask()
 	var input_image: Image = generation_area.get_contained_image()
 	Cue.new(Consts.ROLE_API, "clear").execute()
 	DiffusionServer.api.queue_mask_to_bake(mask, input_image, DiffusionAPI.MASK_MODE_INPAINT)

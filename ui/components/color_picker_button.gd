@@ -34,12 +34,3 @@ func _on_eyedropper_pressed():
 	get_popup().hide()
 
 
-
-# DEPRECATED, color picker eyedropper works just fine without this now
-
-#	Cue.new(Consts.ROLE_COLOR_PICKER_SERVICE, "request_eyedropper").args([
-#			self, "_on_color_picker_service_color_changed"]).execute()
-#
-#
-#func _on_color_picker_service_color_changed(new_color: Color):
-#	color = new_color # signal _on_color_changed is already sent with this

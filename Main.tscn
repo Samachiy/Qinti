@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://ui/generation_interface.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ui/components/file_dialog.gd" type="Script" id=2]
@@ -14,7 +14,6 @@
 [ext_resource path="res://ui/components/model_edit_dialog.gd" type="Script" id=12]
 [ext_resource path="res://ui/controllers/model_details_viewer.tscn" type="PackedScene" id=13]
 [ext_resource path="res://ui/components/about.tscn" type="PackedScene" id=14]
-[ext_resource path="res://ui/components/color_picker_service.gd" type="Script" id=15]
 [ext_resource path="res://main.gd" type="Script" id=16]
 [ext_resource path="res://ui/components/loading_label.tscn" type="PackedScene" id=17]
 [ext_resource path="res://ui/dialogs/dialogs.gd" type="Script" id=18]
@@ -129,13 +128,6 @@ dialog_box = "res://ui/components/tutorial_box.tscn"
 frame_color = Color( 0.858824, 0.152941, 0.152941, 1 )
 frame_width = 7
 touch_indicator = "res://ui/components/tutorial_touch_indicator.tscn"
-
-[node name="ColorPickerService" type="TextureButton" parent="."]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_default_cursor_shape = 3
-script = ExtResource( 15 )
 
 [node name="Dialogs" type="Control" parent="."]
 anchor_right = 1.0

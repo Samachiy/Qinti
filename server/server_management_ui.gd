@@ -49,7 +49,6 @@ var prev_server_address = ''
 var text_output_to_console: bool = true
 var stop_load_icon_if_no_output: bool = false
 
-#signal installation_folder_changed(path)
 
 
 func _ready():
@@ -605,11 +604,6 @@ func _prepare_repo(repo: LocalRepo): #, signal_folder_changed: bool
 	var api = DiffusionServer.instance_api(repo.data.api_gdscript)
 	if api != null:
 		api.refresh_paths()
-	
-	# DEPRECATED until release remove any commented code related to Ctrl + Shift + F installation_folder_changed
-	
-#	if signal_folder_changed:
-#		emit_signal("installation_folder_changed", repo.full_path)
 
 
 func _on_ConfirmationDialog_confirmed():

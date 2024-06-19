@@ -17,9 +17,6 @@ func _ready():
 	Roles.request_role(self, Consts.ROLE_MODEL_SELECTOR)
 	var e = DiffusionServer.connect("server_ready", self, "_on_server_ready")
 	l.error(e, l.CONNECTION_FAILED)
-#	Roles.connect_role(
-#			Consts.ROLE_SERVER_MANAGER, "installation_folder_changed", 
-#			self, "_on_installation_folder_changed")
 	var error = DiffusionServer.connect("paths_refreshed", self, "_on_paths_refreshed")
 	l.error(error, l.CONNECTION_FAILED)
 	error = DiffusionServer.connect("diffusion_models_refreshed", self, "_on_models_refreshed")
@@ -38,10 +35,6 @@ func _tutorial(tutorial_seq: TutorialSequence):
 					[models_container.search_bar])
 			tutorial_seq.add_tr_named_step(Tutorials.TUT6_NEW_MODELS, 
 					[models_container.external_button])
-
-
-#func _on_installation_folder_changed(_path: String):
-#	refresh_models()
 
 
 func _on_paths_refreshed():

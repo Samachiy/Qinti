@@ -189,9 +189,9 @@ func set_images_in_generation_area(cue: Cue):
 	
 	generation_area.set_images_data(cue._arguments)
 	var change_tool: bool = true
-	if brush_tool.visible or eraser_tool.visible or \
-	inpaint_brush_tool.visible or inpaint_eraser_tool.visible:
-		change_tool = false
+#	if brush_tool.visible or eraser_tool.visible or \
+#	inpaint_brush_tool.visible or inpaint_eraser_tool.visible:
+#		change_tool = false
 	
 	if change_tool:
 		select_main_tool() # Selects modify gen area tool
@@ -386,6 +386,7 @@ func _on_DiscardGeneration_pressed():
 	canvas.message_area.hide_area()
 	image_viewer_relay = null
 	generation_area.clear_images()
+	generation_area.clear_mask()
 
 
 func _on_prev_pressed():
