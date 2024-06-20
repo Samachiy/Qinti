@@ -324,6 +324,9 @@ func _on_ShowHideThemes_pressed():
 
 
 func _on_LightDarkMode_pressed():
+	if ThemeChanger.is_busy:
+		return
+	
 	ThemeChanger.toggle_light_dark_theme()
 
 
@@ -344,6 +347,9 @@ func _on_theme_changed():
 
 
 func _on_ColorButton_pressed(theme_data: ThemeData):
+	if ThemeChanger.is_busy:
+		return
+	
 	ThemeChanger.load_theme_data(theme_data)
 
 

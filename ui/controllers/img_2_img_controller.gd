@@ -29,7 +29,6 @@ func _tutorial(tutorial_seq: TutorialSequence):
 	match tutorial_seq.name:
 		Tutorials.TUTM7:
 			tutorial_seq.add_tr_named_step(Tutorials.TUTM7_DESCRIPTION, [])
-			tutorial_seq.add_tr_named_step(Tutorials.TUTM7_USE, [])
 			tutorial_seq.add_tr_named_step(Tutorials.TUTM7_WEIGHT, [denoising_strenght])
 			tutorial_seq.add_tr_named_step(Tutorials.TUTM0_MOD_VISIBILITY, 
 					[board_owner.overunderlay_tool])

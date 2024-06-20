@@ -1,5 +1,6 @@
 extends MarginContainer
 
+const PREV_SEED = "prev_seed"
 
 onready var prompt_area = $HBoxContainer/Prompting
 onready var generate_button = $HBoxContainer/Buttons/Generate
@@ -86,11 +87,11 @@ func _on_image_generated(result):
 	var images_data = []
 	
 	# Images extraction
-	#images_data = DiffusionServer.api.get_images_from_result(result, false, positive_prompt.text)
-	if OS.has_feature("standalone"):
-		images_data = DiffusionServer.api.get_images_from_result(result, false, positive_prompt.text)
-	else:
-		images_data = DiffusionServer.api.get_images_from_result(result, true, positive_prompt.text)
+	images_data = DiffusionServer.api.get_images_from_result(result, false, positive_prompt.text)
+#	if OS.has_feature("standalone"):
+#		images_data = DiffusionServer.api.get_images_from_result(result, false, positive_prompt.text)
+#	else:
+#		images_data = DiffusionServer.api.get_images_from_result(result, true, positive_prompt.text)
 	
 	# Seed extraction
 	last_seed = DiffusionServer.api.get_seed_from_result(result)
@@ -196,6 +197,7 @@ func _save_cues(_is_file_save):
 		Consts.I_PROMPT: positive_prompt.text,
 		Consts.I_NEGATIVE_PROMPT: negative_prompt.text,
 		Consts.I_SEED: int(seed_field.text),
+		PREV_SEED: last_seed,
 	}
 	Director.add_save_cue(
 			Consts.SAVE, 
@@ -211,3 +213,4 @@ func load_prompt_and_seed(cue: Cue):
 	negative_prompt.text = cue.get_option(Consts.I_NEGATIVE_PROMPT, '')
 	negative_prompt.update_text()
 	seed_field.text = str(cue.get_option(Consts.I_SEED, -1))
+	last_seed = cue.get_option(PREV_SEED, -1)

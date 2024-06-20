@@ -16,6 +16,7 @@ var is_ready = false
 var current_theme: ThemeData = null
 var flag: Flag = null
 var flag_name: String = "theme_enum"
+var is_busy: bool = false
 
 enum{
 	# Theme enums
@@ -149,6 +150,7 @@ func load_theme_data(theme_data: ThemeData, time: float = 0, tween = null):
 	if theme_data == null:
 		return
 	
+	is_busy = true
 	current_theme = theme_data
 	current_theme.load_style_in_group(Consts.THEME_MODULATE_GROUP_STYLE, time)
 	current_theme.load_type_in_group(Consts.THEME_MODULATE_GROUP_TYPE, time)
@@ -158,6 +160,7 @@ func load_theme_data(theme_data: ThemeData, time: float = 0, tween = null):
 	current_theme.load_in_theme_resource(tutorial_theme, time, tween)
 	current_theme.load_in_theme_resource(thumbnail_theme, time, tween)
 	emit_signal("theme_changed")
+	is_busy = false
 	
 	if flag is Flag:
 		flag.value = theme_data.theme_enum

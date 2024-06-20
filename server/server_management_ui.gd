@@ -10,6 +10,7 @@ const MSG_INVALID_PATH_NO_INSTALL_FOUND = "MESSAGE_INVALID_PATH_NO_INSTALL_FOUND
 const MSG_NO_NETWORK_CONNECTION = "MESSAGE_NO_NETWORK_CONNECTION"
 const MSG_INVALID_SERVER_URL = "MESSAGE_INVALID_SERVER_URL"
 const MSG_BETA_FEATURE_CONTINUE = "MESSAGE_BETA_FEATURE_CONTINUE"
+const ADVICE_INSTALL_DIR_MUST_HAVE = "ADVICE_INSTALL_DIR_MUST_HAVE"
 
 onready var local_backend = $LocalBackend
 onready var install_path = $"%InstallPath"
@@ -23,6 +24,7 @@ onready var available_os = $"%AvailableOS"
 onready var available_gpu_install = $"%InstallAvailableGPU"
 onready var available_gpu_open = $"%OpenAvailableGPU"
 onready var available_servers_open = $"%OpenAvailableServers"
+onready var available_servers_open_warning = $"%OpenAvailableServersWarning"
 onready var available_servers = $"%InstallAvailableServers"
 onready var available_server_ver = $"%InstallAvailableServerVersions"
 #onready var info_dialog = $InfoDialog
@@ -47,7 +49,6 @@ var prev_server_address = ''
 var text_output_to_console: bool = true
 var stop_load_icon_if_no_output: bool = false
 
-#signal installation_folder_changed(path)
 
 
 func _ready():
@@ -603,11 +604,6 @@ func _prepare_repo(repo: LocalRepo): #, signal_folder_changed: bool
 	var api = DiffusionServer.instance_api(repo.data.api_gdscript)
 	if api != null:
 		api.refresh_paths()
-	
-	# DEPRECATED until release remove any commented code related to Ctrl + Shift + F installation_folder_changed
-	
-#	if signal_folder_changed:
-#		emit_signal("installation_folder_changed", repo.full_path)
 
 
 func _on_ConfirmationDialog_confirmed():
@@ -686,9 +682,12 @@ func _on_OpenAvailableServers_option_selected(_label_id, _index_id):
 	var server_id = available_servers_open.get_selected()
 	var repo_data: RepoData = local_backend.servers.get(server_id, null)
 	var args = ''
+	var start_script = ''
 	if repo_data != null:
 		var pc_data = PCData.new()
 		set_gpu_in_pcdata(pc_data, available_gpu_open.get_selected())
 		args = repo_data.get_start_args_custom(pc_data)
+		start_script = repo_data.get_start_script()
 	
+	available_servers_open_warning.text = tr(ADVICE_INSTALL_DIR_MUST_HAVE).format([start_script])
 	selected_installation_core_args.text = args

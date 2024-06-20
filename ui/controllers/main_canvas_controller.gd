@@ -189,9 +189,9 @@ func set_images_in_generation_area(cue: Cue):
 	
 	generation_area.set_images_data(cue._arguments)
 	var change_tool: bool = true
-	if brush_tool.visible or eraser_tool.visible or \
-	inpaint_brush_tool.visible or inpaint_eraser_tool.visible:
-		change_tool = false
+#	if brush_tool.visible or eraser_tool.visible or \
+#	inpaint_brush_tool.visible or inpaint_eraser_tool.visible:
+#		change_tool = false
 	
 	if change_tool:
 		select_main_tool() # Selects modify gen area tool
@@ -386,6 +386,7 @@ func _on_DiscardGeneration_pressed():
 	canvas.message_area.hide_area()
 	image_viewer_relay = null
 	generation_area.clear_images()
+	generation_area.clear_mask()
 
 
 func _on_prev_pressed():
@@ -416,6 +417,7 @@ func reload_description(_cue: Cue = null):
 
 func show_menu():
 	canvas.menu.clear()
+	canvas.menu.modulate.a8 = 150
 	_fill_menu()
 	canvas.menu.popup_at_cursor()
 
@@ -561,8 +563,10 @@ func _on_scroll_changed():
 func _save_cues(_is_file_save):
 	if canvas is Canvas2D:
 		var layers_data = canvas.get_save_data()
+		var gen_area_data = canvas.get_gen_area_data()
 		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_layers", [layers_data])
 		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_sampler", [selected_sampler])
+		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_gen_aera", [gen_area_data])
 
 
 func load_layers(cue: Cue):
@@ -575,10 +579,10 @@ func load_layers(cue: Cue):
 
 func load_gen_area(cue: Cue):
 	# [ gen_area_data ]
-	var layers_data = cue.get_at(0, {})
+	var gen_area_data = cue.get_at(0, {})
 	if canvas is Canvas2D:
-		canvas.remove_all_layers()
-		canvas.add_layers_data(layers_data)
+		_on_DiscardGeneration_pressed()
+		canvas.set_gen_area_data(gen_area_data)
 
 
 func load_sampler(cue: Cue):

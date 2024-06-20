@@ -62,8 +62,8 @@ func generate(response_object: Object, response_method: String, custom_gen_data:
 	if custom_gen_data.empty():
 		api_request.api_post(url, request_data)
 	else:
-		# Extract request_data from custom_gen_data, if the data format should not be a dictionary
-		# EXTRACT DATA HERE IF NEEDED
+		# Extract request_data from custom_gen_data, if the data format must not be a dictionary
+		# <--- EXTRACT DATA HERE IF NEEDED
 		api_request.api_post(url, custom_gen_data)
 	
 	# Delete the following message once the function is ready:

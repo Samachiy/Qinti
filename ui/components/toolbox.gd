@@ -22,9 +22,6 @@ func _ready():
 	#recent_container.container.load_images_from_folder("res://Placeholders/") # for test purposes
 	Roles.request_role(self, Consts.ROLE_TOOLBOX)
 	yield(get_tree().current_scene, "ready")
-#	Roles.connect_role(
-#			Consts.ROLE_SERVER_MANAGER, "installation_folder_changed", 
-#			self, "_on_installation_folder_changed")
 	var error = DiffusionServer.connect("paths_refreshed", self, "_on_paths_refreshed")
 	l.error(error, l.CONNECTION_FAILED)
 	
@@ -79,12 +76,6 @@ func _on_paths_refreshed():
 	add_LORAs()
 	add_LyCORIS()
 	add_TIs()
-
-
-#func _on_installation_folder_changed(_path: String):
-#	add_LORAs()
-#	add_LyCORIS()
-#	add_TIs()
 
 
 func add_recent_png_images(cue: Cue):

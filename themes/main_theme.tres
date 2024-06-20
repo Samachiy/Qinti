@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=39 format=2]
+[gd_resource type="Theme" load_steps=40 format=2]
 
 [ext_resource path="res://themes/styles/scroll_h_grabber_main_style_highlight.tres" type="StyleBox" id=1]
 [ext_resource path="res://themes/styles/button_main_style_hover.tres" type="StyleBox" id=2]
@@ -36,6 +36,7 @@
 [ext_resource path="res://themes/styles/button_main_style_disabled.tres" type="StyleBox" id=34]
 [ext_resource path="res://themes/styles/tab_simple_style_selected.tres" type="StyleBox" id=35]
 [ext_resource path="res://themes/styles/tab_simple_style_unselected.tres" type="StyleBox" id=36]
+[ext_resource path="res://themes/styles/panel_float_no_title_style_transparent.tres" type="StyleBox" id=37]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
@@ -90,6 +91,8 @@ HSlider/icons/grabber_highlight = ExtResource( 21 )
 HSlider/styles/grabber_area = ExtResource( 6 )
 HSlider/styles/grabber_area_highlight = ExtResource( 1 )
 HSlider/styles/slider = ExtResource( 4 )
+HugePopupMenu/base_type = "PopupMenu"
+HugePopupMenu/styles/panel = ExtResource( 37 )
 InfoRowsPopup/base_type = "PopupMenu"
 InfoRowsPopup/colors/font_color_disabled = Color( 0, 0, 0, 0.960784 )
 Label/colors/font_color = Color( 0.137255, 0.137255, 0.137255, 0.960784 )
