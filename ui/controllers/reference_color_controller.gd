@@ -29,4 +29,24 @@ func set_data_cue(_cue: Cue):
 
 
 func _fill_menu():
-	pass # There's nothing to fill
+	canvas.menu.add_tr_labeled_item(Consts.MENU_SAVE_IMAGE)
+	canvas.menu.add_tr_labeled_item(Consts.MENU_SAVE_IMAGE_AS)
+
+
+func _on_Menu_option_selected(label_id, _index_id):
+	match label_id:
+		Consts.MENU_SAVE_CANVAS:
+			var path = Cue.new(Consts.ROLE_FILE_PICKER, "get_default_save_path").execute()
+			_on_canvas_save_path_selected(path, false)
+		Consts.MENU_SAVE_CANVAS_AS:
+			Cue.new(Consts.ROLE_FILE_PICKER,  "request_dialog").args([
+					self,
+					"_on_canvas_save_path_selected",
+					FileDialog.MODE_SAVE_FILE
+				]).opts({
+					tr("SUPPORTED_SAVE_IMAGE_FORMAT"): "*.png" # donetr
+				}).execute()
+
+
+func _on_canvas_save_path_selected(path: String, overwrite: bool = true):
+	ImageProcessor.save_image(canvas.get_canvas_image(), path, "canvas_image", true, overwrite)

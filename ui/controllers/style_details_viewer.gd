@@ -80,7 +80,11 @@ func save_data():
 		styling_data.file_cluster.save_text(description.text)
 	
 	if new_image != null:
-		styling_data.file_cluster.save_png(new_image)
+		if new_image == Consts.default_image_data:
+			styling_data.file_cluster.delete_png()
+		else:
+			styling_data.file_cluster.save_png(new_image)
+		
 		styling_data.refresh_image_data()
 	
 	styling_data.reload_data()
@@ -122,6 +126,18 @@ func clear():
 func _on_DropArea_modifier_dropped(_position, modifier):
 	if modifier is Modifier:
 		new_image = modifier.image_data
+		image.texture = new_image.texture
+
+
+func _on_DropArea_file_cluster_dropped(_position, file_cluster):
+	if file_cluster is FileCluster:
+		new_image = file_cluster.get_image_data()
+		image.texture = new_image.texture
+
+
+func _on_DropArea_image_data_dropped(_position, image_data):
+	if image_data is ImageData:
+		new_image = image_data
 		image.texture = new_image.texture
 
 

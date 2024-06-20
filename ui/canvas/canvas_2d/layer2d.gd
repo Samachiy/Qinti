@@ -55,6 +55,7 @@ var scale_counter: Vector2 = Vector2.ONE
 var saved_offset_data: Array = [] # [limits: rect2, move_offset: vect2, expand_offset: vect2]
 var default_texture_material = preload('res://ui/materials/layer_texture_material.tres')
 var _save_data: Dictionary = {}
+var loaded_data: Dictionary = {}
 
 
 func _ready():
@@ -222,8 +223,9 @@ func refresh_limits():
 	permanent_mask_area.set_size_as(display_viewport.size)
 	permanent_area.set_position_as(limits.position, get_offset())
 	permanent_mask_area.set_position_as(limits.position, get_offset())
-	yield(VisualServer, "frame_pre_draw")
-	yield(VisualServer, "frame_pre_draw")
+	if is_instance_valid(self):
+		yield(VisualServer, "frame_pre_draw")
+		yield(VisualServer, "frame_pre_draw")
 	canvas.display_viewport.set_update_mode(Viewport.UPDATE_ALWAYS)
 
 
@@ -626,15 +628,21 @@ func consolidate():
 	_save_data[SAVE_MASK] = get_mask()
 	permanent_area.consolidate()
 	permanent_mask_area.consolidate()
+	loaded_data = {}
 
 
 func get_save_data() -> Dictionary:
-	var layer_image = _save_data.get(SAVE_LAYER, null)
-	var layer_mask = _save_data.get(SAVE_MASK, null)
+	if not loaded_data.empty():
+		return loaded_data
+	
+	var layer_image: Image = _save_data.get(SAVE_LAYER, null)
+	var layer_mask: Image = _save_data.get(SAVE_MASK, null)
 	var result_data = {}
 	if layer_image is Image:
+		layer_image = layer_image.get_rect(Rect2(Vector2.ZERO, limits.size))
 		result_data[SAVE_LAYER] = ImageProcessor.image_to_base64(layer_image)
 	if layer_mask is Image:
+		layer_mask = layer_mask.get_rect(Rect2(Vector2.ZERO, limits.size))
 		if not layer_mask.is_invisible():
 			result_data[SAVE_MASK] = ImageProcessor.image_to_base64(layer_mask)
 	
@@ -643,9 +651,9 @@ func get_save_data() -> Dictionary:
  
 
 func set_save_data(data: Dictionary):
+	loaded_data = data
 	var image_base64 = data.get(SAVE_LAYER, '')
 	var mask_base64 = data.get(SAVE_LAYER, '')
-	# RESUME load active mask
 	var new_limits = data.get(SAVE_LIMITS, limits)
 	limits = new_limits
 	refresh_limits()

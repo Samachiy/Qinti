@@ -269,10 +269,16 @@ func refresh_image_data(fill_png_if_empty: bool = true):
 		if png_file.file_exists(png_file_path):
 			image_file = name + ".png"
 	
+	
 	if not image_file.empty():
-		image_data = ImageData.new(name)
-		image_data.load_image_path(path.plus_file(image_file))
-		emit_signal("image_data_refreshed", get_image_data())
+		var dir = Directory.new()
+		if not dir.file_exists(path.plus_file(image_file)):
+			image_file = ''
+			emit_signal("image_data_refreshed", get_image_data())
+		else:
+			image_data = ImageData.new(name)
+			image_data.load_image_path(path.plus_file(image_file))
+			emit_signal("image_data_refreshed", get_image_data())
 
 
 func save_hashes():
@@ -294,6 +300,10 @@ func save_json(json_data_to_save: Dictionary):
 
 
 func save_text(text_to_save: String):
+	if text_to_save.strip_edges().empty():
+		delete_text()
+		return
+	
 	var file = File.new()
 	description_file = get_txt_path().get_file()
 	file.open(get_txt_path(), File.WRITE)
@@ -301,6 +311,18 @@ func save_text(text_to_save: String):
 	file.close()
 
 
+func delete_text():
+	var dir = Directory.new()
+	dir.remove(get_txt_path())
+
+
 func save_png(image_data_to_save: ImageData):
 	var error = image_data_to_save.image.save_png(get_png_path())
 	l.error(error, "Couldn't save image of name: " + get_png_path())
+
+
+func delete_png():
+	var error = OS.move_to_trash(PCData.globalize_path(get_png_path()))
+	l.error(error, "Failure to move to trash image file: " + get_png_path(), l.WARNING)
+
+	

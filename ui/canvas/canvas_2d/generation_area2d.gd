@@ -235,6 +235,7 @@ func get_save_data() -> Dictionary:
 func set_save_data(data: Dictionary):
 	var img_num = data.get(SAVE_IMG_NUM, -1)
 	if img_num > -1:
+		yield(get_tree(), "idle_frame")
 		var last_recent_thumbnail = Cue.new(
 				Consts.ROLE_TOOLBOX, 
 				"get_last_recent_thumbnail"

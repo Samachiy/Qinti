@@ -13,7 +13,7 @@ onready var details_container = $HBoxContainer/ScrollContainer/Details
 onready var details_scroll_container = $HBoxContainer/ScrollContainer
 onready var prompt_mode_selector = $"%PromptMode"
 onready var detail_info = $"%DetailInfo"
-onready var menu_other = $"%Menu"
+onready var menu_other = $"%OtherMenu"
 onready var menu_try = $"%TryMenu"
 
 var detail_button = preload("res://ui/controllers/image_info_detail.tscn")
@@ -195,7 +195,27 @@ func _on_DeselectAll_pressed():
 
 
 func _fill_menu():
-	pass # There's nothing to fill
+	canvas.menu.add_tr_labeled_item(Consts.MENU_SAVE_IMAGE)
+	canvas.menu.add_tr_labeled_item(Consts.MENU_SAVE_IMAGE_AS)
+
+
+func _on_Menu_option_selected(label_id, _index_id):
+	match label_id:
+		Consts.MENU_SAVE_CANVAS:
+			var path = Cue.new(Consts.ROLE_FILE_PICKER, "get_default_save_path").execute()
+			_on_canvas_save_path_selected(path, false)
+		Consts.MENU_SAVE_CANVAS_AS:
+			Cue.new(Consts.ROLE_FILE_PICKER,  "request_dialog").args([
+					self,
+					"_on_canvas_save_path_selected",
+					FileDialog.MODE_SAVE_FILE
+				]).opts({
+					tr("SUPPORTED_SAVE_IMAGE_FORMAT"): "*.png" # donetr
+				}).execute()
+
+
+func _on_canvas_save_path_selected(path: String, overwrite: bool = true):
+	ImageProcessor.save_image(canvas.get_canvas_image(), path, "canvas_image", true, overwrite)
 
 
 func _on_Other_pressed():
@@ -212,9 +232,10 @@ func _on_TryMenu_option_selected(label_id, _index_id):
 			replicate(true)
 		Consts.TRY_PNG_INFO_IMAGE_CHECKED:
 			replicate(false)
+	
 
 
-func _on_Menu_option_selected(label_id, _index_id):
+func _on_OtherMenu_option_selected(label_id, _index_id):
 	var success = false
 	match label_id:
 		Consts.COPY_CONFIG_DATA_JSON:

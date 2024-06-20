@@ -616,13 +616,19 @@ func get_gen_area_data():
 		return generation_area.get_save_data()
 
 
-func set_gen_area_data(gen_area_data: Dictionary):
+func clear_gen_area():
 	if generation_area == null:
 		return
 	
+	if not is_instance_valid(generation_area):
+		return
+	
 	generation_area.clear_images()
-	generation_area.queue_free()
-	add_generation_area()
+
+
+func set_gen_area_data(gen_area_data: Dictionary):
+	if generation_area == null:
+		return
 	
 	if not gen_area_data.empty():
 		generation_area.set_save_data(gen_area_data)
