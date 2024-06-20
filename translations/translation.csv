@@ -188,6 +188,8 @@ MESSAGE_INSTALL_FAILED_KEY_INPUT_DRIVERS,"Installation failed, please update the
 MESSAGE_RUN_FAILED,"Failure to start server, please check the logs and consult the issue in the Github page of the project","La inicailización del servidor falló, porfavor revise los registros del programa y consulte el problema en la página de GitHub del proyecto"
 MESSAGE_SHUTTING_DOWN_SERVER,Closing server. Please wait a moment.,Cerrando servidor. Por favor espere.
 MESSAGE_CALCULATING_HASHES,Calculating models hash code,Calculando códigos hash de los modelos
+MESSAGE_REQUEST_MODEL_DOWNLOAD_CIVITAI,"The model needed for this modifier wasn’t found, please use the following ID to download it from Civitai. Pasting the ID on the search bar at Civitai should display the model to download","El modelo necesario para este modificador no fue encontrado, por favor utilice el siguiente ID para descargarlo desde Civitai. Al pegar el ID en la barra de búsqueda de Civitai se mostrará el modelo a descargar."
+MESSAGE_NO_STYLE_MODEL,Styling model wasn’t found,No se encontró el modelo de estilo.
 SELECT_FOLDER,Select folder,Seleccionar carpeta
 RESUME,Resume,Continuar
 INSTALL,Install,Instalar
@@ -197,6 +199,9 @@ SELECT,Select,Seleccionar
 LATEST_VERSION,Latest,Última
 STABLE_VERSION,Stable,Estable
 INSTALLING_DIFFUSION_SERVER,Installing image generation server...,Instalando servidor de generación de imagenes
+ADVICE_INSTALL_DIR_MUST_HAVE,Installation directory must contain a file named '{0}',  El directorio de instalación debe contener un archivo llamado '{0}'.
+PLEASE_SELECT_AMOUNT_OF_RECENT_IMAGES,Please select the amount of recently generated images entries to save,"Por favor, seleccione la cantidad de entradas de imágenes generadas recientemente que desea guardar."
+TOTAL_RECENT_IMAGES ,out of {0},de {0}
 CANCEL,Cancel,Cancelar
 SAVE,Save,Guardar
 SAVE_AS_DEFAULT,Save as default values,Guardar como valores predeterminados
@@ -355,6 +360,23 @@ TUTM1_COPY,"You can also copy all the information to clipboard with the options 
 TUTM2_DESCRIPTION,The lineart modifier will make the generated image follow the provided sketch.,El modificador de delineado hará que la imagen generada siga el esbozo proporcionado.
 TUTM2_USE,It is useful to edit the details of an image and to easily overlap and compose several images together.,Este modo es útil para editar los detalles de una imagen y para superponer y componer fácilmente varias imágenes juntas.
 TUTM2_TYPES,"To use an specific type of lineart like Canny or MLSD, you can select it with the highlighted button. ","Para utilizar un tipo específico de delineado como Canny o MLSD, puedes seleccionarlo mediante el botón resaltado."
+TUTM3_DESCRIPTION,The composition modifier will make the elements of the generated image to fit on the colored areas,El modificador de composición hará que los elementos de la imagen generada se ajusten a las áreas coloreadas.
+TUTM4_DESCRIPTION,"The scrible modifier can turn a normal scribble into a finished image, ideal for quickly turning bare bones ideas into images","El modificador de garabato puede convertir un garabato normal en una imagen terminada, idela para transformar de manera rápida ideas básicas en imágenes."
+TUTM5_DESCRIPTION,"The depth map modifier will make the generated image to follow the depth of the elements of the image, white means closer, black means further away","El modificador de mapa de profundidad hará que la imagen generada siga la profundidad de los elementos de la imagen, blanco significa más cercano, negro significa más lejano."
+TUTM6_DESCRIPTION,"The normal map modifier will make the generated image to follow a provided normal map, useful for retaining textures or small details","El modificador de mapa normal hará que la imagen generada siga el mapa normal proporcionado, útil para retener texturas o detalles pequeños."
+TUTM7_DESCRIPTION,The image to image modifier will generate a new image visually similar to the provided image,El modificador de imagen a imagen generará una nueva imagen visualmente similar a la imagen proporcionada.
+TUTM7_WEIGHT,"The amount of resemblance to the original image will depend of this slider, 0 means the same image, 1 means a completely different image","La cantidad de semejanza con la imagen original dependerá de este deslizador, 0 significa la misma imagen, 1 significa una imagen completamente diferente."
+TUTM8_DESCRIPTION,The pose modifier allows to generate an image of person copying the provided pose,El modificador de pose permite generar una imagen de una persona copiando la pose proporcionada.
+TUTM8_FACE_HANDS,"To add facial expressions or hands positioning, you can enable the highlighted check boxes respectively","Para agregar expresiones faciales o posiciones de manos, puede habilitar las casillas resaltadas respectivamente."
+TUTM9_DESCRIPTION,"The styling modifier correspond to either a LoRA, Lycoris or textual inversion model, and will apply it to the generated image","El modificador de estilo se refiere a un modelo de LoRA, Lycoris o inversión textual y lo aplicará a la imagen generada."
+TUTM9_STRENGHT,The intensity of which the model/style is applied can be controlled with the highlighted slider.,La intensidad con la que se aplica el modelo/estilo se puede controlar con el deslizador resaltado.
+TUTM9_IS_NEGATIVE,"If the model is meant to be used in the negative prompt, you can enable the following check box","Si el modelo está destinado a ser utilizado en la solicitud de negativo, puede habilitar la casilla resaltada."
+TUTM9_EXTRA,"Sometimes, the LoRA, Lycoris or textual inversion model requires extra words to be added to the prompt to work optimally, you can add them in the following text fields","A veces, el modelo de LoRA, Lycoris o inversión textual requiere que se agreguen palabras extras a la instrucción para funcionar de manera óptima, puede agregarlas en los campos de texto siguientes."
+TUTM9_EXTRA_SLIDER,The intensity of said extra prompt can be adjusted with the highlighted slider.,La intensidad de dicha instrucción extra se puede ajustar con el deslizador resaltado.
+TUTM10_DESCRIPTION,The reference modifier allows for the generated image to contain the subject or a resemblance of the subject in the reference image,El modificador de referencia permite que la imagen generada contenga el sujeto o una semejanza del sujeto encontrado en la imagen de referencia.
+TUTM10_EMPTY_SPACE_IS_WHITE,"It is important to note that empty space will be interpreted as white space, which could greatly affect the generated image","Es importante tener en cuenta que el espacio vacío se interpretará como espacio en blanco, lo que podría afectar significativamente la imagen generada."
+TUTM10_EMPTY_SPACE_ADVICE,So it’s preferable to avoid leaving empty spaces when focusing the image in the active area.,"Por lo tanto, es preferible evitar dejar espacios vacíos al enfocar la imagen en el área activa."
+TUTM11_DESCRIPTION,The reference color modifier will make the generated image to reference the color scheme of the provided image,El modificador de color de referencia hará que la imagen generada se referencie el esquema de colores de la imagen proporcionada.
 ,,
 BRUSH_TOOL,"Brush: Allows to paint on an image or canvas, when used in the main canvas, it also allows to use AI to use what’s drawn to generate an image",Pincel: Permite pintar sobre una imagen o lienzo
 ERASER_TOOL,"Eraser: Allows to erase parts of an image or canvas, when used in the main canvas, it also allows to use AI to use what’s drawn to generate an image",Borrador: Permite borrar partes de una imagen o lienzo

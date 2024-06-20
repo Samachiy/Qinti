@@ -4,6 +4,28 @@ extends ControlnetController
 func _ready():
 	# Configuring inherited varaibles
 	cn_model_type = Consts.CN_TYPE_REFERENCE
+	
+	Tutorials.subscribe(self, Tutorials.TUTM10)
+
+
+func _tutorial(tutorial_seq: TutorialSequence):
+	match tutorial_seq.name:
+		Tutorials.TUTM10:
+			tutorial_seq.add_tr_named_step(Tutorials.TUTM10_DESCRIPTION, [])
+			tutorial_seq.add_tr_named_step(Tutorials.TUTM10_EMPTY_SPACE_IS_WHITE, [])
+			if canvas is Canvas2D:
+				tutorial_seq.add_tr_named_step(
+						Tutorials.TUTM10_EMPTY_SPACE_ADVICE, 
+						[canvas.active_area_node]
+				)
+			else:
+				tutorial_seq.add_tr_named_step(Tutorials.TUTM10_EMPTY_SPACE_ADVICE, [])
+			tutorial_seq.add_tr_named_step(Tutorials.TUTM0_CONTROLNET_WEIGHT, 
+					[cn_config.weight])
+			tutorial_seq.add_tr_named_step(Tutorials.TUTM0_MOD_VISIBILITY, 
+					[board_owner.overunderlay_tool])
+			tutorial_seq.add_tr_named_step(Tutorials.TUTM0_MOD_VISIBILITY_CONFIG, 
+					[board_owner.overunderlay_tool])
 
 
 func get_data_cue(_cue: Cue = null):
