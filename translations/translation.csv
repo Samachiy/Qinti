@@ -199,9 +199,9 @@ SELECT,Select,Seleccionar
 LATEST_VERSION,Latest,Última
 STABLE_VERSION,Stable,Estable
 INSTALLING_DIFFUSION_SERVER,Installing image generation server...,Instalando servidor de generación de imagenes
-ADVICE_INSTALL_DIR_MUST_HAVE,Installation directory must contain a file named '{0}',  El directorio de instalación debe contener un archivo llamado '{0}'.
+ADVICE_INSTALL_DIR_MUST_HAVE,Installation directory must contain a file named '{0}',El directorio de instalación debe contener un archivo llamado '{0}'.
 PLEASE_SELECT_AMOUNT_OF_RECENT_IMAGES,Please select the amount of recently generated images entries to save,"Por favor, seleccione la cantidad de entradas de imágenes generadas recientemente que desea guardar."
-TOTAL_RECENT_IMAGES ,out of {0},de {0}
+TOTAL_RECENT_IMAGES,out of {0},de {0}
 CANCEL,Cancel,Cancelar
 SAVE,Save,Guardar
 SAVE_AS_DEFAULT,Save as default values,Guardar como valores predeterminados
@@ -228,6 +228,7 @@ SERVER,Server,Servidor
 SETTINGS,Settings,Ajustes
 EXIT,Exit,Salir
 NEW,New,Nuevo
+CHANGE_MODEL,Change model,Cambiar modelo
 RESTART_SERVER,Restart server,Reiniciar servidor
 REINSTALL_OR_CHANGE_SERVER,Install or change server,Instalar or cambiar de servidor
 HIDE_MENU,Hide menu,Ocultar menú

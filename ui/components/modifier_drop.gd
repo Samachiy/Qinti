@@ -3,8 +3,12 @@ extends Control
 class_name DropArea
 
 signal modifier_dropped(position, modifier)
+signal file_cluster_dropped(position, file_cluster)
+signal image_data_dropped(position, image_data)
 signal modifier_drop_attempted(position, drop_area)
 signal drop_attempt_finished()
+
+export(bool) var allow_image_data = false
 
 
 var listen_to_mouse_release = false
@@ -27,12 +31,23 @@ func can_drop_data(position: Vector2, data):
 	if data is Modifier:
 		emit_signal("modifier_drop_attempted", position, self)
 		return true
+	elif allow_image_data:
+		if data is ImageData or data is FileCluster:
+			return true
+		else:
+			return false
 	else:
 		return false
 
 
 func drop_data(position, data):
-	emit_signal("modifier_dropped", position, data)
+	if data is Modifier:
+		emit_signal("modifier_dropped", position, data)
+	elif data is FileCluster:
+		emit_signal("file_cluster_dropped", position, data)
+	elif data is ImageData:
+		emit_signal("image_data_dropped", position, data)
+		
 
 
 func enable_drop(_cue: Cue = null):

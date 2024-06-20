@@ -35,7 +35,11 @@ func save_data():
 		file_cluster.save_text(description.text)
 	
 	if new_image != null:
-		file_cluster.save_png(new_image)
+		if new_image == Consts.default_image_data:
+			file_cluster.delete_png()
+		else:
+			file_cluster.save_png(new_image)
+		
 		file_cluster.refresh_image_data()
 
 
@@ -56,6 +60,18 @@ func clear():
 func _on_DropArea_modifier_dropped(_position, modifier):
 	if modifier is Modifier:
 		new_image = modifier.image_data
+		image.texture = new_image.texture
+
+
+func _on_DropArea_file_cluster_dropped(_position, dropped_file_cluster):
+	if dropped_file_cluster is FileCluster:
+		new_image = dropped_file_cluster.get_image_data()
+		image.texture = new_image.texture
+
+
+func _on_DropArea_image_data_dropped(_position, image_data):
+	if image_data is ImageData:
+		new_image = image_data
 		image.texture = new_image.texture
 
 

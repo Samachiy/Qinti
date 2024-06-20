@@ -49,6 +49,7 @@ stretch_mode = 6
 margin_right = 200.0
 margin_bottom = 79.0
 script = ExtResource( 3 )
+allow_image_data = true
 
 [node name="EditControls" type="HBoxContainer" parent="."]
 margin_top = 83.0

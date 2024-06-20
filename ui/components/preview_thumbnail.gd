@@ -167,3 +167,19 @@ func _on_DropArea_modifier_dropped(_position, modifier):
 		var args = [current_image_data]
 		Cue.new(Consts.ROLE_CANVAS, "set_images_in_generation_area").args(args).execute()
 		emit_signal("image_dropped", current_image_data)
+
+
+func _on_DropArea_file_cluster_dropped(_position, file_cluster):
+	if file_cluster is FileCluster:
+		set_image_data(file_cluster.get_image_data())
+		var args = [current_image_data]
+		Cue.new(Consts.ROLE_CANVAS, "set_images_in_generation_area").args(args).execute()
+		emit_signal("image_dropped", current_image_data)
+
+
+func _on_DropArea_image_data_dropped(_position, image_data):
+	if image_data is ImageData:
+		set_image_data(image_data)
+		var args = [current_image_data]
+		Cue.new(Consts.ROLE_CANVAS, "set_images_in_generation_area").args(args).execute()
+		emit_signal("image_dropped", current_image_data)

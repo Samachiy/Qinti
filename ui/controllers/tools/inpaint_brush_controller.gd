@@ -107,6 +107,7 @@ func set_use_modifiers(value):
 func _on_canvas_connected(canvas_node: Node):
 	._on_canvas_connected(canvas_node)
 	generation_area = canvas_node.generation_area
+	
 
 
 func get_mask():

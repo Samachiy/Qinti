@@ -184,12 +184,27 @@ func _append_styling_data(styling_data: StylingData, is_negative: bool):
 		# This behaviour could be changed upon users request
 		is_negative = false
 	
+	var add_pos_prompt
+	var add_neg_prompt
 	if is_negative:
-		negative_prompt.text += styling_data.get_positive_prompt()
-		positive_prompt.text += styling_data.get_negative_prompt()
+		add_pos_prompt = styling_data.get_negative_prompt()
+		add_neg_prompt = styling_data.get_positive_prompt()
 	else:
-		positive_prompt.text += styling_data.get_positive_prompt()
-		negative_prompt.text += styling_data.get_negative_prompt()
+		add_pos_prompt = styling_data.get_positive_prompt()
+		add_neg_prompt = styling_data.get_negative_prompt()
+	
+	
+	if not add_pos_prompt.strip_edges().empty():
+		if not positive_prompt.text.strip_edges().empty():
+			positive_prompt.text += ", "
+		
+		positive_prompt.text += add_pos_prompt
+	
+	if not add_neg_prompt.strip_edges().empty():
+		if not negative_prompt.text.strip_edges().empty():
+			negative_prompt.text += ", "
+		
+		negative_prompt.text += add_neg_prompt
 
 
 func _save_cues(_is_file_save):
