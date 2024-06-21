@@ -147,7 +147,7 @@ _global_script_classes=[ {
 "base": "AutoWebUI_API",
 "class": "Forge_API",
 "language": "GDScript",
-"path": "res://server/available_apis/api_forge.gd"
+"path": "res://server/available_apis/forge_ui_main.gd"
 }, {
 "base": "AutoWebUI_Repo",
 "class": "Forge_Repo",

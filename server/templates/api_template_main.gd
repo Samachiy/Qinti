@@ -2,6 +2,13 @@ extends DiffusionAPI
 
 
 func _ready():
+	
+	# Add any needed code to be executed during API initialization here
+	
+	clear()
+
+
+func load_modules():
 	# Modules (add, as second argument of add_module() function, the path to script)
 	# Example:
 	#controlnet = add_module(
@@ -28,6 +35,9 @@ func _ready():
 			DiffusionServer.FEATURE_INPAINT_OUTPAINT, 
 			""
 	)
+
+
+func load_urls():
 	# The URL and fallback URLs (if needed) that the program will connect too
 	server_urls = [
 	# Example:
@@ -35,9 +45,6 @@ func _ready():
 	#		"http://127.0.0.1:7861",
 	#		"http://127.0.0.1:7862",
 	]
-	
-	# Add any needed extra code here
-	clear()
 
 
 func reset_data(): 

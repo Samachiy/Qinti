@@ -1,26 +1,14 @@
 extends DiffusionAPIModule
 
+
 const CONTROLNET_DICT_KEY = "controlnet"
 const CONTROLNET_ARGS_KEY = "args"
 const ADDRESS_CONTROLNET_PREPROCESS = "/controlnet/detect"
 
-# The controlnet_dict goes inside and array as value of the controlnet_dict_key
-# like this:	 CONTROLNET_DICT_KEY: [controlnet_dict]
-# This applies to both txt2img and im2img dictionaries
-# Removed keys: guidance, mask, guessmode, threshold_a, threshold_b
-var controlnet_dict: Dictionary = {
-	"input_image": "",
-	"module": "None",
-	"model": "",
-	"weight": 1,
-	#"resize_mode": "Just Resize", # this is not configurable, this program will resize it
-	#"lowvram": false, # advanced mode only, if needed
-	#"processor_res": 512, # this is only in if applying the preprocessor to the input_image
-	"guidance_start": 0, # advanced mode only
-	"guidance_end": 1, # advanced mode only
-	#"pixel_perfect": false, # advance mode only, if needed
-	"control_mode": 0, # 0 = balanced, 1 = prompt more important, 2 = controlnet more important
-}
+
+# COPIED OVER FROM auto_web_ui_control_net.gd
+# This is done so as to not create inheritance on something extremelly small and 
+# specific that on top of that has a different way of functioning in certain aspects
 
 
 func bake_pending_controlnets():
@@ -75,23 +63,6 @@ func remove_controlnet_images_from_result(result, images_base64: Array) -> Array
 	return images_base64
 
 
-func preprocess(response_object: Object, response_method: String, failure_method: String, 
-image_data: ImageData, preprocessor_name: String):
-	
-	var api_request = APIRequest.new(response_object, response_method, self)
-	api_request.connect_on_request_failed(DiffusionServer, failure_method)
-	var url = api.server_address.url + ADDRESS_CONTROLNET_PREPROCESS
-	var data = {
-		Consts.PREP_ONLY_MODULE: preprocessor_name,
-		Consts.PREP_ONLY_INPUT_IMAGES: [image_data.base64],
-		Consts.PREP_ONLY_RESOLUTION: image_data.texture.get_width(),
-	}
-	
-	# The next code notifies the server_state_indicator for a state change 
-	DiffusionServer.set_state(Consts.SERVER_STATE_PREPROCESSING)
-	api_request.api_post(url, data)
-
-
 func get_preprocessed_image(result, preprocessor_name: String = '') -> ImageData:
 	var images = result.get('images')
 	var image_data: ImageData = null
@@ -101,3 +72,50 @@ func get_preprocessed_image(result, preprocessor_name: String = '') -> ImageData
 			ImageData.PNG)
 	
 	return image_data
+
+
+# ORIGINAL/UNIQUE FUNCTIONS FOR FORGE
+
+
+var preprocessors_translation_dict = {
+	Consts.CNPREP_LINEART_REALISTIC: "lineart_realistic",
+	Consts.CNPREP_SOFTEDGE_PIDINET_SAFE: "softedge_pidisafe",
+	Consts.CNPREP_SOFTEDGE_HED_SAFE: "softedge_hedsafe",
+	Consts.CNPREP_DEPTH_MIDAS: "depth_midas",
+	Consts.CNPREP_NORMAL_BAE: "normalbae",
+	Consts.CNPREP_NORMAL_MAP: "normal_midas",
+	Consts.CNPREP_SEG_OFADE20K: "seg_ofade20k",
+	Consts.CNPREP_SEG_OFCOCO: "seg_ofcoco",
+	Consts.CNPREP_SEG_UFADE20K: "seg_ufade20k",
+	Consts.CNPREP_OPENPOSE_ALL: "dw_openpose_full",
+	Consts.CNPREP_SCRIBBLE_PIDINET: "scribble_pidinet",
+	Consts.CNPREP_INVERT: "invert (from white bg & black line)",
+}
+
+
+func preprocess(response_object: Object, response_method: String, failure_method: String, 
+image_data: ImageData, preprocessor_name: String):
+	if not is_instance_valid(response_object):
+		l.g("Can't preprocess image, invalid response object. Type: " + preprocessor_name, 
+				l.WARNING)
+	
+	var api_request = APIRequest.new(response_object, response_method, self)
+	api_request.connect_on_request_failed(DiffusionServer, failure_method)
+	var url = api.server_address.url + ADDRESS_CONTROLNET_PREPROCESS
+	var data = {
+		Consts.PREP_ONLY_MODULE: translate_preprocessor(preprocessor_name),
+		Consts.PREP_ONLY_INPUT_IMAGES: [image_data.base64],
+		Consts.PREP_ONLY_RESOLUTION: image_data.texture.get_width(),
+	}
+	
+	# The next code notifies the server_state_indicator for a state change 
+	DiffusionServer.set_state(Consts.SERVER_STATE_PREPROCESSING)
+	api_request.api_post(url, data)
+
+
+func translate_preprocessor(preprocessor_name: String):
+	var translation = preprocessors_translation_dict.get(preprocessor_name, '')
+	if translation.empty():
+		return preprocessor_name
+	else:
+		return translation
