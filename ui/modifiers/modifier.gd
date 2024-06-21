@@ -5,6 +5,7 @@ class_name Modifier
 const SELECTED_MODE_NAME = "selected"
 const IMAGE_DATA = "image"
 const IMAGE_NAME = "image_name"
+const ACTIVE = "active"
 
 onready var core_mode_of_image_type = $Modes/PNGInfo
 onready var alt_mode_of_image_type = $Modes/Img2Img
@@ -479,6 +480,7 @@ func get_modes_data():
 	data[SELECTED_MODE_NAME] = mode_name
 	data[IMAGE_DATA] = image_data.get_base64()
 	data[IMAGE_NAME] = image_data.image_name
+	data[ACTIVE] = is_active()
 	return data
 
 
@@ -487,6 +489,7 @@ func set_modes_data(data: Dictionary):
 	var default_mode: String = ''
 	image_data = ImageData.new(data.get(IMAGE_NAME, ""))
 	image_data.load_base64(data.get(IMAGE_DATA, ""))
+	set_active(data.get(ACTIVE, true))
 	
 	for mode_key in data:
 		if default_mode.empty():

@@ -87,6 +87,24 @@ var txt2img_dict: Dictionary = {
 
 
 func _ready():
+	extra_samplers = []
+	extra_upscalers = ["Latent"]
+	default_sampler = "Euler"
+	default_upscaler = "Latent"
+	DIR_LORA = lora_dir
+	DIR_LYCORIS = lyco_dir
+	DIR_TI = embeddings_dir
+	DIR_DIFFUSION_MODELS = ckpt_dir
+	DIR_CONTROLNET_MODELS = control_dir
+	ADDRESS_GET_CONTROLNET_SETTINGS = "/controlnet/settings"
+	ADDRESS_GET_SERVER_CONFIG = "/sdapi/v1/options"
+	ADDRESS_SET_SERVER_CONFIG = "/sdapi/v1/options"
+	ADDRESS_SHUTDOWN_SERVER = "/sdapi/v1/shutdown"
+	PCData.install_python_library("psutil", false)
+	clear()
+
+
+func load_modules():
 	controlnet = add_module(
 			DiffusionServer.FEATURE_CONTROLNET, 
 			"res://server/available_apis/auto_web_ui_control_net.gd"
@@ -103,26 +121,14 @@ func _ready():
 			DiffusionServer.FEATURE_INPAINT_OUTPAINT, 
 			"res://server/available_apis/auto_web_ui_inpaint_outpaint.gd"
 	)
-	extra_samplers = []
-	extra_upscalers = ["Latent"]
-	default_sampler = "Euler"
-	default_upscaler = "Latent"
-	DIR_LORA = lora_dir
-	DIR_LYCORIS = lyco_dir
-	DIR_TI = embeddings_dir
-	DIR_DIFFUSION_MODELS = ckpt_dir
-	DIR_CONTROLNET_MODELS = control_dir
-	ADDRESS_GET_CONTROLNET_SETTINGS = "/controlnet/settings"
-	ADDRESS_GET_SERVER_CONFIG = "/sdapi/v1/options"
-	ADDRESS_SET_SERVER_CONFIG = "/sdapi/v1/options"
-	ADDRESS_SHUTDOWN_SERVER = "/sdapi/v1/shutdown"
+
+
+func load_urls():
 	server_urls = [
 		"http://127.0.0.1:7860",
 		"http://127.0.0.1:7861",
 		"http://127.0.0.1:7862",
 	]
-	PCData.install_python_library("psutil", false)
-	clear()
 
 
 func generate(response_object: Object, response_method: String, custom_gen_data: Dictionary = {}):

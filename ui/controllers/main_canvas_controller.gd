@@ -567,6 +567,9 @@ func _save_cues(_is_file_save):
 		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_layers", [layers_data])
 		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_sampler", [selected_sampler])
 		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_gen_area", [gen_area_data])
+		Director.add_save_cue(Consts.SAVE, Consts.ROLE_CANVAS, "load_canvas", [
+				canvas.display_area,
+		])
 
 
 func load_layers(cue: Cue):
@@ -594,3 +597,11 @@ func load_gen_area(cue: Cue):
 func load_sampler(cue: Cue):
 	var sampler_name = cue.get_at(0, DEFAULT_SAMPLER)
 	samplers.select_by_label(sampler_name, false)
+
+
+func load_canvas(cue: Cue):
+	# [ canvas_display_area ]
+	var display_area = cue.get_at(0, Rect2(Vector2.ZERO, Vector2(512, 512)))
+	canvas.display_area = display_area
+	canvas.fit_to_rect2(display_area)
+	

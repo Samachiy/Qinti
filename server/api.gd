@@ -90,6 +90,10 @@ signal data_refreshed(what_dict) # { what_1: success_bool_1, what_2: success_boo
 signal paths_refreshed 
 
 
+func _ready():
+	load_modules()
+	load_urls()
+
 
 # GENERIC FUNCTIONS
 
@@ -291,6 +295,20 @@ func _consolidate_one_controlnet(dictionaries: Array, width: int, height: int, t
 						)
 	
 	return result
+
+
+# API SETUP
+
+
+func load_urls():
+	# The URL and fallback URLs (if needed) that the program will connect too
+	l.g("The function 'load_urls' has not been overriden yet on Api: " + 
+	name)
+
+
+func load_modules():
+	l.g("The function 'load_modules' has not been overriden yet on Api: " + 
+	name)
 
 
 # RESET API INFO FOR NEW REQUEST

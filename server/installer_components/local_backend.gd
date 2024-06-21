@@ -22,17 +22,17 @@ var servers: Dictionary = {
 			).set_readme_title("# Stable Diffusion web UI"
 			).set_id("Automatic1111"
 			).enable_install(true),
-#	"Forge": RepoData.new(PCData.new() 
-#			).set_start_script_linux("webui.sh", "--api"
-#			).set_start_script_windows("webui.bat", "--api"
-#			).set_start_args_amd("--precision full --no-half"
-#			).set_url("https://github.com/lllyasviel/stable-diffusion-webui-forge.git"
-#			).set_api(Forge_API
-#			).set_class(Forge_Repo
-#			).set_versions("main", []
-#			).set_readme_title("# Stable Diffusion WebUI Forge"
-#			).set_id("Forge"
-#			).enable_install(true),
+	"Forge": RepoData.new(PCData.new() 
+			).set_start_script_linux("webui.sh", "--api"
+			).set_start_script_windows("webui.bat", "--api"
+			).set_start_args_amd("--precision full --no-half"
+			).set_url("https://github.com/lllyasviel/stable-diffusion-webui-forge.git"
+			).set_api(Forge_API
+			).set_class(Forge_Repo
+			).set_versions("main", []
+			).set_readme_title("# Stable Diffusion WebUI Forge"
+			).set_id("Forge"
+			).enable_install(true),
 	"SD.Next": RepoData.new(PCData.new()
 			).set_start_script_linux("webui.sh", "--docs"
 			).set_start_script_windows("webui.bat", "--docs"
