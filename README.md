@@ -72,11 +72,11 @@ To use Qinti, it is necessary to specify a Automatic1111 Web UI installation or 
 
 After a valid installation is set, Qinti will display a few short tutorials to explain the user interface
 
-# Modyfing code and compiling 
+# Modyfing the code and compiling 
 
 In case anyone wants to modify or compile the code by themselves, the instructions are as follows:
 
-### Runnig the project
+### Running the project inside Godot IDE
 
 1. Clone this repo (don't run it yet):
    > git clone https://github.com/Samachiy/Qinti.git
