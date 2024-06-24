@@ -136,6 +136,8 @@ margin_bottom = 26.0
 theme_type_variation = "ConfirmButton"
 text = "SAVE"
 
+[connection signal="file_cluster_dropped" from="Viewer/Photo/DropArea" to="." method="_on_DropArea_file_cluster_dropped"]
+[connection signal="image_data_dropped" from="Viewer/Photo/DropArea" to="." method="_on_DropArea_image_data_dropped"]
 [connection signal="modifier_dropped" from="Viewer/Photo/DropArea" to="." method="_on_DropArea_modifier_dropped"]
 [connection signal="pressed" from="EditControls/Cancel" to="." method="_on_Cancel_pressed"]
 [connection signal="pressed" from="EditControls/Save" to="." method="_on_Save_pressed"]

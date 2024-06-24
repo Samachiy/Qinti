@@ -1,12 +1,14 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://ui/components/prompt_box.gd" type="Script" id=1]
+[ext_resource path="res://themes/main_theme.tres" type="Theme" id=2]
 
 [node name="PositivePrompt" type="TextEdit"]
 margin_right = 815.0
 margin_bottom = 57.0
 rect_min_size = Vector2( 0, 55 )
 size_flags_vertical = 3
+theme = ExtResource( 2 )
 wrap_enabled = true
 script = ExtResource( 1 )
 

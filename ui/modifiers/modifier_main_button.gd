@@ -22,4 +22,5 @@ func get_drag_data(_position: Vector2):
 
 
 func _on_drag_preview_tree_exiting():
-	owner.visible = true
+	if owner is Control:
+		owner.visible = true

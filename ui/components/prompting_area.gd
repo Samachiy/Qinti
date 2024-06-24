@@ -99,14 +99,17 @@ func _on_image_generated(result):
 	# Setting up the result images in the UI
 	var cue = Cue.new(Consts.ROLE_TOOLBOX, "add_recent_data_images").args(images_data)
 	var recent_thumbnail: RecentThumbnail = cue.execute()
-	recent_thumbnail.set_up_relay()
-	Cue.new(Consts.ROLE_CANVAS, "set_images_in_generation_area"
-		).args(
-			images_data
-		).opts({
-			'relay': recent_thumbnail.image_viewer_relay,
-			'focus': true
-		}).execute()
+	if recent_thumbnail.images_data.empty():
+		recent_thumbnail.queue_free()
+	else:
+		recent_thumbnail.set_up_relay()
+		Cue.new(Consts.ROLE_CANVAS, "set_images_in_generation_area"
+			).args(
+				images_data
+			).opts({
+				'relay': recent_thumbnail.image_viewer_relay,
+				'focus': true
+			}).execute()
 	Cue.new(Consts.ROLE_ACTIVE_MODIFIER, "deselect").execute(false)
 	Cue.new(Consts.ROLE_CANVAS, "open_board").execute()
 	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "set_text").args([
@@ -167,6 +170,9 @@ func _on_PositiveDropArea_modifier_dropped(_position, modifier: Modifier):
 		var styling_data = modifier.mode.get("styling_data")
 		if styling_data is StylingData:
 			_append_styling_data(styling_data, false)
+	
+	positive_prompt.update_text()
+	negative_prompt.update_text()
 
 
 func _on_NegativeDropArea_modifier_dropped(_position, modifier: Modifier):
@@ -174,6 +180,9 @@ func _on_NegativeDropArea_modifier_dropped(_position, modifier: Modifier):
 		var styling_data = modifier.mode.get("styling_data")
 		if styling_data is StylingData:
 			_append_styling_data(styling_data, true)
+	
+	positive_prompt.update_text()
+	negative_prompt.update_text()
 
 
 func _append_styling_data(styling_data: StylingData, is_negative: bool):
