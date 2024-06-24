@@ -115,6 +115,7 @@ func instance_api(api_script: GDScript) -> DiffusionAPI:
 	
 	return api
 
+
 func refresh_data(what: String):
 	if not is_api_initialized():
 		return

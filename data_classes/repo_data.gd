@@ -3,7 +3,7 @@ class_name RepoData extends Reference
 const LATEST_VER = 'LATEST_VERSION'
 const STABLE_VER = 'STABLE_VERSION'
 
-var url: String
+var url: String = ""
 var default_ver: String
 var available_ver: Dictionary # { visible_tr_name, version string}
 var latest_ver: String
@@ -75,16 +75,16 @@ func set_url(repo_url: String) -> RepoData:
 	return self
 
 
-func set_class(gdscript: GDScript):
+func set_class(gdscript: GDScript) -> RepoData:
 	if gdscript.has_script_signal("repository_installed"):
 		class_gdscript = gdscript
 	else:
-		l.g("Couldn't set class in repository data: " + url)
+		l.g("Couldn't set class in repository data: " + id + ": " + url)
 	
 	return self
 
 
-func set_api(gdscript: GDScript):
+func set_api(gdscript: GDScript) -> RepoData:
 	var stop_script = DiffusionAPI
 	var proving_script = gdscript
 	while proving_script is GDScript:
@@ -95,38 +95,42 @@ func set_api(gdscript: GDScript):
 			proving_script = proving_script.get_base_script()
 	
 	if api_gdscript == null:
-		l.g("Couldn't set api in repository data: " + url)
+		l.g("Couldn't set api in repository data: " + id + ": " + url)
 	
 	return self
 
 
-func set_readme_title(title: String):
+func set_readme_title(title: String) -> RepoData:
 	readme_title = title
 	return self
 
 
-func set_id(new_id: String):
+func set_id(new_id: String) -> RepoData:
 	id = new_id
 	return self
 
 
 func set_versions(default_version: String, available_versions: Array, show_latest: bool = false, 
 latest_version: String = "master") -> RepoData:
+	# default_version is the git
 	available_ver = {}
 	default_ver = default_version
 	latest_ver = latest_version
 	
-	# The recommended ver option showuld always be present
+	# The recommended ver option should always be present
 	available_ver[STABLE_VER] = STABLE_VER
 	
 	for version in available_versions:
-		# We add everythin in the array, no matter what it is
+		# We add everything in the array, no matter what it is
 		if version in available_ver:
+			# This is to avoid adding repeated versions
 			continue
 		
 		available_ver[version] = version
 	
-	# We add it last version last so it shows at the bottom, last version tends to be unstable
+	
+	# We add the last version last so it shows at the bottom, last version tends to be unstable
+	# hence why we add it last
 	if show_latest:
 		available_ver[LATEST_VER] = LATEST_VER
 	
@@ -180,7 +184,7 @@ func get_start_script_type() -> int:
 
 func new_local_repo(path: String):
 	if class_gdscript == null:
-		l.g("No set class in repository data: " + url)
+		l.g("No set class in repository data: " + id + ": " + url)
 		return
 	
 	return class_gdscript.new(path, self)
@@ -188,7 +192,7 @@ func new_local_repo(path: String):
 
 func new_api():
 	if api_gdscript == null:
-		l.g("No set api in repository data: " + url)
+		l.g("No set api in repository data: " + id + ": " + url)
 		return
 	
 	return api_gdscript.new()
@@ -196,7 +200,7 @@ func new_api():
 
 func enable_install(value: bool):
 	if class_gdscript == null:
-		l.g("Can't enable install in repo '" + url + "', no class script is set")
+		l.g("Can't enable install in repo '" + id + ": " + url + "', no class script is set")
 		can_install = false
 		return
 	

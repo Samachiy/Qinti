@@ -61,8 +61,12 @@ func _init(path: String, repo_data: RepoData):
 		# This is in case the repository is pending cloning
 		self.is_installed = false
 		clone_path = path
-		repo_name = repo_data.url.get_basename().get_file()
-		full_path = clone_path.plus_file(repo_name)
+		if not repo_data.url.empty():
+			repo_name = repo_data.url.get_basename().get_file()
+			full_path = clone_path.plus_file(repo_name)
+		else:
+			l.g("The LocalRepo '" + data.id + 
+					"' doesn't have a git url assigned, repository operations won't be possible")
 
 
 func has_start_script(dir_path):
@@ -155,6 +159,9 @@ func override_args(new_args: String, append_to_base_args: bool):
 
 
 func reset_repo(repo_version: String) -> PythonInterface:
+	if repo_name.empty():
+		l.g("LocalRepo '" + data.id + "' doesn't have a git url, reset won't be possible")
+		
 	# Allows to specify version
 	l.g("Reseting repository: " + repo_name + ". Ver.: " + repo_version, l.INFO)
 	var script
@@ -175,6 +182,9 @@ func reset_repo(repo_version: String) -> PythonInterface:
 
 
 func clone_repo(repo_version: String) -> PythonInterface:
+	if repo_name.empty():
+		l.g("LocalRepo '" + data.id + "' doesn't have a git url, reset won't be possible")
+		
 	# Will only clone repo if needed
 	l.g("Cloning repository: " + repo_name, l.INFO)
 	return clone_any_repo(data.url, clone_path, repo_version, data.get_start_script(), repo_name)
@@ -291,6 +301,10 @@ func _on_script_key_input_requested():
 
 
 func run() -> PythonInterface:
+	if repo_name.empty():
+		l.g("LocalRepo '" + data.id + 
+				"' doesn't have a repo_name, error running. Please contact developer.")
+		
 	# Will return null if it fails, otherwise, a PythonInterface
 	prepare_files()
 	l.g("Running repository: " + repo_name, l.INFO)
