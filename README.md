@@ -72,7 +72,11 @@ To use Qinti, it is necessary to specify a Automatic1111 Web UI installation or 
 
 After a valid installation is set, Qinti will display a few short tutorials to explain the user interface
 
-# Modyfing the code and compiling 
+# Contributing to the project
+
+To contribute to the project in the form of code, please refer to the Collaboration Guide in the Github wiki
+
+# Modifying the code and compiling 
 
 In case anyone wants to modify or compile the code by themselves, the instructions are as follows:
 
