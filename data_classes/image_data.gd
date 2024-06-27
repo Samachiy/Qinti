@@ -128,7 +128,7 @@ static func get_extension_int(extension: String) -> int:
 
 
 func get_base64() -> String:
-	if base64 == null:
+	if base64.empty():
 		if is_ready:
 			base64 = Marshalls.raw_to_base64(raw_image_data)
 		else:

@@ -16,6 +16,7 @@ func select_mode():
 	Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "open_board").args([self]).execute()
 	if data_cue == null:
 		Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "set_image").args([image_data]).execute()
+		DiffusionServer.request_image_info(self, "_on_png_info_received", image_data.base64)
 #		if raw_info.empty():
 #			DiffusionServer.request_image_info(self, "_on_png_info_received", image_data.base64)
 #		else:
@@ -48,6 +49,9 @@ func apply_to_api(_api):
 	if selected or data_cue == null:
 		data_cue = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "get_data_cue").execute()
 		config = Cue.new(Consts.ROLE_CONTROL_PNG_INFO, "get_config").execute()
+	
+	if data_cue == null:
+		return
 	
 	var prompt_mode = data_cue.get_at(2)
 	var prompt = [
