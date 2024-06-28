@@ -32,7 +32,7 @@ var servers: Dictionary = {
 			).set_versions("main", []
 			).set_readme_title("# Stable Diffusion WebUI Forge"
 			).set_id("Forge"
-			).enable_install(true),
+			).enable_install(false),
 	"SD.Next": RepoData.new(PCData.new()
 			).set_start_script_linux("webui.sh", "--docs"
 			).set_start_script_windows("webui.bat", "--docs"
@@ -44,6 +44,16 @@ var servers: Dictionary = {
 			).set_readme_title("# SD.Next"
 			).set_id("SD.Next"
 			).enable_install(false),
+	"New Server": RepoData.new(PCData.new() 
+			).set_start_script_linux("linux_start_script.sh", "--arguments"
+			).set_start_script_windows("windows_start_script.bat", "--arguments"
+			).set_start_args_amd("--amd_only_arguments" # Feel free to remove this line if there aren't any
+			).set_start_args_nvidia("--nvidia_only_arguments" # Feel free to remove this line if there aren't any
+			#).set_url("https://github.com/USER/REPO.git" # If the local backend doesn't correspond to a git repo, feel free to delete this line
+			).set_api(AutoWebUI_API # Replace this with the class name of the API created before
+			).set_class(AutoWebUI_Repo # Replace this with the class name of the API created before
+			#).set_versions("main", [], true, "main" # Feel free to delete this if the set_url() was deleted for not having a git repo
+			).set_id("id")
 }
 
 var repo: LocalRepo = null setget set_repo

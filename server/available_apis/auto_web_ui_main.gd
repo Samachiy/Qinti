@@ -159,8 +159,8 @@ func get_images_from_result(result, debug: bool, img_name: String) -> Array:
 	if debug:
 		# Controlnet images haven't been removed
 		return _base64_to_image_data(resul_base64, img_name)
-	
-	resul_base64 = controlnet.remove_controlnet_images_from_result(result, resul_base64)
+	if controlnet != null:
+		resul_base64 = controlnet.remove_controlnet_images_from_result(result, resul_base64)
 	return _base64_to_image_data(resul_base64, img_name)
 
 
@@ -562,8 +562,10 @@ func _on_server_shutdown_success(_result):
 
 
 func _on_server_shutdown_failure(result: int):
+	var tree = get_tree()
 	if result == 500:
-		yield(get_tree().create_timer(0.5), "timeout")
+		if tree != null:
+			yield(get_tree().create_timer(0.5), "timeout")
 		emit_signal("server_stopped")
 		return
 	
@@ -577,7 +579,8 @@ func _on_server_shutdown_failure(result: int):
 	l.g("Shutdown signal failed, attempting to terminate server", l.DEBUG)
 	PCData.install_python_library("psutil", true)
 	if Python.kill():
-		yield(get_tree().create_timer(1.5), "timeout")
+		if tree != null:
+			yield(get_tree().create_timer(1.5), "timeout")
 	emit_signal("server_stopped")
 
 

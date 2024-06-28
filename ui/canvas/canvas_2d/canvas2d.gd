@@ -353,7 +353,7 @@ func select_layer(layer_id: String):
 	return aux
 
 
-func get_selected_layer():
+func get_current_layer():
 	return current_layer
 
 
@@ -363,6 +363,11 @@ func set_current_layer(value):
 	
 	if is_instance_valid(current_layer) and current_layer is Layer2D:
 		current_layer.hide_mask()
+	
+	if generation_area is Layer2D:
+		if generation_area.has_images:
+			current_layer = generation_area
+			return
 	
 	if value is Layer2D:
 		current_layer = value

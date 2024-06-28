@@ -16,6 +16,7 @@ is_dark_: bool, opposite_theme_: int, preview_color_: Color):
 	tr_name = tr_name_
 	style_colors = style_colors_
 	type_colors = type_colors_
+	type_colors.merge(style_colors)
 	is_dark = is_dark_
 	opposite_theme = opposite_theme_
 	preview_color = preview_color_

@@ -103,6 +103,10 @@ func add_regional_prompting_modifier():
 	modifier_container.place_modifiers()
 
 
+func refresh_modifiers(_cue: Cue = null):
+	modifier_container.place_modifiers()
+
+
 func update_canvas_overlay_underlay(cue: Cue):
 	# [canvas: Control, target_mode: String, limiter: Modifier, 
 	# overlay_underlay_material: Material]

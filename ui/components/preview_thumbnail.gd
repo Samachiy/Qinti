@@ -163,10 +163,12 @@ func get_drag_data(_position: Vector2):
 
 func _on_DropArea_modifier_dropped(_position, modifier):
 	if modifier is Modifier:
+		modifier.visible = true
 		set_image_data(modifier.image_data)
 		var args = [current_image_data]
 		Cue.new(Consts.ROLE_CANVAS, "set_images_in_generation_area").args(args).execute()
 		emit_signal("image_dropped", current_image_data)
+		Cue.new(Consts.ROLE_MODIFIERS_AREA, "refresh_modifiers").execute()
 
 
 func _on_DropArea_file_cluster_dropped(_position, file_cluster):

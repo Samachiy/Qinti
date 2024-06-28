@@ -2,7 +2,9 @@ extends DiffusionAPIModule
 
 
 func bake_pending_controlnets():
-	# this must apply pending controlnet to request data
+	# This function must apply the controlnet data to api.request_data, which will be used
+	# as API payload for image generation
+	
 	# controlnet_to_bake: a dictionary with the name of the controlnet as keys and an 
 	# array of dictionaries as value. the dictionaries inside the array uses names specified in 
 	

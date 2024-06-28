@@ -174,6 +174,8 @@ func _on_connection_failed(response_code):
 
 
 func _on_ProceedOpenInstalled_pressed():
+	if DiffusionServer.is_api_initialized():
+		DiffusionServer.server.stop_server()
 	var success = false
 	var path = selected_installation_path.text
 	# load_installation_folder_info already checks if folder exists
@@ -289,6 +291,8 @@ func get_repo_from_path(path: String, error_level: int = l.ERROR) -> LocalRepo:
 
 
 func _on_ProceedInstall_pressed():
+	if DiffusionServer.is_api_initialized():
+		DiffusionServer.server.stop_server()
 	var dir = Directory.new()
 	var dir_path = install_path.text
 	var error = OK
@@ -602,6 +606,7 @@ func cue_text_to_console(cue: Cue):
 func _prepare_repo(repo: LocalRepo): #, signal_folder_changed: bool
 	local_backend.repo = repo
 	var api = DiffusionServer.instance_api(repo.data.api_gdscript)
+	DiffusionServer.set_state(DiffusionServer.STATE_LOADING)
 	if api != null:
 		api.refresh_paths()
 

@@ -34,4 +34,6 @@ allow_image_data = true
 
 [node name="Menu" parent="." instance=ExtResource( 3 )]
 
+[connection signal="file_cluster_dropped" from="DropArea" to="." method="_on_DropArea_file_cluster_dropped"]
+[connection signal="image_data_dropped" from="DropArea" to="." method="_on_DropArea_image_data_dropped"]
 [connection signal="modifier_dropped" from="DropArea" to="." method="_on_DropArea_modifier_dropped"]

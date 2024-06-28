@@ -28,6 +28,7 @@ var ADDRESS_GET_SERVER_CONFIG = ""
 var ADDRESS_SET_SERVER_CONFIG = ""
 var ADDRESS_SHUTDOWN_SERVER = ""
 
+var full_feature_debug: bool = false
 var extra_samplers = []
 var extra_upscalers = []
 var default_sampler = ''
@@ -460,7 +461,7 @@ func bake_pending_img2img(_cue: Cue = null):
 	
 	if img_to_img is DiffusionAPIModule:
 		img_to_img.bake_pending_img2img()
-	else:
+	elif full_feature_debug:
 		l.g("Tried to use 'bake_pending_img2img' but api has no img2img module")
 
 
@@ -489,7 +490,7 @@ func bake_pending_mask(_cue: Cue = null):
 	
 	if inpaint_outpaint is DiffusionAPIModule:
 		inpaint_outpaint.bake_pending_mask()
-	else:
+	elif full_feature_debug:
 		l.g("Tried to use 'bake_pending_img2img' but api has no img2img module")
 
 
@@ -499,7 +500,7 @@ func bake_pending_mask(_cue: Cue = null):
 func request_image_info(response_object: Object, response_method: String, image_base64: String):
 	if image_info is DiffusionAPIModule:
 		image_info.request_image_info(response_object, response_method, image_base64)
-	else:
+	elif full_feature_debug:
 		l.g("Tried to use 'request_image_info' but api has no image info module")
 
 
@@ -507,7 +508,9 @@ func get_image_info_from_result(result) -> Dictionary:
 	if image_info is DiffusionAPIModule:
 		return image_info.get_image_info_from_result(result)
 	else:
-		l.g("Tried to use 'get_image_info_from_result' but api has no image info module")
+		if full_feature_debug:
+			l.g("Tried to use 'get_image_info_from_result' but api has no image info module")
+		
 		return {}
 
 
@@ -531,7 +534,7 @@ func bake_pending_controlnets(_cue: Cue = null):
 	
 	if controlnet is DiffusionAPIModule:
 		controlnet.bake_pending_controlnets()
-	else:
+	elif full_feature_debug:
 		l.g("Tried to use 'bake_pending_controlnets' but api has no controlnet module")
 
 
@@ -545,7 +548,7 @@ preprocessor_name: String):
 	if controlnet is DiffusionAPIModule:
 		DiffusionServer.set_state(Consts.SERVER_STATE_PREPROCESSING)
 		controlnet.preprocess(response_object, response_method, failure_method, image_data, preprocessor_name)
-	else:
+	elif full_feature_debug:
 		l.g("Tried to use 'preprocess' but api has no controlnet module")
 
 
@@ -553,7 +556,9 @@ func get_preprocessed_image(result, preprocessor_name: String = '') -> ImageData
 	if controlnet is DiffusionAPIModule:
 		return controlnet.get_preprocessed_image(result, preprocessor_name)
 	else:
-		l.g("Tried to use 'get_preprocessed_image' but api has no controlnet module")
+		if full_feature_debug:
+			l.g("Tried to use 'get_preprocessed_image' but api has no controlnet module")
+		
 		return null
 
 

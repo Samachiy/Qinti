@@ -2,7 +2,8 @@ extends DiffusionAPIModule
 
 
 func bake_pending_mask():
-	# This function must apply pending img2img to request_data
+	# This function must apply the mask data to api.request_data, which will be used
+	# as API payload for image generation
 	
 	var data: Dictionary = api.get_mask_data()
 	# data is a dictionary which values must be added to request_data. Below is 
