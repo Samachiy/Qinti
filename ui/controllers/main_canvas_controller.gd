@@ -238,6 +238,8 @@ func consolidate_layer(_cue: Cue = null):
 	var layer = canvas.select_layer(MAIN_LAYER_NAME)
 	if layer != null:
 		layer.consolidate()
+	if generation_area is GenerationArea2D:
+		generation_area.consolidate()
 
 
 func apply_parameters_to_api(_cue: Cue = null):

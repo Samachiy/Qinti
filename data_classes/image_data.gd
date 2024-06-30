@@ -15,11 +15,11 @@ enum{
 
 var is_ready: bool = false
 var raw_image_data: PoolByteArray = PoolByteArray()
-var base64 = null setget , get_base64
+var base64: String = '' setget , get_base64
 var image_extension: int
-var image: Image = Image.new()
+var image: Image = Image.new() 
 var texture: ImageTexture = ImageTexture.new()
-var path = ''
+var path: String = ''
 var image_name: String = ''
 var search_data: String = ''
 
@@ -84,7 +84,7 @@ func load_base64(raw_image_base64: String, image_extension_: int = -1):
 	return self
 
 
-func load_image_path(image_path):
+func load_image_path(image_path: String):
 	if is_valid_image_type(image_path):
 		path = image_path
 		var image_file = File.new()
@@ -104,7 +104,7 @@ func load_texture(texture_to_load: Texture):
 	return load_image_object(texture_to_load.get_data())
 
 
-func is_valid_image_type(image_name_to_check: String, error_msg: bool = false):
+func is_valid_image_type(image_name_to_check: String, error_msg: bool = false) -> bool:
 	var extension: String = image_name_to_check.get_extension()
 	if extension.to_lower() in ALLOWED_IMG_TYPES:
 		return true
@@ -114,7 +114,7 @@ func is_valid_image_type(image_name_to_check: String, error_msg: bool = false):
 		return false
 
 
-static func get_extension_int(extension: String):
+static func get_extension_int(extension: String) -> int:
 	var resul
 	match extension.to_lower():
 		'png':
@@ -127,14 +127,28 @@ static func get_extension_int(extension: String):
 	return resul
 
 
-func get_base64():
-	if base64 == null:
+func get_base64() -> String:
+	if base64.empty():
 		if is_ready:
 			base64 = Marshalls.raw_to_base64(raw_image_data)
 		else:
-			return null
+			return ''
 	
 	return base64
+
+
+func get_image_object() -> Image:
+	if image == null:
+		_assemble_images()
+	
+	return image
+
+
+func get_image_texture() -> ImageTexture:
+	if texture == null:
+		_assemble_images()
+	
+	return texture
 
 
 func get_size() -> Vector2:
@@ -145,7 +159,14 @@ func match_string(string: String) -> bool:
 	if search_data.empty():
 		search_data = image_name.to_lower()
 	
-	if string.to_lower() in search_data:
+	string = string.to_lower()
+	if string in search_data:
+		return true
+	elif string in image_name.to_lower():
 		return true
 	else:
 		return false
+
+
+func save(save_path: String, datetime_on_default: bool = true, overwrite: bool = true):
+	ImageProcessor.save_image_data(self, save_path, image_name, datetime_on_default, overwrite)
