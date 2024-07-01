@@ -12,7 +12,7 @@ var image_file: String = ''  # path of .png, .jpeg, .jpg, etc (see image data ty
 var image_count: int = 0
 var description_file: String = '' # path of .txt
 var metadata_file: String = '' # path of .json
-var image_extensdion: int = -1
+var image_extension: int = -1
 var image_data: ImageData = null
 var name: String = ''
 var search_data: String = ''
@@ -26,6 +26,23 @@ signal image_data_refreshed(image_data)
 func _init(directory: String, default_image_data_: ImageData):
 	default_image_data = default_image_data_
 	path = directory
+
+
+func clear():
+	# Clears the contained files info without deleting the connected signals
+	alt_mains = []
+	main_count = 0
+	main_file = ''
+	main_file_hash = ''
+	main_file_q_hash = ''
+	image_count = 0
+	image_file = ''
+	image_extension = -1
+	image_data = null
+	description_file = ''
+	metadata_file = ''
+	name = ''
+	search_data = ''
 
 
 func add_file(file_path: String):
@@ -47,11 +64,11 @@ func add_file(file_path: String):
 						"or remove redundant files: " + main_file + str(alt_mains), l.WARNING)
 		'png':
 			# png takes priority over other formats
-			image_count = 0
+			image_count += 1
 			image_file = file_path
-			image_extensdion = ImageData.get_extension_int(extension)
+			image_extension = ImageData.get_extension_int(extension)
 		'jpeg', 'jpg':
-			image_count = 0
+			image_count += 1
 			if image_file.empty():
 				image_file = file_path
 		'txt':
@@ -199,8 +216,9 @@ func match_string(string: String) -> bool:
 	if main_file.empty():
 		return false
 	
-	if main_file.empty():
-		return false
+	string = string.strip_edges()
+	if string.empty():
+		return true
 	
 	if search_data.empty():
 		search_data = name.to_lower()
@@ -219,17 +237,25 @@ func match_name(string: String) -> bool:
 
 
 func get_image_data() -> ImageData:
-	if image_data == null:
-		if not image_file.empty():
-			image_data = ImageData.new(name)
-			image_data.load_image_path(path.plus_file(image_file))
-		else:
-			image_data = null
+	prepare_image_data()
 	
 	if image_data == null:
 		return default_image_data
 	else:
 		return image_data
+
+
+func prepare_image_data():
+	if image_data != null:
+		return
+	
+	if not image_file.empty():
+		image_data = ImageData.new(name)
+		image_data.load_image_path(path.plus_file(image_file))
+		emit_signal("image_data_refreshed", image_data)
+	else:
+		image_data = null
+	
 
 
 func match_q_hash(q_hash: String):

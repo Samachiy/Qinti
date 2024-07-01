@@ -86,3 +86,7 @@ func _on_Label_resized():
 			yield(get_tree(), "idle_frame")
 			label.rect_position.y = rect_size.y - label.rect_size.y
 
+
+func prepare_to_free():
+	clear_cluster()
+

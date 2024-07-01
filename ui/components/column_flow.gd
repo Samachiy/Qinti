@@ -109,6 +109,15 @@ func get_clusters():
 	return container.contained_clusters
 
 
+func get_cleared_clusters():
+	var clusters = container.contained_clusters
+	for cluster in clusters.values():
+		if cluster is FileCluster:
+			cluster.clear()
+	
+	return clusters
+
+
 func get_items():
 	return container.thumbnails_children
 

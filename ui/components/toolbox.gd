@@ -16,13 +16,17 @@ var ti_thread: Thread
 var refreshed_containers: Dictionary = {}
 var save_recent_img_amount: int = 20
 
+var lora_thread_running: bool = false
+var lycoris_thread_running: bool = false
+var ti_thread_running: bool = false
+
 signal file_clusters_refreshed
 
 func _ready():
 	#recent_container.container.load_images_from_folder("res://Placeholders/") # for test purposes
 	Roles.request_role(self, Consts.ROLE_TOOLBOX)
-	yield(get_tree().current_scene, "ready")
 	var error = DiffusionServer.connect("paths_refreshed", self, "_on_paths_refreshed")
+	yield(get_tree().current_scene, "ready")
 	l.error(error, l.CONNECTION_FAILED)
 	
 	Tutorials.subscribe(self, Tutorials.TUT2)
@@ -113,27 +117,63 @@ func refresh_recent_images_order(_cue: Cue = null):
 func add_LORAs(thread: bool = true):
 	var path = DiffusionServer.api.get_lora_dir()
 	if thread:
-		lora_thread = thread_get_file_clusters_at(path, "_thread_add_LORAs")
+		if lora_thread is Thread:
+			if lora_thread.is_alive():
+				l.g("lora_thread alive")
+				return
+			elif lora_thread.is_active():
+				l.g("lora_thread is_active")
+				lora_thread.wait_to_finish()
+		
+		lora_thread = thread_get_file_clusters_at(
+				path, 
+				"_thread_add_LORAs", 
+				lora_container.get_cleared_clusters()
+		)
 	else:
-		var clusters = get_file_clusters_at(path)
+		var clusters = get_file_clusters_at(path, lora_container.get_cleared_clusters())
 		_set_clusters(lora_container, clusters, StylingData.LORA_FORMAT)
 
 
 func add_LyCORIS(thread: bool = true):
 	var path = DiffusionServer.api.get_lycoris_dir()
 	if thread:
-		lycoris_thread = thread_get_file_clusters_at(path, "_thread_add_LyCORIS")
+		if lycoris_thread is Thread:
+			if lycoris_thread.is_alive():
+				l.g("lycoris_thread alive")
+				return
+			elif lycoris_thread.is_active():
+				l.g("lycoris_thread is_active")
+				lycoris_thread.wait_to_finish()
+		
+		lycoris_thread = thread_get_file_clusters_at(
+				path, 
+				"_thread_add_LyCORIS", 
+				lycoris_container.get_cleared_clusters()
+		)
 	else:
-		var clusters = get_file_clusters_at(path)
+		var clusters = get_file_clusters_at(path, lycoris_container.get_cleared_clusters())
 		_set_clusters(lycoris_container, clusters, StylingData.LYCORIS_FORMAT)
 
 
 func add_TIs(thread: bool = true):
 	var path = DiffusionServer.api.get_textual_inversion_dir()
 	if thread:
-		ti_thread = thread_get_file_clusters_at(path, "_thread_add_TIs")
+		if ti_thread is Thread:
+			if ti_thread.is_alive():
+				l.g("ti_thread alive")
+				return
+			elif ti_thread.is_active():
+				l.g("ti_thread is_active")
+				ti_thread.wait_to_finish()
+		
+		ti_thread = thread_get_file_clusters_at(
+				path, 
+				"_thread_add_TIs", 
+				ti_container.get_cleared_clusters()
+		)
 	else:
-		var clusters = get_file_clusters_at(path)
+		var clusters = get_file_clusters_at(path, ti_container.get_cleared_clusters())
 		_set_clusters(ti_container, clusters, StylingData.TI_FORMAT)
 
 
@@ -179,6 +219,13 @@ func _thread_add_TIs(clusters: Dictionary):
 func _set_clusters(container: VFlowClusters, clusters: Dictionary, styling_format: String, 
 signal_refresh: bool = true, clear_container_first: bool = true):
 	if clear_container_first:
+		# We yield because, when we get the clusters, those will refresh
+		# their image data on a thread
+		# When image data is refreshed, is will call _on_Label_resized()
+		# which holds a yield "idle_frame", if we clear it before that
+		# yield "idle_frame" finishes, we will get an error, so we wait an
+		# idle frame before clearing
+		yield(get_tree(), "idle_frame")
 		container.clear()
 	
 	container.load_file_clusters(clusters, styling_format)
@@ -188,19 +235,25 @@ signal_refresh: bool = true, clear_container_first: bool = true):
 
 
 func _dispose_thread(thread: Thread):
-	if thread is Thread:
+	if thread is Thread and thread.is_active():
 		thread.wait_to_finish()
 		thread = null
 	
 
 
-func get_file_clusters_at(path: String) -> Dictionary:
-	return Cue.new(Consts.ROLE_FILE_PICKER, "get_file_clusters").args([path]).execute()
+func get_file_clusters_at(path: String, clusters: Dictionary) -> Dictionary:
+	return Cue.new(Consts.ROLE_FILE_PICKER, "get_file_clusters").args([path]).opts({
+			Consts.FILE_CLUSTERS: clusters
+	}).execute()
 
 
-func thread_get_file_clusters_at(path: String, receiving_method: String) -> Thread:
+func thread_get_file_clusters_at(path: String, receiving_method: String, 
+clusters: Dictionary) -> Thread:
 	return Cue.new(Consts.ROLE_FILE_PICKER, "thread_get_file_clusters").args(
-			[path, self, receiving_method]).execute()
+			[path, self, receiving_method]
+	).opts({
+			Consts.FILE_CLUSTERS: clusters
+	}).execute()
 
 
 func _on_Loras_refresh_requested():

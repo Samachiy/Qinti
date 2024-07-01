@@ -91,9 +91,11 @@ func temporal_connect(signal_name: String, object: Object, method: String):
 
 func get_file_clusters(cue: Cue):
 	# [ path, default_image_data: ImageData ]
+	# { clusters: Dictionary = {} }
 	var path: String = cue.str_at(0, '')
 	var image_data: ImageData = cue.get_at(1, default_image_data, false)
-	return _get_file_clusters_at(path, image_data)
+	var prev_clusters = cue.get_option(Consts.FILE_CLUSTERS, {})
+	return _get_file_clusters_at(path, image_data, prev_clusters)
 
 
 func thread_get_file_clusters(cue: Cue) -> Thread:
@@ -106,10 +108,12 @@ func thread_get_file_clusters(cue: Cue) -> Thread:
 
 func _get_send_file_clusters(cue: Cue):
 	# [ path, receiving_object, receiving_method, default_image_data: ImageData ]
+	# { clusters: Dictionary = {} }
 	var path: String = cue.str_at(0, '')
 	var receiving_obj = cue.object_at(1, null)
 	var receiving_method = cue.str_at(2, '')
 	var image_data: ImageData = cue.get_at(3, default_image_data, false)
+	var prev_clusters = cue.get_option(Consts.FILE_CLUSTERS, {})
 	
 	if receiving_obj == null:
 		l.g("Can't retrieve threaded file clusters, receiving object is null, at: " + path)
@@ -124,11 +128,18 @@ func _get_send_file_clusters(cue: Cue):
 		return
 	
 	if receiving_obj.has_method(receiving_method):
-		var clusters = _get_file_clusters_at(path, image_data)
+		var clusters = _get_file_clusters_at(path, image_data, prev_clusters)
+		prepare_file_clusters(clusters)
 		receiving_obj.call_deferred(receiving_method, clusters)
 	else:
 		l.g("Can't retrieve threaded file clusters. Receiving object lacks method: " + 
 				receiving_method)
+
+
+func prepare_file_clusters(clusters: Dictionary):
+	for cluster in clusters.values():
+		if cluster is FileCluster:
+			cluster.prepare_image_data()
 
 
 func _get_file_clusters_at(path: String, image_data: ImageData, clusters: Dictionary = {}) -> Dictionary:
@@ -202,6 +213,10 @@ func _get_file_paths_at(path: String, filter_ext: Array, result: Array = []):
 
 func safe_open_dir(path: String, dir: Directory, create: bool = true) -> int:
 	# returns Error
+	
+	if path.empty():
+		return ERR_FILE_BAD_PATH
+	
 	var error
 	if not dir.dir_exists(path) and create:
 		error = dir.make_dir_recursive(path)
