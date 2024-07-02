@@ -19,6 +19,11 @@ func _tutorial(tutorial_seq: TutorialSequence):
 					[board_owner.overunderlay_tool])
 
 
+func prepare_layer(cue: Cue):
+	canvas.grid.set_as_solid_background(Color.white)
+	return .prepare_layer(cue)
+
+
 func get_data_cue(_cue: Cue = null):
 	# This function will be called more times on it's lifespan, program it accordingly
 	if layer_name.empty():

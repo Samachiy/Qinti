@@ -210,24 +210,42 @@ func set_installation_info(cue: Cue):
 	var path = cue.str_at(0, '')
 	var gpu_type = cue.int_at(1, PCData.GPU.NVIDIA)
 	var extra_args = cue.str_at(2, '')
+	var backend = cue.str_option("backend", '')
 	var success = load_installation_folder_info(path)
 	
-	if success:
-		local_backend.repo.data.pc.gpu_type = gpu_type
-		local_backend.repo.override_args(extra_args, true)
-		DiffusionServer.initialize_server_connection()
-		hide_installation_window()
-		return
+	if not success:
+		success = load_installation_folder_info_manual_server(backend, path)
+		if success:
+			l.g("Manual backend was applied: " + local_backend.repo.data.id, l.INFO)
 	
-	var backend = cue.str_option("backend", '')
-	success = load_installation_folder_info_manual_server(backend, path)
 	if success:
-		l.g("Manual backend was applied: " + local_backend.repo.data.id, l.INFO)
 		local_backend.repo.data.pc.gpu_type = gpu_type
 		local_backend.repo.override_args(extra_args, true)
 		DiffusionServer.initialize_server_connection()
 		hide_installation_window()
-		return
+
+
+func _set_resource_paths(cue: Cue):
+	var lora_dir = cue.str_option(DiffusionAPI.LORA_KEY, '')
+	var lycoris_dir = cue.str_option(DiffusionAPI.LYCORIS_KEY, '')
+	var ti_dir = cue.str_option(DiffusionAPI.TI_KEY, '')
+	var dir = Directory.new()
+	var refresh = false
+	
+	if not lora_dir.empty() and dir.dir_exists(lora_dir):
+		DiffusionServer.api.DIR_LORA = lora_dir
+		refresh = true
+	
+	if not lycoris_dir.empty() and dir.dir_exists(lycoris_dir):
+		DiffusionServer.api.DIR_LYCORIS = lycoris_dir
+		refresh = true
+	
+	if not ti_dir.empty() and dir.dir_exists(ti_dir):
+		DiffusionServer.api.DIR_TI = ti_dir
+		refresh = true
+	
+	if refresh:
+		DiffusionServer.emit_signal("paths_refreshed")
 
 
 func set_install_cue(cue: Cue):
@@ -553,7 +571,12 @@ func _on_global_save_cues_requested():
 					local_backend.repo.data.pc.gpu_type,
 					local_backend.repo.extra_args
 				],
-				{ "backend": local_backend.repo.data.id}
+				{ 
+					"backend": local_backend.repo.data.id,
+					DiffusionAPI.LORA_KEY: DiffusionServer.api.get_lora_dir(),
+					DiffusionAPI.LYCORIS_KEY: DiffusionServer.api.get_lycoris_dir(),
+					DiffusionAPI.TI_KEY: DiffusionServer.api.get_textual_inversion_dir(),
+				}
 		)
 
 
@@ -603,10 +626,12 @@ func cue_text_to_console(cue: Cue):
 	
 
 
-func _prepare_repo(repo: LocalRepo): #, signal_folder_changed: bool
+func _prepare_repo(repo: LocalRepo, custom_paths_cue: Cue = null): #, signal_folder_changed: bool
 	local_backend.repo = repo
 	var api = DiffusionServer.instance_api(repo.data.api_gdscript)
 	DiffusionServer.set_state(DiffusionServer.STATE_LOADING)
+	if custom_paths_cue is Cue:
+		_set_resource_paths(custom_paths_cue)
 	if api != null:
 		api.refresh_paths()
 

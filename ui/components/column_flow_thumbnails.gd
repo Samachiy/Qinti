@@ -75,12 +75,18 @@ func refresh_order():
 
 func clear():
 	for child in thumbnails_children:
-		if is_instance_valid(child):
-			child.queue_free()
+		free_thumbnail(child)
 	
 	thumbnails_children.clear()
-	contained_clusters.clear()
+	contained_clusters = {}
 	contained_file_thumbnails_q_hash.clear()
+
+
+func free_thumbnail(thumbnail: Thumbnail):
+	if is_instance_valid(thumbnail):
+		thumbnail.prepare_to_free()
+		thumbnail.queue_free()
+	
 
 
 func create_thumbnail(set_as_first: bool = true):

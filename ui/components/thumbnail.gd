@@ -79,6 +79,11 @@ func set_image_data(image_data_: ImageData):
 	texture = image_data_.texture
 	var image_size: Vector2 = texture.get_size()
 	#image_data_.image.save_png("user://wuttf.png")
+	if image_size.x == 0:
+		l.g("Image data size is 0 on thumbnail")
+		vertical_proportion = 1
+		return
+	
 	vertical_proportion = image_size.y / float(image_size.x)
 
 
@@ -170,3 +175,7 @@ func _on_gui_input(event):
 			menu.popup_at_cursor()
 		
 		pressed_right = event.pressed
+
+
+func prepare_to_free():
+	pass

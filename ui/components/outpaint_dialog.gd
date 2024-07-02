@@ -34,3 +34,7 @@ func _on_popup_closed():
 		Cue.new(Consts.ROLE_CONTROL_IN_PAINT, "set_settings_cue").args([
 				use_modifiers.pressed
 		]).execute()
+
+
+func get_popup_proportion():
+	return Vector2(0.4, 0.4)

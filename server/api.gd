@@ -11,6 +11,9 @@ const REFRESH_UPSCALERS = "upscalers"
 
 const MASK_MODE_INPAINT = "inpaint"
 const MASK_MODE_OUTPAINT = "outpaint"
+const LORA_KEY = "LORA"
+const LYCORIS_KEY = "LYCORIS"
+const TI_KEY = "TI"
 
 # Technically this should be consts, but since they need to be overriden, we set them as vars
 var DIR_LORA = ""

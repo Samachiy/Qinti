@@ -18,7 +18,7 @@ var raw_image_data: PoolByteArray = PoolByteArray()
 var base64: String = '' setget , get_base64
 var image_extension: int
 var image: Image = Image.new() 
-var texture: ImageTexture = ImageTexture.new()
+var texture: ImageTexture = null setget , get_image_texture
 var path: String = ''
 var image_name: String = ''
 var search_data: String = ''
@@ -50,7 +50,7 @@ func _assemble_images():
 		l.g("Couldn't load image. Extension '" + str(image_extension) + "'. Error: " + 
 		str(error) + ". Origin: " + path)
 	
-	texture.create_from_image(image)
+	#texture.create_from_image(image)
 
 
 func load_data(raw_image_data_: PoolByteArray, image_extension_: int):
@@ -88,20 +88,27 @@ func load_image_path(image_path: String):
 	if is_valid_image_type(image_path):
 		path = image_path
 		var image_file = File.new()
-		image_file.open(image_path, File.READ)
-		load_data(
-				image_file.get_buffer(image_file.get_len()), # byte data
-				get_extension_int(image_path.get_extension())) # extension
+		var error = image_file.open(image_path, File.READ)
+		if error == OK:
+			load_data(
+					image_file.get_buffer(image_file.get_len()), # byte data
+					get_extension_int(image_path.get_extension())) # extension
 	
 	return self
 
 
 func load_image_object(image_to_load: Image):
-	return load_data(image_to_load.save_png_to_buffer(), PNG)
+	if image_to_load is Image:
+		return load_data(image_to_load.save_png_to_buffer(), PNG)
+	else:
+		return self
 
 
 func load_texture(texture_to_load: Texture):
-	return load_image_object(texture_to_load.get_data())
+	if texture_to_load is Texture:
+		return load_image_object(texture_to_load.get_data())
+	else:
+		return self
 
 
 func is_valid_image_type(image_name_to_check: String, error_msg: bool = false) -> bool:
@@ -137,6 +144,14 @@ func get_base64() -> String:
 	return base64
 
 
+func get_image_texture():
+	if texture == null:
+		texture = ImageTexture.new()
+		texture.create_from_image(get_image_object())
+	
+	return texture
+
+
 func get_image_object() -> Image:
 	if image == null:
 		_assemble_images()
@@ -144,11 +159,11 @@ func get_image_object() -> Image:
 	return image
 
 
-func get_image_texture() -> ImageTexture:
-	if texture == null:
-		_assemble_images()
-	
-	return texture
+#func get_image_texture() -> ImageTexture:
+#	if texture == null:
+#		_assemble_images()
+#
+#	return texture
 
 
 func get_size() -> Vector2:
