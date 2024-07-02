@@ -45,3 +45,7 @@ func _on_popup_closed():
 		]).opts({
 				Consts.I_DENOISING_STRENGTH: denoising_strenght.get_value(),
 		}).execute()
+
+
+func get_popup_proportion():
+	return Vector2(0.4, 0.4)

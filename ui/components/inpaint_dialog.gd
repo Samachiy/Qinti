@@ -62,3 +62,7 @@ func _on_popup_closed():
 				Consts.I2I_INPAINT_FULL_RES: inpaint_full_res.pressed,
 				Consts.I2I_INPAINTING_MASK_INVERT: invert_mask.pressed,
 		}).execute()
+
+
+func get_popup_proportion():
+	return Vector2(0.4, 0.4)

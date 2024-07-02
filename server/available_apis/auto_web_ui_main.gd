@@ -61,11 +61,11 @@ var service = TEXT2IMG_SERVICE
 var txt2img_dict: Dictionary = {
 	"enable_hr": false,
 	"denoising_strength": 0.7, # used hi hr, advanced mode only
-	"firstphase_width": 0,
-	"firstphase_height": 0,
-	"hr_scale": 2,
-	"hr_upscaler": "",
-	"hr_second_pass_steps": 0,
+	#"firstphase_width": 0,
+	#"firstphase_height": 0,
+	#"hr_scale": 2,
+	#"hr_upscaler": "",
+	#"hr_second_pass_steps": 0,
 	"prompt": "", 
 	"seed": -1,
 	"sampler_name": "Euler a",

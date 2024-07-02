@@ -11,8 +11,8 @@ onready var hover_indicator = $HBox/NotificationArea/HoverIndicator
 onready var update_button = $HBox/UpdateQinti
 
 var minimal_indexes = [
-	Consts.UI_CONTROL_RIGHT_CLICK,
 	Consts.UI_CONTROL_LEFT_CLICK,
+	Consts.UI_CONTROL_RIGHT_CLICK,
 	Consts.UI_CONTROL_MIDDLE_CLICK,
 	Consts.UI_CONTROL_SCROLL_UP,
 	Consts.UI_CONTROL_SCROLL_DOWN,
@@ -20,7 +20,9 @@ var minimal_indexes = [
 var pressed_left = false
 var pressed_right = false
 
-var added_descriptions: Dictionary = {}
+var added_descriptions: Dictionary = {} #{ title1: description1, title2: description2, ...}
+
+var descriptions_priority: Dictionary = {} # { priority1: [ title, ...], priority2: [ title, ...] 
 var text: String = ''
 var format_array: Array = []
 
@@ -57,18 +59,31 @@ func update_tr_descriptions(_locale = null):
 	var text_value: String
 	var description: String
 	update_text()
-	for title_key in added_descriptions.keys():
-		text_value = added_descriptions[title_key]
-		description = tr(title_key) + ": " + tr(text_value) # donetr
-		menu.set_labeled_item(description, title_key, false)
+	var priorities = descriptions_priority.keys()
+	priorities.sort()
+	var titles
+	for priority in priorities:
+		titles = descriptions_priority.get(priority, [])
+		for title_key in titles:
+			text_value = added_descriptions[title_key]
+			description = tr(title_key) + ": " + tr(text_value) # donetr
+			menu.set_labeled_item(description, title_key, false)
 
 
 func add(cue: Cue):
+	# [ priority: int == 100 ]
 	# { title1: description1,
 	#	title2: description2,
 	#	... }
+	var priority = cue.int_at(0, 100, false)
+	var array: Array
 	for title_key in cue._options.keys():
 		added_descriptions[title_key] = cue.str_option(title_key, '-')
+		array = descriptions_priority.get(priority, [])
+		if array.empty():
+			descriptions_priority[priority] = array
+
+		array.append(title_key)
 
 
 func clear(_cue: Cue = null):
@@ -88,6 +103,7 @@ func show(_cue: Cue = null):
 func show_descriptions_popup():
 	menu.clear()
 	added_descriptions.clear()
+	descriptions_priority.clear()
 	Cue.new(Consts.UI_HAS_DESCRIPTION_GROUP, "reload_description").execute()
 	update_tr_descriptions()
 	menu.popup_at_cursor()

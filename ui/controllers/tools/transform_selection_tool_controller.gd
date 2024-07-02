@@ -45,7 +45,7 @@ var movement_cache: Vector2 = Vector2.ZERO # intended for snapping
 var original_limits: Rect2 = Rect2()
 
 func reload_description(_cue: Cue = null):
-	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "add").opts({
+	Cue.new(Consts.ROLE_DESCRIPTION_BAR, "add").args([9]).opts({
 		Consts.UI_CONTROL_LEFT_CLICK: Consts.HELP_DESC_MOVE_IMAGE,
 	}).execute()
 

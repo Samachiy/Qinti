@@ -57,7 +57,7 @@ func get_last_settings(_cue: Cue = null):
 
 
 func _on_SaveSettings_popup_hide():
-	pass # Replace with function body.
+	pass # Nothing to do here
 
 
 func _on_SaveSettings_confirmed():
@@ -77,3 +77,7 @@ func _on_SaveSettings_confirmed():
 func refresh_total_recent_images():
 	var total = Cue.new(Consts.ROLE_TOOLBOX, "get_recent_thumbnail_number").execute()
 	recent_img_total_label.text = tr(TOTAL_RECENT_IMAGES).format([total])
+
+
+func get_popup_proportion():
+	return Vector2(0.3, 0.3)
