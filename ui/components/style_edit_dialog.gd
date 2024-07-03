@@ -26,3 +26,8 @@ func open(cue: Cue):
 
 func _on_StyleDetailsViewer_close_requested():
 	close()
+
+
+
+func get_popup_proportion():
+	return Vector2(0.5, 0.7)

@@ -65,4 +65,4 @@ func _on_popup_closed():
 
 
 func get_popup_proportion():
-	return Vector2(0.4, 0.4)
+	return Vector2(0.3, 0.2)

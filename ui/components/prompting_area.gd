@@ -87,11 +87,11 @@ func _on_image_generated(result):
 	var images_data = []
 	
 	# Images extraction
-	images_data = DiffusionServer.api.get_images_from_result(result, false, positive_prompt.text)
-#	if OS.has_feature("standalone"):
-#		images_data = DiffusionServer.api.get_images_from_result(result, false, positive_prompt.text)
-#	else:
-#		images_data = DiffusionServer.api.get_images_from_result(result, true, positive_prompt.text)
+	#images_data = DiffusionServer.api.get_images_from_result(result, false, positive_prompt.text)
+	if OS.has_feature("standalone"):
+		images_data = DiffusionServer.api.get_images_from_result(result, false, positive_prompt.text)
+	else:
+		images_data = DiffusionServer.api.get_images_from_result(result, true, positive_prompt.text)
 	
 	# Seed extraction
 	last_seed = DiffusionServer.api.get_seed_from_result(result)

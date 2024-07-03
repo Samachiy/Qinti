@@ -5,7 +5,7 @@ const ALLOWED_IMG_TYPES = ['png', 'jpeg', 'jpg']
 export(String, FILE, "*.png") var default_image = ""
 
 var default_image_data: ImageData = null
-var default_save_path: String = PCData.get_program_dir()
+var default_save_path: String = PCData.get_program_dir().plus_file('')
 var default_path_changed: bool = false
 var temporal_connections: Array = []
 

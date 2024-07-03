@@ -79,6 +79,7 @@ margin_right = 0.0
 margin_bottom = 0.0
 
 [node name="SaveSettings" parent="ManualDialogs" instance=ExtResource( 23 )]
+resizable = true
 
 [node name="InpaintDialog" parent="ManualDialogs" instance=ExtResource( 26 )]
 

@@ -209,7 +209,19 @@ verification_file: String, repository_name: String = '') -> PythonInterface:
 			repository_version,
 			verification_file
 		])
+
+
+func pull_any_repo(path: String, blocking: bool = true):
+	#python, -m, pip, install, psutil
+	var output = []
+	if blocking:
+		var error = OS.execute(GIT, ["-C", path, "pull"], true, output)
+		l.error(error, "Couldn't pull git repository: " + path)
+	else:
+# warning-ignore:return_value_discarded
+		OS.execute(GIT, ["-C", path, "pull"], false, output)
 	
+	return output
 
 
 func _set_is_installed(value: bool):
@@ -369,3 +381,7 @@ func display_log(text, log_level = -1):
 func stop_load_icon_if_no_output(stop: bool, time: int = 30):
 	Cue.new(Consts.ROLE_SERVER_MANAGER, "cue_icon_stop_if_no_output").args([stop, time]).execute()
 
+
+func check_qinti_update(_cue: Cue):
+	# Function meant to be overrided
+	pass

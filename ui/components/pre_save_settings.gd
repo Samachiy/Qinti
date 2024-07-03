@@ -32,7 +32,7 @@ func request_settings(cue: Cue = null):
 	call_path = path
 	
 	refresh_total_recent_images()
-	popup_centered_minsize()
+	popup_centered()
 
 
 func get_settings(_cue: Cue = null):
