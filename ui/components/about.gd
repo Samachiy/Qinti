@@ -1,6 +1,6 @@
 extends MarginContainer
 
-const LICENSE_PATH = "res://LICENSE.txt"
+const LICENSE_PATH = "res://LICENSE"
 const ABOUT_PATH = "res://ui/components/about.txt"
 
 onready var license = $Tabs/LICENSE
@@ -14,6 +14,7 @@ var parent = null
 func _ready():
 	Roles.request_role(self, Consts.ROLE_ABOUT_WINDOW)
 	parent = get_parent_control()
+	get_main_about_text()
 	if guion_label.text.empty():
 		l.g("Missing a library/plugin acknowledgment")
 
