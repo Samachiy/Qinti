@@ -9,7 +9,9 @@ const ADDRESS_CONTROLNET_PREPROCESS = "/controlnet/detect"
 # This applies to both txt2img and im2img dictionaries
 # Removed keys: guidance, mask, guessmode, threshold_a, threshold_b
 var controlnet_dict: Dictionary = {
+	"enabled": true,
 	"input_image": "",
+	"image": "",
 	"module": "None",
 	"model": "",
 	"weight": 1,
@@ -41,6 +43,19 @@ func _add_controlnet_to_data(dictionary: Dictionary):
 	if not always_on_scripts_dict.has(CONTROLNET_DICT_KEY):
 		always_on_scripts_dict[CONTROLNET_DICT_KEY] = {CONTROLNET_ARGS_KEY: []}
 	
+	#  Deprecated alias 'input_image' detected. This field will be removed on 2024-06-01Please use 'image' instead
+	dictionary['image'] = dictionary['input_image'] 
+# warning-ignore:return_value_discarded
+	dictionary.erase('input_image')
+	match dictionary.get("control_mode", 0):
+		0:
+			dictionary["control_mode"] = "Balanced"
+		1:
+			dictionary["control_mode"] = "My prompt is more important"
+		2:
+			dictionary["control_mode"] = "ControlNet is more important"
+	
+	dictionary["enabled"] = true
 	always_on_scripts_dict[CONTROLNET_DICT_KEY][CONTROLNET_ARGS_KEY].append(dictionary)
 
 
@@ -66,9 +81,13 @@ func remove_controlnet_images_from_result(result, images_base64: Array) -> Array
 	if controlnet_array is Dictionary:
 		controlnet_array = controlnet_array.get(CONTROLNET_ARGS_KEY, null)
 		is_cn_array = true
+	
+	var images_amount = int(result.get("batch_size", 1)) * int(result.get("n_iter", 1))
 	if is_cn_array and controlnet_array is Array:
 		# We remove the controlnet images
 		extra_images_num = controlnet_array.size()
+# warning-ignore:narrowing_conversion
+		extra_images_num = min(extra_images_num, images_base64.size() - images_amount)
 		for _i in range(extra_images_num):
 			images_base64.pop_back()
 	

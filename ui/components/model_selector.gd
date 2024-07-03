@@ -194,6 +194,8 @@ func _on_DiffusionModels_external_path_requested():
 
 
 func _save_cues(_is_file_save):
+	if current_model == null:
+		return
 	var data = {
 		FileCluster.HASH: current_model.get_hash(),
 		FileCluster.Q_HASH: current_model.get_q_hash(),

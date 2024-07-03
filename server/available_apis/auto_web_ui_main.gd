@@ -327,7 +327,7 @@ func probe_server(current_server_address: ServerAddress):
 	api_request.print_network_error = false
 	var url = server_address.url + ADDRESS_GET_SERVER_CONFIG
 	if Consts.pc_data.is_windows():
-		api_request.api_node.timeout = 1.0
+		api_request.api_node.timeout = 0.8
 	api_request.api_get(url)
 
 

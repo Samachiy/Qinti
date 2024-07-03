@@ -219,6 +219,7 @@ func set_installation_info(cue: Cue):
 			l.g("Manual backend was applied: " + local_backend.repo.data.id, l.INFO)
 	
 	if success:
+		local_backend.repo.check_qinti_update(cue)
 		local_backend.repo.data.pc.gpu_type = gpu_type
 		local_backend.repo.override_args(extra_args, true)
 		DiffusionServer.initialize_server_connection()

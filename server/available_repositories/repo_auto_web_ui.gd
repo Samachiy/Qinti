@@ -322,4 +322,10 @@ func _disable_auto_launch():
 			_set_config_file(config_dict)
 	else:
 		display_log("Auto launch is not present, leaving it as it is.", l.INFO)
-		
+
+
+func check_qinti_update(cue: Cue):
+	var extensions_dir = full_path.plus_file("extensions")
+	var controlnet_ext_dir = extensions_dir.plus_file("sd-webui-controlnet")
+	if cue.is_version_lower_than_array(Director.get_current_version_array()):
+		pull_any_repo(controlnet_ext_dir)
