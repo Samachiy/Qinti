@@ -203,7 +203,6 @@ func _on_script_finished():
 	l.error(error, "Failure to create debug file when script requested key input")
 	file.store_string("LOG OUTPUT:\n" + log_output + "\n\nSERVER OUTPUT:\n" + server_output)
 	file.close()
-	pause_install_request_user_action(MSG_INSTALL_FAILED_KEY_INPUT_DRIVERS, '')
 
 
 func prepare_files():

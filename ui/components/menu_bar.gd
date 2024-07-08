@@ -129,11 +129,14 @@ func _ready():
 	Tutorials.subscribe(self, Tutorials.TUTM2)
 	
 	if not OS.has_feature("standalone"):
+		dev_menu.visible = true
 		connect_menu_button(dev_menu)
 		add_tr_item_checkbox(dev_menu, DEV_TOGGLE_CONTROLNET)
 		add_tr_item_checkbox(dev_menu, DEV_TOGGLE_INOUTPAINT)
 		add_tr_item_checkbox(dev_menu, DEV_TOGGLE_IMG2IMG)
 		add_tr_item_checkbox(dev_menu, DEV_TOGGLE_IMG_INFO)
+	else:
+		dev_menu.visible = false
 
 
 func _tutorial(tutorial_seq: TutorialSequence):
