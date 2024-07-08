@@ -78,7 +78,7 @@ After a valid installation is set, Qinti will display a few short tutorials to e
 
 ## Tutorials
 
-Currently, there is one introductory tutorial to how to use Qinti: https://youtu.be/FSb57p9rTGc
+Currently, there is one introductory tutorial on how to use Qinti: https://youtu.be/FSb57p9rTGc
 
 
 # Contributing to the project
