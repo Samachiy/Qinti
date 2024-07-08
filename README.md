@@ -13,11 +13,23 @@
 
 Qinti UI is an open source frontend made with Godot for image generation that aims to be both easy to use and for professional use.
 
-It also comes in the form of an executable, so the frontend itself doesn't need to be installed, just click and run. It is currently available for Linux and Windows.
+The frontend itself doesn't need to be installed, just click and run. It is currently available for Linux and Windows.
 
 The project uses the AGPL license to ensure that it will always be free and open source.
 
 # Features
+- Infinite canvas
+- Save and load your progress on what you are working
+- Controlnet
+- Inpaint, outpaint and drwaing to AI image
+- Model resources management
+- Use of Textural inversion, LoRAs, Lycoris, etc
+- Undo and Redo
+- Supports both Automatic1111 Web UI and SD.Next as backends
+- Modular use of generated images metadata to generate other images
+- Inbuilt tutorials
+- Automatic1111 Web UI installation (beta feature)
+- Themes
 
 ## Controlnet
 
@@ -34,14 +46,6 @@ https://github.com/Samachiy/Qinti/assets/155751973/84399745-4e89-4de7-b369-4d7b3
 
 
 ## Misc
-- Infinite canvas
-- Use of Textural inversion, LoRAs, Lycoris, etc
-- Model resources management
-- Supports both Automatic1111 Web UI and SD.Next as backends
-- Modular use of generated images metadata to generate other images
-- Inbuilt tutorials
-- Automatic1111 Web UI installation (beta feature)
-
 
 https://github.com/Samachiy/Qinti/assets/155751973/fe350ae5-c6e2-4f8e-a0f4-d471179a1a51
 
@@ -71,6 +75,11 @@ To use Qinti, it is necessary to specify a Automatic1111 Web UI installation or 
 - On the second option it is only necessary to specify an installation folder and press “install”.
 
 After a valid installation is set, Qinti will display a few short tutorials to explain the user interface
+
+## Tutorials
+
+Currently, there is one introductory tutorial to how to use Qinti: https://youtu.be/FSb57p9rTGc
+
 
 # Contributing to the project
 
