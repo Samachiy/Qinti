@@ -21,7 +21,7 @@ The project uses the AGPL license to ensure that it will always be free and open
 - Infinite canvas
 - Save and load your progress on what you are working
 - Controlnet
-- Inpaint, outpaint and drwaing to AI image
+- Inpaint, outpaint and drawing to AI image
 - Model resources management
 - Use of Textural inversion, LoRAs, Lycoris, etc
 - Undo and Redo
